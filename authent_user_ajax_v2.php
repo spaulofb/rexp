@@ -1,0 +1,610 @@
+<?php
+/**
+*   REXP - REGISTRO DE EXPERIMENTO - ANOTA??O DE PROJETO
+* 
+*       MODULO: index_ajax - complemento AJAX do index 
+*  
+*   LAFB/SPFB250512.1736 - Correxoes gerais
+*/
+
+ob_start(); /**  Evitando warning */
+#
+//  Verificando se sseion_start - ativado ou desativado
+if( ! isset($_SESSION)) {
+     session_start();
+} 
+//
+if( isset($_SESSION["login_down"]) ) unset($_SESSION["login_down"]);
+if( isset($_SESSION["senha_down"]) ) unset($_SESSION["senha_down"]);
+if( isset($_SESSION["total"]) )  unset($total);
+#
+/* não gravar em cache */
+#
+$gmtDate = gmdate("D, d M Y H:i:s");
+header("Expires: {$gmtDate} GMT");
+header("Last-Modified: {$gmtDate} GMT");
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
+//  header("Content-Type: text/html; charset=iso-8859-1");
+//
+// IMPORTANTE: para acentuacao php
+header("Content-type: text/html; charset=utf-8");
+//
+//   Colocar as datas do Cadastro do Usuario e a validade
+date_default_timezone_set('America/Sao_Paulo');
+///
+ini_set('default_charset','UTF-8');
+//
+// Funciona em todas as versoes
+ini_set('include_path', '/var/www/cgi-bin/');
+//  
+//   Para acertar a acentuacao
+//  $_POST = array_map(utf8_decode, $_POST);
+// extract: Importando vari?veis POST para a tabela de s?mbolos a partir de um array 
+extract($_POST, EXTR_OVERWRITE); 
+
+///  Enviar mensagens 
+$msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
+$msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
+
+$msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >";
+$msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
+
+$msg_final="</span></span>";
+// Final - Mensagens para enviar 
+//
+//  Verificando SESSION incluir_arq - 20180801
+$incluir_arq="";
+//  path e arquivo local
+$dirarq=$_SERVER['SCRIPT_FILENAME'];
+//
+//  Arquivo local
+$arqlocal =  basename(__FILE__);
+$_SESSION["dirprincipal"] = $dirprincipal = str_replace($arqlocal,'',$dirarq);
+//
+//   Atualizado 20180928 - Correto
+//  Diretorio principal exemplo /var/www/html/aqui
+//  $dir_principal=__DIR__;
+//
+//  Verificando SESSION incluir_arq
+if( ! isset($_SESSION["incluir_arq"]) ) {
+     //
+     //  path e arquivo local
+     $_SESSION["incluir_arq"]= $_SESSION["dirprincipal"];
+     //
+}
+$incluir_arq=$_POST["incluir_arq"] = $_SESSION["incluir_arq"];
+//
+//  Varios arrays
+//  include("includes/array_menu.php");
+include_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
+//
+$elemento=5; $elemento2=6;
+//
+//  Muito MELHOR ESSE JEITO
+require_once("php_include/ajax/includes/conectar.php");
+//
+//       INCLUINDO CLASS - 
+//    IMPORTANTE: variavel de erro
+$php_errormsg="";
+///     Class para funcoes de mensagens
+require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");
+if( strlen(trim($php_errormsg))>0  )  {
+    echo "ERRO: OCORREU UM ERRO ".$php_errormsg;
+    exit();
+}
+$autoload = new Autoload();
+$funcoes=new funcoes();
+//
+/**  Caso variavel desativada  */
+if( ! isset($permit_pa)  ) {
+    //
+    if( isset($_POST["m_cod_img"]) ) {
+        $codimg_atual=$_POST["m_cod_img"];
+    } else {
+        if( isset($_SESSION["captchacodigo"]) ) {
+            $codimg_atual = $_SESSION["captchacodigo"];       
+        }
+    }
+    //
+    // Desativar variaveis  
+    if( isset($_POST["login_down"]) ) $login_down=$_POST["login_down"] ;
+    if( isset($_POST["senha_down"]) ) $senha_down=$_POST["senha_down"] ;
+    if( isset($_POST["codigo_down"]) ) $codigo_down=$_POST["codigo_down"] ;
+    //
+    $login_down= trim($login_down); 
+    $senha_down= trim($senha_down); 
+    $codigo_down= trim($codigo_down);    
+    if( strlen($login_down)<1 || strlen($senha_down)<1  || strlen($codigo_down)<1 ) {
+        /**  echo "<p  style=\"font-size:medium;font-weight:bold;\" >&nbsp;";
+         *    echo "Os Campos s&atilde;o obrigat&oacute;rios</p>";    
+        */
+         ////  $msg_erro .="Os Campos s&atilde;o obrigat&oacute;rios.".$msg_final; 
+         echo $funcoes->mostra_msg_erro("Os Campos s&atilde;o obrigat&oacute;rios.");
+         exit();
+    }
+    //
+    if( ! isset($codigo_down) ) $codigo_down="";
+    if( ! isset($codimg_atual) ) $codimg_atual="";
+    if( strlen($codigo_down)<1 and strlen($codimg_atual)<1  ) {
+          $msg_erro .= "Falha grave reiniciar.".$msg_final;  
+          echo  $msg_erro;
+          exit();
+    }
+    //
+    /**  Comparando variaveis de Codigo  */ 
+    if( $codimg_atual!==$codigo_down ) {
+         /***  echo "<p style=\"font-size:medium;font-weight:bolder;\" >";
+         *   echo "O c&oacute;digo est&aacute; errado.</p>";    i
+         */
+         echo $funcoes->mostra_msg_erro("O c&oacute;digo est&aacute; errado.");
+         exit();
+    }
+    /**   Fianl - if( $codimg_atual!==$codigo_down ) {  */
+    //
+    /** 
+    *  O que addslashes() faz?
+    *    -  Ele adiciona uma barra invertida (\) antes dos seguintes caracteres:
+    *       Aspas simples (')
+    *       Aspas duplas (")
+    *       Barra invertida (\)
+    *       Caractere NULL (\0)
+    */
+    $login_down=addslashes($login_down);
+    $senha_down=addslashes($senha_down);
+    $codigo_down=addslashes($codigo_down);
+    #
+    //
+    $aval_teste = "Projeto_RExp";
+    ///  @require_once('/var/www/cgi-bin/php_include/ajax/includes/avaliando_ajax.php');
+    ///  include('/var/www/cgi-bin/php_include/ajax/includes/avaliando_ajax.php');
+    //
+    $login_recebido = $login_down; 
+    $senha_recebido= $senha_down;    
+    $_SESSION['login_down'] =$login_down;
+    $_SESSION['senha_down'] =$senha_down;        
+    //
+    //  login ou e_mail -  Tabela pessoal.usuario(login) e pessoal.pessoa(e_mail)
+    //  ALTERADO EM 20191122
+    // if( strpos($login_down,'@')===false ) {
+    if( strpos($login_down,'@') ) {
+        //  Caso  variavel for E_MAIL
+        //  $email=$login_down;
+        $testar_login=strtoupper(trim($login_down));
+        $_SESSION['user_cond'] =" upper(trim(b.e_mail))='$testar_login'";   
+        //
+    } else {
+        //
+        //  Variavel pode ser codigousp ou login
+        $testar_login =  trim($login_down);
+        //
+        // Caso variavel for numerica - codigousp
+        if( is_numeric($testar_login) ) {
+             //
+             //  login  como  codigousp da Tabela usuario
+             $testar_login = (int) trim($login_down);
+             $_SESSION['user_cond']  =" a.codigousp=$testar_login ";          
+        } else {
+            //
+            // login - variavel como string
+            $_SESSION['user_cond']  =" a.login=\"$testar_login\" ";    
+            //
+        }
+        //
+    }
+    //
+    $email=$login_down;
+    $mail_correcto=0;
+    //
+    //  Verificando Tabelas - login e senha
+    require('php_include/ajax/includes/verificando.php');
+    //
+    // Ocorreu algum erro na busca do usuario
+    if( ! isset($_SESSION["total"]) ) {
+        $_SESSION["total"]=-1;    
+    }
+    $ssot="{$_SESSION["total"]}"; 
+    //
+    //
+    if( intval($ssot)<1 ) {
+        //
+         $m_erro=0;
+         if( isset($email_erro) ) {
+              if( strlen(trim($email_erro))>1  ) {
+                   $m_erro=$m_erro+1;
+                   $msg_erro .= "Re-digite o campo Usuário/Email".$msg_final;   
+                   unset($email_erro);
+              }
+        }
+        /**   Final - if( isset($email_erro) ) { */
+        //
+        if( isset($senha_erro) ) { 
+             if( strlen(trim($senha_erro))>1 ) {
+                  $m_erro=$m_erro+1;
+                  ///  $msg_erro .=$senha_erro.$msg_final;
+                  $msg_erro .= "Re-digite campo Senha".$msg_final;                
+                  unset($senha_erro);       
+             }
+        }  
+        /**  Final - if( isset($senha_erro) ) {  */
+        //
+        //  Verifica se houve erro
+        if( intval($m_erro)>1 ) {
+            $msg_erro .= "Re-digite campos: Usuário/Email e Senha".$msg_final;   
+        }  
+        /**  Final - if( intval($m_erro)>1 ) {  */
+        //
+        echo  $msg_erro;
+        //
+        exit();      
+        //
+    }  
+    /**   Final - if( intval($ssot)<1 ) {  */
+    //
+    /**   Verifica se a SESSION email_usuario foi enviada pelo arquivo verificando.php  */ 
+    $num_erros=0;
+    if( ! $_SESSION["email_usuario"] ) {
+         $msg_erro .= utf8_decode("SESSION email_usuario indefinida. Consulte administrador.").$msg_final;   
+         $num_erros=1;
+    }  
+    /**   Final - if( ! $_SESSION["email_usuario"] ) {  */
+    //
+    ///  Pesquisando o email do usuario
+    $email=$_SESSION["email_usuario"];
+    if( strpos($email,'@')===false ) {
+         $msg_erro .= utf8_decode("Esse usuário não contém email cadastrado. Consulte administrador.").$msg_final;   
+         $num_erros=2;
+    } 
+    /**   Final - if( strpos($email,'@')===false ) { */
+    //
+    //  Caso houve erro
+    if( intval($num_erros)>0 ) {
+         echo  $msg_erro;
+         exit();      
+    }  
+    /**   Final - if( intval($num_erros)>0 ) { */
+    // 
+    //  Repassando importante
+    $_SESSION['login_down'] = $login_down = $_SESSION["email_usuario"];
+    ///
+    /** Exemplo do resultado  do  Permissao de Acesso
+      +-------------+--------+
+      | descricao   | codigo |
+      +-------------+--------+
+      | super       |      0 | 
+      | chefe       |     10 | 
+      | vice        |     15 | 
+      | aprovador   |     20 | 
+      | orientador |     30 | 
+      | anotador    |     50 | 
+      +-------------+--------+
+    */
+    ///      Select alterarndo para MYSQLI
+    $cmdsql="SELECT lower(substring_index(substring_index(descricao,'-',1),' ',1)) as descricao, "
+               ." codigo FROM $bd_2.pa order by codigo ";
+    ///   
+    ////  $resultado_pa=mysql_query($cmdsql);
+    $resultado_pa=mysqli_query( $_SESSION["conex"], $cmdsql);
+    ///
+    /// Verifica ERRO - mysqli_query
+    if( mysqli_error($_SESSION["conex"]) ) {
+        ///
+        /// Ocorreu erro Select/MYSQLI - usuario e senha
+        $txt="SELECT descricao TABLE pa - db/mysqli&nbsp; Corrigir<br/>";
+        ///
+        $_SESSION["erro"] = "$txt".mysqli_error($_SESSION["conex"]);
+        $msg_erro .="{$_SESSION["erro"]} ".$msg_final;
+        echo "$msg_erro";
+        ///
+        exit();
+        ///
+    }
+    //
+    //   Alterado em 20250509
+    //  while( $row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC)) {
+    while( $row = mysqli_fetch_array($resultado_pa)) {
+           $descricao=$row["descricao"];
+           $array_pa[$descricao]=$row["codigo"];
+    }
+    //
+    //   Desativando variavel 
+    if( isset($resultado_pa) ) {
+         // mysqli_free_result($resultado_pa);
+          unset($resultado_pa);
+    } 
+    //
+    $_SESSION["array_pa"]=$array_pa;
+    //
+}
+/**  FINAL  - if( strlen(trim($permit_pa))<1  ) {  */
+//
+/**  Consulta verifica se existe usuario
+*           com o login_down passado e senha          
+*/
+if( ! isset($_SESSION["total"]) ) {
+    $_SESSION["total"]="";  
+}
+$stotal=$_SESSION["total"];
+//
+
+
+   echo "ERRO: authent_user_ajax/327 -->> \$stotal = $stotal <br> \$login_down = $login_down <<-->>  SEM ACESSO  \$permit_pa  <br>"
+       ." -->> \$login_down = $login_down -->  \$senha_down = $senha_down  <-- \$codigo_down = $codigo_down  <br>"
+       ." -->> \$email = $email  -->>  \$ssot = $ssot <br>";
+      exit();
+
+
+
+
+
+
+if( intval($stotal)==1 and ( ! isset($permit_pa) ) ) {         
+        //
+        if( isset($_SESSION["array_pa"]) ) {
+               $array_pa=$_SESSION["array_pa"];
+        } 
+        ///
+        /***
+        *       ALTERADO EM 20250509
+        *       verifica email do usuario  
+        *       caso ativo copiar para login_down
+        ***/
+        if( isset($_SESSION["email_usuario"]) ) {
+            $login_down = trim($_SESSION["email_usuario"]);
+        }
+
+
+/**
+echo "ERRO: authent_user_ajax/354 -->> PARTE 2 -->> \$login_down = $login_down <<->> \$array_pa = ".gettype($array_pa)
+       ." --  SEM ACESSO  \$permit_pa -- \$stotal = $stotal ";
+exit();
+ */
+
+
+
+
+        //
+        // if( strpos($login_down,'@')===false ) {
+        if( strpos($login_down,'@') ) {
+            //
+            //  Caso  variavel for E_MAIL
+            //  $email=$login_down;
+            $testar_login=strtoupper(trim($login_down));
+            $_SESSION['user_cond'] =" upper(trim(b.e_mail))='$testar_login'";   
+            //
+        } else {
+            //
+            //  Variavel pode ser codigousp ou login
+            $testar_login =  trim($login_down);
+            //
+            // Caso variavel for numerica - codigousp
+            if( is_numeric($testar_login) ) {
+                //
+                //  login  como  codigousp da Tabela usuario
+                $testar_login = (int) trim($login_down);
+                $_SESSION['user_cond']  =" a.codigousp=$testar_login ";          
+                //
+            } else {
+                //
+                // login - variavel como string
+                $_SESSION['user_cond']  =" a.login=\"$testar_login\" ";    
+                //
+            }
+            //
+        }
+        //
+        $user_cond =  "{$_SESSION['user_cond']}";
+        //
+        $usuario_email=$testar_login; 
+        $_SESSION["n_login_down"]=trim($_SESSION["login_down"]); 
+        $_SESSION["n_senha_down"]=trim($_SESSION["senha_down"]);         
+        //
+        
+/**
+          $msg_erro .= "Falha grave --- <b>{$_SESSION['user_cond']}</b> <br/>  $login_down  -->>  {$_SESSION["email_usuario"]}  <<-- reiniciar.".$msg_final;  
+          echo  $msg_erro;
+          exit();
+ */
+        
+        
+        
+        // 
+        $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
+                 ." WHERE (a.codigousp=b.codigousp ) and $user_cond order by a.pa  ";
+        //   
+        //  $result_pa=mysql_query($cmdsql);
+        $result_pa=mysqli_query($_SESSION["conex"],$cmdsql);
+        //
+        /// Verifica ERRO - mysqli_query
+        if( mysqli_error($_SESSION["conex"]) ) {
+            ///
+            /// Ocorreu erro Select/MYSQLI - usuario e senha
+            $txt="SELECT pa TABLES participante/pessoa: - db/mysqli&nbsp; Corrigir<br/>";
+            ///
+            $_SESSION["erro"] = "$txt".mysqli_error($_SESSION["conex"]);
+            $msg_erro .="{$_SESSION["erro"]} ".$msg_final;
+            echo "$msg_erro";
+            //
+            exit();
+            //
+        }
+        //
+        //  Nr. de registros
+        $regs = mysqli_num_rows($result_pa);
+        //
+        
+/**
+          $msg_erro .= "Falha grave --->>AQUI - \$regs = $regs <br> -->> \$user_cond = <b>";
+          $msg_erro .= "{$user_cond}</b> <br/>  $login_down  <br>";
+          $msg_erro .= "-->> \$_SESSION[email_usuario] = {$_SESSION["email_usuario"]}  <<-- .".$msg_final;  
+          echo  $msg_erro;
+          exit();
+ */
+        
+        
+        /**  Verificando Nr. de Registros  */
+        if( intval($regs)>1 ) {
+             //
+             //   $num_pas = count($array_usuarios);         
+             $num_pas= (int) count($array_pa);  
+             /** 
+              *   ABAIXO tag Select - Selecionar Chefe, Orientador, Orientado etc...
+              *    sendo enviado para a function pa_selecionado - arq. authent_user.php                                                 
+             */   
+           ?>
+            <p id="conteudo"  >Usu&aacute;rio aceito<br/>
+            <span  class="loginresultado"  >
+                Selecione para logar como:&nbsp;&nbsp;
+            <select  name="permit_pa"  id="permit_pa" class="td_select"  style="border: 1px solid #000000;"
+                 onchange="javascript: pa_selecionado('pa_selecionado',this.value);" 
+                  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
+            <option value="" >Selecione</option>
+           <?php
+              //
+              // Alterado em 20250509
+              while( $linha=mysqli_fetch_array($result_pa)) {       
+                    //
+                    /**   htmlentities - o melhor para transferir na Tag Select  */ 
+                    $codigo_pa= (int) $linha["pa"];  
+                    //
+                    foreach( $array_pa as $chave => $valor ) {                
+                          $campo_nome = ucfirst($chave);
+                          $valor= (int) $valor;
+                          if( $valor==$codigo_pa ) {
+                              echo "<option  value=".$valor." title='Clicar'  >";
+                              echo  $campo_nome."&nbsp;</option>" ;
+                          }                
+                          //
+                    }
+                    /**   Final - foreach( $array_pa as $chave => $valor ) {   */
+                    //
+              }  
+              /**  Final - while( $linha=mysqli_fetch_array($result_pa)) {   */
+              //
+            ?>
+            </select>
+            </span>
+            </p>
+          <?php
+            //
+            //  Desativando variavel 
+             if( isset($result_pa) ) {
+                 //
+                 //   mysqli_free_result($result_pa);
+                unset($result_pa);
+                 //
+             } 
+             //
+            exit();
+            //
+        } else if( intval($regs)==1 ) {
+            //
+            $permit_pa="";
+            if( $result_pa ) {
+                //
+                //  Usando mysql_result - ANTERIOR
+                //  $permit_pa=mysql_result($result_pa,0,"pa");   
+                //
+                //  MYSQLI - Usar fetch_assoc para o resultado
+                $row = $result_pa->fetch_assoc();
+                $permit_pa = $row["pa"];
+                ///
+                $opcao="PA_SELECIONADO";
+                //
+            }
+            /**  Final - if( $result_pa ) { */
+            //       
+        } else if( intval($regs)<1 ) {
+            /*** 
+            *   Caso o total seja zero sair com exit() 
+            *   destroy qualquer session                
+            */
+            require("php_include/ajax/includes/sair.php");        
+            //
+            exit();
+            //
+        }    
+        //
+}   
+/**  Final - if( intval($stotal)==1 and ( ! isset($permit_pa) ) ) {   */
+//  
+//
+// Verificando variavel $opcao
+$opcao_up="";
+if( isset($opcao) ) {
+    $opcao_up=strtoupper(trim($opcao));
+}
+/**  Final - if( isset($opcao) ) {  */
+//
+
+
+echo "ERRO: authent_user_ajax/533 -->> PARTE 3 -->>  \$stotal = $stotal <br>"
+     ."  -->> \$opcao_up = $opcao_up  ";
+exit();
+
+
+
+
+
+/**  Final - Caso variavel IGUAL a 1  */
+if( intval($stotal)==1 ) {
+   ///
+
+
+
+
+   if( $opcao_up=="PA_SELECIONADO" )  {  
+         ///  
+         if( strlen(trim($_SESSION["n_login_down"]))>0  )  {
+             $len_val = strlen(trim($_SESSION["n_login_down"]));          
+         } elseif( strlen(trim($_SESSION["login_down"]))>0  )  {
+             $len_val = strlen(trim($_SESSION["login_down"]));          
+         }    
+         $_SESSION["permit_pa"]=$permit_pa; 
+         $_SESSION["login_down"]=trim($_SESSION["n_login_down"]);   
+         $_SESSION["senha_down"] = trim($_SESSION["n_senha_down"]);    
+         /* Armazenando as variaveis na nossa Session */
+         unset($total); 
+         ///  unset($login_down);    unset($senha_down);    unset($codigo_down);
+         $navegador = $_SERVER["HTTP_USER_AGENT"];
+         $pos = strpos($_SERVER["HTTP_USER_AGENT"],'MSIE');
+         if( isset($parte1) ) unset($parte1); 
+         if( isset($parte2) ) unset($parte2); 
+         if( isset($_POST) ) {
+              $_POST = array(); unset($_POST);     
+         }  
+         $_SESSION["len_val"]=$len_val;
+         $_SESSION["action"]="projetos_rexp";
+         ///
+         include('php_include/ajax/includes/exec_ie_firefox.php');      
+         //
+         exit();   
+         //
+   }
+   //
+} else if( intval($stotal)<>1 ) {
+    //
+
+
+/**
+echo "ERRO: authent_user_ajax/486 -->> PARTE 4 -->> SEM ACESSO  \$permit_pa -- \$stotal = $stotal ";
+exit();
+ */
+
+
+      ///  session_destroy();    
+     /****  Caso o total seja zero sair com exit() 
+          destroy qualquer session              
+     ****/
+     require("php_include/ajax/includes/sair.php");        
+     //
+}
+///  print'<a href=formulario.php >'.'<h2 class="aviso">Senha Invalida</h2>'.'</a>';
+///  $msg_erro .= "Falha na autentica&ccedil;&atilde;o do Usu&aacute;rio/Login".$msg_final;
+///  echo $msg_erro;
+#
+/* Informarmos senha invalida */
+#
+ob_end_flush(); /* limpar o buffer */
+#
+?>

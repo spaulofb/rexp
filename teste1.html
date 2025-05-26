@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="author" content="Sebastião Paulo" />
+<meta http-equiv="Cache-Control" content=" no-store, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0">
+<meta http-equiv="PRAGMA" content="NO-CACHE">
+<meta name="ROBOTS" content="NONE"> 
+<meta http-equiv="Expires" content="-1" >
+<meta name="GOOGLEBOT" content="NOARCHIVE"> 
+<meta charset="utf-8" />
+<script type="text/javascript" src="*.js" charset="utf-8"></script>
+</head>
+<body>
+  <!-- Parte do arquivo PDF - Relatorio do Projeto  -->
+<div id="arq_link"   >
+  <form name="form_arq_link"  method="post"  enctype="multipart/form-data"  action="<?php echo $pagina_local; ?>"  >
+     <table border='0' cellpading='0' cellspacing='0' width='90%'>
+       <tr>
+         <!-- Relatorio Externo (link) Projeto -->
+          <td  class="td_inicio1" style="vertical-align: middle; "  colspan="1" >
+            <label for="relatproj" style="vertical-align: middle; cursor: pointer; " title="link para o Arquivo do Projeto" ><span class="asteristico" >*</span>&nbsp;Arquivo (link):&nbsp;</label>
+          </td  >
+           <td class="td_inicio2" style="vertical-align: middle; " colspan="1"  >
+                 <!-- Target of the form is set to hidden iframe -->
+               <!-- From will send its post data to fileframe section of this PHP script (see above) -->
+               <input type="file" name="relatproj"  id="relatproj"  size="90" 
+                     title="Relatório Externo do Projeto (link)" required="required" 
+                     style="cursor: pointer; vertical-align:middle; " onChange="javascript: jsUpload(this);" />
+            </td>
+         <!-- FINAL - Relatorio Externo (link) Projeto -->
+       </tr>
+       <tr>
+      <!--  Aviso na espera do processo -->
+      <td  id="aguarde_arq"  style="display:block; text-align: center; background-color: #FFFFFF; color: #000000;;"   colspan="2"    >
+         Aguarde. Esse processo pode demorar...   
+       </td>
+    </tr>    
+     <tr>
+       <td  align="center"  style="text-align: center; border:none;" colspan="2" >
+          <button  type="submit" name="enviar_arq" id="enviar_arq" class="botao3d" 
+            style="width: 160px; cursor: pointer;" title="Enviar"  acesskey="E"  alt="Enviar"   onclick="javascript: if(  trim(document.getElementById('relatproj').value)=='' ) { alert('Importante: informar o arquivo do Projeto.'); document.getElementById('relatproj').focus(); return false; } " >Enviar arquivo&nbsp;<img src="../imagens/enviar.gif" alt="Enviar Arquivo"  style="vertical-align:text-bottom;"  >
+          </button>
+        </td>
+    </tr>
+    <tr>
+        <td  style="display:block; text-align: left; background-color: #FFFFFF; color: #000000;;"   colspan="2"    >
+          <span class="asteristico" >*</span>&nbsp;<b>Campo obrigat&oacute;rio</b>    
+       </td>
+    </tr>       
+   </table>
+  </form>
+  <script type="text/javascript" lang="javascript" charset="utf-8"  >
+  ///
+////  charset="utf-8";
+///
+   /* This function is called when user selects file in file dialog */
+    function jsUpload(upload_field) {
+            // Este e apenas um exemplo de verificacao de extensoes de arquivo
+            //  var re_text = /\.txt|\.xml|\.zip/i;
+            var re_text = /\.pdf/i;
+            var filename = upload_field.value;
+            /* Checking file type */
+            var merro=0;
+             if( filename.search(re_text)==-1)  {
+                  //  alert("File does not have text(txt, xml, zip) extension");
+                  alert(decodeURI("ERRO: Esse arquivo não tem formato PDF"));
+                 
+                  //  upload_field.form.reset();
+                   merro=1;
+             }  else {
+                 var n = filename.search(/[%*/$#@&]/);
+                 if( n!=-1)  {
+                     
+                        var uri = "my t ação e";
+    var res = (uri);
+    alert("  res = "+res);
+                     
+                     
+                      var uri='ERRO: Nome do arquivo não pode conter símbolos como: %*/$#@ \r\nCorrigir renomear.';
+                      
+                      alert(uri);
+                       merro=1;
+                 }    
+             }
+             
+             ///  Verifica se houve erro
+             if( parseInt(merro)>0  ) {
+                  document.getElementById('relatproj').value="";
+                  document.getElementById('relatproj').focus();
+                  return false;
+             }
+             
+             
+             /*
+                upload_field.form.submit();
+                document.getElementById('upload_status').value = "uploading file...";
+                upload_field.disabled = true;
+                return true;
+             */
+    }
+    
+///
+function abc()  {
+       ///  Depois qdo foi ACEITO o USUARIO
+    if( ativ_desat_upper=="INICIAR" ) {
+        var caminho_http="";
+        limpar_campos("limpar");
+        ////  Verificar  e desativar ID form
+        if( document.getElementById("form") ) {
+            ///  Ocultando ID
+            exoc("form",0,""); 
+        } 
+        ///
+        ///  Mudando de pagina
+        var http_host = m_dados.split("#");
+        var LARGURA = screen.width;
+        var ALTURA = screen.height;
+        var caminho_http=http_host[1];    
+        /* Caso o navegador nao for microsoft
+           var navegador =navigator.appName;
+           var pos = navegador.search(/microsoft/gi);
+         */           
+         var navegador_usado="<?php echo $_SESSION["navegador"];?>";
+         var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome'); 
+         var is_microsoft = navegador_usado.search(/microsoft|ie/gi);
+         
+         ///  Verificando se o navegador eÂ´ IE ou CHROME
+         ///  if( is_chrome!=-1  || is_microsoft!=-1  ) {
+         if(  navegador_usado.toUpperCase()=="CHROME"  || navegador_usado.toUpperCase()=="IE"  ) {
+             
+////             alert(" CONTINUAR - LINHA/694 -  NAVEGADOR IE OU CHROME"+http_host[1]);
+            
+               location.replace(http_host[1]); 
+               return;
+         } else {
+    
+/*                        
+                 alert("LINHA/488 -->> navegador_usado = "+navegador_usado+"  \r\n --caminho_http = "+caminho_http+"   -->>>  ativ_desat = "+ativ_desat+" - mensag = "+mensag+" - m_dados = "+m_dados)        
+                  return;
+  */                     
+                       //  alert(" http_host[1] = "+http_host[1])
+                       window.location.replace(http_host[1]);
+                     
+                       //     window.open('http://www-gen.fmrp.usp.br','_parent','');window.close(); 
+                       // } else {
+                        //   window.close();
+                       //    var win_new = window.open(http_host[1]); 
+                       //    win_new.focus();            
+                       // }   
+                        return;  
+         }
+    } 
+    
+    
+      if( parseInt(autorizado)==1  ) {
+          if( navegador_usado.toUpperCase()=="CHROME"  || navegador_usado.toUpperCase()=="IE"  ) {
+               ///
+               location.replace(http_host[1]); 
+               return;
+          } else {
+               ///  alert(" http_host[1] = "+http_host[1])
+                window.location.replace(http_host[1]);
+                ///   window.close();
+                ///    var win_new = window.open(http_host[1]); 
+                ///    win_new.focus();            
+                ///   
+                return;  
+          }        
+      }
+         
+       
+}
+  </script>
+</div>
+<!--  Final - Parte do arquivo PDF - Relatorio do Projeto  -->
+</body>
+</html>

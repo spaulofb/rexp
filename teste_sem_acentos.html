@@ -1,0 +1,180 @@
+<!DOCTYPE html >
+<html lang="pt-br" >
+<head>
+ <title>width e height</title>
+<meta charset="utf-8" >
+<meta name="author" content="SPFB&LAFB" /> 
+<style type="text/css">
+<!--
+.idd {
+  width: 100%;
+  height: 100px;
+  background-color: #a7fea8;
+  text-align: center;
+ }
+-->
+</style>
+<script type="text/javascript">
+//  Alinhar Texto - como o TRIM do php
+//  Removendo os espacos antes e depois
+function xtrim(str) { return str.replace(/^\s+|\s+$/g,""); }
+///
+//********************************************************************************
+//
+//  Alinhar Texto - como o TRIM do php
+//  Removendo os espacos antes e depois 
+//  Alterado para o HTML5  aceitar
+function ytrim(str) { 
+     var texto = str.replace(/^\s+|\s+$/g,""); 
+     var i=9999;
+     var resultado = "";
+     var x = texto.indexOf("  ");
+     if( x!=-1 ) {
+         while( i>0 ) {
+              texto = texto.replace("  "," "); 
+              var n = texto.indexOf("  ");
+              /// 
+              if( n==-1) {
+                  break;
+              } else {
+                  resultado = texto;              
+              }
+              i--;
+         } 
+         return resultado; 
+     }
+     return texto;
+}
+////***************************************************
+m_dados_recebidos="sal?dkjdfas asdl?kjfdas falta_arquivo_pdf.1&";
+var pos=m_dados_recebidos.search(/falta_arquivo_pdf/i);
+
+
+//**********************************************************
+var texto="   Digtado  -   agora     ";
+var nlength = texto.length;
+document.writeln("texto: "+texto+" - tamano="+nlength);
+var texto1=xtrim(texto);
+
+alert("texto1:"+texto1+" - tamanho: "+texto1.length)
+//
+var texto2=ytrim(texto);
+document.getElementById("b").innerHTML=texto2+" - tamanho=".texto2.length;
+////
+///  Verifica a data 
+function verificadata(nome_id) {
+   var isvalid = document.getElementById(nome_id).checkValidity();
+   
+   ///
+   if( ! isvalid ) {
+        document.writeln("INVALIDO");
+   }  else {
+       var valor=document.getElementById(nome_id).value;
+       var variavel_len=valor.length;
+       ////  document.writeln("OK --  INVALIDO  -  variavel_len = "+variavel_len+"  data = "+valor); 
+       var texto="OK --  INVALIDO  -  variavel_len = "+variavel_len+"  data = "+valor; 
+       if( parseInt(variavel_len)>10  ) {
+            var teste=" -> ERRO";
+            var texto="OK --  INVALIDO  -  variavel_len = "+variavel_len+"  data = "+valor+teste; 
+       }
+       document.getElementById("mostrar").innerHTML=texto;
+   }
+   
+       
+}
+///
+function navegador(){
+      var agente = window.navigator.userAgent;
+      var navegadores = ["Chrome", "Firefox", "Safari", "Opera", "Trident", "MSIE", "Edge"];
+      for(var i in navegadores){
+          if(agente.indexOf( navegadores[i]) != -1 ){
+              return navegadores[i];
+          }
+      }
+  }
+  var browser = document.getElementById("navegador");
+  window.onload = function(){
+  browser.innerHTML = "El navegador es: "+ navegador();
+}
+///
+///  Retirando a acentuação de um Input de texto
+function alterar_acentos(palavra) {
+    ///
+    var palavraSemAcento = "";
+    var caracterComAcento = "áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ";
+    var caracterSemAcento = "aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC";
+    var palavra_length = palavra.length;
+    for( var i=0; i<palavra_length; i++) {
+           var char = palavra.substr(i,1);
+           var indexAcento = caracterComAcento.indexOf(char);
+           if( indexAcento!=-1 ) {
+    
+               alert("palavra="+palavra+"  --  indexAcento = "+indexAcento);               
+               
+                  palavraSemAcento += caracterSemAcento.substr(indexAcento,1);
+           } else {
+                   palavraSemAcento += char;
+           }
+           
+           
+    alert(" domenu/50 -- alterar_acentos  --- palavraSemAcento ="+palavraSemAcento+" -->> inicio  i = "+i+"  --  palavra_length = "+palavra_length);
+                   
+
+           
+     }
+     ///
+     return palavraSemAcento;
+    ///
+}
+///
+///
+</script>
+</head>
+<body onload="navegador();">
+<div id="contenedor">
+    <header>
+        <div id="titulo">
+            <h1>DETECTAR NAVEGADOR CON JAVASCRIPT</h1>
+        </div>
+    </header> 
+    <section id="main">
+        <div id="navegador"></div>
+    </section>
+</div>
+<p>Click the button to alert the string with removed whitespace.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<div id="mostra1" style="padding-top:.5em;" ></div>
+<div id="mostra2" style="padding-top:.5em;" ></div>
+
+<p><strong>Note:</strong> The trim() method is not supported in Internet Explorer 8 and earlier versions.</p>
+
+<script>
+function myFunction() {
+    var str = "       Hello      World!       ";
+    //// document.writeln("Antes - str len = "+str.length);
+    var strtrim=str.trim();    
+    alert(strtrim);
+    document.getElementById("mostra1").innerHTML=str+" - "+str.length;   
+    var strtrim = strtrim.replace(/^\s+|\s+$/gm,"");    
+    var strtrim = strtrim.replace(/\s*,\s*/g,""); 
+    var strtrim = strtrim.replace(/^\s+|\s{2,9}|\s+$/gm,",");    
+    document.getElementById("mostra2").innerHTML=strtrim+" - "+strtrim.length;
+     
+}
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+  };
+}
+////
+</script>
+
+<div id="mostrar" style="padding-top: 6px;position:relative;" ></div>
+<br/>
+ <script type="text/javascript">
+ alterar_acentos("Apresentação"); 
+ </script> 
+ </body>
+</html>

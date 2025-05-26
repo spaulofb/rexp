@@ -1,0 +1,50 @@
+@charset "UTF-8";
+/*  CSS3 Document */
+
+@font-face {
+    font-family: 'bariol_boldbold';
+    src: url('bariol_bold-videoaulasiagfont-.eot');
+    src: url('bariol_bold-videoaulasiagfont-.eot?#iefix') format('embedded-opentype'),
+         url('bariol_bold-videoaulasiagfont-.woff') format('woff'),
+         url('bariol_bold-videoaulasiagfont-.ttf') format('truetype'),
+         url('bariol_bold-videoaulasiagfont-.svg#bariol_boldbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bariol_lightlight';
+    src: url('bariol_light-videoaulasiagfont-.eot');
+    src: url('bariol_light-videoaulasiagfont-.eot?#iefix') format('embedded-opentype'),
+         url('bariol_light-videoaulasiagfont-.woff') format('woff'),
+         url('bariol_light-videoaulasiagfont-.ttf') format('truetype'),
+         url('bariol_light-videoaulasiagfont-.svg#bariol_lightlight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bariol_regularregular';
+    src: url('bariol_regular-videoaulasiagfont-.eot');
+    src: url('bariol_regular-videoaulasiagfont-.eot?#iefix') format('embedded-opentype'),
+         url('bariol_regular-videoaulasiagfont-.woff') format('woff'),
+         url('bariol_regular-videoaulasiagfont-.ttf') format('truetype'),
+         url('bariol_regular-videoaulasiagfont-.svg#bariol_regularregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bariolthin';
+    src: url('bariol_thin-videoaulasiagfont-.eot');
+    src: url('bariol_thin-videoaulasiagfont-.eot?#iefix') format('embedded-opentype'),
+         url('bariol_thin-videoaulasiagfont-.woff') format('woff'),
+         url('bariol_thin-videoaulasiagfont-.ttf') format('truetype'),
+         url('bariol_thin-videoaulasiagfont-.svg#bariolthin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}

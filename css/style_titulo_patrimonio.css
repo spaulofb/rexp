@@ -1,0 +1,110 @@
+
+p.titulo_usp, p.titulo_grupo, p.titulo_gemac {  color: #000; letter-spacing: 1px; vertical-align: middle;   
+        margin: 0; white-space: nowrap; text-align: center; 
+	   font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+	  font-weight: normal; font-size: large; line-height: 120%;  
+	   white-space:nowrap;  
+}	 
+p.titulo_grupo {  color: #008000; 
+	   font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}	 
+p.titulo_gemac {  color: #000;  }	 
+p.titulo_graduacao {  color: #000; 
+          margin: 5pt 0 0 0;white-space: nowrap; text-align: center;font-weight: bold; 
+	      font-size: x-small; line-height: 180%; 
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}	 
+.MsoNormal2 { text-align:justify; 
+           text-indent:45.1pt; 
+		   font-size: small; line-height: 180%; 
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}
+.div_pag_principal {   background-image: url(http://sol.fmrp.usp.br/gemac/images/fundogem.jpg); 
+                        width: 100%;
+}
+.body_cab_p1 { background-image: url(http://sol.fmrp.usp.br/gemac/images/fundogem.jpg);  }
+p.titulo_usp_p1, p.titulo_grupo_p1, p.titulo_gemac_p1 {
+      color: #FFFFFF; letter-spacing: 1px;  
+      margin: 0; white-space: nowrap; text-align: center; 
+     font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 	  
+	  width: 100%;  font-weight: normal; font-size: small;  line-height: 180%;  
+	 background-image: url(http://sol.fmrp.usp.br/gemac/images/fundogem.jpg); 
+	 white-space:nowrap;
+}	 
+p.titulo_gemac_p1	{ margin-top: 5pt; }  
+.parag_link a, .parag_link a:visited{ text-decoration: none }
+.parag_link a, .parag_link a:hover { text-decoration: underline }
+
+/*
+a:active { text-decoration: underline }
+a:hover { text-decoration: underline }
+a:link { text-decoration: none }
+a:visited { text-decoration: none }
+*/
+
+.botao a, .botao a:visited {  
+       font: bold 0px/0px arial, helvetica, sans-aerif;	
+       padding:0px; text-decoration: none;
+       text-align:center; color:#fff;
+       background: #fff url('images/bolinha.gif') no-repeat center center;	
+       background-color: transparent;
+       width: 12px;  height: 12px;	display:block;	
+}
+.botao a:hover { 
+       background: #FFFFFF url('images/bluecube.gif') repeat center center;
+       color:#FFFFFF; background-color: transparent;
+}
+
+.paragrafo_centrar {
+    text-align : center;
+    font-weight: bold;
+    line-height: normal;
+    white-space : nowrap;
+    color: #000000;
+    font-size: small;
+} 
+.paragrafo_centrar_2 {
+    text-align : center;
+    font-weight: bold;
+    line-height: normal;
+    white-space : nowrap;
+    font-size: small;
+  } 
+
+.paragrafo_centrar_bold {
+    text-align:center;
+    font-weight: bold;
+    background-color:#FFFFFF;
+    white-space : nowrap;
+    font-size: small;
+} 
+.m_h2 { mso-style-next:Normal;
+	margin-right:0cm;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:20.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family: Arial, Helvetica, sans-serif, Georgia, Times, "Courier New", Courier, monospace;
+} 
+p.index, .resposta { 	
+  	            font-family: Arial, Helvetica, sans-serif, Georgia, Times, "Courier New", Courier, monospace;
+	            text-align:justify;white-space:nowrap;
+	            font-style:normal;font-size: small; margin-left: 10pt;  
+} 
+
+.resposta {
+            font-size: medium; color:#FF0000; background: #FFFFFF;  
+}
+         
+.div_centrar, .div_centrar_relat { margin-left: 2pt; 
+         text-align: center; width: 580px; border: none; line-height: normal; 
+         background-image: url(http://sol.fmrp.usp.br/gemac/images/fundo4.jpg); 
+} 
+.div_centrar_relat {  background-image:none; background-color: #000000; } 
+
+label { color: #000000; }
+

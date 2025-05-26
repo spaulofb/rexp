@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Lang" content="en">
+<meta name="author" content="">
+<meta http-equiv="Reply-to" content="@.com">
+<meta name="generator" content="PhpED 6.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="creation-date" content="06/01/2011">
+<meta name="revisit-after" content="15 days">
+<title>Untitled</title>
+<link rel="stylesheet" type="text/css" href="my.css">
+</head>
+<body>
+
+<!-- div - ate antes do Cancelar e  Remover -->
+ <div class="parte_inicial"  >
+   
+  
+         <div class="div_nova"   >
+           <!--  Fonte de Recurso -->
+           <span>
+               <label for="fonterec" title="Fonte Principal de Recursos (Pr&oacute;prio, FAPESP, CNPQ, etc)" >Fonte Principal de Recursos:&nbsp;</label>
+           </span>
+           <span>
+               <?php echo $fonterec;?>
+           </span>
+           <!-- Final - Fonte de Recurso -->
+        </div>
+
+       
+       
+       <article class="projetoarticle1" >
+            <!--  Usuario para conectar -->
+            <label for="email_participante" style="vertical-align: middle; cursor: pointer;" >Usu&aacute;rio (Login) Email:&nbsp;</label>       
+              <span id="email_participante" class="email_participante" ></span>
+                 <input type="hidden" name="e_mail" id="e_mail" value="" required="required"  />
+                 <input type="hidden" name="datacad" id="datacad" value="<?php echo $_SESSION['datacad'];?>"  />
+                 <input type="hidden" name="datavalido" id="datavalido" value="<?php echo $_SESSION['datavalido'];?>"  />
+            <!-- Final - Usuario -->
+       </article>
+       
+       <article class="projetoarticle1" > 
+           <table border="0" id="tab_senha" cellpadding="0" cellspacing="0" style="width: 100%; display: none;" >
+     <tr style="border: none;" >
+       <!--  Verificando a Senha  -->
+       <td>&nbsp;</td>
+       <td>
+         <div id="div_forca_senha" name="div_forca_senha" style="width: 326px; height: auto;">&nbsp;</div>
+       </td>
+     </tr>
+
+          
+     <tr class="td_inicio2" > 
+        <!-- Incluir senha e redigitar_senha  --> 
+        <td class="td_inicio1" >
+           <label for="senha" style="cursor: pointer;"  >Senha:&nbsp;</label>
+        </td>
+        <td class="td_inicio1"  style="text-align: left;"  >
+           <input  type="password" class="required password" name="senha" id="senha" title="Digitar Senha (8 a 10 caracteres)" size="25" maxlength="12"  onKeyUp="this.value=trim(this.value);  verificaForca(this);"  onblur="javascript: alinhar_texto(this.id,this.value);  exoc('label_msg_erro',0,'');"  autocomplete="off"   >       
+             <span class="example">(8 a 10 caracteres)</span>
+               <span style="padding-left: 15px;" >
+                   <input  type="button"  id="gerar_senha"   onclick="javascript: enviar_dados_cad('GERAR_SENHA');"  title='Clicar'  style="cursor: pointer; width: 110px;"  value="Gerar senha" 
+                                    class="botao3d"   >
+            </span>
+        </td>
+     </tr>
+     <tr class="td_inicio2" > 
+        <td class="td_inicio1" >
+          <label for="redigitar_senha" style="cursor: pointer;"  >Redigitar Senha:&nbsp;</label>
+        </td>
+        <td class="td_inicio1"  style="text-align: left;" >
+           <input  type="password" name="redigitar_senha"  id="redigitar_senha" class="required password" title="Redigitar Senha (8 a 10 caracteres)" size="25" maxlength="12"  onKeyUp="this.value=trim(this.value);  verificaForca(this);"  onblur="javascript: alinhar_texto(this.id,this.value); exoc('label_msg_erro',0,'');"  autocomplete="off"  >
+        </td>
+        <!-- Final -  Incluir senha e redigitar_senha  -->
+     </tr>
+    </table>
+         
+       </article>   
+       
+    </section>   
+ 
+ </div>
+ <!-- Final - div - ate antes do Cancelar e  Remover -->
+
+ 
+ 
+ 
+     <section>
+         <!--  TAGS  type reset e  submit  -->                                              
+            <article class="projetoarticle4"  >
+               <div class="reset_button" >
+                <!-- Limpar campos -->        
+                  <span>          
+                   <button  type="button"  name="limpar" id="limpar"  class="botao3d"    
+                     onclick="javascript: enviar_dados_cad('reset','<?php echo $pagina_local;?>'); return false;"  
+                       title="Limpar"  acesskey="L"  alt="Limpar" >    
+               Limpar&nbsp;<img src="../imagens/limpar.gif" alt="Limpar"  >
+                      </button>
+                  </span> 
+                  <!-- Final - Limpar  -->
+                  <!-- Enviar -->                  
+                  <span>
+                     <button  type="submit"  name="enviar" id="enviar" class="botao3d"  
+                      title="Enviar"  acesskey="E"  alt="Enviar"     >    
+               Enviar&nbsp;<img src="../imagens/enviar.gif" alt="Enviar"  >
+                      </button>
+                  </span>
+                  <!-- Final -Enviar -->
+               <div class="reset_button" >
+             </article>                  
+          <!--  FINAL - TAGS  type reset e  submit  -->
+      </section>
+  
+  
+  
+</body>
+</html>

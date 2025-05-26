@@ -1,0 +1,3584 @@
+/***************************************************************************
+       INICIANDO O CSS  -- NUNCA USAR COMO COMENTARIO OS SIMBOLOS      
+           
+       PRIMEIRA PARTE 
+       
+       @media screen and (min-device-width:769px) {         
+       importante sem device para testar no computador/desktop
+****************************************************************************/
+@charset "UTF-8";
+@media only screen and (min-width:769px) {
+* {margin:0; padding:0; border:0; }
+html {
+    height: 100%;
+}        
+body { width: 960px; min-height:100%; border:none; 
+       background-color: #ffffff;  /*  Cor Branca  */
+       color: #000000;
+   /*    font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, calibri, serif;  */
+       font-family: 'bariol_regularregular';
+       position: absolute;
+       overflow:auto; 
+}
+
+/*  INICIANDO  */
+.pagina_ini { float: left; clear:both; position: absolute; border: 1px solid #000000;
+              /*    height: 548px; max-height: 548px;  
+                   max-height: 44em; 
+                   height: auto;
+              */
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small;          
+              z-index: 10;                              
+}
+
+.pagina_ini, #cabecalho, .menu_principal, #rodape  { width: 960px; border:none; }
+
+#cabecalho { position: absolute; margin: 0px; 
+             padding: 0px; height: 100px; 
+             text-align: center;
+             background-repeat:no-repeat;
+             background-attachment:fixed;          
+             z-index: 1;
+}
+
+.img_cabecalho { width: 960px;float: left; border: none; } 
+/*  .img_cabecalho { float: left; border: none;   background-image: url("../imagens/topo_rge_nova.gif");  }     */ 
+
+/*  Precisa do z-index: 100  na div do MENU   */
+.menu_principal { position: relative; z-index: 999999;
+                  text-align: left; 
+             /*     margin-top: 1px; margin-bottom: 1px;   */
+              margin-top: 102px; 
+             /*     padding-top: 1px; padding-bottom: 1px;  */
+             padding: 1px 0px 2px 0px; 
+             border:none;
+             width:auto;
+}
+
+#corpo, .corpo_iniciando { margin-top: 38px; width: 960px;  font-size: small;  
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;     
+        border: 1px groove #000033;
+        background-color: #FFFFFF; 
+}
+
+#corpo { height: auto; 
+        float: left; clear: both; 
+        position: relative; 
+        z-index: 2;
+        overflow: auto !important;
+}
+
+.corpo_iniciando { overflow: hidden; text-align: justify; }
+ 
+/*  .article_msg { line-height: 2em; margin-left: 0; width: 100%; }   */
+
+.opcoes_inicio, .usuario_senha {  margin-right: 4px;  padding: 4px; 
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small; color: #000000;             
+              border: none;
+}
+
+.usuario_senha { margin-left: 25%; float: left; clear:both;   }
+
+section.merro_e_titulo  { margin-top: 0; height: auto; }  
+
+#label_msg_erro  { display:none; width: 100%; 
+                    text-align: center; 
+                    height: auto;
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;     
+                    background-color: rgb(255,255,255);  /* Cor Vermelha */
+                    color: rgb(0,0,0); /* Cor Branca */
+                    border: none;  font-size: 14px; 
+                    position: relative; 
+                   padding-top: .2em;   
+                    padding-bottom: 0;
+}
+.spanerro { color:#FF0000; }  
+
+#corpo   .botaoiniciando  { position: fixed; margin:2px 0 0 0; z-index: 11; }
+#corpo   .botaoiniciando input[type="button"] { float: right; width: 7.0em;
+    font:.9em  Verdana, Arial, Helvetica, sans-serif, Times, Courier,Georgia,serif;
+    background:#f1f1f1;
+    color:#333;
+    text-align:center;
+    padding: 0.25em;
+    border-width: .5em;
+    border-color:#fff #909090 #909090 #fff;
+    border-style:solid;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight: bold;
+    display: inline;
+    overflow: auto !important;
+}  
+
+#corpo  .botaoiniciando input[type="button"]:hover    {
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+/*  Serve para a tag Select primeira letra  */
+#chefe:first-letter { text-transform: capitalize; 
+      background-color: #FFFF00;
+      color:#00FFFF;
+}
+
+/*  Alterado em 20160921  */
+.header_title { text-align:center;
+     margin: 14px 0px 0px 0px;
+     padding:0;
+     border: none;
+}
+.header_title  p {
+     font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+     text-align: center;
+     color: #000000;
+     font-size:large;
+     font-weight: bold; 
+     background: #FFFFFF;
+}
+
+.section_index { float: left; margin: 0px 14px 14px 14px; height: 18em;
+                  padding:0 2% 0 2%;
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     overflow: auto !important;
+}
+
+.section_index h1 { font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+        font-weight: bold;
+        font-size: 16px;
+        vertical-align: middle; 
+        text-align: center;
+}
+
+.section_index p { text-align: justify; font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva,   Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+      font-size: 14px;
+      text-indent: 3em;
+      vertical-align: middle;
+      line-break: keep-all;
+}
+
+.section_index p span { font-weight: bold; padding-right: 6px;}
+
+.topo_pagina  { position:absolute;
+             /***  padding: 4px;  
+               *  width: auto;
+               ***/
+                bottom:0;                
+             right: 32px;
+             overflow:hidden;
+}
+
+/*
+section.section_index   {
+    width: 99%;
+    padding-right: 2%;
+         left: 1%; top: 0;
+     transform: translate(1%, 0%);
+    background-color: #FFFF00;
+    
+        overflow: scroll;
+}
+*/
+
+.section_navegador, .section_navegador_final  { float: left;   
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     box-sizing: border-box;
+     -webkit-box-shadow:  10px 10px 5px #888888;
+    -moz-box-shadow:  10px 10px 5px #888888;
+    -o-box-shadow:  10px 10px 5px #888888;
+    -ms-box-shadow: 10px 10px 5px #888888;
+     box-shadow: 10px 10px 5px #888888;
+     overflow: hidden;
+     text-align: center; 
+     left: 20%; top:4%;
+     transform: translate(-1%, -1%);  
+}
+
+.section_inicio { border: 3px double #000000;
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif; 
+}
+
+.section_navegador_final { font-size: medium; position:relative;margin: 0;padding:1em .5em .5em .5em; 
+                  width: 100%; left:0; float: display; 
+}
+
+.div_form { position: relative; background-color: #32CD99; 
+           overflow: auto !important; height: auto;
+}
+
+.label_campos { padding-right: .42em; }
+
+.projetoarticle1, .projetoarticle2, .projetoarticle3,  .projetoarticlexy, .anotacaoarticle1 { 
+       padding: 2px 2px 6px 4px; 
+       font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana,   Garamond  ;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+        position:relative;
+}
+.projetoarticle1 { font-size: large; }
+.tit_anotacao { font-size:1.2em; font-weight:bolder; text-align: justify; }
+
+.font_size_family {
+   /*  font-size: x-small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;  */
+    font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana, Garamond;                       
+    padding: 3px; empty-cells: show;
+    white-space: nowrap; font-weight: bold; border: 1px solid #000000;
+ /***   font-size: x-small;  
+    font-size: large;     ***/
+    font-size: large;
+} 
+
+.projetoarticle2, .projetoarticle3  { 
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding-left: 2px;
+}
+.projetoarticle1 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticle1 input, .projetoarticle1 select  { padding:.1em;  }
+.projetoarticle1 input[type="email"] { font-size: 16px; text-align: left; margin: 0; }
+.projetoarticle2 label { float:left; width: 8em; vertical-align: middle; 
+                 cursor: pointer; text-align: right; 
+}
+.projetoarticle2 span {  margin:0; padding-left: .8em; cursor: pointer;   }
+
+.projetoarticle1 .labelselect { float: left; clear:both; margin:.2em 0 .5em 0; width: 100%; }
+
+.projetoarticle3 div { margin: .05em; padding: .05em;  }
+.projetoarticle3 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+
+.projetoarticle4 { position:relative; float:left; padding: 0 .3em;}
+.projetoarticle4 input[type="button"] { padding: 0 2em; margin: 0 .1em; }
+.projetoarticle4 button { padding: .2em; margin:.1em; }
+
+.projetoarticlexy {
+    width:auto; height:20px; position:relative;left:0px;
+}
+.projetoarticlexy label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticlexy .nleft { margin:0px;padding-left: 0px; position:fixed;vertical-align: middle; } 
+.projetoarticlexy .nright {float:left;margin-left:240px; }
+
+#div_imagem_codigo { margin: 0px; padding: 0px; }
+
+.div_select_busca { text-align: center;padding-top: 4px; padding-bottom: 4px;  }
+
+/**  select.Busca_letrai {font-size: medium; height: auto; }  */
+select.Busca_letrai {font-size: large; height: auto; }
+
+.sidebar {
+    display: inline;
+    width: 100%;
+    /*  float: right;  */
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;   
+    padding-top: 8px; padding-bottom: 18px;                  
+}
+
+.sidebar .coluna1 {
+    display: inline;
+    width: 50%;
+    float: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+.sidebar .coluna2 {
+    display: inline;
+    width: 50%;
+    float: right;
+   /*   background-color: yellow;  */
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+/*   #ladoalado-container {width:100%; height:auto; float:left; margin:10px 0 0 0;}   */
+#ladoalado-container { width:100%; float:left; height: auto; margin: 0; 
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+}
+#ladoalado { width: auto; height:auto; margin:0;}
+#loop-ladoalado { float:left; margin:0px 18px 0 0; }
+/* #loop-ladoalado:hover {background:#EDEDED;}  */
+#loop-ladoalado label { cursor: pointer; font-weight: bold; text-decoration:none;  }
+#loop-ladoalado h1 {font-family:'bariol_boldbold'; font-size:16px; font-weight:700; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#333;}
+#loop-ladoalado h2 {float:left;font-family:'bariol_boldbold'; font-size:16px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#FFF; width:90px; margin:135px 0 0 61px; z-index:0; position:absolute; }
+#loop-ladoalado h3 {font-family:'bariol_boldbold'; font-size:14px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; background:#000; color:#FFF; float:left; width:155px; margin:-35px 10px 0 30px;}
+#loop-ladoalado h3 a {text-decoration:none; color:#fff; padding:5px;}
+#loop-ladoalado img {float:left;}
+#loop-ladoalado  span {font-family:'bariol_regularregular'; font-size:14px; font-weight:700; height:40px; text-align:center; margin:95px 20px 30px 35px; float:left;}
+#loop-ladoalado input { text-decoration:none; padding:.1em; }
+
+
+
+.div1, .div1_partes { float:left; width: 142px; top: 62px;  
+            background-image: url("../imagens/sem_texto_vertical.gif");
+            background-repeat:no-repeat; border: 1px groove #000033; 
+            margin-right: 1px; position: absolute;
+            /*  z-index depois do rodape que e? 3  */
+            z-index: 4;            
+}
+
+.div1_partes { background:#33CC00; margin-right: 2px;  }
+
+.div_msg_erro { display:none; position: relative; 
+                width: 100%; text-align: center; overflow:hidden;  
+                font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;                    
+                font-size:large;
+                border: 2px double #000000;
+}
+
+.div1,  .div1_partes { height: 560px; }
+
+/* #corpo { height: 429px; }  */
+
+#rodape { position: relative; 
+        float:left; clear: both;  overflow: none;
+        height: 18px; left: 0px; padding: 0px; 
+        font-style: italic; margin-top: 2px;
+        font-weight: normal;
+        font-size: x-small;
+        color: #000000;
+        border: 1px solid #000; 
+        vertical-align: top;
+        z-index: 3;
+        background-color: #FFFFFF;
+}
+
+.body_index  {
+	font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif, Times, Georgia;
+     background: #ffffff;
+	width: 100%;
+	color: #000000;
+	margin: 0 auto 0;
+	padding: 0;
+}
+
+/*  empty-cells - mostrar celulas vazias com borda    */
+table { empty-cells: show; }
+
+h1, p, table, fieldset {
+	margin-bottom: 10px;
+}
+img {
+	border: none;
+}
+
+label { color: #000000; }
+
+.ul_index {
+	margin-left: 30px;
+	line-height: 1.8em;
+	list-style-type: square;
+	color: #f60;
+	font-weight: bold;
+}
+h1 {
+	font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+	font-size: 2em;
+}
+h2, .aviso {
+	font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+	font-size: 1.5em;
+	background-color: #9CC213;
+	color: #fff;
+	padding: 5px;
+	border-bottom: 1px solid #000
+}
+
+hr, .hr_inicio {
+	border: none;
+	border-bottom: 1px dashed #999;
+	margin-bottom: 10px;
+	height: 1px;
+}
+
+.hr_inicio {
+        margin: 0px;
+		padding: 0px;
+		height: 3px;
+		line-height: 0px;
+		background-color: #9CC213;
+		vertical-align: bottom;
+		border: none;
+}
+
+.aviso {
+    padding: 3px;
+	font-size: 1em;
+}
+
+.table_inicio {
+	width: 100%;
+	border: 1px solid #000;
+	border-collapse: collapse;
+    background-color: #FFFFFF; 
+	font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+	color: #000000;	
+    overflow: auto;
+    font-weight:normal;
+}
+.table_inicio caption {
+	text-align: left;
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+.table_inicio th {
+	background-color: #9CC213;
+	color: #fff;
+}
+.table_inicio th td {
+	padding: 5px;
+	border-bottom: 1px solid #000;
+}
+
+/*  .td_inicio1  .td_inicio2  tem tb no arquivo estilo_frame.css  */
+.td_inicio1,  .td_inicio2, .td_inicio3, .td_inicio4 .loginresultado { 
+		white-space: nowrap;
+		vertical-align: bottom;
+		font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+		font-weight: bolder;
+	/*	background-color: #9CC213;  */
+        background-color: #32CD99; color: #ffffff;
+		border: 1px solid #000;
+		padding: 3px; text-align: right;
+        overflow: auto;
+}
+.td_inicio1 { font-size: large; }
+.td_inicio2  { text-align: left; padding-left: 5px; }  
+.td_inicio3  { vertical-align: middle; }  
+.td_inicio4  { text-align:left; background-color: #FFFFFF; }  
+
+.loginresultado { font-size: small; padding: 0px 0 8px 0;  }
+
+.detalhes1,  .detalhes2, .reset_button  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight:bolder;
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: right;
+}
+.detalhes2  { text-align:left; padding-left: 5px; }  
+
+.reset_button {  float: left; clear: both; margin: .3em 0 .3em;
+    padding-top: .6em; border: none; 
+   text-align: left; background-color:  #32CD99; 
+}
+.reset_button span { padding: .4em .4em 0 .4em; }
+.reset_button span button { width: 90px; }
+
+.tb_consulta {
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+       font-size: small;
+       display: flex; justify-content: center;    
+}
+
+.tb_consulta table caption { margin-top: .6em; }
+
+
+/*  INICIO IMPORTANTE - MENU HORIZONTAL   */ 
+#pcm{display:none; float:right; width: 100%;  }
+.otimizacaositesbusca { float:right; width: 100%; }
+ul.otimizacaositesbusca ul{display:none; z-index: 999999;    }
+ul.otimizacaositesbusca li:hover>ul{display:block;    }
+ul.otimizacaositesbusca ul{position: absolute;left:-1px;top:98%;    }
+ul.otimizacaositesbusca ul ul{position: absolute;left:98%;top:-2px;}
+ul.otimizacaositesbusca,ul.otimizacaositesbusca ul { 
+	margin:0px;
+	list-style:none;
+	padding:0px 3px 3px 0px;
+	background-color:#B5ACAC;
+	background-repeat:repeat;
+	border-color:#CECECE;
+	border-width:4px;
+	border-style:ridge;
+}
+ul.otimizacaositesbusca table {border-collapse:collapse}ul.otimizacaositesbusca {
+	display:block;
+	zoom:1;
+	position:absolute;
+/*	z-index: 1000;  */
+	left: 100;
+	top: 200;
+}
+* HTML ul.otimizacaositesbusca {position:absolute}
+ul.otimizacaositesbusca ul{ z-index: 999999;
+	width:183.75px;
+}
+ul.otimizacaositesbusca li{
+	display:block;
+	margin:3px 0px 0px 3px;
+	font-size:0px;
+}
+ul.otimizacaositesbusca a:active, ul.otimizacaositesbusca a:focus {
+outline-style:none;
+}
+ul.otimizacaositesbusca a, ul.otimizacaositesbusca li.dis a:hover, ul.otimizacaositesbusca li.sep a:hover {
+	display:block;
+	vertical-align:middle;
+	background-color:#B5ACAC;
+	border-width:1px;
+	border-color:#414141;
+	border-style:solid;
+	text-align:left;
+	text-decoration:none;
+	padding:4px;
+	_padding-left:0;
+	font:bold 11px Verdana;
+	color: #086B08;
+	cursor:pointer;
+}
+ul.otimizacaositesbusca span{
+	overflow:hidden;
+}
+ul.otimizacaositesbusca li {
+	float:left;
+}
+ul.otimizacaositesbusca ul li {
+	float:none;
+}
+ul.otimizacaositesbusca ul a {
+	text-align:left;
+	white-space:nowrap;
+}
+ul.otimizacaositesbusca li.sep{
+	text-align:left;
+	padding:0px;
+	line-height:0;
+	height:100%;
+}
+ul.otimizacaositesbusca li.sep span{
+	float:none;	padding-right:0;
+	width:3;
+	height:100%;
+	display:inline-block;
+	background-color:#CECECE;	background-image:none;}
+ul.otimizacaositesbusca ul li.sep span{
+	width:100%;
+	height:3;
+}
+ul.otimizacaositesbusca li:hover{
+	position:relative;
+}
+ul.otimizacaositesbusca li:hover>a{
+	background-color:#1F1F1F;
+	border-color:#FFFFFF;
+	border-style:solid;
+	font:bold 11px Verdana;
+	color: #FFFFFF;
+	text-decoration:none;
+}
+ul.otimizacaositesbusca li a:hover{
+	position:relative;
+	background-color:#1F1F1F;
+	border-color:#FFFFFF;
+	border-style:solid;
+	font:bold 11px Verdana;
+	color: #FFFFFF;
+	text-decoration:none;
+}
+ul.otimizacaositesbusca li.dis a {
+	color: #AAAAAA !important;
+}
+ul.otimizacaositesbusca img {border: none;float:left;_float:none;margin-right:4px;width:24px;
+height:24px;
+}
+ul.otimizacaositesbusca ul img {width:16px;
+height:16px;
+}
+ul.otimizacaositesbusca img.over{display:none}
+ul.otimizacaositesbusca li.dis a:hover img.over{display:none !important}
+ul.otimizacaositesbusca li.dis a:hover img.def {display:inline !important}
+ul.otimizacaositesbusca li:hover > a img.def  {display:none}
+ul.otimizacaositesbusca li:hover > a img.over {display:inline}
+ul.otimizacaositesbusca a:hover img.over,ul.otimizacaositesbusca a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover img.over,ul.otimizacaositesbusca a:hover a:hover a:hover img.over{display:inline}
+ul.otimizacaositesbusca a:hover img.def,ul.otimizacaositesbusca a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover img.def,ul.otimizacaositesbusca a:hover a:hover a:hover img.def{display:none}
+ul.otimizacaositesbusca a:hover ul,ul.otimizacaositesbusca a:hover a:hover ul{display:block}
+ul.otimizacaositesbusca a:hover ul ul{display:none}
+ul.otimizacaositesbusca span{
+	display:block;
+	background-image:url(./images/arrow_sub5.gif);
+	background-position:right center;
+	background-repeat: no-repeat;
+   padding-right:14px;}
+ul.otimizacaositesbusca ul span,ul.otimizacaositesbusca a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+ul.otimizacaositesbusca ul li:hover > a span{	background-image:url(./images/arrow_sub5.gif);}
+ul.otimizacaositesbusca table a:hover span,ul.otimizacaositesbusca table a:hover a:hover span{background-image:url(./images/arrow_sub5.gif)}
+ul.otimizacaositesbusca table a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+
+/* FIM DO MENU HORIZONTAL */
+
+.tabela1 { top: 0px; background-color: #FFF; font-size: small; 
+           text-align:center; 
+		   border: 4px groove #0000FF;
+		   width: 100%;
+}
+
+.tabela1 th  { background-color: #0000FF; color: #FFF; }
+
+.box {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.box * {
+    vertical-align: middle;
+}
+
+.caixa_box {  color: #000066;
+       font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;
+       font-size: large; 
+       text-align:center;
+       border: 3px double #000000;
+       font-weight: bold;
+       width: 100%;
+       height: 100%;
+       overflow: auto;
+       background-color: #FFFFFF;
+ }
+ 
+.wcemhcem { width: 100%; height: 100%; }
+
+/***************************************************************************
+        botao3d como botao3d_menu_vert sendo usado no menu vertical 
+		na tag input  type=button
+****************************************************************************/
+.botao3d, .botao3d_iniciando	{
+	width: 7.0em;
+	font:0.74em  Verdana, Arial, Helvetica, sans-serif, Times, Courier;
+	background:#f1f1f1;
+	color:#333;
+	text-align:center;
+	padding: 0.25em;
+	border-width: 0.2em;
+	border-color:#fff #909090 #909090 #fff;
+	border-style:solid;
+	text-decoration:none;
+	cursor:pointer;
+    font-weight: bold;
+}
+ 
+.botao3d:hover	{
+	background:#999;
+	color:#fff;
+	border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_iniciando { width: 15.0em; }
+
+.botao3d:focus { 
+	background:#999;
+	color:#fff;
+	border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_menu_vert { width: 10.0em; }
+
+/* Final do botao3d usada mais na tag input type=button  */
+
+.dentro_corpo { position:relative; overflow: auto; padding: 8px; 
+                text-align:center; width: auto; height: 420px; clear: both; 
+}
+
+.dentro_corpo p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+				  font-size:small;
+				  text-align: justify;
+				  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.dentro_corpo ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.dentro_corpo .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center; }
+
+.dentro_corpo .anchor { margin-right: 1px; text-align:right; }
+
+.titulo_consulta { color: #000000; 
+                /*   font-size: large;  */
+              font-size: medium;
+              ext-align: justify;  
+              font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+              border: none;
+              margin:0; padding:0;
+}
+
+.ordenar { display: none; font-size: large; margin:0; padding: 0;max-height: 24px; }
+#anotacao_escolhida { text-align: center; display: none;overflow:auto; }
+.confirmar0 { text-align:center;padding: 2px 0 2px 0; border:2px double #FF00FF; overfow-y:scroll;  }
+.div_out { width:100%; overflow: auto; background-color: #32CD99; }
+
+.class_div1 { position: relative; float: right;  width: 780px; height: 560px;  }
+
+.class_div2   { width: 790px; height: 510px; overflow:auto; }
+.class_div2 p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+				  font-size:small;
+				  text-align: justify;
+				  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.class_div2 ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.class_div2 .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center;   }
+
+.class_div2 .anchor { margin-right: 1px; text-align:right; }
+
+/*  Fixar ancora */
+.fixar_ancora  { float:right; clear:both;  width: 100%; height: 40px; margin: 0px; padding: 0px; display:inline;
+                      border: none; position: absolute; bottom: 0px; right: 20px; text-align:right;
+}
+
+/*  Botao usado na tag  input  file    */
+.button {  
+        border: 1px solid black;  
+        background-color: #c2cfd1;  
+    	cursor: pointer;
+}  
+
+form { padding: 6px; }
+
+p.upload_frames { color: #000000; 
+          margin: 0;white-space: nowrap; text-align: left;font-weight: bold; 
+	      font-size: small; padding: 0px;
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}	
+
+/*   Tabelas para ter overflow; scroll      */
+div.scrollTable{
+			background: #fff;
+			height: 200px;			
+        	font-size: small;
+        	font-weight: normal;
+}
+
+div.scrollTable table.header, div.scrollTable div.scroller table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+	
+div.scrollTable table.header {
+	border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+	/*		width: 920px;  */
+}
+
+div.scrollTable div.scroller table{
+			border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+	/*	width: 920px; */
+}
+
+
+div.scrollTable table.header th, div.scrollTable div.scroller table td{
+			border: 1px solid #444;
+		/*	padding: 3px 5px;  */
+        	font-size: small;
+        	font-weight: normal;
+			text-align:left;
+}
+		
+div.scrollTable table.header th {
+		/*	background: #ddd;  */
+        background-color: #00FF00;
+}
+	
+div.scrollTable div.scroller {
+ 		overflow: auto;
+}
+
+div.scroller {
+	margin-top: 4px;
+	height: 140px;
+} 
+	
+div.scrollTable .coluna75px{
+			width: 75px;
+}
+	
+div.scrollTable .coluna100px {
+			width: 100px;
+}
+	
+div.scrollTable .coluna150px {
+			width: 150px;
+}
+
+/*  Passando  o Mouse sobre uma TAG inclui parte tambem no arq funcoes.js   */
+.itemOn { color: #000000; background-color: #FFFFFF;  text-decoration:none; }
+.itemOver { color: #000000; background-color: #7CFC00; }
+
+.titlehdr { font: normal 22px arial, verdana;
+   color: #c00;
+   border-bottom: 1px solid #c00;
+}
+
+.example { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia;
+           /* color: red;  */           
+           font-weight:bolder;
+           color: #000000; 
+}
+
+.td_instituicao { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+                  color: #000000; 
+                  font-style: normal;
+                  font-variant: normal;
+                  font-size: small; 
+                  empty-cells: show;
+                  border: 1px solid #000000;
+}
+
+/*  link   */
+.link_href:link {text-decoration: none}
+.link_href:visited {text-decoration: none}
+.link_href:active {text-decoration: none}
+.link_href:hover {text-decoration: underline; background-color: #7CFC00; 
+}
+
+/* PARA O LINK 1 - 20120229 */
+a.linkum:link {
+    color:#FF0000;
+    text-decoration:none;
+}
+a.linkum:visited {
+    color:#999999;
+    text-decoration:none;
+}
+a.linkum:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+a.linkum:active {
+    color:#00FF00;
+    text-decoration:underline;
+    background-color:#000000;
+}
+
+.asteristico { font-size: large; font-weight: bold; 
+               text-align: left; vertical-align: top;
+               font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+}
+
+p.titulo_alterar {  font-size:small; font-weight: bold;
+                    color: #000000;  text-align: center; 
+                    margin: 0px;  line-height: 110%; padding-top: 4px; padding-bottom: 4px;
+                    font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}
+
+.titulo_pequeno {  font-size:small; font-weight: bold; background-color: #32CD99; 
+                 color: #000000;  text-align: left; 
+                 margin: 0px;  line-height: 110%; 
+                 font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+
+#main_section {
+    float: left;
+    width: 720px;
+    background-color: #FFFFFF;
+}
+
+.main_articles  {
+    background-color: rgb(198,255,255);
+    float: left;
+    margin: 10px;
+    border: 2px solid #000000;
+    width: 330px;
+    height: 150px;
+}
+
+.main_articles header  {
+      background-color: yellow; 
+}
+
+.main_articles footer  {
+      background-color: grey; 
+      color: #FFFFFF;
+}
+
+.article_inicio, .limpar_enviar {
+    width: 100%;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia, Garamond, monospace, serif; 
+    color: #000000;    
+    overflow:hidden;
+   /*  float: left;  */
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    border-collapse: collapse;
+    /*  border: 3px double #999;   */
+    border: none;
+}
+
+.article_inicio article {
+    width: 100%;
+    border: 2px solid #999;
+}
+
+.article_inicio  p  {
+    text-align: left;
+    width: 100%;
+   /* border: 2px solid #999; */
+    border: none;
+}    
+    
+.article_inicio label span {
+   display: inline-block;
+   width: 120px;
+   font-weight: bold;
+   font-size: medium;
+   border: none;
+   text-align: right;   
+}
+
+.article_inicio input[type=text] {
+  font: 1em sans-serif;
+   font-weight:normal;
+   font-size: small;
+  width: 250px;
+  /*
+  -moz-box-sizing: border-box;
+   box-sizing: border-box;
+
+  border: 2px solid #999;
+    */
+}
+
+.article_inicio caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.article_inicio th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.article_inicio th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.limpar_enviar { text-align: center; padding:3px 0 3px 0px; border: 1px double #000000; }
+
+.article_div { display: inline-block; vertical-align: 60%; padding: 0 2px 0 2px;  } 
+
+#conteudo, #inclusao {
+    font-weight: bold;
+    text-align: center;
+    font-family:  sans-serif, Arial, "Times New Roman", Times,  Geneva, Helvetica,  'Courier New',  serif, Courier, monospace, Verdana, Garamond, Georgia;    
+    font-size: small;
+    line-height: 2em; margin-left: 0; width: 100%;
+    border: none;
+}
+
+.titulo_usuario  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+    /*    background-color: #9CC213;  */
+        background-color: #FFFFFF;
+        color: #000000;
+        border: none;
+        padding: 3px;
+        text-align: center;
+        overflow:hidden;
+       font-weight: bold;        
+        font-size:large;
+        font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+.lb_msg_erro {
+      display:none; position: relative;width: 100%;
+      text-align: center; overflow:hidden;
+      font-size: small;
+     font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+p.titulo_usp , p.titulo_grupo, p.titulo_gemac, .titulo_lista, .titulo_usp2 {  letter-spacing: 1px; 
+        white-space: nowrap; text-align: center; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+      font-weight: normal; font-size: large; 
+       white-space: nowrap;  
+       position: relative;
+       background-color: #FFFFFF;
+       color: #000000; 
+}     
+
+.titulo_usp2 { font-size: medium; }
+
+p.titulo_grupo {  color: #008000; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+p.titulo_gemac {  color: #000;  }     
+p.titulo_graduacao {  color: #000000; margin: 5pt 0 0 0;
+          white-space: nowrap; text-align: center;font-weight: bold; 
+          font-size: x-small; line-height: 180%; 
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+
+.titulo_lista { line-height:normal;
+      margin: 0px; padding: 2px 0 2px 0; 
+      font-size: medium; font-weight: bold;
+}
+/*  div class - Tamanho do Texto   */
+.tt, .tt_segundo {  position:relative;
+        float:initial; 
+        text-align: right; 
+        font-weight:bold;
+        font-size: 14px;
+        margin: 2em 0 0 0; 
+        padding: 10px 0px 10px 0;
+}
+
+.autorprojeto, .dtiniproj, .anotacaon { text-align: center; font-size: medium; }
+.titanotacao { text-align:center;font-size: medium; overflow: auto; }
+.dtanotacao { text-align:center; font-size: medium;  margin-top:4px; } 
+.testemunhas { text-align:justify;font-size: medium;;margin:0; padding: 0; margin-left: 20%; }
+.arqanotacao { text-align:center;font-size: medium;  margin-top:4px; }
+
+.div_select_projeto { text-align: center; padding-top:0px; vertical-align: top; padding-bottom: 8px; } 
+.anotador_titulo { width: 70em; height: 60px; cursor: pointer; overflow: auto; 
+                   color: #000000;  background-color: #FFFFFF; border: 1px solid #000000; 
+}
+
+.table_inicio_anot {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+    color: #000000;    
+    overflow: auto;
+    font-weight:normal;
+    margin-top: .8em;
+}
+.table_inicio_anot caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.table_inicio_anot th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.table_inicio_anot th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+
+.parte_inicial { float: left; clear: both;  border: 1px solid #000000; 
+                 padding: .2em; height: auto; width: 99%; 
+}
+.div_nova, .div_cadanotador { float: left; clear: both; text-align: left; 
+              border: none; vertical-align: middle; 
+              padding: .2em 0 .2em 0;
+}
+.div_nova span { color: #FFFFFF; border: none; 
+                 padding: .2em; vertical-align: middle; 
+                 font-size: large;
+}
+.div_nova span label { white-space: nowrap;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000; cursor: pointer;
+        margin-right: .2em ;
+}
+.div_nova label { cursor: pointer; font-size: large; 
+           font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+           font-weight: bolder;  
+} 
+.div_nova span.span_float { float: left;clear: both; }
+
+.div_nova textarea { float: left; clear: both;
+                font-size: large; background-color: #FFFFFF; 
+                color: #000000; width: 52em;
+}
+.div_nova div label.titulo_pequeno { font-size: large; }
+.div_nova span.arquivado_como { background-color: #FFFFFF; color: #000000; 
+        padding: .4em 1em .4em .4em; font-weight: bold; border: 1px solid #000000;
+        font-size: small;
+} 
+
+.div_nova span select { font-size: large; vertical-align: top; }
+.fontrec, .fonteprojid { font-size: large; width: 16em; vertical-align: top; }
+
+/*  .td_select { font-size: large; height: auto; margin-top:2px; }   */
+.td_select { font-size: large; height: auto; vertical-align: top; }  
+
+.div_cadanotador  { border: none; width: 100%;  }
+.div_cadanotador span label { white-space: nowrap; padding: 2px;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000; cursor: pointer;
+}
+
+.codigousp, .nome, .email, .data, .telefone, .ramal { width: 12em; font-size: large;  }
+.nome { width: 45em; }
+.email { width: 45em; }
+.email_participante { font-size: large; font-weight: bolder;
+                 color: #FFFFFF;  
+                vertical-align: top; 
+}
+.data, .telefone { width: 10em; }
+.ramal { width: 6em; }
+.div_pagina {  font-size: large; }
+.hr_new  { float: left; clear: both;
+   border: .1em inset #000000;
+   width: 100%;
+   margin: .4em 0 0 .2em;
+} 
+.span_div_nova {
+        white-space: nowrap;
+        vertical-align: top;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99; color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px; text-align: right;
+        overflow: auto;
+        font-size: large;     
+}
+.span_ord_proj { float: right; padding-left: .4em; }
+
+}
+/*****************************************************   
+  
+      FINAL DA PRIMEIRA PARTE      
+
+**********************************************************/
+
+
+
+
+/***** 
+     SEGUNDA PARTE   
+         @media  screen and (max-device-width:768px) and (orientation:portrait) {
+         importante sem device para testar no computador/desktop
+****/
+@media only screen and (max-width:768px) and (orientation: portrait) {
+* {margin:0; padding:0; border:0;}        
+html {
+    height: 100%;
+}
+
+body { width: 752px; min-height:100%; border:none; 
+    /**   background-color: #ffffff;  ***/
+       background-color: #ffff00;  /***  Cor Amarela  ***/
+       color: #000000;
+   /*    font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, calibri, serif;  */
+       font-family: 'bariol_regularregular';
+       position: absolute;
+       overflow:hidden; 
+}
+
+
+/*  INICIANDO  */
+.pagina_ini { float: left; clear:both; position: absolute; border: 1px solid #000000;
+              /* height: 548px; 
+                  max-height: 40em; 
+                  height: auto;
+              */
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small;          
+              z-index: 10;                              
+}
+
+.pagina_ini, #cabecalho, .menu_principal, .img_cabecalho, #rodape { width: 752px; border:none; }
+
+#cabecalho {  position: absolute; margin: 0px; 
+             padding: 0px; height: 100px; 
+            text-align: center;
+            background-repeat:no-repeat;
+            background-attachment:fixed;          
+            z-index: 1;
+}
+
+.img_cabecalho { float: left;  border: none; } 
+
+/*  .img_cabecalho { float: left; border: none;   background-image: url("../imagens/topo_rge_nova.gif");  }     */
+
+/*  Precisa do z-index: 100  na div do MENU   */
+.menu_principal { position: relative; z-index: 999999;
+                height: 38px; text-align: left; 
+               margin-top: 102px; 
+             padding: 1px 0px 2px 0px; 
+             border:none;
+             width:auto;
+}
+
+#corpo, .corpo_iniciando { margin: 2px 0px 2px 0px; width: 752px;   
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva,Helvetica, sans-serif,   Garamond, Georgia, serif;     
+        font-size: small; border: 1px groove #000033;
+}
+
+#corpo { height: auto; float: left; clear:both; 
+          position: relative; 
+         border: 1px groove #000033;
+         background-color: #FFFFFF; 
+        z-index: 2;
+       overflow: auto !important;
+}
+
+.corpo_iniciando { overflow: hidden;
+         background-color: #FFFFFF;; 
+        text-align: justify; 
+}
+ 
+/*  .article_msg { line-height: 2em; margin-left: 0; width: 100%; }   */
+
+.opcoes_inicio, .usuario_senha {  margin-right: 4px;  padding: 4px; 
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small; color: #000000;             
+              border: none;
+}
+
+.usuario_senha { margin-left: 5%; float: left; clear:both; }
+
+section.merro_e_titulo  { margin-top: 0; height: auto; }  
+
+#label_msg_erro  { display:none; width: 100%; 
+                    text-align: center; 
+                    height: auto;
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif, Garamond, Georgia, serif;     
+                    background-color: rgb(255,255,255);  /* Cor Vermelha */
+                    color: rgb(0,0,0); /* Cor Branca */
+                    border: none;  font-size: 14px; 
+                    position: relative; 
+                    padding-top: .2em;
+                    padding-bottom: 0;
+}
+.spanerro { color:#FF0000; }  
+
+#corpo   .botaoiniciando  { position: fixed; margin:2px 0 0 0; z-index: 11; }
+#corpo   .botaoiniciando input[type="button"] { float: right; 
+     width: 7.0em;
+    font:.9em  Verdana, Arial, Helvetica, sans-serif, Times, Courier,Georgia,serif;
+    background:#f1f1f1;
+    color:#333;
+    text-align:center;
+    padding: 0.25em;
+    border-width: .5em;
+    border-color:#fff #909090 #909090 #fff;
+    border-style:solid;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight: bold;
+    display: inline;
+    overflow: auto !important;
+}  
+
+#corpo  .botaoiniciando input[type="button"]:hover    {
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+/*  Serve para a tag Select primeira letra  */
+#chefe:first-letter { text-transform: capitalize; 
+      background-color: #FFFF00;  color:#00FFFF;
+}
+
+/*  Alterado em 20160921  */
+.header_title {
+     margin: 40px auto;
+     text-align:center;
+     margin-bottom: 14px;
+     border: none;
+}
+.header_title  p {
+     font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+     text-align: center;
+     color: #000000;
+     font-size:large;
+     font-weight: bold; 
+     background: #FFFFFF;
+}
+
+.section_index { float: left; margin: 0px 8px 18px 2px; height: 19em;
+                  padding:0 2% 0 2%;
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     overflow: auto !important;
+}
+
+.section_index h1 { font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+        font-weight: bold;
+        font-size: 16px;
+        vertical-align: middle; 
+        text-align: center;
+}
+
+.section_index p { text-align: justify; font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva,   Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+      font-size: 14px;
+      text-indent: 3em;
+      vertical-align: middle;
+      line-break: keep-all;
+}
+
+.section_index p span { font-weight: bold; padding-right: 6px;}
+
+.topo_pagina  { position:absolute;
+             /***  padding: 4px;  
+               *  width: auto;
+               ***/
+                bottom:0;                
+             right: 32px;
+             overflow:hidden;
+}
+
+/*
+section.section_index   {
+    width: 99%;
+    padding-right: 2%;
+         left: 1%; top: 0;
+     transform: translate(1%, 0%);
+    background-color: #FFFF00;
+    
+        overflow: scroll;
+}
+*/
+
+.section_navegador, .section_navegador_final  { float: left;   
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     box-sizing: border-box;
+     -webkit-box-shadow:  10px 10px 5px #888888;
+    -moz-box-shadow:  10px 10px 5px #888888;
+    -o-box-shadow:  10px 10px 5px #888888;
+    -ms-box-shadow: 10px 10px 5px #888888;
+     box-shadow: 10px 10px 5px #888888;
+     overflow: hidden;
+     text-align: center; 
+     left: 20%; top:4%;
+     transform: translate(-1%, -1%);  
+}
+
+.section_inicio { border: 3px double #000000;
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif; 
+}
+
+.section_navegador_final { font-size: medium; position:relative;margin: 0;
+        padding:1em .5em .5em .5em; width: 100%; left:0; float: display; 
+}
+
+.div_form { background-color: #32CD99; overflow: auto !important; 
+           position:relative; height: auto;
+}
+
+/*  .label_campos { padding-right: .42em; }  */
+
+.projetoarticle1, .projetoarticle2, .projetoarticle3,  .projetoarticlexy, .anotacaoarticle1 { 
+       padding: 2px 2px 6px; 
+       font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana,   Garamond  ;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+        position:relative;
+}
+.projetoarticle1 { font-size: large; }
+.tit_anotacao { font-size:1.2em; font-weight:bolder; text-align: justify; }
+
+/***
+.font_size_family {
+    font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana,   Garamond  ;                       
+    padding: 3px; empty-cells: show;
+    white-space:nowrap; font-weight: bold; border: 1px solid #000000;
+    font-size: x-small;
+} 
+***/
+.font_size_family {
+   /*  font-size: x-small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;  */
+    font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana, Garamond;                       
+    padding: 3px; empty-cells: show;
+    white-space: nowrap; font-weight: bold; border: 1px solid #000000;
+ /***   font-size: x-small;  
+    font-size: large;     ***/
+    font-size: small;
+} 
+
+
+
+.projetoarticle2, .projetoarticle3  { 
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding-left: 2px;
+}
+.projetoarticle1 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticle1 input, .projetoarticle1 select  { padding:.1em;  }
+.projetoarticle1 input[type="email"] { font-size: 16px; text-align: left; margin: 0; }
+.projetoarticle2 label { float:left; width: 8em; vertical-align: middle; cursor: pointer; text-align: right; }
+.projetoarticle2 span {  margin:0; padding-left: .8em; cursor: pointer;   }
+
+.projetoarticle1 .labelselect { float: left; clear:both; margin:.2em 0 .5em 0; width: 100%; }
+
+.projetoarticle3 div { margin: .05em; padding: .05em;  }
+.projetoarticle3 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+
+.projetoarticle4 { position:relative; float:left; padding: 0 .3em;}
+.projetoarticle4 input[type="button"] { padding: 0 2em; margin: 0 .1em; }
+.projetoarticle4 button { padding: .2em; margin:.1em; }
+
+.projetoarticlexy {
+    width:auto; height:20px; position:relative;left:0px;
+}
+.projetoarticlexy label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticlexy .nleft { margin:0px;padding-left: 0px; position:fixed;vertical-align: middle; } 
+.projetoarticlexy .nright {float:left;margin-left:240px; }
+
+#div_imagem_codigo { margin: 0px; padding: 0px; }
+
+.div_select_busca { text-align: center;padding-top: 4px; padding-bottom: 4px;  }
+
+select.Busca_letrai {font-size: large; height: auto; }
+
+.sidebar {
+    display: inline;
+    width: 100%;
+    /*  float: right;  */
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;   
+    padding-top: 8px; padding-bottom: 18px;                  
+}
+
+.sidebar .coluna1 {
+    display: inline;
+    width: 50%;
+    float: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+.sidebar .coluna2 {
+    display: inline;
+    width: 50%;
+    float: right;
+   /*   background-color: yellow;  */
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+/*   #ladoalado-container {width:100%; height:auto; float:left; margin:10px 0 0 0;}   */
+#ladoalado-container { width:100%; float:left;height:auto; margin: 0; 
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+}
+#ladoalado { width: auto; height:auto; margin:0;}
+#loop-ladoalado { float:left; margin:0px 18px 0 0; }
+/* #loop-ladoalado:hover {background:#EDEDED;}  */
+#loop-ladoalado label { cursor: pointer; font-weight: bold; text-decoration:none;  }
+#loop-ladoalado h1 {font-family:'bariol_boldbold'; font-size:16px; font-weight:700; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#333;}
+#loop-ladoalado h2 {float:left;font-family:'bariol_boldbold'; font-size:16px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#FFF; width:90px; margin:135px 0 0 61px; z-index:0; position:absolute; }
+#loop-ladoalado h3 {font-family:'bariol_boldbold'; font-size:14px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; background:#000; color:#FFF; float:left; width:155px; margin:-35px 10px 0 30px;}
+#loop-ladoalado h3 a {text-decoration:none; color:#fff; padding:5px;}
+#loop-ladoalado img {float:left;}
+#loop-ladoalado  span {font-family:'bariol_regularregular'; font-size:14px; font-weight:700; height:40px; text-align:center; margin:95px 20px 30px 35px; float:left;}
+#loop-ladoalado input { text-decoration:none; padding:.1em; }
+
+
+
+.div1, .div1_partes { float:left; width: 142px; top: 62px;  
+            background-image: url("../imagens/sem_texto_vertical.gif");
+            background-repeat:no-repeat; border: 1px groove #000033; 
+            margin-right: 1px; position: absolute;
+            /*  z-index depois do rodape que e? 3  */
+            z-index: 4;            
+}
+
+.div1_partes { background:#33CC00; margin-right: 2px;  }
+
+.div_msg_erro { display:none; position: relative; 
+                width: 100%; text-align: center; overflow:hidden;  
+                font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;                    
+                font-size:large;
+                border: 2px double #000000;
+}
+
+.div1,  .div1_partes { height: 560px; }
+
+/* #corpo { height: 429px; }  */
+
+#rodape { position: relative; 
+        float:left; clear: both;  overflow: none;
+        /* top: 561px;  */  
+       /* top: 578px;  */  
+        height: 18px; left: 0px; padding: 0px; 
+        font-style:italic; margin-top: 2px;
+        font-weight: larger;
+        font-size: x-small;  
+     /*   color:#003399;        */  
+        color: #000000;
+        border: 1px solid #000; 
+        vertical-align: top;
+        z-index: 3;     
+        background-color: #FFFFFF;
+}
+
+.body_index  {
+    font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif, Times, Georgia;
+     background: #ffffff;
+    width: 100%;
+    color: #000000;
+    margin: 0 auto 0;
+    padding: 0;
+}
+
+/*  empty-cells - mostrar celulas vazias com borda    */
+table { empty-cells: show; }
+
+h1, p, table, fieldset {
+    margin-bottom: 10px;
+}
+img {
+    border: none;
+}
+
+label { color: #000000; }
+
+.ul_index {
+    margin-left: 30px;
+    line-height: 1.8em;
+    list-style-type: square;
+    color: #f60;
+    font-weight: bold;
+}
+h1 {
+    font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+    font-size: 2em;
+}
+h2, .aviso {
+    font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+    font-size: 1.5em;
+    background-color: #9CC213;
+    color: #fff;
+    padding: 5px;
+    border-bottom: 1px solid #000
+}
+
+hr, .hr_inicio {
+    border: none;
+    border-bottom: 1px dashed #999;
+    margin-bottom: 10px;
+    height: 1px;
+}
+
+.hr_inicio {
+        margin: 0px;
+        padding: 0px;
+        height: 3px;
+        line-height: 0px;
+        background-color: #9CC213;
+        vertical-align: bottom;
+        border: none;
+}
+
+.aviso {
+    padding: 3px;
+    font-size: 1em;
+}
+
+.table_inicio {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+    color: #000000;    
+    overflow: auto;
+    font-weight:normal;
+}
+.table_inicio caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.table_inicio th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.table_inicio th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+/*  .td_inicio1  .td_inicio2  tem tb no arquivo estilo_frame.css  */
+.td_inicio1,  .td_inicio2, .td_inicio3, .td_inicio4 .loginresultado { 
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight:bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: right;
+        overflow: auto;
+}
+.td_inicio1 { font-size: large; }
+.td_inicio2  { text-align:left; padding-left: 5px; }  
+.td_inicio3  { vertical-align: middle; }  
+.td_inicio4  { text-align:left; background-color: #FFFFFF; }  
+
+.loginresultado { font-size: small; padding: 0px 0 8px 0;  }
+
+.detalhes1,  .detalhes2, .reset_button  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight:bolder;
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: right;
+}
+.detalhes2  { text-align:left; padding-left: 5px; }  
+
+.reset_button { float: left; clear: both; margin: .3em 0 .3em;
+     padding-top: .6em; border: none; 
+   text-align: left; background-color:  #32CD99; 
+}
+.reset_button span { padding: .4em .4em 0 .4em; }
+.reset_button span button { width: 90px; }
+
+.tb_consulta {
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+       font-size: small;
+       display: flex; justify-content: center;    
+}
+
+.tb_consulta table caption { margin-top: .6em; }
+
+
+/*  INICIO IMPORTANTE - MENU HORIZONTAL   */ 
+#pcm{display:none; float:right; width: 100%;  }
+.otimizacaositesbusca { float:right; width: 100%; }
+ul.otimizacaositesbusca ul{display:none; z-index: 999999;    }
+ul.otimizacaositesbusca li:hover>ul{display:block;    }
+ul.otimizacaositesbusca ul{position: absolute;left:-1px;top:98%;    }
+ul.otimizacaositesbusca ul ul{position: absolute;left:98%;top:-2px;}
+ul.otimizacaositesbusca,ul.otimizacaositesbusca ul { 
+    margin:0px;
+    list-style:none;
+    padding:0px 3px 3px 0px;
+    background-color:#B5ACAC;
+    background-repeat:repeat;
+    border-color:#CECECE;
+    border-width:4px;
+    border-style:ridge;
+}
+ul.otimizacaositesbusca table {border-collapse:collapse}ul.otimizacaositesbusca {
+    display:block;
+    zoom:1;
+    position:absolute;
+/*    z-index: 1000;  */
+    left: 100;
+    top: 200;
+}
+* HTML ul.otimizacaositesbusca {position:absolute}
+ul.otimizacaositesbusca ul{ z-index: 999999;
+    width:183.75px;
+}
+ul.otimizacaositesbusca li{
+    display:block;
+    margin:3px 0px 0px 3px;
+    font-size:0px;
+}
+ul.otimizacaositesbusca a:active, ul.otimizacaositesbusca a:focus {
+outline-style:none;
+}
+ul.otimizacaositesbusca a, ul.otimizacaositesbusca li.dis a:hover, ul.otimizacaositesbusca li.sep a:hover {
+    display:block;
+    vertical-align:middle;
+    background-color:#B5ACAC;
+    border-width:1px;
+    border-color:#414141;
+    border-style:solid;
+    text-align:left;
+    text-decoration:none;
+    padding:4px;
+    _padding-left:0;
+    font:bold 11px Verdana;
+    color: #086B08;
+    cursor:pointer;
+}
+ul.otimizacaositesbusca span{
+    overflow:hidden;
+}
+ul.otimizacaositesbusca li {
+    float:left;
+}
+ul.otimizacaositesbusca ul li {
+    float:none;
+}
+ul.otimizacaositesbusca ul a {
+    text-align:left;
+    white-space:nowrap;
+}
+ul.otimizacaositesbusca li.sep{
+    text-align:left;
+    padding:0px;
+    line-height:0;
+    height:100%;
+}
+ul.otimizacaositesbusca li.sep span{
+    float:none;    padding-right:0;
+    width:3;
+    height:100%;
+    display:inline-block;
+    background-color:#CECECE;    background-image:none;}
+ul.otimizacaositesbusca ul li.sep span{
+    width:100%;
+    height:3;
+}
+ul.otimizacaositesbusca li:hover{
+    position:relative;
+}
+ul.otimizacaositesbusca li:hover>a{
+    background-color:#1F1F1F;
+    border-color:#FFFFFF;
+    border-style:solid;
+    font:bold 11px Verdana;
+    color: #FFFFFF;
+    text-decoration:none;
+}
+ul.otimizacaositesbusca li a:hover{
+    position:relative;
+    background-color:#1F1F1F;
+    border-color:#FFFFFF;
+    border-style:solid;
+    font:bold 11px Verdana;
+    color: #FFFFFF;
+    text-decoration:none;
+}
+ul.otimizacaositesbusca li.dis a {
+    color: #AAAAAA !important;
+}
+ul.otimizacaositesbusca img {border: none;float:left;_float:none;margin-right:4px;width:24px;
+height:24px;
+}
+ul.otimizacaositesbusca ul img {width:16px;
+height:16px;
+}
+ul.otimizacaositesbusca img.over{display:none}
+ul.otimizacaositesbusca li.dis a:hover img.over{display:none !important}
+ul.otimizacaositesbusca li.dis a:hover img.def {display:inline !important}
+ul.otimizacaositesbusca li:hover > a img.def  {display:none}
+ul.otimizacaositesbusca li:hover > a img.over {display:inline}
+ul.otimizacaositesbusca a:hover img.over,ul.otimizacaositesbusca a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover img.over,ul.otimizacaositesbusca a:hover a:hover a:hover img.over{display:inline}
+ul.otimizacaositesbusca a:hover img.def,ul.otimizacaositesbusca a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover img.def,ul.otimizacaositesbusca a:hover a:hover a:hover img.def{display:none}
+ul.otimizacaositesbusca a:hover ul,ul.otimizacaositesbusca a:hover a:hover ul{display:block}
+ul.otimizacaositesbusca a:hover ul ul{display:none}
+ul.otimizacaositesbusca span{
+    display:block;
+    background-image:url(./images/arrow_sub5.gif);
+    background-position:right center;
+    background-repeat: no-repeat;
+   padding-right:14px;}
+ul.otimizacaositesbusca ul span,ul.otimizacaositesbusca a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+ul.otimizacaositesbusca ul li:hover > a span{    background-image:url(./images/arrow_sub5.gif);}
+ul.otimizacaositesbusca table a:hover span,ul.otimizacaositesbusca table a:hover a:hover span{background-image:url(./images/arrow_sub5.gif)}
+ul.otimizacaositesbusca table a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+
+/* FIM DO MENU HORIZONTAL */
+
+.tabela1 { top: 0px; background-color: #FFF; font-size: small; 
+           text-align:center; 
+           border: 4px groove #0000FF;
+           width: 100%;
+}
+
+.tabela1 th  { background-color: #0000FF; color: #FFF; }
+
+.box {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.box * {
+    vertical-align: middle;
+}
+
+.caixa_box {  color: #000066;
+       font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;
+       font-size: large; 
+       text-align:center;
+       border: 3px double #000000;
+       font-weight: bold;
+       width: 100%;
+       height: 100%;
+       overflow: auto;
+       background-color: #FFFFFF;
+ }
+ 
+.wcemhcem { width: 100%; height: 100%; }
+
+/***************************************************************************
+        botao3d como botao3d_menu_vert sendo usado no menu vertical 
+        na tag input  type=button
+****************************************************************************/
+.botao3d, .botao3d_iniciando    {
+    width: 7.0em;
+    font:0.74em  Verdana, Arial, Helvetica, sans-serif, Times, Courier;
+    background:#f1f1f1;
+    color:#333;
+    text-align:center;
+    padding: 0.25em;
+    border-width: 0.2em;
+    border-color:#fff #909090 #909090 #fff;
+    border-style:solid;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight: bold;
+}
+ 
+.botao3d:hover    {
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_iniciando { width: 15.0em; }
+
+.botao3d:focus { 
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_menu_vert { width: 10.0em; }
+
+/* Final do botao3d usada mais na tag input type=button  */
+
+.dentro_corpo { position:relative; overflow: auto; padding: 8px; 
+                text-align:center; width: auto; height: 420px; clear: both; 
+}
+
+.dentro_corpo p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+                  font-size:small;
+                  text-align: justify;
+                  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.dentro_corpo ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.dentro_corpo .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center;   }
+
+.dentro_corpo .anchor { margin-right: 1px; text-align:right; }
+
+.titulo_consulta { color: #000000; 
+                /*   font-size: large;  */
+              font-size: medium; 
+              ext-align: justify;  
+              font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+              border: none;
+              margin:0; padding:0;
+}
+
+.ordenar { display: none; font-size: large; margin:0; padding: 0;max-height: 24px; }
+#anotacao_escolhida { text-align: center; display: none;overflow:auto; }
+.confirmar0 { text-align:center;padding: 2px 0 2px 0; border:2px double #FF00FF; overfow-y:scroll;  }
+.div_out { width:100%; overflow: auto; background-color: #32CD99; }
+
+.class_div1 { position: relative; float: right;  width: 780px; height: 560px;  }
+
+.class_div2   { width: 790px; height: 510px; overflow:auto; }
+.class_div2 p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+                  font-size:small;
+                  text-align: justify;
+                  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.class_div2 ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.class_div2 .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center;   }
+
+.class_div2 .anchor { margin-right: 1px; text-align:right; }
+
+/*  Fixar ancora */
+.fixar_ancora  { float:right; clear:both;  width: 100%; height: 40px; margin: 0px; padding: 0px; display:inline;
+                      border: none; position: absolute; bottom: 0px; right: 20px; text-align:right;
+}
+
+/*  Botao usado na tag  input  file    */
+.button {  
+        border: 1px solid black;  
+        background-color: #c2cfd1;  
+        cursor: pointer;
+}  
+
+form { padding: 6px; }
+
+p.upload_frames { color: #000000; 
+          margin: 0;white-space: nowrap; text-align: left;font-weight: bold; 
+          font-size: small; padding: 0px;
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}    
+
+/*   Tabelas para ter overflow; scroll      */
+div.scrollTable{
+            background: #fff;
+            height: 200px;            
+            font-size: small;
+            font-weight: normal;
+}
+
+div.scrollTable table.header, div.scrollTable div.scroller table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+    
+div.scrollTable table.header {
+    border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+    /*        width: 920px;  */
+}
+
+div.scrollTable div.scroller table {
+            border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+    /*    width: 920px; */
+}
+
+
+div.scrollTable table.header th, div.scrollTable div.scroller table td {
+            border: 1px solid #444;
+        /*    padding: 3px 5px;  */
+            font-size: small;
+            font-weight: normal;
+            text-align:left;
+}
+        
+div.scrollTable table.header th {
+        /*    background: #ddd;  */
+        background-color: #00FF00;
+}
+    
+div.scrollTable div.scroller {
+         overflow: auto;
+}
+
+div.scroller {
+    margin-top: 4px;
+    height: 140px;
+} 
+    
+div.scrollTable .coluna75px {
+            width: 75px;
+}
+    
+div.scrollTable .coluna100px {
+            width: 100px;
+}
+    
+div.scrollTable .coluna150px {
+            width: 150px;
+}
+
+/*  Passando  o Mouse sobre uma TAG inclui parte tambem no arq funcoes.js   */
+.itemOn { color: #000000; background-color: #FFFFFF;  text-decoration:none; }
+.itemOver { color: #000000; background-color: #7CFC00; }
+
+.titlehdr { font: normal 22px arial, verdana;
+   color: #c00;
+   border-bottom: 1px solid #c00;
+}
+
+.example { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia;
+           /* color: red;  */           
+           font-weight:bolder;
+           color: #000000; 
+}
+
+.td_instituicao { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+                  color: #000000; 
+                  font-style: normal;
+                  font-variant: normal;
+                  font-size: small; 
+                  empty-cells: show;
+                  border: 1px solid #000000;
+}
+
+/*  link   */
+.link_href:link {text-decoration: none}
+.link_href:visited {text-decoration: none}
+.link_href:active {text-decoration: none}
+.link_href:hover {text-decoration: underline; background-color: #7CFC00; 
+}
+
+/* PARA O LINK 1 - 20120229 */
+a.linkum:link {
+    color:#FF0000;
+    text-decoration:none;
+}
+a.linkum:visited {
+    color:#999999;
+    text-decoration:none;
+}
+a.linkum:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+a.linkum:active {
+    color:#00FF00;
+    text-decoration:underline;
+    background-color:#000000;
+}
+
+.asteristico { font-size: large; font-weight: bold; 
+               text-align: left; vertical-align: top;
+               font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+}
+
+p.titulo_alterar {  font-size:small; font-weight: bold;
+                    color: #000000;  text-align: center; 
+                    margin: 0px;  line-height: 110%; padding-top: 4px; padding-bottom: 4px;
+                    font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}
+
+.titulo_pequeno {  font-size:small; font-weight: bold; background-color: #32CD99; 
+                 color: #000000;  text-align: left; 
+                 margin: 0px;  line-height: 110%; 
+                 font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+
+#main_section {
+    float: left;
+    width: 720px;
+    background-color: #FFFFFF;
+}
+
+.main_articles  {
+    background-color: rgb(198,255,255);
+    float: left;
+    margin: 10px;
+    border: 2px solid #000000;
+    width: 330px;
+    height: 150px;
+}
+
+.main_articles header  {
+      background-color: yellow; 
+}
+
+.main_articles footer  {
+      background-color: grey; 
+      color: #FFFFFF;
+}
+
+.article_inicio, .limpar_enviar {
+    width: 100%;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia, Garamond, monospace, serif; 
+    color: #000000;    
+    overflow:hidden;
+   /*  float: left;  */
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    border-collapse: collapse;
+    /*  border: 3px double #999;   */
+    border: none;
+}
+
+.article_inicio article {
+    width: 100%;
+    border: 2px solid #999;
+}
+
+.article_inicio  p  {
+    text-align: left;
+    width: 100%;
+   /* border: 2px solid #999; */
+    border: none;
+}    
+    
+.article_inicio label span {
+   display: inline-block;
+   width: 120px;
+   font-weight: bold;
+   font-size: medium;
+   border: none;
+   text-align: right;   
+}
+
+.article_inicio input[type=text] {
+  font: 1em sans-serif;
+   font-weight:normal;
+   font-size: small;
+  width: 250px;
+  /*
+  -moz-box-sizing: border-box;
+   box-sizing: border-box;
+
+  border: 2px solid #999;
+    */
+}
+
+.article_inicio caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.article_inicio th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.article_inicio th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.limpar_enviar { text-align: center; padding:3px 0 3px 0px; border: 1px double #000000; }
+
+.article_div { display: inline-block; vertical-align: 60%; padding: 0 2px 0 2px;  } 
+
+#conteudo, #inclusao {
+    font-weight: bold;
+    text-align: center;
+    font-family:  sans-serif, Arial, "Times New Roman", Times,  Geneva, Helvetica,  'Courier New',  serif, Courier, monospace, Verdana, Garamond, Georgia;    
+    font-size: small;
+    line-height: 2em; margin-left: 0; width: 100%;
+    border: none;
+}
+
+.titulo_usuario  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+    /*    background-color: #9CC213;  */
+        background-color: #FFFFFF;
+        color: #000000;
+        border: none;
+        padding: 3px;
+        text-align: center;
+        overflow:hidden;
+       font-weight: bold;        
+        font-size:large;
+        font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+.lb_msg_erro {
+      display:none; position: relative;width: 100%;
+      text-align: center; overflow:hidden;
+      font-size: small;
+     font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+p.titulo_usp , p.titulo_grupo, p.titulo_gemac, .titulo_lista, .titulo_usp2 {  letter-spacing: 1px; 
+        white-space: nowrap; text-align: center; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+      font-weight: normal; font-size: large; 
+       white-space: nowrap;  
+       position: relative;
+       background-color: #FFFFFF;
+       color: #000000; 
+}  
+
+.titulo_usp2 { font-size: medium; }
+
+p.titulo_grupo {  color: #008000; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+p.titulo_gemac {  color: #000;  }     
+p.titulo_graduacao {  color: #000; 
+          margin: 5pt 0 0 0;white-space: nowrap; text-align: center;font-weight: bold; 
+          font-size: x-small; line-height: 180%; 
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+
+.titulo_lista { line-height:normal;
+      margin: 0px; padding: 2px 0 2px 0; 
+      font-size: medium; font-weight: bold;
+}
+/***  div class - Tamanho do Texto   ***/
+.tt, .tt_segundo {  position:relative;
+        float:initial; 
+        text-align: right; 
+        font-weight:bold;
+        font-size: 14px;
+        margin: 2em 0 0 0; 
+        padding: 10px 0px 10px 0;
+}
+
+.autorprojeto, .dtiniproj, .anotacaon { text-align: center; font-size: medium; }
+.titanotacao { text-align:center;font-size: medium; overflow: auto; }
+.testemunhas { text-align:justify;font-size: medium;;margin:0; padding: 0; margin-left: 20%; }
+.arqanotacao { text-align:center;font-size: medium;  margin-top:4px; }
+
+.div_select_projeto { text-align: center; padding-top:0px; vertical-align: top; padding-bottom: 8px; } 
+.anotador_titulo { width: 70em; height: 60px; cursor: pointer; overflow: auto; 
+                   color: #000000;  background-color: #FFFFFF; border: 1px solid #000000; 
+}
+
+.table_inicio_anot {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+    color: #000000;    
+    overflow: auto;
+    font-weight:normal;
+}
+.table_inicio_anot caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.table_inicio_anot th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.table_inicio_anot th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+
+}
+
+.parte_inicial { float: left; clear: both;  border: 1px solid #000000; 
+                 padding: .2em; height: auto; width: 99%; 
+}
+
+.div_nova, .div_cadanotador { float: left; clear: both; text-align: left; 
+              border: none; vertical-align: middle; 
+              padding: .2em 0 .2em 0;
+}
+.div_nova span { color: #FFFFFF; border: none; 
+                 padding: .2em; vertical-align: middle; 
+                 font-size: large;
+}
+.div_nova span label { white-space: nowrap;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000;
+        cursor: pointer;
+}
+.div_nova label { cursor: pointer; font-size: large; 
+           font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+           font-weight: bolder;  
+} 
+.div_nova span.span_float { float: left; clear: both; }
+
+.div_nova textarea { float: left; clear: both;
+                font-size: large; background-color: #FFFFFF; 
+                color: #000000; width: 44em;
+}
+.div_nova div label.titulo_pequeno { font-size: large; }
+.div_nova span.arquivado_como { background-color: #FFFFFF; color: #000000; 
+        padding: .4em 1em .4em .4em; font-weight: bold; border: 1px solid #000000;
+        font-size: small;
+} 
+
+.div_nova span select { font-size: large; vertical-align: top; }
+.fontrec, .fonteprojid { font-size: large; width: 16em; vertical-align: top;  }
+
+.td_select { font-size: large; height: auto; vertical-align: top; }
+
+.div_cadanotador  { border: none; width: 100%;  }
+.div_cadanotador span label { white-space: nowrap; padding: 2px;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000;  cursor: pointer;
+}
+
+.codigousp, .nome, .email, .data, .telefone, .ramal { width: 9em; font-size: large; }
+.nome { width: 30em;  }
+.email { width: 30em; }
+.email_participante { color: #FFFFFF; font-weight: bold; font-size: large; }
+.data, .telefone { width: 10em; }
+.ramal { width: 8em; }
+.hr_new  {  float: left; clear: both;
+   border: .1em inset #000000;
+   width: 100%;
+   margin: .4em 0 0 .2em;
+} 
+.span_div_nova {
+        white-space: nowrap;
+        vertical-align: top;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99; color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px; text-align: right;
+        overflow: auto;
+        font-size: large;     
+}
+.span_ord_proj { float: right; padding-left: .4em; }
+
+
+}    
+/*****************************************************************   
+
+*       FINAL DA SEGUNDA PARTE  
+
+******************************************************************/
+  
+
+
+
+/*******
+     TERCEIRA PARTE   
+          @media  screen and (max-device-width:768px) and (orientation:portrait) {
+          importante sem device para testar no computador/desktop
+
+*****/
+@media only screen and (max-width:768px) and (orientation:landscape) {          
+* { margin:0; padding:0; border:0; }        
+html {
+    height: 100%;
+}        
+body { width: 752px; min-height:100%; border:none; 
+    /**   background-color: #ffffff;   ***/
+       background:#0000FF;  /***  Cor Azul  ***/
+       color: #000000;
+   /*    font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, calibri, serif;  */
+       font-family: 'bariol_regularregular';
+       position: absolute;
+       overflow:auto; 
+}
+
+/*  INICIANDO  */
+.pagina_ini { float: left; clear:both; position: absolute; border: 1px solid #000000;
+              /*  height: 548px; max-height: 548px;  
+                  max-height: 40em; 
+              */
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small;          
+              z-index: 10;                              
+}
+
+.pagina_ini, #cabecalho, .menu_principal, .img_cabecalho, #rodape   { width: 752px; border:none; }
+
+#cabecalho { position: absolute; margin: 0px; 
+            padding: 0px; height: 100px; 
+           text-align: center;
+           background-repeat:no-repeat;
+          background-attachment:fixed;          
+         z-index: 1;
+}
+
+.img_cabecalho { float: left; border: none; } 
+
+/*  .img_cabecalho { float: left; border: none;   background-image: url("../imagens/topo_rge_nova.gif");  }     */
+
+/*  Precisa do z-index: 100  na div do MENU   */
+.menu_principal { position: relative; z-index: 999999;
+                text-align: left; 
+               margin-top: 102px; 
+              padding: 1px 0px 2px 0px; 
+             border:none;
+             width:auto;
+}
+
+#corpo, .corpo_iniciando { margin-top: 38px; width: 752px; font-size: small;  
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;     
+        border: 1px groove #000033;
+        background-color: #FFFFFF;; 
+}
+
+#corpo { height: auto; width: 752px; 
+          float: left; clear:both; 
+          position: relative; 
+          z-index: 2;
+         overflow: auto !important;
+}
+
+.corpo_iniciando { overflow: hidden; text-align: justify; }
+ 
+/*  .article_msg { line-height: 2em; margin-left: 0; width: 100%; }   */
+
+.opcoes_inicio, .usuario_senha {  margin-right: 4px;  padding: 4px; 
+              font-family: sans-serif, Times, Courier, 'Courier New', Arial,  monospace, Verdana,  serif, Geneva, Helvetica, Garamond, Georgia;
+              font-size: small; color: #000000;             
+              border: none;
+}
+
+.usuario_senha { margin-left: 25%; float: left; clear:both;   }
+
+section.merro_e_titulo  {  margin-top: 0; height: auto; }  
+
+#label_msg_erro  { display:none; width: 100%; 
+                    text-align: center; 
+                    height: auto;
+        font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;     
+                    background-color: rgb(255,255,255);  /* Cor Vermelha */
+                    color: rgb(0,0,0); /* Cor Branca */
+                    border: none;  font-size: 14px; 
+                    position: relative; 
+                    padding-top: .2em;
+                    padding-bottom: 0;
+}
+.spanerro { color:#FF0000; }  
+
+#corpo   .botaoiniciando  { position: fixed; margin:2px 0 0 0; z-index: 11; }
+#corpo   .botaoiniciando input[type="button"] { float: right; 
+     width: 7.0em;
+    font:.9em  Verdana, Arial, Helvetica, sans-serif, Times, Courier,Georgia,serif;
+    background:#f1f1f1;
+    color:#333;
+    text-align:center;
+    padding: 0.25em;
+    border-width: .5em;
+    border-color:#fff #909090 #909090 #fff;
+    border-style:solid;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight: bold;
+    display: inline;
+    overflow: auto !important;
+}  
+
+#corpo  .botaoiniciando input[type="button"]:hover    {
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+/*  Serve para a tag Select primeira letra  */
+#chefe::first-letter { text-transform: capitalize; 
+      background-color: #FFFF00;
+      color:#00FFFF;
+}
+
+/*  Alterado em 20160921  */
+.header_title {
+     margin: 40px auto;
+     text-align:center;
+     margin-bottom: 14px;
+     border: none;
+}
+.header_title  p {
+     font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+     text-align: center;
+     color: #000000;
+     font-size:large;
+     font-weight: bold; 
+     background: #FFFFFF;
+}
+
+.section_index { float: left; margin: 0px 0px 18px 2px; height: 19em;
+                  padding:0 2% 0 2%;
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     overflow: auto !important;
+}
+
+.section_index h1 { font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+        font-weight: bold;
+        font-size: 16px;
+        vertical-align: middle; 
+        text-align: center;
+}
+
+.section_index p { text-align: justify; font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva,   Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+      font-size: 14px;
+      text-indent: 3em;
+      vertical-align: middle;
+      line-break: keep-all;
+}
+
+.section_index p span { font-weight: bold; padding-right: 6px; }
+
+.topo_pagina  { position:absolute;
+             /***  padding: 4px;  
+               *  width: auto;
+               ***/
+                bottom:0;                
+             right: 32px;
+             overflow:hidden;
+}
+
+/*
+section.section_index   {
+    width: 99%;
+    padding-right: 2%;
+         left: 1%; top: 0;
+     transform: translate(1%, 0%);
+    background-color: #FFFF00;
+    
+        overflow: scroll;
+}
+*/
+
+.section_navegador, .section_navegador_final  { float: left;   
+/*    margin-top:10px;  */
+    position: relative; 
+/*    padding: 0px;  
+    padding: 0px 10px 0px 10px;
+*/
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif;
+    background-color: #FFFFFF;
+     font-size:large;
+     box-sizing: border-box;
+     -webkit-box-shadow:  10px 10px 5px #888888;
+    -moz-box-shadow:  10px 10px 5px #888888;
+    -o-box-shadow:  10px 10px 5px #888888;
+    -ms-box-shadow: 10px 10px 5px #888888;
+     box-shadow: 10px 10px 5px #888888;
+     overflow: hidden;
+     text-align: center; 
+     left: 20%; top:4%;
+     transform: translate(-1%, -1%);  
+}
+
+.section_inicio { border: 3px double #000000;
+    font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,   Garamond, Georgia, serif; 
+}
+
+.section_navegador_final { font-size: medium; position:relative;margin: 0;
+        padding:1em .5em .5em .5em; width: 100%; left:0; float: display; 
+}
+
+.div_form { background-color: #32CD99; overflow: auto !important; 
+           position: relative; height: auto;
+}
+
+.label_campos { padding-right: .42em; }
+
+.projetoarticle1, .projetoarticle2, .projetoarticle3,  .projetoarticlexy, .anotacaoarticle1 { 
+       padding: 2px 2px 6px; 
+       font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana,   Garamond  ;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+        position:relative;
+}
+.projetoarticle1 { font-size: large; }
+.tit_anotacao { font-size:1.2em; font-weight:bolder; text-align: justify; }
+
+/***
+.font_size_family {
+    font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana,   Garamond  ;                       
+    padding: 3px; empty-cells: show;
+    white-space:nowrap; font-weight: bold; border: 1px solid #000000;
+    font-size: x-small;
+} 
+**/
+.font_size_family {
+   /*  font-size: x-small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;  */
+    font-family: sans-serif, Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times,  serif, Geneva,  Helvetica,   monospace, Verdana, Garamond;                       
+    padding: 3px; empty-cells: show;
+    white-space: nowrap; font-weight: bold; border: 1px solid #000000;
+ /***   font-size: x-small;  
+    font-size: large;     ***/
+    font-size: small;
+} 
+
+
+.projetoarticle2, .projetoarticle3  { 
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding-left: 2px;
+}
+.projetoarticle1 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticle1 input, .projetoarticle1 select  { padding:.1em;  }
+.projetoarticle1 input[type="email"] { font-size: 16px; text-align: left; margin: 0; }
+.projetoarticle2 label { float:left; width: 8em; vertical-align: middle; cursor: pointer; text-align: right; }
+.projetoarticle2 span {  margin:0; padding-left: .8em; cursor: pointer;   }
+
+.projetoarticle1 .labelselect { float: left; clear:both; margin:.2em 0 .5em 0; width: 100%; }
+
+.projetoarticle3 div { margin: .05em; padding: .05em;  }
+.projetoarticle3 label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+
+.projetoarticle4 { position:relative; float:left; padding: 0 .3em;}
+.projetoarticle4 input[type="button"] { padding: 0 2em; margin: 0 .1em; }
+.projetoarticle4 button { padding: .2em; margin:.1em; }
+
+.projetoarticlexy {
+    width:auto; height:20px; position:relative;left:0px;
+}
+.projetoarticlexy label { cursor: pointer; font-weight: bold; margin-right: .2em; }
+.projetoarticlexy .nleft { margin:0px;padding-left: 0px; position:fixed;vertical-align: middle; } 
+.projetoarticlexy .nright {float:left;margin-left:240px; }
+
+#div_imagem_codigo { margin: 0px; padding: 0px; }
+
+.div_select_busca { text-align: center;padding-top: 4px; padding-bottom: 4px;  }
+
+select.Busca_letrai {font-size: large; height: auto; }
+
+.sidebar {
+    display: inline;
+    width: 100%;
+    /*  float: right;  */
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;   
+    padding-top: 8px; padding-bottom: 18px;                  
+}
+
+.sidebar .coluna1 {
+    display: inline;
+    width: 50%;
+    float: left;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+.sidebar .coluna2 {
+    display: inline;
+    width: 50%;
+    float: right;
+   /*   background-color: yellow;  */
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+}
+
+/*   #ladoalado-container {width:100%; height:auto; float:left; margin:10px 0 0 0;}   */
+#ladoalado-container { width:100%; float:left;height:auto; margin: 0; 
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+        white-space: nowrap;   
+        text-align: justify;
+        vertical-align: bottom;
+}
+#ladoalado { width: auto; height:auto; margin:0;}
+#loop-ladoalado { float:left; margin:0px 18px 0 0; }
+/* #loop-ladoalado:hover {background:#EDEDED;}  */
+#loop-ladoalado label { cursor: pointer; font-weight: bold; text-decoration:none;  }
+#loop-ladoalado h1 {font-family:'bariol_boldbold'; font-size:16px; font-weight:700; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#333;}
+#loop-ladoalado h2 {float:left;font-family:'bariol_boldbold'; font-size:16px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; color:#FFF; width:90px; margin:135px 0 0 61px; z-index:0; position:absolute; }
+#loop-ladoalado h3 {font-family:'bariol_boldbold'; font-size:14px; background:#e25143; height:40px; line-height:40px; padding:0 3px 0 3px; text-align:center; background:#000; color:#FFF; float:left; width:155px; margin:-35px 10px 0 30px;}
+#loop-ladoalado h3 a {text-decoration:none; color:#fff; padding:5px;}
+#loop-ladoalado img {float:left;}
+#loop-ladoalado  span {font-family:'bariol_regularregular'; font-size:14px; font-weight:700; height:40px; text-align:center; margin:95px 20px 30px 35px; float:left;}
+#loop-ladoalado input { text-decoration:none; padding:.1em; }
+
+
+
+.div1, .div1_partes { float:left; width: 142px; top: 62px;  
+            background-image: url("../imagens/sem_texto_vertical.gif");
+            background-repeat:no-repeat; border: 1px groove #000033; 
+            margin-right: 1px; position: absolute;
+            /*  z-index depois do rodape que e? 3  */
+            z-index: 4;            
+}
+
+.div1_partes { background:#33CC00; margin-right: 2px;  }
+
+.div_msg_erro { display:none; position: relative; 
+                width: 100%; text-align: center; overflow:hidden;  
+                font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;                    
+                font-size:large;
+                border: 2px double #000000;
+}
+
+.div1,  .div1_partes { height: 560px; }
+
+/* #corpo { height: 429px; }  */
+
+#rodape { position: relative; 
+         float:left; clear: both;  overflow: none;
+        height: 18px; left: 0px; padding: 0px; 
+        font-style: italic; margin-top: 2px;
+        font-weight: normal;
+        font-size: x-small;
+  /***      color:#003399;     ***/
+        color: #000000; 
+        border: 1px solid #000; 
+        vertical-align: top;
+        z-index: 3;
+        background-color: #FFFFFF;
+}
+
+.body_index  {
+    font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif, Times, Georgia;
+     background: #ffffff;
+    width: 100%;
+    color: #000000;
+    margin: 0 auto 0;
+    padding: 0;
+}
+
+/*  empty-cells - mostrar celulas vazias com borda    */
+table { empty-cells: show; }
+
+h1, p, table, fieldset {
+    margin-bottom: 10px;
+}
+img {
+    border: none;
+}
+
+label { color: #000000; }
+
+.ul_index {
+    margin-left: 30px;
+    line-height: 1.8em;
+    list-style-type: square;
+    color: #f60;
+    font-weight: bold;
+}
+h1 {
+    font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+    font-size: 2em;
+}
+h2, .aviso {
+    font-family: Georgia, "Times New Roman", Times, serif, Arial, Helvetica, Verdana;
+    font-size: 1.5em;
+    background-color: #9CC213;
+    color: #fff;
+    padding: 5px;
+    border-bottom: 1px solid #000
+}
+
+hr, .hr_inicio {
+    border: none;
+    border-bottom: 1px dashed #999;
+    margin-bottom: 10px;
+    height: 1px;
+}
+
+.hr_inicio {
+        margin: 0px;
+        padding: 0px;
+        height: 3px;
+        line-height: 0px;
+        background-color: #9CC213;
+        vertical-align: bottom;
+        border: none;
+}
+
+.aviso {
+    padding: 3px;
+    font-size: 1em;
+}
+
+.table_inicio {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+    color: #000000;    
+    overflow: auto;
+    font-weight:normal;
+}
+.table_inicio caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.table_inicio th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.table_inicio th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+/*  .td_inicio1  .td_inicio2  tem tb no arquivo estilo_frame.css  */
+.td_inicio1,  .td_inicio2, .td_inicio3, .td_inicio4 .loginresultado { 
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight:bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: right;
+        overflow: auto;
+}
+.td_inicio1 { font-size: large; }
+.td_inicio2  { text-align:left; padding-left: 5px; }  
+.td_inicio3  { vertical-align: middle; }  
+.td_inicio4  { text-align:left; background-color: #FFFFFF; }  
+
+.loginresultado { font-size: small; padding: 0px 0 8px 0;  }
+
+.detalhes1,  .detalhes2, .reset_button  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight:bolder;
+    /*    background-color: #9CC213;  */
+    /*    background-color: #CDCDCD;   cinza claro  */
+        background-color: #A8A8A8;  /* cinza brilhante */
+        color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px;
+        text-align: right;
+}
+.detalhes2  { text-align:left; padding-left: 5px; }  
+
+.reset_button { float: left; clear: both; margin: .3em 0 .3em;
+    padding-top: .6em; border: none; 
+   text-align: left; background-color:  #32CD99; 
+}
+.reset_button span { padding: .4em .4em 0 .4em; }
+.reset_button span button { width: 90px; }
+
+.tb_consulta {
+       font-family: Georgia, Arial, Courier, 'Courier New', "Times New Roman", Times, sans-serif, Geneva, Helvetica,   monospace, Verdana,   Garamond,  serif;                     
+       font-size: small;
+       display: flex; justify-content: center;    
+}
+
+.tb_consulta table caption { margin-top: .6em; }
+
+
+/*  INICIO IMPORTANTE - MENU HORIZONTAL   */ 
+#pcm{display:none; float:right; width: 100%;  }
+.otimizacaositesbusca { float:right; width: 100%; }
+ul.otimizacaositesbusca ul{display:none; z-index: 999999;    }
+ul.otimizacaositesbusca li:hover>ul{display:block;    }
+ul.otimizacaositesbusca ul{position: absolute;left:-1px;top:98%;    }
+ul.otimizacaositesbusca ul ul{position: absolute;left:98%;top:-2px;}
+ul.otimizacaositesbusca,ul.otimizacaositesbusca ul { 
+    margin:0px;
+    list-style:none;
+    padding:0px 3px 3px 0px;
+    background-color:#B5ACAC;
+    background-repeat:repeat;
+    border-color:#CECECE;
+    border-width:4px;
+    border-style:ridge;
+}
+ul.otimizacaositesbusca table {border-collapse:collapse}ul.otimizacaositesbusca {
+    display:block;
+    zoom:1;
+    position:absolute;
+/*    z-index: 1000;  */
+    left: 100;
+    top: 200;
+}
+* HTML ul.otimizacaositesbusca {position:absolute}
+ul.otimizacaositesbusca ul{ z-index: 999999;
+    width:183.75px;
+}
+ul.otimizacaositesbusca li{
+    display:block;
+    margin:3px 0px 0px 3px;
+    font-size:0px;
+}
+ul.otimizacaositesbusca a:active, ul.otimizacaositesbusca a:focus {
+outline-style:none;
+}
+ul.otimizacaositesbusca a, ul.otimizacaositesbusca li.dis a:hover, ul.otimizacaositesbusca li.sep a:hover {
+    display:block;
+    vertical-align:middle;
+    background-color:#B5ACAC;
+    border-width:1px;
+    border-color:#414141;
+    border-style:solid;
+    text-align:left;
+    text-decoration:none;
+    padding:4px;
+    _padding-left:0;
+    font:bold 11px Verdana;
+    color: #086B08;
+    cursor:pointer;
+}
+ul.otimizacaositesbusca span{
+    overflow:hidden;
+}
+ul.otimizacaositesbusca li {
+    float:left;
+}
+ul.otimizacaositesbusca ul li {
+    float:none;
+}
+ul.otimizacaositesbusca ul a {
+    text-align:left;
+    white-space:nowrap;
+}
+ul.otimizacaositesbusca li.sep{
+    text-align:left;
+    padding:0px;
+    line-height:0;
+    height:100%;
+}
+ul.otimizacaositesbusca li.sep span{
+    float:none;    padding-right:0;
+    width:3;
+    height:100%;
+    display:inline-block;
+    background-color:#CECECE;    background-image:none;}
+ul.otimizacaositesbusca ul li.sep span{
+    width:100%;
+    height:3;
+}
+ul.otimizacaositesbusca li:hover{
+    position:relative;
+}
+ul.otimizacaositesbusca li:hover>a{
+    background-color:#1F1F1F;
+    border-color:#FFFFFF;
+    border-style:solid;
+    font:bold 11px Verdana;
+    color: #FFFFFF;
+    text-decoration:none;
+}
+ul.otimizacaositesbusca li a:hover{
+    position:relative;
+    background-color:#1F1F1F;
+    border-color:#FFFFFF;
+    border-style:solid;
+    font:bold 11px Verdana;
+    color: #FFFFFF;
+    text-decoration:none;
+}
+ul.otimizacaositesbusca li.dis a {
+    color: #AAAAAA !important;
+}
+ul.otimizacaositesbusca img {border: none;float:left;_float:none;margin-right:4px;width:24px;
+height:24px;
+}
+ul.otimizacaositesbusca ul img {width:16px;
+height:16px;
+}
+ul.otimizacaositesbusca img.over{display:none}
+ul.otimizacaositesbusca li.dis a:hover img.over{display:none !important}
+ul.otimizacaositesbusca li.dis a:hover img.def {display:inline !important}
+ul.otimizacaositesbusca li:hover > a img.def  {display:none}
+ul.otimizacaositesbusca li:hover > a img.over {display:inline}
+ul.otimizacaositesbusca a:hover img.over,ul.otimizacaositesbusca a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover ul img.def,ul.otimizacaositesbusca a:hover a:hover img.over,ul.otimizacaositesbusca a:hover a:hover a:hover img.over{display:inline}
+ul.otimizacaositesbusca a:hover img.def,ul.otimizacaositesbusca a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover ul img.over,ul.otimizacaositesbusca a:hover a:hover img.def,ul.otimizacaositesbusca a:hover a:hover a:hover img.def{display:none}
+ul.otimizacaositesbusca a:hover ul,ul.otimizacaositesbusca a:hover a:hover ul{display:block}
+ul.otimizacaositesbusca a:hover ul ul{display:none}
+ul.otimizacaositesbusca span{
+    display:block;
+    background-image:url(./images/arrow_sub5.gif);
+    background-position:right center;
+    background-repeat: no-repeat;
+   padding-right:14px;}
+ul.otimizacaositesbusca ul span,ul.otimizacaositesbusca a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+ul.otimizacaositesbusca ul li:hover > a span{    background-image:url(./images/arrow_sub5.gif);}
+ul.otimizacaositesbusca table a:hover span,ul.otimizacaositesbusca table a:hover a:hover span{background-image:url(./images/arrow_sub5.gif)}
+ul.otimizacaositesbusca table a:hover table span{background-image:url(./images/arrow_sub2.gif)}
+
+/* FIM DO MENU HORIZONTAL */
+
+.tabela1 { top: 0px; background-color: #FFF; font-size: small; 
+           text-align:center; 
+           border: 4px groove #0000FF;
+           width: 100%;
+}
+
+.tabela1 th  { background-color: #0000FF; color: #FFF; }
+
+.box {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.box * {
+    vertical-align: middle;
+}
+
+.caixa_box {  color: #000066;
+       font-family: Times, Courier, 'Courier New', Arial,  monospace, Verdana, Geneva, Helvetica, sans-serif,   Garamond, Georgia, serif;
+       font-size: large; 
+       text-align:center;
+       border: 3px double #000000;
+       font-weight: bold;
+       width: 100%;
+       height: 100%;
+       overflow: auto;
+       background-color: #FFFFFF;
+ }
+ 
+.wcemhcem { width: 100%; height: 100%; }
+
+/***************************************************************************
+        botao3d como botao3d_menu_vert sendo usado no menu vertical 
+        na tag input  type=button
+****************************************************************************/
+.botao3d, .botao3d_iniciando    {
+    width: 7.0em;
+    font:0.74em  Verdana, Arial, Helvetica, sans-serif, Times, Courier;
+    background:#f1f1f1;
+    color:#333;
+    text-align:center;
+    padding: 0.25em;
+    border-width: 0.2em;
+    border-color:#fff #909090 #909090 #fff;
+    border-style:solid;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight: bold;
+}
+ 
+.botao3d:hover    {
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_iniciando { width: 15.0em; }
+
+.botao3d:focus { 
+    background:#999;
+    color:#fff;
+    border-color:#000 #fafafa #fafafa #000;
+}
+
+.botao3d_menu_vert { width: 10.0em; }
+
+/* Final do botao3d usada mais na tag input type=button  */
+
+.dentro_corpo { position:relative; overflow: auto; padding: 8px; 
+                text-align:center; width: auto; height: 420px; clear: both; 
+}
+
+.dentro_corpo p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+                  font-size:small;
+                  text-align: justify;
+                  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.dentro_corpo ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.dentro_corpo .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center;   }
+
+.dentro_corpo .anchor { margin-right: 1px; text-align:right; }
+
+.titulo_consulta { color: #000000; 
+               /***   font-size: large; 
+                      font-size: small;   
+              ***/
+              font-size: medium;   
+              ext-align: justify;  
+              font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+              border: none;
+              margin:0; padding:0;
+}
+
+.ordenar { display: none; font-size: large; margin:0; padding: 0;max-height: 24px; }
+#anotacao_escolhida { text-align: center; display: none;overflow:auto; }
+.confirmar0 { text-align:center;padding: 2px 0 2px 0; border:2px double #FF00FF; overfow-y:scroll;  }
+.div_out { width:100%; overflow: auto; background-color: #32CD99; }
+
+.class_div1 { position: relative; float: right;  width: 780px; height: 560px;  }
+
+.class_div2   { width: 790px; height: 510px; overflow:auto; }
+.class_div2 p { background-color: #FFF; color:#000;
+                  font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia, "Times New Roman";
+                  font-size:small;
+                  text-align: justify;
+                  padding: 8px; text-indent: 4em; line-height: 150%;
+}
+
+.class_div2 ul { margin-left: 5%; margin-right: 5%;  
+                   list-style-type: disc; text-align: justify; line-height: 150%;
+} 
+
+.class_div2 .titulo { background-color: #FFF; color: #0000FF; font-size: x-large; text-align: center;   }
+
+.class_div2 .anchor { margin-right: 1px; text-align:right; }
+
+/*  Fixar ancora */
+.fixar_ancora  { float:right; clear:both;  width: 100%; height: 40px; margin: 0px; padding: 0px; display:inline;
+                      border: none; position: absolute; bottom: 0px; right: 20px; text-align:right;
+}
+
+/*  Botao usado na tag  input  file    */
+.button {  
+        border: 1px solid black;  
+        background-color: #c2cfd1;  
+        cursor: pointer;
+}  
+
+form { padding: 6px; }
+
+p.upload_frames { color: #000000; 
+          margin: 0;white-space: nowrap; text-align: left;font-weight: bold; 
+          font-size: small; padding: 0px;
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}    
+
+/*   Tabelas para ter overflow; scroll      */
+div.scrollTable{
+            background: #fff;
+            height: 200px;            
+            font-size: small;
+            font-weight: normal;
+}
+
+div.scrollTable table.header, div.scrollTable div.scroller table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+    
+div.scrollTable table.header {
+    border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+    /*        width: 920px;  */
+}
+
+div.scrollTable div.scroller table{
+            border-collapse: collapse;
+    font-family: "Times New Roman", Times,  Arial, Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+    /*    width: 920px; */
+}
+
+
+div.scrollTable table.header th, div.scrollTable div.scroller table td{
+            border: 1px solid #444;
+        /*    padding: 3px 5px;  */
+            font-size: small;
+            font-weight: normal;
+            text-align:left;
+}
+        
+div.scrollTable table.header th{
+        /*    background: #ddd;  */
+        background-color: #00FF00;
+}
+    
+div.scrollTable div.scroller{
+         overflow: auto;
+}
+
+div.scroller {
+    margin-top: 4px;
+    height: 140px;
+} 
+    
+div.scrollTable .coluna75px{
+            width: 75px;
+}
+    
+div.scrollTable .coluna100px{
+            width: 100px;
+}
+    
+div.scrollTable .coluna150px{
+            width: 150px;
+}
+
+/*  Passando  o Mouse sobre uma TAG inclui parte tambem no arq funcoes.js   */
+.itemOn { color: #000000; background-color: #FFFFFF;  text-decoration:none; }
+.itemOver { color: #000000; background-color: #7CFC00; }
+
+.titlehdr { font: normal 22px arial, verdana;
+   color: #c00;
+   border-bottom: 1px solid #c00;
+}
+
+.example { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia;
+           /* color: red;  */           
+           font-weight:bolder;
+           color: #000000; 
+}
+
+.td_instituicao { font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+                  color: #000000; 
+                  font-style: normal;
+                  font-variant: normal;
+                  font-size: small; 
+                  empty-cells: show;
+                  border: 1px solid #000000;
+}
+
+/*  link   */
+.link_href:link {text-decoration: none}
+.link_href:visited {text-decoration: none}
+.link_href:active {text-decoration: none}
+.link_href:hover {text-decoration: underline; background-color: #7CFC00; 
+}
+
+/* PARA O LINK 1 - 20120229 */
+a.linkum:link {
+    color:#FF0000;
+    text-decoration:none;
+}
+a.linkum:visited {
+    color:#999999;
+    text-decoration:none;
+}
+a.linkum:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+a.linkum:active {
+    color:#00FF00;
+    text-decoration:underline;
+    background-color:#000000;
+}
+
+.asteristico { font-size: large; font-weight: bold; 
+               text-align: left; vertical-align: top;
+               font-family: Arial, Helvetica, sans-serif, Times, Verdana, Courier, serif, Georgia;
+}
+
+p.titulo_alterar {  font-size:small; font-weight: bold;
+                    color: #000000;  text-align: center; 
+                    margin: 0px;  line-height: 110%; padding-top: 4px; padding-bottom: 4px;
+                    font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, sans-serif, monospace; 
+}
+
+.titulo_pequeno {  font-size:small; font-weight: bold; background-color: #32CD99; 
+                 color: #000000;  text-align: left; 
+                 margin: 0px;  line-height: 110%; 
+                 font-family:  Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif, 'Courier New', Courier, monospace, Verdana,   Garamond, Georgia, serif;
+}
+
+#main_section {
+    float: left;
+    width: 720px;
+    background-color: #FFFFFF;
+}
+
+.main_articles  {
+    background-color: rgb(198,255,255);
+    float: left;
+    margin: 10px;
+    border: 2px solid #000000;
+    width: 330px;
+    height: 150px;
+}
+
+.main_articles header  {
+      background-color: yellow; 
+}
+
+.main_articles footer  {
+      background-color: grey; 
+      color: #FFFFFF;
+}
+
+.article_inicio, .limpar_enviar {
+    width: 100%;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia, Garamond, monospace, serif; 
+    color: #000000;    
+    overflow:hidden;
+   /*  float: left;  */
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+    border-collapse: collapse;
+    /*  border: 3px double #999;   */
+    border: none;
+}
+
+.article_inicio article {
+    width: 100%;
+    border: 2px solid #999;
+}
+
+.article_inicio  p  {
+    text-align: left;
+    width: 100%;
+   /* border: 2px solid #999; */
+    border: none;
+}    
+    
+.article_inicio label span {
+   display: inline-block;
+   width: 120px;
+   font-weight: bold;
+   font-size: medium;
+   border: none;
+   text-align: right;   
+}
+
+.article_inicio input[type=text] {
+  font: 1em sans-serif;
+   font-weight:normal;
+   font-size: small;
+  width: 250px;
+  /*
+  -moz-box-sizing: border-box;
+   box-sizing: border-box;
+
+  border: 2px solid #999;
+    */
+}
+
+.article_inicio caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.article_inicio th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.article_inicio th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.limpar_enviar { text-align: center; padding:3px 0 3px 0px; border: 1px double #000000; }
+
+.article_div { display: inline-block; vertical-align: 60%; padding: 0 2px 0 2px;  } 
+
+#conteudo, #inclusao {
+    font-weight: bold;
+    text-align: center;
+    font-family:  sans-serif, Arial, "Times New Roman", Times,  Geneva, Helvetica,  'Courier New',  serif, Courier, monospace, Verdana, Garamond, Georgia;    
+    font-size: small;
+    line-height: 2em; margin-left: 0; width: 100%;
+    border: none;
+}
+
+.titulo_usuario  { 
+        white-space: nowrap;
+        vertical-align: bottom;
+    /*    background-color: #9CC213;  */
+        background-color: #FFFFFF;
+        color: #000000;
+        border: none;
+        padding: 3px;
+        text-align: center;
+        overflow:hidden;
+       font-weight: bold;        
+        font-size:large;
+        font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+.lb_msg_erro {
+      display:none; position: relative;width: 100%;
+      text-align: center; overflow:hidden;
+      font-size: small;
+     font-family:  Courier, 'Courier New', Arial, "Times New Roman", Times,  Geneva, Helvetica, sans-serif,  monospace, Verdana,  Garamond, Georgia, serif;        
+}
+
+p.titulo_usp , p.titulo_grupo, p.titulo_gemac, .titulo_lista, .titulo_usp2 {  letter-spacing: 1px; 
+        white-space: nowrap; text-align: center; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+      font-weight: normal; font-size: large; 
+       white-space: nowrap;  
+       position: relative;
+       background-color: #FFFFFF;
+       color: #000000; 
+}     
+
+.titulo_usp2 { font-size: medium; }
+
+p.titulo_grupo {  color: #008000; 
+       font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+p.titulo_gemac {  color: #000;  }     
+p.titulo_graduacao {  color: #000; 
+          margin: 5pt 0 0 0;white-space: nowrap; text-align: center;font-weight: bold; 
+          font-size: x-small; line-height: 180%; 
+          font-family: Verdana, Arial, Helvetica, Times, "Times New Roman", serif, Courier, sans-serif, monospace; 
+}
+
+.titulo_lista { line-height:normal;
+      margin: 0px; padding: 2px 0 2px 0; 
+      font-size: medium; font-weight: bold;
+}
+/*  div class - Tamanho do Texto   */
+.tt {  position:relative;
+        float:initial; 
+        margin: 0px;
+        top:0px; 
+        text-align: right; 
+        font-weight:bold;
+        font-size: 14px;
+        padding:0;    
+}
+.tt_segundo { position:relative;
+        float:initial; 
+        text-align: right; 
+        font-weight:bold;
+        font-size: 14px;
+        padding: 0;    
+        margin: 2em 0 0 0; 
+        padding: 10px 0px 10px 0;
+
+}
+
+.autorprojeto, .dtiniproj, .anotacaon { text-align: center; font-size: medium; }
+.titanotacao { text-align:center;font-size: medium; overflow: auto; }
+.dtanotacao { text-align:center; font-size: medium;  margin-top:4px; } 
+.testemunhas { text-align:justify;font-size: medium;; margin:0;padding:0; margin-left: 20%; }
+.arqanotacao { text-align:center;font-size: medium;  margin-top:4px; }
+
+.div_select_projeto { text-align: center; padding-top:0px; vertical-align: top; padding-bottom: 8px; } 
+.anotador_titulo { width: 70em; height: 60px; cursor: pointer; overflow: auto; 
+                 color: #000000;  background-color: #FFFFFF; border: 1px solid #000000; 
+}
+
+.table_inicio_anot {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    background-color: #FFFFFF; 
+    font-family: sans-serif, times, Verdana,  Arial, courier, Helvetica, Georgia,serif; 
+    color: #000000;    
+    overflow: auto;
+    font-weight:normal;
+}
+.table_inicio_anot caption {
+    text-align: left;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.table_inicio_anot th {
+    background-color: #9CC213;
+    color: #fff;
+}
+.table_inicio_anot th td {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+}
+
+.parte_inicial { float: left; clear: both;  border: 1px solid #000000; 
+                 padding: .2em; height: auto; width: 99%; 
+}
+.div_nova, .div_cadanotador { float: left; clear: both; text-align: left; 
+              border: none; vertical-align: middle; 
+              padding: .2em 0 .2em 0;
+}
+.div_nova span { color: #FFFFFF; border: none; 
+                 padding: .2em; vertical-align: middle; 
+                 font-size: large;
+}
+.div_nova span label { white-space: nowrap;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000; cursor: pointer;
+}
+.div_nova label { cursor: pointer; font-size: large; 
+           font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+           font-weight: bolder;  
+} 
+.div_nova span.span_float { float: left; clear: both; }
+
+.div_nova textarea { float: left; clear: both;
+                font-size: large; background-color: #FFFFFF; 
+                color: #000000; width: 44em;
+}
+.div_nova div label.titulo_pequeno { font-size: large; }
+.div_nova span.arquivado_como { background-color: #FFFFFF; color: #000000; 
+        padding: .4em 1em .4em .4em; font-weight: bold; border: 1px solid #000000;
+        font-size: small;
+} 
+
+.div_nova span select { font-size: large; vertical-align: top; }
+.fontrec, .fonteprojid { font-size: large; width: 16em; vertical-align: top; }
+
+.td_select { font-size: large; height: auto; vertical-align: top; }
+
+.div_cadanotador  { border: none; width: 100%;  }
+.div_cadanotador span label { white-space: nowrap; padding: 2px;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99;
+        color: #000000; cursor: pointer;
+}
+
+.codigousp, .nome, .email, .data, .telefone, .ramal { width: 9em; font-size: large; }
+.nome { width: 30em;  }
+.email { width: 30em;  }
+.email_participante { color: #FFFFFF; font-weight: bold; font-size: large; }
+.data, .telefone { width: 10em; }
+.ramal { width: 8em; }
+.hr_new  {  float: left; clear: both;
+   border: .1em inset #000000;
+   width: 100%;
+   margin: .4em 0 0 .2em;
+} 
+.span_div_nova {
+        white-space: nowrap;
+        vertical-align: top;
+        font-family: Arial, Helvetica, sans-serif, Times, Verdana, Georgia, Courier;
+        font-weight: bolder;
+    /*    background-color: #9CC213;  */
+        background-color: #32CD99; color: #ffffff;
+        border: 1px solid #000;
+        padding: 3px; text-align: right;
+        overflow: auto;
+        font-size: large;     
+}
+.span_ord_proj { float: right; padding-left: .4em; }
+
+}
+/******************************************************************************** 
+    FINAL  -- TERCEIRA PARTE   
+         @media  screen and (max-device-width:768px) and (orientation:portrait) {
+         importante sem device para testar no computador/desktop
+***********************************************************************************/

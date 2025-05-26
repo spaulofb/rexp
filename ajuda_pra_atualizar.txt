@@ -1,0 +1,24 @@
+#  Verificando se esse arquivo esta sendo utilizado em outro
+/bin/grep -RE  "participante_cad_ajax.php"    .  2> /dev/null | /bin/grep -v "^grep:"
+ /bin/grep -RE  "pessoal_cad_ajax.php"    .  2> /dev/null | /bin/grep -v "^./mobile"
+
+
+/bin/ls -alt *_v?.*
+
+/bin/rm  -i   *_v?.*
+
+/bin/ls -alt  *_original.php
+
+/bin/ls -alt   *_anterior.php
+/bin/rm -i  *anterior*
+
+/bin/ls -al *lixo*
+/bin/rm -i *lixo*
+
+ /bin/find /var/bak -iname "crond_ssh_*.log"
+
+/bin/find /var/bak  -name 'crond_*.log' -type f -mtime +2 -exec /bin/rm  -rf   {}  \;
+
+/bin/find  $dir_bk_old_home  -name '*.gz' -type f -mtime +2 -exec /bin/ls -al  {}  \;
+
+
