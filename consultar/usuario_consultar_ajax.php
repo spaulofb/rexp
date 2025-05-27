@@ -1,5 +1,6 @@
 <?php
-//  AJAX da opcao CONSULTAR
+//
+//  AJAX da opcao CONSULTAR usuario
 #
 ob_start(); /* Evitando warning */
 //
@@ -7,23 +8,36 @@ ob_start(); /* Evitando warning */
 if(!isset($_SESSION)) {
    session_start();
 }
-// set IE read from page only not read from cache
+//
+/**     Verificar a Mensagem de Erro  
+ *  Crucial ter as configurações de erro ativadas
+*/ 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+//  set IE read from page only not read from cache
 //  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control","no-store, no-cache, must-revalidate");
-header("Cache-Control","post-check=0, pre-check=0");
-header("Pragma", "no-cache");
-
-//  header("content-type: application/x-javascript; charset=tis-620");
-//  header("content-type: application/x-javascript; charset=iso-8859-1");
-header("Content-Type: text/html; charset=ISO-8859-1",true);
-//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
-
 //
-// extract: Importa vari?veis para a tabela de s?mbolos a partir de um array 
+// Defina os cabeçalhos de controle de cache
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+header("Content-type: text/html; charset=utf-8");
+//
+/**  Colocar as datas do Cadastro do Usuario e a validade   */  
+date_default_timezone_set('America/Sao_Paulo');
+//
+//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
+//  setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
+//
+//   Para acertar a acentuacao
+//  $_POST = array_map(utf8_decode, $_POST);
+/**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
 extract($_POST, EXTR_OVERWRITE);  
-
+//
+//  Formato das mensagens para enviar 
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -31,26 +45,42 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-
-///  Verificando SESSION incluir_arq
+//  Final - Formato das mensagens para enviar 
+//
+//  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
      echo $msg_erro;
      exit();
 }
 $incluir_arq=$_SESSION["incluir_arq"];
-///
-///  Conjunto de arrays 
-include_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
-/// Conjunto de Functions
-include("{$_SESSION["incluir_arq"]}script/stringparabusca.php");		
+//
+/**
+*    Caso NAO houve ERRO  
+*     INICIANDO CONEXAO - PRINCIPAL
+*/
+require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
+//
+//  Conexao MYSQLI
+$conex = $_SESSION["conex"];
+//
+//  Conjunto de arrays 
+require_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
+//
+// Conjunto de Functions
+require_once("{$_SESSION["incluir_arq"]}script/stringparabusca.php");		
 ///
 $post_array = array("source","val","m_array");
-for( $i=0; $i<count($post_array); $i++ ) {
+$sizear=count($post_array);
+for( $i=0; $i<$sizear; $i++ ) {
+    //
     $xyz = $post_array[$i];
-    //  Verificar strings com simbolos: # ou ,   para transformar em array PHP
+    //
+    /**   Verificar strings com simbolos: # ou ,   para transformar em array PHP  */
+    // 
     $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
-    if( isset($_POST[$xyz]) ) {
+    if( isset($_POST[$xyz]) ) { 
+        //
    	    $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
  	    if( $pos1 === false ) {
 	         ///  $$xyz=trim($_POST[$xyz]);
@@ -59,58 +89,122 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	     } else {
              $$xyz = explode($div_array_por,$_POST[$xyz]);  
          } 
+         //
     }
-}
+    //
+} 
+/**  Final - for( $i=0; $i<$sizear; $i++ ) {  */
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
-
+/**   $source = utf8_decode($source); $val = utf8_decode($val);  */
+// 
+if( isset($source) ) {
+    //
+    $source = trim($source);
+    if( is_array($source) ) {
+        /** Array para String */
+         $source = implode(",",$source);
+    } else {
+        /** String  */
+         $source = utf8_decode($source);
+    }
+    //
+} else {
+    $source = "";
+}
+//
+if( isset($val) ) {
+    //
+    $val = trim($val);
+    if( is_array($val) ) {
+        /** Array para String */
+         $val = implode(",",$val);
+    } else {
+        /** String  */
+         $val = utf8_decode($val);
+    }
+    //
+} else {
+    $val = "";
+}
 if( strtoupper($val)=="SAIR" ) $source=$val;
-
+//
+/** Variavel $source como Maiuscula  */
+$sourceup=strtoupper(trim($source));
+//
 $_SESSION["source"]=$source;
-
-if( strtoupper($source)=="SAIR" ) {
+//
+//  INCLUINDO CLASS - 
+require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
+if( class_exists('funcoes') ) {
+    $funcoes=new funcoes();
+}
+//
+/** Sair do Programa */
+if( $sourceup=="SAIR" ) {
+    //
     // Eliminar todas as variaveis de sessions
     $_SESSION = array();
-
+    //
     session_destroy();
     if( isset($total) ) unset($total);
     if( isset($login_senha) ) unset($login_senha); 
     if( isset($login_down) ) unset($login_down);     
     if( isset($senha_down) )  unset($senha_down); 
     //
-    //  echo  "<a href='http://www-gen.fmrp.usp.br'  title='Sair' >Sair</a>";
     response.setHeader( "Pragma", "no-cache" ); 
     response.setHeader( "Cache-Control", "no-cache" ); 
     response.setDateHeader( "Expires", 0 ); 
-    //  echo  "http://www-gen.fmrp.usp.br/";
     #
     exit();
     #
-} elseif( strtoupper(trim($source))=="DESCARREGAR" )  {
-    // Define o tempo m?ximo de execu??o em 0 para as conex?es lentas
+} 
+/**  Final - if( $sourceup=="SAIR" ) { */
+//
+
+echo "ERRO:  LINHA160  -->> \$sourceup = $sourceup  - \$val = $val - \$m_array = $m_array   <br />";
+exit();
+
+
+//
+if( $sourceup=="DESCARREGAR" )  {
+    //
+    /**  Define o tempo m?ximo de execu??o em 0 para as conex?es lentas  */
+    // 
     set_time_limit(0);
-    // $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];
+    //
+    /**   $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];    */
+    // 
     $pasta = "../doctos_img/A".$m_array[0];
     $pasta .= "/".$m_array[1]."/";     
-    //  $output = shell_exec('for arq in `ls '.$pasta.'/*.*`; do mv $arq `echo $arq | tr  [:upper:] [:lower:] `; done');    
+    //
     $arquivo = trim($val);
     if( ! file_exists("{$pasta}".$arquivo) ) {
          $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
          echo $msg_erro;  
-    }  else   echo $pasta."%".$arquivo;
+    } else {
+         echo $pasta."%".$arquivo;
+    } 
     exit();     
-} elseif( strtoupper(trim($source))=="SELECIONAR" )  {
+    //
+} 
+/**  Final - if( $sourceup=="DESCARREGAR" )  { */
+//
+if( $sourceup=="SELECIONAR" )  {
+    //
     //  Depois de ter selecionado uma Letra ou Todos
     $array_simbolos = array(",","|");
     $simbolos_count = count($array_simbolos);
     for( $x=0; $x< $simbolos_count ; $x++ ) {
-       if( stripos($m_array,$array_simbolos[$x]) ) {
-           $achou=1;
-           break;
-       }
+         if( stripos($m_array,$array_simbolos[$x]) ) {
+              $achou=1;
+              break;
+         }
+         //
     } 
+    //
     if( $achou==1 ) {
+        //
         if( stripos($m_array,",") ) $m_array = explode(",",$m_array);
         if( stripos($m_array,"|") ) $m_array = explode("|",$m_array);
         for( $i=0 ; $i<count($m_array); $i++ ) {
@@ -120,11 +214,16 @@ if( strtoupper($source)=="SAIR" ) {
         $val_strlen = (int) strlen(trim($m_array_str))-1;
         $m_array_str=substr($m_array_str,0,$val_strlen);
         //
-    } else  $m_array_str=$m_array;
+    } else {
+        $m_array_str=$m_array;     
+    } 
     if( stripos($val,"|") ) $val=explode("|",$val);
+    //
     $elemento=$val[1];
-    include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-     // Para criar Tabela Temporaria
+    //  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
+    require_once("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
+    //
+    // Para criar Tabela Temporaria
     $_SESSION["table_temp_usu"] = "temp_".$val[2];
     $_SESSION[$_SESSION['table_temp_usu']] = $_SESSION["table_temp_usu"];
     //
@@ -191,9 +290,15 @@ if( strtoupper($source)=="SAIR" ) {
                $_SESSION["opcoes_lista"] = "../script/paginacao.php?pagina=";
                require_once("../script/paginacao.php");                      
           }          
-    }   
+    } 
+    //  
     exit();       
-} elseif( strtoupper(trim($source))=="CONJUNTO" )  {
+    //
+} 
+/**  Final - if( $sourceup=="SELECIONAR" )  { */
+//
+if( $sourceup=="CONJUNTO" ) {
+     //
      // PARTE PARA MUDANCA DE CAMPO - IMPORTANTE
 	 $n_cpo = (int) $n_cpo; $cpo_final = (int) $cpo_final;
 	 if( ! is_array($m_array) ) $m_array  = explode(",",$m_array);
@@ -279,7 +384,8 @@ if( strtoupper($source)=="SAIR" ) {
 		       echo "==== Nenhum(a) <b>".ucfirst($cp_table_atual)."</b> desse(a) <b>"
 									 .ucfirst($cp_cpo_where)."</b> ====";	
 		       exit();
-	    }  //  Final do IF - m_linhas<1						   
+	    }  
+        //  Final do IF - m_linhas<1						   
 		//  Executar IF quando nao for o ultimo campo
 		if( $i<$cpo_final ) {
 				?>
@@ -288,6 +394,7 @@ if( strtoupper($source)=="SAIR" ) {
        	     <select  class="td_select"  name="<?php echo $table_atual;?>"  id="<?php echo $table_atual;?>" 
                 onchange="enviar_dados_con('CONJUNTO',this.value,this.name+'|'+'<?php echo $_SESSION["VARS_AMBIENTE"];?>');" style="padding: 1px;" title="<?php echo ucfirst($cp_table_atual);?>"  >			
 	    	 <?php
+                 //          
           	     //  acrescentando opcoes
 	             echo "<option value='' >&nbsp;Selecionar&nbsp;</option>";
                  while( $linha=mysql_fetch_array($result) ) {   //  WHILE  DA TAG SELECT    
@@ -310,43 +417,58 @@ if( strtoupper($source)=="SAIR" ) {
 						  }	  
 	                      echo  "<option $inst_selected   value=".$value."  title='$se_sigla $traco $se_nome'  >&nbsp;";
                		      echo  $nome."&nbsp;</option>" ;
-   	              }  // FIM DO WHILE
+   	              }  
+                  /**  Final - while( $linha=mysql_fetch_array($result) ) { */
+                  // 
 	       	  ?>
 	          </select>
 	          </span>
 			  <?php
+                 //
                  mysql_free_result($result_tb_temp1); 
                  mysql_free_result($result); 
     	         // Final do SELECT
-	    	 	 break;
+	    	 	// break;
 		  } else {
+            //
 		     //  Executando o Mysql Select do ultimo campo
 			 unset($m_linhas); 
 		     //  echo   "\$m_linhas =   ".$m_linhas."  ---  \$_SESSION["where"] = ".$_SESSION['where'];
 			 //   require_once("../cadastrar/reservadeuso_ajax_ifs.php");
-		  } //  FINAL DO - IF i < cpo_final
-     }  //  Final do IF principal
+		  } 
+          //  FINAL DO - IF i < cpo_final
+          //
+     }  
+     //  Final do IF principal
+     //
 }
-
-//  Serve tanto para o arquivo projeto  quanto para o experimento
-	 
-
-//  if(  ( strtoupper(trim($source))=="COAUTORES" ) or  ( strtoupper(trim($source))=="COLABS" ) ) {	
-if(  ( strtoupper(trim($source))=="CORESPONSAVEIS" ) or  ( strtoupper(trim($source))=="COLABS" ) ) {	
-   //  $m_co = "Co-respons?veis";
-  // $m_co = "Co-resp.";
-  $m_co = "Co-resp.";
-   //  if( strtoupper(trim($source))=="COLABS" )    $m_co = "Colaboradores";
-   if( strtoupper(trim($source))=="COLABS" )    $m_co = "Colab.";
-   //  Cod/Num_USP/Coautor
-   $elemento=5;
-   /*   Atrapalha e muito essa programacao orientada a objeto
-        include('/var/www/cgi-bin/php_include/ajax/includes/class.MySQL.php');
-       $result = $mySQL->runQuery("select codigousp,nome,categoria from pessoa  order by nome ");
-   */
-   include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
-   mysql_select_db($db_array[$elemento]);
-   //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+/**  Final - if( $sourceup=="CONJUNTO" )  {  */
+//
+//
+/**   Serve tanto para o arquivo projeto  quanto para o experimento   
+ *  if(  ( strtoupper(trim($source))=="CORESPONSAVEIS" ) or  ( strtoupper(trim($source))=="COLABS" ) ) {	
+ */
+$pattern = '/^(CORESPONSAVEIS|COLABS)$/ui';
+if( preg_match($pattern, $sourceup) ) {
+      //
+      //  $m_co = "Co-respons?veis";
+      // $m_co = "Co-resp.";
+      $m_co = "Co-resp.";
+      //  if( strtoupper(trim($source))=="COLABS" ) $m_co = "Colaboradores";
+      if( strtoupper(trim($source))=="COLABS" ) $m_co = "Colab.";
+      //
+      //  Cod/Num_USP/Coautor
+      $elemento=5;
+      /**    Atrapalha e muito essa programacao orientada a objeto
+      *    include('/var/www/cgi-bin/php_include/ajax/includes/class.MySQL.php');
+      *    $result = $mySQL->runQuery("select codigousp,nome,categoria from pessoa  order by nome ");
+      */
+      require_once("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
+       //
+      mysql_select_db($db_array[$elemento]);
+      //
+      /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query() */
+      // 
    $result=mysql_query("select codigousp,nome,categoria from pessoa  order by nome ");
    if( ! $result ) {
           mysql_free_result($result);
