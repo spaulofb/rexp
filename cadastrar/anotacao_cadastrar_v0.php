@@ -1,5 +1,7 @@
 <?php 
-///  Verificando se session_start - ativado ou desativado
+/**
+ *   Verificando se session_start - ativado ou desativado
+ */
 if( ! isset($_SESSION)) {
    session_start();
 }
