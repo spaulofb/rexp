@@ -1,4 +1,6 @@
-<?php
+<?php  
+//
+////
 
    $mobile = FALSE;
    $user_agents = array("iPhone","iPad","Android","webOS","BlackBerry","iPod","Symbian","IsGeneric");
