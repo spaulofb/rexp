@@ -1,8 +1,7 @@
 <?php  
 //
-////
-
-   $mobile = FALSE;
+//
+$mobile = FALSE;
    $user_agents = array("iPhone","iPad","Android","webOS","BlackBerry","iPod","Symbian","IsGeneric");
  
    foreach($user_agents as $user_agent){
