@@ -388,7 +388,7 @@ $_SESSION["m_titulo"]="Usuário";
 </head>
 <body  id="id_body"    oncontextmenu="return false" onselectstart="return false"  ondragstart="return false"    onkeydown="javascript: no_backspace(event);"   >
 <!-- PAGINA -->
-<div class="pagina_ini"  id="pagina_ini"  >
+<div class="pagina_ini"  id="pagina_ini" >
 <!-- Cabecalho -->
 <div id="cabecalho"  >
 <?php include("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");?>
@@ -409,147 +409,128 @@ require_once("{$_SESSION["incluir_arq"]}includes/menu_horizontal.php");
 </div>
 <p class='titulo_usp' >Consultar&nbsp;Usuário</p>
 </section>
-<div id="div_form" class="div_form" style="overflow:auto;" >
 <?php 
 //
 //	 Verificano o PA - Privilegio de Acesso
 //  if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_SESSION["permit_pa"]<=$_SESSION['array_usuarios']['orientador'] ) ) {    
 if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {         
-       //
-       //
-       //  CODIGO/USP
-       $elemento=5;
-       include("php_include/ajax/includes/conectar.php");     
-       //
-       /**
-        *  Conexao Mysqli
-        */ 
-        $conex = $_SESSION["conex"];
+?>
+<div id="div_form" class="div_form" style="overflow:auto;" >
+<?php
+//
+//  CODIGO/USP
+$elemento=5;
+require_once("php_include/ajax/includes/conectar.php");     
+//
+//  Selecionar os usuarios pela primeira letra do nome e o codigousp
+/**  
+$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,a.codigousp,b.e_mail "
+    ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
+    ." WHERE a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"];
+*/
+//  Selecionar os usuarios pela primeira letra do nome
+/**
+$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
+    ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
+    ." where a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] 
+    ." group by 1";
+*/
+$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n ";
+$sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
+$sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  group by 1";
+//
+$result = mysqli_query($_SESSION["conex"],$sqlcmd);
+if( ! $result ) {
+    //
+    //  Caso falha na consulta
+    $terr="ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;";
+    $terr .= "db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]);
+    die("{$terr}"); 
+    //
+}       
+//  Nr. de Registros
+$lnletras = mysqli_num_rows($result);                
+//
+/**   Salvar letrais iniciais em um conjunto para facilitar a busca  */
+// 
+?>
+<!-- Todas pessoas -->
+<div style="display: flex;"  >
+ <div class='titulo_usp' style='margin-left: 30%; padding:2px 0 2px 2px; font-weight: bold;font-size:large;' >
+   Mostrar:&nbsp;
+   <span style="font-size: medium;  " >
+  <input type='button' id='todos' class='botao3d'  value='Todos' title='Selecionar todos'  onclick='javascript: consulta_mostraus("Todos")' >
+</span>
+  <span class="span_ord_proj" >
+<!-- tag Select para ordenar  -->
+<select   title="Ordernar"  id="ordenar"  class="ordenar"  onchange="javascript: consulta_mostraus('ordenar',todos.value,this.value)"  >
+<option  value=""  >ordenar por</option>
+<option  value="categoria asc"  >Categoria - asc</option>
+<option  value="categoria desc" >Categoria - desc</option>
+<option  value="nome asc"  >Nome - asc</option>
+<option  value="nome desc" >Nome - desc</option>
+</select>
+</span>
+</div>
+</div>   
+<!--  Final - Todas pessoas/usuarios -->
+<!--  Selecionar usuario pela letra inicial do nome  -->
+<div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
+<p class="titulo_lista"  >ou pela letra inicial do Nome:&nbsp;</p>
+</div>
+<div class="div_select_busca" >
+<select name="Busca_letrai" id="Busca_letrai" class="Busca_letrai" title="Selecionar usu&aacute;rio pela letra inicial do nome" 
+    onchange="javascript:  consulta_mostraus(this.id,this.value)" >
+<?php
+     //
+    if( intval($lnletras)<1 ) {
+        echo "<option value='' >Nenhum usu&aacute;rio encontrado</option>";
+    } else {
         //
-       //   ATUALIZADO EM 20200528
-       //  Selecionar os usuarios pela primeira letra do nome e o codigousp
-       //  Selecionar os usuarios pela primeira letra do nome
-       /**
-          $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
-              ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
-              ." where a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] 
-              ." group by 1";
-
-       $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n ";
-       $sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
-       $sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  group by 1";
-       */
-        /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
-        mysqli_set_charset($_SESSION["conex"],'utf8');
-        //
-       $sqlcmd = "SELECT b.nome ";
-       $sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
-       $sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  order by b.nome asc";
-       $result = mysqli_query($_SESSION["conex"],$sqlcmd);
-       if( ! $result ) {
-            //
-            //  Caso falha na consulta
-            $terr="ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;";
-            $terr .= "db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]);
-            die("{$terr}"); 
-            //
-       }       
-       //  Nr. de Registros
-       $lnletras = mysqli_num_rows($result);                
-       //
-     //  $arrusr=mysqli_fetch_array($result);
-       //
-
-       /** 
-echo "\$lnletras = $lnletras <br />";
-exit();
- */
-
-
-       /**   Salvar letrais iniciais em um conjunto para facilitar a busca  */
-       // 
-    ?>
-    <!-- Todas pessoas -->
-    <div style="display: flex;"  >
-        <div class='titulo_usp' style='margin-left: 30%; padding:2px 0 2px 2px; font-weight: bold;font-size:large;' >
-           Mostrar:&nbsp;
-          <span style="font-size: medium;  " >
-          <input type='button' id='todos' class='botao3d'  value='Todos' title='Selecionar todos'  onclick='consulta_mostraus("Todos")' >
-        </span>
-         <span class="span_ord_proj" >
-            <!-- tag Select para ordenar  -->
-            <select   title="Ordernar"  id="ordenar"  class="ordenar" 
-                  onchange="consulta_mostraus('ordenar',todos.value,this.value)"  >
-                <option  value=""  >ordenar por</option>
-                <option  value="categoria asc"  >Categoria - asc</option>
-                <option  value="categoria desc" >Categoria - desc</option>
-                <option  value="nome asc"  >Nome - asc</option>
-                 <option  value="nome desc" >Nome - desc</option>
-            </select>
-        </span>
-       </div>
-    </div>   
-    <!--  Final - Todas pessoas/usuarios -->
-    <!--  Selecionar usuario pela letra inicial do nome  -->
-    <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
-        <p class="titulo_lista"  >ou pela letra inicial do Nome:&nbsp;</p>
-    </div>
-
-    <div class="div_select_busca" >
-        <select name="Busca_letrai" id="Busca_letrai" class="Busca_letrai" 
-           title="Selecionar usu&aacute;rio pela letra inicial do nome"  onchange="consulta_mostraus(this.id,this.value)" >
-         <?php
-           //
-           /**  Caso variavel menor que 1  */
-           if( intval($lnletras)<1 ) {
-                echo "<option value='' >Nenhum usu&aacute;rio encontrado</option>";
-            } else {
-                //
-              ?>
-                <!--  <option value="" >Selecionar Usu&aacute;rio pela Letra Inicial</option>  -->
-                <option value="" >Selecionar usu&aacute;rio pelo nome</option>
-              <?php
-                 //
-                //  while( $linha=$conex->fetch_array($result) ) {    
-                //  while( $linha=$arrusr ) {   
-                while( $linha=mysqli_fetch_array($result) ) {   
-                         
-                      //
-                      /**  htmlentities - corrige possiveis falhas de acentuacao de code page  
-                       *    $letra= htmlentities($linha["letra1"]);  
-                       *    $letra=$linha["letra1"];   
-                      */
-                      $nmusr=$linha["nome"];  
-                      $lncodigousp=$linha["codigousp"];  
-                      $lnemail=$linha["e_mail"];
-                      /**
-                       *  echo "<option  value=".urlencode($letra)."  title=\"Clicar para busca\"  >$letra</option>";  
-                       */
-                      echo "<option  value=".$lncodigousp."  title=\"Clicar para busca\"  >$nmusr</option>";  
-                      //
-                }  
-                /**  while( $linha=$conex->fetch_array($result) ) {   */
-                //
-            //
-          } 
-        ?>
-        </select>
-      </div>   
-     <?php
+?>
+<!--  <option value="" >Selecionar Usu&aacute;rio pela Letra Inicial</option>  -->
+<option value="" >Selecionar usu&aacute;rio pelo nome</option>
+<?php
+    //
+    while( $linha=$conex->fetch_array($result) ) {    
+          //   
+          /**  htmlentities - corrige possiveis falhas de acentuacao de code page  */
+          // 
+          $letra= htmlentities($linha["letra1"]);  
+          $lncodigousp=$linha["codigousp"];  
+          $lnemail=$linha["e_mail"];
+          /**  
+           *  echo "<option  value=".urlencode($letra)."  "
+           *     ."  title='Clicar para Busca'  >".$letra."</option>" ;
+          */
+          echo "<option  value=".urlencode($letra)."  title='Clicar para busca'  >".$letra."</option>" ;
+          //  echo "<option  value=".$lncodigousp."  title='Clicar para Busca'  >".$lnemail."</option>" ;
+          //
+    }  
+    /**  Final - while( $linha=$conex->fetch_array($result) ) {  */
+    //
+?>
+</select>
+<?php
          //
          /** Desativar variavel  */
          if( isset($result) )  {
-               //   mysql_free_result($result); 
-               unset($result);
-               //
-          }
-          //  
+            //   mysql_free_result($result); 
+            unset($result);
+            //
+         }  
+    }
+    //
+?>
+</div>   
+<p class="titulo_lista" >Lista dos Usu&aacute;rios&nbsp;<span style="font-size: 12px; ">-&nbsp;(de menor PA)</span></p>
+<?php
 } else {
    echo  "<p class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";
 }
 ?>
+<p style="height:20em;widht:20em;border:20px double #000;"> sdafklllllllllllllllllllllllllllllllllllllllllllllllj</p>
 </div>
-<!-- Final div_form -->
 <div id="div_out" class="div_out" >
 </div>
 </div>

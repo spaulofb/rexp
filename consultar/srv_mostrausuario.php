@@ -57,7 +57,6 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
 }
 $incluir_arq=$_SESSION["incluir_arq"];
 //
-//
 /**
 *    Caso NAO houve ERRO  
 *     INICIANDO CONEXAO - PRINCIPAL
@@ -69,10 +68,18 @@ $conex = $_SESSION["conex"];
 //
 $opcao = $_POST['grupous'];
 //
-//  Conectar 
+/**   Conectar - atualizado em 20250528  */ 
 $elemento=6; $elemento2=5;
-require_once("php_include/ajax/includes/conectar.php");   
+include("php_include/ajax/includes/conectar.php");   
 //
+
+/**  
+echo "ERRO: srv_mostrausuario/77  -->> NOVO -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
+exit();
+ */
+
+
+
 //  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 if( class_exists('funcoes') ) {
@@ -95,8 +102,10 @@ if( isset($opcao) ) {
 // Vericando - caso Variavel opcao  NAO for LISTA
 if( $opcaoup!='LISTA' ) {
    //
-   /**  Remover Tabela Temporaria   */
-   $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_usuario";
+   /**  Remover Tabela Temporaria   
+    * $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_usuario"; 
+   */
+   $_SESSION["table_temporaria"] = "$bd_2.temp_consultar_usuario";
    $sql_temp = "DROP TABLE IF EXISTS  {$_SESSION["table_temporaria"]} ";
    $result_usuarios=mysqli_query($_SESSION["conex"],$sql_temp);
    if( ! $result_usuarios ) {
@@ -107,20 +116,11 @@ if( $opcaoup!='LISTA' ) {
    $dados=trim($val);
    $parte_login="";
    //
-
-
-echo "ERRO: srv_mostrausuario/112  -->> SEGUIR -->> $%dados  -->> \$opcaoup = $opcaoup<br />\n";
-exit();
-
-
-
-
    //  Variavel alfabetica
    if( ctype_alpha($dados) ) {
        //
-       //  if( strlen(trim($opcao))==1 ) {
-       // $letra=strtoupper(trim($opcao));
-       if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) ) {
+       /** if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) ) { */ 
+       if( ! preg_match("/tod(a|o)s?|ordenar/ui",$dados) ) {
             //
             /**   Caso tenha escolhido uma Letra do Login/Usuario por EMAIL  */
             if( strlen($dados)>1) {
@@ -133,10 +133,9 @@ exit();
             }
             /**  Final - if( strlen($dados)>1) { */
             //      
-            //  Caso tenha escolhido uma Letra do Login/Usuario
+            /**   Caso tenha escolhido uma Letra do Login/Usuario  */
             if( strlen($dados)==1) {
                 //
-                // ALterado em 20170609
                 if( strlen($dados)==1 ) {
                     //
                     $letra="$dados";
@@ -152,48 +151,65 @@ exit();
        }
        /**  Final - if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {  */    
        //
-   } elseif( ctype_digit($dados) )  {
+   } 
+   /**  Final - if( ctype_alpha($dados) ) { */ 
+   //
+   /**   Caso for uma variavel numerica   */ 
+   if( ctype_digit($dados) ) {
        //
        //  Variavel $opcao numerica
        $parte_login=" a.codigousp=$opcao  and  ";
        //
-   }
-   //
+   }  
+   /**  Final - if( ctype_digit($dados) )  {  */
    //
    //  Caso variavel NULA
    if( strlen(trim($parte_login))<1 ) {
         //
-        //  Caso variavel SEM SER  TODOS ou TODAS
-        if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {
-              $msg_erro .= "&nbsp;Falha grave na variavel.".$msg_final;
-              echo $msg_erro;  
-              exit();          
-        }     
+        /**  Caso variavel SEM SER TODOS ou TODAS  
+         * if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {
+        */ 
+        if( ! preg_match("/tod(a|o)s?|ordenar/ui",$dados) ) {
+             //
+             $msg_erro .= "&nbsp;Falha grave na variavel.".$msg_final;
+             echo $msg_erro;  
+             exit();          
+        }   
+        /**  Final - if( ! preg_match("/tod(a|o)s?/ui",$dados) ) {  */
+        //  
    }   
+   /**  Final - if( strlen(trim($parte_login))<1 ) {  */
    //
    $_SESSION["selecionados"]="";
-   //  Selecionar os usuarios de acordo com a opcao
-   /** 
-   *   $sqlcmd="CREATE TABLE  IF NOT EXISTS ".$_SESSION["table_temporaria"]." "
-         ." SELECT a.codigousp,a.login,b.nome,b.categoria,c.descricao as pa,b.e_mail "
-         ." FROM $bd_2.usuario a, $bd_2.pessoa b, $bd_1.pa c "
-         ." WHERE $letra_login a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] ;
-   */     
-   //  Alterado em 20250527
-   /***
-         $sqlcmd="CREATE TABLE  IF NOT EXISTS ".$_SESSION["table_temporaria"]." "
-         ." SELECT a.codigousp,a.login,b.nome,b.categoria,c.descricao as pa,b.e_mail "
-         ." FROM $bd_2.usuario a, $bd_2.pessoa b, $bd_1.pa c "
-         ." WHERE $parte_login a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] ;
-   **/      
    //
+   /**   Selecionar os usuarios de acordo com a opcao  */
+   // 
+   //  Alterado em 20250528
+   /**
+   *      $sqlcmd="CREATE TABLE  IF NOT EXISTS ".$_SESSION["table_temporaria"]." "
+   *      ." SELECT a.codigousp,a.login,b.nome,b.categoria,c.descricao as pa,b.e_mail "
+   *      ." FROM $bd_2.usuario a, $bd_2.pessoa b, $bd_1.pa c "
+   *      ." WHERE $parte_login a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] ;
+   */      
+   /**  Criando uma Tabela Temporaria   */
    $sqlcmd="CREATE TABLE IF NOT EXISTS ".$_SESSION["table_temporaria"]." "
          ." SELECT a.codigousp,a.login,b.nome,b.categoria,c.descricao as pa,b.e_mail "
          ." FROM $bd_2.usuario a, $bd_2.pessoa b, $bd_1.pa c "
          ." WHERE $parte_login a.codigousp=b.codigousp and a.pa=c.codigo ";
    //      
-   //   MOstrar todos usuarios      
-   if( strtoupper($opcao)=="TODOS"){
+
+/**  
+echo "ERRO: srv_mostrausuario/193  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ."<br> \$sqlcmd = $sqlcmd<br />\n";
+exit();
+ */
+
+
+   //
+   //  Mostrar todos usuarios      
+   //  if( $opcaoup=="TODOS" ) {
+   if( preg_match("/tod(a|o)s?/ui",$opcaoup) ) {
+        //       
         //  $sqlcmd .= " order by b.nome";
         //  $sqlcmd .= " order by a.login";
         if( strlen(trim($m_array))>0 ) {
@@ -203,58 +219,103 @@ exit();
         }  else {
              $sqlcmd .=" order by c.codigo,b.nome  ";    
         }
-        /// $_SESSION["selecionados"] = "<b>Todos</b>";
+        //
+        // $_SESSION["selecionados"] = "<b>Todos</b>";
         $_SESSION["selecionados"] = " - <b>Total</b>";
         //
    } else {
-        ///  Mostrar apenas os usuarios selecionados pela Letra inicial
-        ///  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by b.nome, a.login";
-        ///  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by  a.login";
-        ///  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by c.codigo,b.nome ";
-        ///  $_SESSION["selecionados"] = " - come&ccedil;ando com <b>".strtoupper($opcao)."</b>";        
-        $sqlcmd .=" order by c.codigo,b.nome ";
-        $_SESSION["selecionados"] = "";        
+       //
+       //  Mostrar apenas os usuarios selecionados pela Letra inicial
+       //  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by b.nome, a.login";
+       //  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by  a.login";
+       //  $sqlcmd .=" and upper(substr(b.nome,1,1))='".$opcao."'  order by c.codigo,b.nome ";
+       //  $_SESSION["selecionados"] = " - come&ccedil;ando com <b>".strtoupper($opcao)."</b>";        
+       $sqlcmd .=" order by c.codigo,b.nome ";
+       $_SESSION["selecionados"] = "";        
+       //
    }
-   ///  Executando o Create Table
+   //
+   //  Executando o Create Table
    $result_usuarios=mysqli_query($_SESSION["conex"],$sqlcmd);      
-   ////                  
+   //                  
    if( ! $result_usuarios ) {
-         /// die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
-         $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
+         //
+         // die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
+         $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysqli&nbsp;";
+         $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
          exit();          
    } 
-   ///  Selecionando todos os registros da Tabela temporaria
+   //
+   /**  Desativar variavel  */
+   if( isset($result_usuarios) ) {
+       unset($result_usuarios);
+   }
+   //
+   //  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * FROM {$_SESSION["table_temporaria"]} ";
    $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
    if( ! $result_outro ) {
-         /// die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
-         $msg_erro .= "&nbsp;Selecionando os Usu&aacute;rios:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
-        echo $msg_erro;  
-        exit();          
+         //
+         // die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
+         $msg_erro .= "&nbsp;Selecionando os Usu&aacute;rios:&nbsp;db/mysqli&nbsp;";
+         $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
+         echo $msg_erro;  
+         exit();          
    }        
-   ///  Pegando os nomes dos campos do primeiro Select
-   $num_fields=mysql_num_fields($result_outro);   /// Obt?m o n?mero de campos do resultado
+   //
+   /**   Pegando os nomes dos campos do primeiro Select  */
+   // 3. Obter o número de campos (colunas)
+   $num_fields = $result_outro->field_count;
+   //
    $td_menu = $num_fields+1;   
-   ///  Total de registros
-   $_SESSION["total_regs"] = mysql_num_rows($result_outro);
-   $total_regs=$_SESSION["total_regs"];
-   $_SESSION['total_regs']==1 ? $lista_usuario=" <b>1</b> usu&aacute;rio " : $lista_usuario="<b>$total_regs</b> usu&aacute;rios ";     
-   /// $_SESSION["titulo"]= "<p class='titulo_consulta'  style='text-align: left; margin: 0px 0px 0px 4px; padding: 0px; '    >";
-   $_SESSION["titulo"]= "<p class='titulo'  style='text-align: left; margin: 0px 0px 0px 4px; padding: 0px; line-height: normal; '  >";
+   //
+
+/**  
+echo "ERRO: srv_mostrausuario/275  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+exit();
+    */
+
+
+   //
+   //  Total de registros
+   $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
+   $total_regs= (int) $_SESSION["total_regs"];
+   //
+   if( $total_regs==1 ) {
+        //
+        $lista_usuario=" <b>1</b> usu&aacute;rio ";
+        //
+   } else {
+        //
+        $lista_usuario="<b>$total_regs</b> usu&aacute;rios ";
+        //
+   }
+   //
+   $_SESSION["titulo"]= "<p class='titulo' style='text-align: left; margin: 0px 0px 0px 4px; padding: 0px; line-height: normal; '>";
    $_SESSION["titulo"].= "Lista de $lista_usuario ".$_SESSION['selecionados']."</p>"; 
+   //
    //  Buscando a pagina para listar os registros        
-   $_SESSION["num_rows"]=$_SESSION["total_regs"];  $_SESSION["name_c_id0"]="codigousp";    
+   $_SESSION["num_rows"]=$_SESSION["total_regs"];  
+   $_SESSION["name_c_id0"]="codigousp";    
+   //
    if( isset($titulo_pag) ) $_SESSION["ucfirst_data"]=$titulo_pag; 
+   /**
+    *  SESSION pagina - Paginacao da tabela de consulta de usuarios
+   */
    $_SESSION["pagina"]=0;
+   //
    $_SESSION["m_function"]="consulta_mostraus";   
-   //// $_SESSION["opcoes_lista"] = "../includes/tabela_de_consulta_usuarios.php?pagina=";
+   //
+   /**  Variavel de controle para a tabela de consulta de usuarios  */
+   //
    $_SESSION["opcoes_lista"] = "{$arq_tab_consulta_usuario}?pagina=";
-   /// require_once("../includes/tabela_de_consulta_usuarios.php");                      
+   //
    require_once("{$arq_tab_consulta_usuario}");                      
-   ////
+   //
 } else {
-     //
+    //
 
 
      
