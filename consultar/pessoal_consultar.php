@@ -74,7 +74,6 @@ if( intval($n_erro)>0 ) {
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
 //
-//
 /**
  *  Conexao Mysqli
  */ 
