@@ -1,5 +1,5 @@
 <?php 
-/*
+/**
     EDITANDO: LAFB/SPFB110903.0934
 
     REXP - CONSULTAR PESSOAL  
@@ -10,10 +10,37 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-/// IMPORTANTE: para acentuacao php
+//
+//
+/**     Verificar a Mensagem de Erro  
+ *  Crucial ter as configurações de erro ativadas
+*/ 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+//  set IE read from page only not read from cache
+//  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+//
+// Defina os cabeçalhos de controle de cache
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 header("Content-type: text/html; charset=utf-8");
-
-//// Mensagens para enviar
+//
+/**  Colocar as datas do Cadastro do Usuario e a validade   */  
+date_default_timezone_set('America/Sao_Paulo');
+//
+//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
+//  setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
+//
+//   Para acertar a acentuacao
+//  $_POST = array_map(utf8_decode, $_POST);
+/**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
+extract($_POST, EXTR_OVERWRITE);  
+//
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -21,12 +48,9 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-///   FINAL - Mensagens para enviar
-
-///
-extract($_POST, EXTR_OVERWRITE); 
-///
-///  Verificando SESSION incluir_arq - 20180618
+//   FINAL - Mensagens para enviar
+//
+//  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
@@ -37,8 +61,8 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-///
-///   CASO OCORREU ERRO GRAVE
+//
+//   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -49,18 +73,23 @@ if( intval($n_erro)>0 ) {
 *     INICIANDO CONEXAO - PRINCIPAL
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-
-///  Variavel recebida do script/arquivo - inicia_conexao.php 
+//
+//
+/**
+ *  Conexao Mysqli
+ */ 
+$conex = $_SESSION["conex"];
+//
+//  Variavel recebida do script/arquivo - inicia_conexao.php 
 $_SESSION["m_horiz"] = $array_projeto;
-///
-///   Caminho da pagina local
-$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
-
-///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
-/// $_SESSION['time_exec']=180000;
-///
-/***
+//
+//  Titulo do Cabecalho - Topo
+if( ! isset($_SESSION["titulo_cabecalho"]) ) {
+     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+} 
+// $_SESSION['time_exec']=180000;
+//
+/**
 *    Depois do arquivo inicia_conexao.php 
 *      - definido Desktop ou Mobile (aplicativo movel)
 */

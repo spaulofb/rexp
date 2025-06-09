@@ -36,6 +36,16 @@ date_default_timezone_set('America/Sao_Paulo');
 /**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
 extract($_POST, EXTR_OVERWRITE);  
 //
+// Mensagens para enviar
+$msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
+$msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
+
+$msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >";
+$msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
+
+$msg_final="</span></span>";
+//   FINAL - Mensagens para enviar
+//
 //  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {

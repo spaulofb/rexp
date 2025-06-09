@@ -13,7 +13,7 @@ if( ! isset($_SESSION)) {
 /// IMPORTANTE: para acentuacao php
 header("Content-type: text/html; charset=utf-8");
 
-//// Mensagens para enviar
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
