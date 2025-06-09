@@ -222,9 +222,8 @@ function consulta_mostraus(tcopcao,val,string_array) {
     var lcopcao = tcopcao.toUpperCase();
     //
 
-/**  
+     
   alert("  usuario_consultar.php/123 --  tcopcao = "+tcopcao+" - val = "+val+" - string_array = "+string_array);    
- */       
     
     //
     // BOTAO - TODOS
@@ -296,10 +295,9 @@ function consulta_mostraus(tcopcao,val,string_array) {
            var srv_ret = oXML.responseText;
            var lnip = srv_ret.search(/Nenhum|ERRO:|Uncau|Fatal erro/ui);
           
-/**  
-  alert("usuario_consultar.php/112  --->> fndone_nostraus -->>  lnip="+lnip+" --->>>  lcopcao="+lcopcao+" --val = "+val+" <<<---  \r\n srv_ret =  "+srv_ret);   
-      */     
 
+  alert("usuario_consultar.php/112  --->> fndone_nostraus -->>  lnip="+lnip+" --->>>  lcopcao="+lcopcao+" --val = "+val+" <<<---  \r\n srv_ret =  "+srv_ret);   
+          
 
           if( lnip==-1 ) {
               //
@@ -320,14 +318,12 @@ function consulta_mostraus(tcopcao,val,string_array) {
                          document.getElementById('Busca_letrai').options[0].selectedIndex=0;    
                      }
                  }    
-                 /**   document.getElementById('label_msg_erro').style.display="none";  */  
-                 //
+                 /**   document.getElementById('label_msg_erro').style.display="none";  */
 
 
-/**  
+
   alert("usuario_consultar.php/112  --->> fndone_nostraus  1) PARTE -->>  lcopcao="+lcopcao+" --val = "+val
             +" <<<---  \r\n srv_ret =  "+srv_ret);   
- */
           
 
                  // 
