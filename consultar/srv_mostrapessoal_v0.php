@@ -9,159 +9,104 @@ ob_start(); /* Evitando warning */
 if(!isset($_SESSION)) {
    session_start();
 }
-//
-/**     Verificar a Mensagem de Erro  
- *  Crucial ter as configurações de erro ativadas
-*/ 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-//  set IE read from page only not read from cache
+// set IE read from page only not read from cache
 //  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-//
-// Defina os cabeçalhos de controle de cache
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
-header("Content-type: text/html; charset=utf-8");
-//
-/**  Colocar as datas do Cadastro do Usuario e a validade   */  
-date_default_timezone_set('America/Sao_Paulo');
-//
+header("Cache-Control","no-store, no-cache, must-revalidate");
+header("Cache-Control","post-check=0, pre-check=0");
+header("Pragma", "no-cache");
+
+//  header("content-type: application/x-javascript; charset=tis-620");
+//  header("content-type: application/x-javascript; charset=iso-8859-1");
+header("Content-Type: text/html; charset=ISO-8859-1",true);
 //  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-//  setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
-//
-//   Para acertar a acentuacao
-//  $_POST = array_map(utf8_decode, $_POST);
-/**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
+setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
+
+/// extract: Importa vari?veis para a tabela de s?mbolos a partir de um array 
 extract($_POST, EXTR_OVERWRITE);  
-//
-//  Mensagens para enviar
+///
+////  Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
-//
+
 $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >";
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
-//
+
 $msg_final="</span></span>";
-/**   Final - Mensagens para enviar   */
-// 
-//  Verificando SESSION incluir_arq
+//// Final - Mensagens para enviar
+
+///  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
-     //
      ///  $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
 }
 $incluir_arq=$_SESSION["incluir_arq"];
-//
-/**
-*    Caso NAO houve ERRO  
-*     INICIANDO CONEXAO - PRINCIPAL
-*/
-require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-//
-//  Conexao MYSQLI
-$conex = $_SESSION["conex"];
-//
-//  Verificando POST  grupous
+///
+///  Verificando POST  grupous
 if( ! isset($_POST['grupous']) ) {
-     //
-     /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  */
+     ///  $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
      $msg_erro .= "POST grupous não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
-     //
 }
 $opcao = $_POST['grupous'];
-//
-//  Variavel POST dados
+
+///  Variavel POST dados
 if( isset($_POST['dados']) ) {
     $dados=$_POST['dados'];
 } else {
    if( ! isset($dados) ) $dados="";    
 }
-//  Variavel com letras maiusculas      
+////  Variavel com letras maiusculas      
 $dados_maiusc = strtoupper(trim($dados));
 ///
 ///  Conectar 
 $elemento=6;  $elemento2=5;
 include("php_include/ajax/includes/conectar.php");     
-//
-//  INCLUINDO CLASS - 
-require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
-if( class_exists('funcoes') ) {
-    $funcoes=new funcoes();
-}
-//      
-//  Variavel com letras maiusculas      
+
+////  Variavel com letras maiusculas      
 $opcao_maiusc = strtoupper(trim($opcao));
-//
-//  Arquivo da tabela de consulta pessoal - importante
+
+///  Arquivo da tabela de consulta pessoal - importante
 $arq_tab_consulta_pessoal="{$_SESSION["incluir_arq"]}includes/tabela_de_consulta_pessoal.php";
-//
-//  Vericando - caso Variavel opcao  NAO for LISTA
-//  if( strtoupper($opcao)!='LISTA' ) {
-
-
-
-
-if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) { 
-    //
-    $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
-    $table_temporaria = $_SESSION["table_temporaria"];
-    //
-    //  Removendo tabela temporaria
-    $sql_temp = "DROP TABLE IF EXISTS $table_temporaria ";
-    $result_usuarios=mysqli_query($conex,$sql_temp);
-    if( ! $result_usuarios ) {
-        //
-        // die('ERRO: '.mysqli_error($conex)));  
-        $msg_erro .= "&nbsp;DROP TABLE IF EXISTS {$table_temporaria}:";
-        $msg_erro .= "&nbsp;db/mysqli&nbsp;";
-        $msg_erro .= mysqli_error($conex).$msg_final;
+///
+/// Vericando - caso Variavel opcao  NAO for LISTA
+///  if( strtoupper($opcao)!='LISTA' ) {
+if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
+   ///
+   $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
+   $table_temporaria = $_SESSION["table_temporaria"];
+   ///  Removendo tabela temporaria
+   $sql_temp = "DROP TABLE IF EXISTS  $table_temporaria   ";
+   $result_usuarios=mysql_query($sql_temp);
+   if( ! $result_usuarios ) {
+        //// die('ERRO: '.mysql_error());  
+        $msg_erro .= "&nbsp;DROP TABLE IF EXISTS {$_SESSION["table_temporaria"]}:&nbsp;db/mysql&nbsp;";
+        $msg_erro .= mysql_error().$msg_final;
         echo $msg_erro;  
         exit();          
    }   
-   /**  Final - if( ! $result_usuarios ) {   */
-   //
-   //  Caso for uma letra somente
-   //  $testcase=trim($opcao);
+   ///  Caso for uma letra somente
+   ///  $testcase=trim($opcao);
    $dados=trim($opcao);   
    $parte_login="";
-   //
-   //  Variavel alfabetica
-
-
-/** 
-echo "ERRO: LINHA139 -->> srv_mostrapessoal  -->>  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
-            ." -->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xtd = $xtd \n";
-exit();
- */
-
-
-
+   ///  Variavel alfabetica
    if( ctype_alpha($dados) ) {
-        //
-        //  if( strlen(trim($opcao))==1 ) {
-        // $letra=strtoupper(trim($opcao));
-        // if( ! preg_match("/TODOS|TODAS/i",$dados) )  {
+        ////  if( strlen(trim($opcao))==1 ) {
+        /// $letra=strtoupper(trim($opcao));
+        /// if( ! preg_match("/TODOS|TODAS/i",$dados) )  {
         if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) ) {
-             //
-             //  Caso tenha escolhido uma Letra do Login/Usuario por EMAIL
-             if( strlen($dados)>1) {
-                  //
-                  // $letra_login=" upper(a.login) like '$letra%'  and  ";
-                  // $letra_login=" upper(b.e_mail) like '$letra%'  and  ";
-                  $email=trim($opcao);
-                  $parte_login=" WHERE  e_mail='$email' ";
-             }      
-             //
-             //  Caso tenha escolhido uma Letra do Login/Usuario
-             if( strlen($dados)==1) {
+              ///  Caso tenha escolhido uma Letra do Login/Usuario por EMAIL
+              if( strlen($dados)>1) {
+                   /// $letra_login=" upper(a.login) like '$letra%'  and  ";
+                   //// $letra_login=" upper(b.e_mail) like '$letra%'  and  ";
+                   $email=trim($opcao);
+                   $parte_login=" WHERE  e_mail='$email' ";
+              }      
+              ///  Caso tenha escolhido uma Letra do Login/Usuario
+              if( strlen($dados)==1) {
                    /// ALterado em 20170609
                    if( strlen($dados)==1 ) {
                        $letra="$dados";
@@ -169,52 +114,32 @@ exit();
                        $letra=trim($opcao);  
                    }    
                    $parte_login=" WHERE upper(nome) like '$letra%'  ";
-                   //
-             }    
-             //
+              }    
+              ///
         }    
-        //
-    //  } elseif( ctype_digit($dados) ) {
-    } elseif( is_numeric($dados) ) {
-        /**
-        *     Variavel $opcao numerica
-        *  Alterado em 20250610
-        *    $parte_login=" WHERE codigousp=$opcao   ";
-        */
-        $parte_login=" WHERE codigousp=$dados ";
-        //
-    } 
-    //
-    //  Caso variavel NULA
-    $xlen= strlen(trim($parte_login));
-
-
-echo "ERRO: srv_mostrapessoal/193  -->>  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
-            ." -->> \$parte_login = $parte_login  <<-->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xlen = $xlen \n";
-exit();
-
-
-
-    if( intval($xlen)<1 ) {
-        //
-        //  Caso variavel SEM SER  TODOS ou TODAS
-        if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {
+        ///
+    } elseif( ctype_digit($dados) )  {
+          ///  Variavel $opcao numerica
+          $parte_login=" WHERE  codigousp=$opcao   ";
+    }
+    ///  Caso variavel NULA
+    if( strlen(trim($parte_login))<1 ) {
+        ////  Caso variavel SEM SER  TODOS ou TODAS
+         ////  Caso variavel SEM SER  TODOS ou TODAS
+         if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {
               $msg_erro .= "&nbsp;Falha grave na variavel".$msg_final;
               echo $msg_erro;  
               exit();          
-        }
-        //     
+         }     
     }   
-    /**  Final - if( intval($xlen)<1 ) {  */
-    //
-    $_SESSION["selecionados"]="";
-    /**
+    ///
+   $_SESSION["selecionados"]="";
+   /***
     *    O charset UTF-8  uma recomendacao, 
     *    pois cobre quase todos os caracteres e 
     *    símbolos do mundo
-    */
-    mysqli_set_charset($conex,'utf8');
-    //
+    ***/
+   mysql_set_charset('utf8');
    ///  Selecionar os usuarios de acordo com a opcao
    $sqlcmd = "CREATE TABLE IF NOT EXISTS  $table_temporaria  "
            ." SELECT codigousp,nome,categoria,e_mail "
@@ -243,11 +168,11 @@ exit();
         $sqlcmd .=" order by nome asc";
    }
    /// Executando  procedimento
-   $result_usuarios=mysqli_query($conex,$sqlcmd);   
+   $result_usuarios=mysql_query($sqlcmd);   
    ////                
    if( ! $result_usuarios ) {
-        /// die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($conex)));  
-        $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysqli_error($conex).$msg_final;
+        /// die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
+        $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
         echo $msg_erro;  
          exit();          
    } 
@@ -260,10 +185,10 @@ exit();
    mysql_set_charset('utf8');
    ///  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  $table_temporaria  ";
-   $result_outro = mysqli_query($conex,$query2);                                    
+   $result_outro = mysql_query($query2);                                    
    if( ! $result_outro ) {
-         ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysqli_error($conex));  
-        $msg_erro .= "&nbsp;Selecionando as pessoas:&nbsp;db/mysql&nbsp;".mysqli_error($conex).$msg_final;
+         ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
+        $msg_erro .= "&nbsp;Selecionando as pessoas:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
         echo $msg_erro;  
         exit();          
    }        
@@ -312,10 +237,10 @@ exit();
     ///
     ///  Mostrar dados da Pessoa selecionada    
    $sqlcmd = "SELECT * FROM  $bd_2.pessoa  WHERE codigousp=$dados ";
-   $result_outro = mysqli_query($conex,$sqlcmd);                                    
+   $result_outro = mysql_query($sqlcmd);                                    
    if( ! $result_outro ) {
-       ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysqli_error($conex));  
-      $msg_erro .= "&nbsp;Selecionando dados da pessoa:&nbsp;db/mysql&nbsp;".mysqli_error($conex).$msg_final;
+       ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
+      $msg_erro .= "&nbsp;Selecionando dados da pessoa:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
       echo $msg_erro;  
       exit();          
    }  
@@ -354,7 +279,7 @@ exit();
      <?php
         ///  Selecionando a Categoria
          $sqlcat = "SELECT descricao as cat FROM $bd_2.categoria WHERE codigo=\"$categoria\" ";
-         $result_cat = mysqli_query($conex,$sqlcat);
+         $result_cat = mysql_query($sqlcat);
          $nregs=mysql_num_rows($result_cat);
          $cat="";
          ///  Caso encontrou categoria

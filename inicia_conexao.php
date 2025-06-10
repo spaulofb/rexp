@@ -1,5 +1,5 @@
 <?php
-/*
+/**  
 *   REXP - REGISTRO DE EXPERIMENTO
 *   
 *   OTIMIZAR ESSE MODULO INCLUINDO ONDE ? necessário
@@ -152,7 +152,7 @@ include('php_include/ajax/includes/verificando.php');
 */
 if( $_SESSION["total"]==1 ) { 
      //
-	// @require_once('file:///H|/php_include/ajax/includes/class.MySQL.php');
+     /**   @require_once('file:///H|/php_include/ajax/includes/class.MySQL.php');     */
 	$_POST['val_tm']=1; unset($_SESSION["total"]);
  //   $_SESSION[login_down]= $login_down; $_SESSION[senha_down]=$senha_down;  $_SESSION["n_upload"]="ativando";
     $_SESSION["n_upload"]="ativando";

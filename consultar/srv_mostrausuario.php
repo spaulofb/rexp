@@ -165,7 +165,8 @@ if( $opcaoup!='LISTA' ) {
    /**  Final - if( ctype_alpha($dados) ) { */ 
    //
    /**   Caso for uma variavel numerica   */ 
-   if( ctype_digit($dados) ) {
+   //  if( ctype_digit($dados) ) {  
+   if( is_numeric($dados) ) {    
        /**
         *     Variavel $opcao numerica
         *  Alterado em 20250609
