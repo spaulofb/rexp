@@ -189,7 +189,7 @@ exit();
     $xlen= strlen(trim($parte_login));
 
 
-echo "ERRO: srv_mostrapessoal/193  -->>  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
+echo "ERRO: srv_mostrapessoal/193  -->> OK  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
             ." -->> \$parte_login = $parte_login  <<-->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xlen = $xlen \n";
 exit();
 
