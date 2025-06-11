@@ -236,10 +236,8 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
     }
     //    
     // BOTAO - TODOS
-    var lcopcao = tcopcao.toUpperCase();
-    var quantidade= lcopcao.search(/TODOS|TODAS/ui);
+    var quantidade= lcopcao.search(/TODOS|TODAS/i);
     if( quantidade!=-1 ) {
-        //
         if( document.getElementById("ordenar") ) {
             //
             var nraid = document.getElementById("ordenar");
@@ -271,13 +269,9 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
     /// tag Select para Ordenar o Botao Todos
     var quantidade=lcopcao.search(/ORDENAR/i);
     if( quantidade!=-1 ) {
-         //
-         //  var tmp=val;
-         var tmp=dados;
-         //  var val=lcopcao;
-         var dados=lcopcao;
+         var tmp=val;
+         var val=lcopcao;
          var lcopcao=tmp;
-         //
          ///  var string_array=string_array.replace(" ","");      
         if( document.getElementById("Busca_letrai") ) {
               document.getElementById("Busca_letrai").selectedIndex="0";
@@ -287,18 +281,8 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
     /**   Final - if( quantidade!=-1 ) {  */
     // 
     // tag Select para desativar o campo Select ordenar
-    //  var quantidade=dados.search(/^BUSCA_PROJ|^busca_porcpo|^Busca_letrai/ui);
-    var xpos=lcopcao.search(/^BUSCA_PROJ|^busca_porcpo|^Busca_letrai/ui);
-
-/**   
-    alert(" pessoal_consultar.php/291 -->> xpos = "+xpos+" -->>  lcopcao = "+lcopcao
-      +" -->> dados = "+dados+" - string_array = "+string_array);
- */
-
-
-
-    if( xpos!=-1 ) {
-        //
+    var quantidade=dados.search(/^BUSCA_PROJ|^busca_porcpo|^Busca_letrai/i);
+    if( quantidade!=-1 ) {
         if( document.getElementById("ordenar") ) {
               document.getElementById("ordenar").selectedIndex="0";
               document.getElementById("ordenar").style.display="none";            
@@ -382,7 +366,7 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
     var srv_php = "srv_mostrapessoal.php";
     var poststr = new String("");
     //
-    var poststr = "grupous="+encodeURIComponent(lcopcao)+"&dados="+encodeURIComponent(dados);
+    var poststr = "grupous="+encodeURIComponent(tcopcao)+"&dados="+encodeURIComponent(dados);
     poststr +="&m_array="+encodeURIComponent(string_array); 
     //
     xAJAX_mostraus.connect(srv_php, "POST", poststr, fndone_mostraus);   

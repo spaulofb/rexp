@@ -229,17 +229,15 @@ function consulta_mostraus(tcopcao,val,string_array) {
     if( typeof(val)=="undefined" ) var val="";
     if( typeof(string_array)=="undefined" ) var string_array="";  
     ///
-    var lcopcao = tcopcao.toUpperCase();
-    //
 
-/**  
+/**   
   alert("  usuario_consultar.php/123 --  tcopcao = "+tcopcao+" - val = "+val+" - string_array = "+string_array);    
- */       
+ */
     
     //
     // BOTAO - TODOS
     var lcopcao = tcopcao.toUpperCase();
-    var quantidade= lcopcao.search(/TODOS|TODAS/i);
+    var quantidade= lcopcao.search(/TODOS|TODAS/ui);
     if( quantidade!=-1 ) {
         //
         if( document.getElementById("ordenar") ) {
@@ -250,6 +248,8 @@ function consulta_mostraus(tcopcao,val,string_array) {
             if( zdisp!="block" ) {
                 nraid.style.display="block";
             }
+            //
+            document.getElementById("ordenar").selectedIndex="0";
             //
         } else {
              alert("Faltando document.getElementById(\"ordenar\") ");           
@@ -269,9 +269,11 @@ function consulta_mostraus(tcopcao,val,string_array) {
     // tag Select para Ordenar o Botao Todos
     var quantidade=lcopcao.search(/ORDENAR/i);
     if( quantidade!=-1 ) {
+         //
          var tmp=val;
          var val=lcopcao;
          var lcopcao=tmp;
+         //
          ///  var string_array=string_array.replace(" ","");      
         if( document.getElementById("Busca_letrai") ) {
               document.getElementById("Busca_letrai").selectedIndex="0";
@@ -281,8 +283,17 @@ function consulta_mostraus(tcopcao,val,string_array) {
     /**  Final - if( quantidade!=-1 ) {  */
     // 
     /**  tag Select para desativar o campo Select ordenar  */
-    var quantidade=lcopcao.search(/BUSCA_PROJ|busca_porcpo|Busca_letrai/i);
-    if( quantidade!=-1 ) {
+    var xpos=lcopcao.search(/BUSCA_PROJ|busca_porcpo|Busca_letrai/ui);
+
+
+/**  
+  alert("usuario_consultar.php/284 -->> xpos = "+xpos+" -->>  lcopcao = "+lcopcao
+      +" - val = "+val+" - string_array = "+string_array);
+ */
+
+
+    if( xpos!=-1 ) {
+        //
         if( document.getElementById("ordenar") ) {
               document.getElementById("ordenar").selectedIndex="0";
               document.getElementById("ordenar").style.display="none";            

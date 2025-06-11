@@ -49,9 +49,8 @@ $msg_final="</span></span>";
 // Final - Mensagens para enviar
 //
 //  Verificando SESSION incluir_arq
-if( ! isset($_SESSION["incluir_arq"]) ) {  
-      //
-      /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;      */
+if( ! isset($_SESSION["incluir_arq"]) ) {
+     ///  $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
@@ -102,10 +101,10 @@ if( isset($opcao) ) {
 //
 
 
-
+/**
 echo "ERRO: srv_mostrausuario/105  -->> \$opcaoup = $opcaoup  <<-->>  \$val = $val   -->>  \$bd_1 = $bd_1  -->>  \$bd_2 = $bd_2  <br />\n";
 exit();
-
+ */
 
 
 
@@ -226,11 +225,11 @@ exit();
          ." WHERE $parte_login a.codigousp=b.codigousp and a.pa=c.codigo ";
    //      
 
-
+/**  
 echo "ERRO: srv_mostrausuario/1228  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
-       ."  -->>  \$m_array = $m_array  <br> \$sqlcmd = $sqlcmd<br />\n";
+       ."<br> \$sqlcmd = $sqlcmd<br />\n";
 exit();
-
+ */
 
 
    //
@@ -265,14 +264,14 @@ exit();
    //
 
 
-
+/**  
 echo "ERRO: srv_mostrausuario/267  -->>  \$dados = $dados  -->> \$_SESSION[selecionados] = {$_SESSION["selecionados"]}<br/>\n "
-       ."<br> \$sqlcmd = $sqlcmd<br/>\n";
+       ."<br> \$sqlcmd = $sqlcmd<br />\n";
 exit();
+ */
 
 
 
-   //    
    //  Executando o Create Table
    $result_usuarios=mysqli_query($_SESSION["conex"],$sqlcmd);      
    //                  
