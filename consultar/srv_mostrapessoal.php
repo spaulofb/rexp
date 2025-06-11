@@ -188,11 +188,11 @@ exit();
     //  Caso variavel NULA
     $xlen= strlen(trim($parte_login));
 
-
+/**  
 echo "ERRO: srv_mostrapessoal/192  -->> OK  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
             ." -->> \$parte_login = $parte_login  <<-->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xlen = $xlen \n";
 exit();
-
+ */
 
 
     if( intval($xlen)<1 ) {
@@ -215,50 +215,66 @@ exit();
     */
     mysqli_set_charset($conex,'utf8');
     //
-   ///  Selecionar os usuarios de acordo com a opcao
-   $sqlcmd = "CREATE TABLE IF NOT EXISTS  $table_temporaria  "
+    //  Selecionar os usuarios de acordo com a opcao
+    $sqlcmd = "CREATE TABLE IF NOT EXISTS  $table_temporaria  "
            ." SELECT codigousp,nome,categoria,e_mail "
            ." FROM  $bd_2.pessoa  $parte_login  ";
-    ///
-   ///   Mostrar todos usuarios      
-   ///  if( strtoupper($opcao)=="TODOS" ) {
-   if( preg_match("/TODOS|TODAS|ordenar/i",$opcao) ) {
+    //
+    //   Mostrar todos usuarios      
+    //  if( strtoupper($opcao)=="TODOS" ) {
+    //   if( preg_match("/TODOS|TODAS|ordenar/i",$opcao) ) {   
+    if( ! preg_match("/tod(a|o)s?|ordenar/ui",$dados) ) {
+        //
         $_SESSION["selecionados"] = " - <b>Total</b>";
+        //
+        // Caso variavel $m_array esteja definida 
         if( isset($m_array) ) {
-            if( strlen(trim($m_array))>0 ) {
-                 $m_array=preg_replace('/categoria/i', 'categoria', $m_array);             
-                 $m_array=preg_replace('/nome/i', 'nome', $m_array);             
-                 $m_array=preg_replace('/sexo/i', 'sexo', $m_array);             
-                 $m_array=preg_replace('/unidade/i', 'unidade', $m_array);             
-                 $m_array=preg_replace('/setpr/i', 'setor', $m_array);             
+            //
+            $lent= strlen(trim($m_array));
+            if( $lent>0 ) {
+                 //
+                 $m_array=preg_replace('/categoria/ui', 'categoria', $m_array);             
+                 $m_array=preg_replace('/nome/ui', 'nome', $m_array);             
+                 $m_array=preg_replace('/sexo/ui', 'sexo', $m_array);             
+                 $m_array=preg_replace('/unidade/ui', 'unidade', $m_array);             
+                 $m_array=preg_replace('/setpr/ui', 'setor', $m_array);             
                  $sqlcmd .=" order by $m_array  "; 
-            }  
+            } 
+            /**  Final - if( $lent>0 ) {  */
+            // 
         } else {
              //// $sqlcmd .=" order by c.codigo,b.nome  ";    
              $sqlcmd .=" order by nome  ";    
         }
+        //
    } else {
-        ///  Mostrar apenas as pessoas selecionados pela Letra inicial
+        //
+        //  Mostrar apenas as pessoas selecionados pela Letra inicial
         $_SESSION["selecionados"] = "";        
         $sqlcmd .=" order by nome asc";
+        //
    }
-   /// Executando  procedimento
+   //
+   // Executando  procedimento
    $result_usuarios=mysqli_query($conex,$sqlcmd);   
-   ////                
+   //                
    if( ! $result_usuarios ) {
-        /// die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($conex)));  
-        $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysqli_error($conex).$msg_final;
+         //
+        // die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($conex)));  
+        $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;";
+        $msg_erro .= mysqli_error($conex).$msg_final;
         echo $msg_erro;  
          exit();          
    } 
-   ////
+   //
    /***
     *    O charset UTF-8  uma recomendacao, 
     *    pois cobre quase todos os caracteres e 
     *    símbolos do mundo
     ***/
-   mysql_set_charset('utf8');
-   ///  Selecionando todos os registros da Tabela temporaria
+   mysqli_set_charset($_SESSION["conex"],'utf8');
+   //
+   //  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  $table_temporaria  ";
    $result_outro = mysqli_query($conex,$query2);                                    
    if( ! $result_outro ) {
@@ -266,11 +282,24 @@ exit();
         $msg_erro .= "&nbsp;Selecionando as pessoas:&nbsp;db/mysql&nbsp;".mysqli_error($conex).$msg_final;
         echo $msg_erro;  
         exit();          
-   }        
-   ///  Pegando os nomes dos campos do primeiro Select
-   $num_fields=mysql_num_fields($result_outro);  ///  Obtem o numero de Campos do resultado
+   }    
+   //   
+   //  Pegando os nomes dos campos do primeiro Select
+   $num_fields=mysqli_num_fields($result_outro);  //  Obtem o numero de Campos do resultado
    $td_menu = $num_fields+1;   
-   ////  Total de registros
+
+
+
+echo "ERRO: srv_mostrapessoal/293  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+exit();
+
+
+
+
+
+   // 
+   //  Total de registros
    $total_regs=$_SESSION["total_regs"] = mysql_num_rows($result_outro);
    $total_regs===1 ? $lista_usuario=" <b>1</b> pessoa " : $lista_usuario="<b>$total_regs</b> pessoas ";     
    $_SESSION["titulo"]= "<p class='titulo_consulta' style='text-align: left; margin-right: 4px; padding: 0px;' >";
