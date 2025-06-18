@@ -93,6 +93,7 @@ $opcao_maiusc = strtoupper(trim($opcao));
 //  Arquivo da tabela de consulta usuario - importante
 $arq_tab_consulta_usuario="{$incluir_arq}includes/tabela_de_consulta_usuarios.php"; 
 //
+$opcaoup="";
 if( isset($opcao) ) {
     $opcao = trim($opcao);
     $opcaoup= strtoupper($opcao);
@@ -350,11 +351,11 @@ exit();
    $_SESSION["opcoes_lista"] = "{$arq_tab_consulta_usuario}?pagina=";
    //
 
-
-echo "ERRO: srv_mostrausuario/353  -->>  \$total_regs = $total_regs <<-->>  \$_SESSION[opcoes_lista] = {$_SESSION["opcoes_lista"]}  <br /> "
-       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+/**  
+echo "ERRO: srv_mostrausuario/353  -->>  \$total_regs = $total_regs <<-->>  \$_SESSION[opcoes_lista] = {$_SESSION["opcoes_lista"]}  "
+       ."<br> \$opcaoup = $opcaoup  -- \$dados = $dados  -- \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
 exit();
-
+ */
 
 
 

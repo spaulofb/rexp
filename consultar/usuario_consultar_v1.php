@@ -36,6 +36,16 @@ date_default_timezone_set('America/Sao_Paulo');
 /**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
 extract($_POST, EXTR_OVERWRITE);  
 //
+// Mensagens para enviar
+$msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
+$msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";  
+//
+$msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >";
+$msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
+//
+$msg_final="</span></span>";
+//   FINAL - Mensagens para enviar
+//
 //  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
@@ -202,7 +212,7 @@ function acentuarAlerts(mensagem) {
 //  Function principal para aquivo AJAX
 function consulta_mostraus(tcopcao,val,string_array) {
 //
-//  Selecionar os Usuários de acordo com a op??o (todos ou pela primeira letra)
+//  Selecionar os Usuários de acordo com a opcao (todos ou pela primeira letra)
 //
 //  LAFB/SPFB110831.1127
 //
@@ -219,16 +229,15 @@ function consulta_mostraus(tcopcao,val,string_array) {
     if( typeof(val)=="undefined" ) var val="";
     if( typeof(string_array)=="undefined" ) var string_array="";  
     ///
-    var lcopcao = tcopcao.toUpperCase();
-    //
 
-     
+
   alert("  usuario_consultar.php/123 --  tcopcao = "+tcopcao+" - val = "+val+" - string_array = "+string_array);    
+
     
     //
     // BOTAO - TODOS
     var lcopcao = tcopcao.toUpperCase();
-    var quantidade= lcopcao.search(/TODOS|TODAS/i);
+    var quantidade= lcopcao.search(/TODOS|TODAS/ui);
     if( quantidade!=-1 ) {
         //
         if( document.getElementById("ordenar") ) {
@@ -239,6 +248,8 @@ function consulta_mostraus(tcopcao,val,string_array) {
             if( zdisp!="block" ) {
                 nraid.style.display="block";
             }
+            //
+            document.getElementById("ordenar").selectedIndex="0";
             //
         } else {
              alert("Faltando document.getElementById(\"ordenar\") ");           
@@ -258,9 +269,11 @@ function consulta_mostraus(tcopcao,val,string_array) {
     // tag Select para Ordenar o Botao Todos
     var quantidade=lcopcao.search(/ORDENAR/i);
     if( quantidade!=-1 ) {
+         //
          var tmp=val;
          var val=lcopcao;
          var lcopcao=tmp;
+         //
          ///  var string_array=string_array.replace(" ","");      
         if( document.getElementById("Busca_letrai") ) {
               document.getElementById("Busca_letrai").selectedIndex="0";
@@ -270,8 +283,17 @@ function consulta_mostraus(tcopcao,val,string_array) {
     /**  Final - if( quantidade!=-1 ) {  */
     // 
     /**  tag Select para desativar o campo Select ordenar  */
-    var quantidade=lcopcao.search(/BUSCA_PROJ|busca_porcpo|Busca_letrai/i);
-    if( quantidade!=-1 ) {
+    var xpos=lcopcao.search(/BUSCA_PROJ|busca_porcpo|Busca_letrai/ui);
+
+
+/**  
+  alert("usuario_consultar.php/284 -->> xpos = "+xpos+" -->>  lcopcao = "+lcopcao
+      +" - val = "+val+" - string_array = "+string_array);
+ */
+
+
+    if( xpos!=-1 ) {
+        //
         if( document.getElementById("ordenar") ) {
               document.getElementById("ordenar").selectedIndex="0";
               document.getElementById("ordenar").style.display="none";            
@@ -284,7 +306,7 @@ function consulta_mostraus(tcopcao,val,string_array) {
     var xAJAX_mostraus = new XHConn();
     //
     if ( !xAJAX_mostraus ) {
-          alert("XMLHTTP/AJAX não dispon?vel. Tente um navegador mais novo ou melhor.");
+          alert("XMLHTTP/AJAX indefinida. Tente um navegador mais novo ou melhor.");
           return false;
     }
     //
@@ -295,9 +317,10 @@ function consulta_mostraus(tcopcao,val,string_array) {
            var srv_ret = oXML.responseText;
            var lnip = srv_ret.search(/Nenhum|ERRO:|Uncau|Fatal erro/ui);
           
-
+/**  
   alert("usuario_consultar.php/112  --->> fndone_nostraus -->>  lnip="+lnip+" --->>>  lcopcao="+lcopcao+" --val = "+val+" <<<---  \r\n srv_ret =  "+srv_ret);   
-          
+      */     
+
 
           if( lnip==-1 ) {
               //
@@ -318,12 +341,14 @@ function consulta_mostraus(tcopcao,val,string_array) {
                          document.getElementById('Busca_letrai').options[0].selectedIndex=0;    
                      }
                  }    
-                 /**   document.getElementById('label_msg_erro').style.display="none";  */
+                 /**   document.getElementById('label_msg_erro').style.display="none";  */  
+                 //
 
 
-
+/**  
   alert("usuario_consultar.php/112  --->> fndone_nostraus  1) PARTE -->>  lcopcao="+lcopcao+" --val = "+val
             +" <<<---  \r\n srv_ret =  "+srv_ret);   
+ */
           
 
                  // 
@@ -352,6 +377,7 @@ function consulta_mostraus(tcopcao,val,string_array) {
               exoc("label_msg_erro",1,srv_ret);  
               //
           }; 
+          //
     };
     // 
     //  Define o servidor PHP para consulta do banco de dados
@@ -388,7 +414,7 @@ $_SESSION["m_titulo"]="Usuário";
 </head>
 <body  id="id_body"    oncontextmenu="return false" onselectstart="return false"  ondragstart="return false"    onkeydown="javascript: no_backspace(event);"   >
 <!-- PAGINA -->
-<div class="pagina_ini"  id="pagina_ini" >
+<div class="pagina_ini"  id="pagina_ini"  >
 <!-- Cabecalho -->
 <div id="cabecalho"  >
 <?php include("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");?>
@@ -409,128 +435,148 @@ require_once("{$_SESSION["incluir_arq"]}includes/menu_horizontal.php");
 </div>
 <p class='titulo_usp' >Consultar&nbsp;Usuário</p>
 </section>
+<div id="div_form" class="div_form" style="overflow:auto;" >
 <?php 
 //
 //	 Verificano o PA - Privilegio de Acesso
 //  if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_SESSION["permit_pa"]<=$_SESSION['array_usuarios']['orientador'] ) ) {    
 if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {         
-?>
-<div id="div_form" class="div_form" style="overflow:auto;" >
-<?php
-//
-//  CODIGO/USP
-$elemento=5;
-require_once("php_include/ajax/includes/conectar.php");     
-//
-//  Selecionar os usuarios pela primeira letra do nome e o codigousp
-/**  
-$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,a.codigousp,b.e_mail "
-    ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
-    ." WHERE a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"];
-*/
-//  Selecionar os usuarios pela primeira letra do nome
-/**
-$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
-    ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
-    ." where a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] 
-    ." group by 1";
-*/
-$sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n ";
-$sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
-$sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  group by 1";
-//
-$result = mysqli_query($_SESSION["conex"],$sqlcmd);
-if( ! $result ) {
-    //
-    //  Caso falha na consulta
-    $terr="ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;";
-    $terr .= "db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]);
-    die("{$terr}"); 
-    //
-}       
-//  Nr. de Registros
-$lnletras = mysqli_num_rows($result);                
-//
-/**   Salvar letrais iniciais em um conjunto para facilitar a busca  */
-// 
-?>
-<!-- Todas pessoas -->
-<div style="display: flex;"  >
- <div class='titulo_usp' style='margin-left: 30%; padding:2px 0 2px 2px; font-weight: bold;font-size:large;' >
-   Mostrar:&nbsp;
-   <span style="font-size: medium;  " >
-  <input type='button' id='todos' class='botao3d'  value='Todos' title='Selecionar todos'  onclick='javascript: consulta_mostraus("Todos")' >
-</span>
-  <span class="span_ord_proj" >
-<!-- tag Select para ordenar  -->
-<select   title="Ordernar"  id="ordenar"  class="ordenar"  onchange="javascript: consulta_mostraus('ordenar',todos.value,this.value)"  >
-<option  value=""  >ordenar por</option>
-<option  value="categoria asc"  >Categoria - asc</option>
-<option  value="categoria desc" >Categoria - desc</option>
-<option  value="nome asc"  >Nome - asc</option>
-<option  value="nome desc" >Nome - desc</option>
-</select>
-</span>
-</div>
-</div>   
-<!--  Final - Todas pessoas/usuarios -->
-<!--  Selecionar usuario pela letra inicial do nome  -->
-<div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
-<p class="titulo_lista"  >ou pela letra inicial do Nome:&nbsp;</p>
-</div>
-<div class="div_select_busca" >
-<select name="Busca_letrai" id="Busca_letrai" class="Busca_letrai" title="Selecionar usu&aacute;rio pela letra inicial do nome" 
-    onchange="javascript:  consulta_mostraus(this.id,this.value)" >
-<?php
-     //
-    if( intval($lnletras)<1 ) {
-        echo "<option value='' >Nenhum usu&aacute;rio encontrado</option>";
-    } else {
+       //
+       //
+       //  CODIGO/USP
+       $elemento=5;
+       include("php_include/ajax/includes/conectar.php");     
+       //
+       /**
+        *  Conexao Mysqli
+        */ 
+        $conex = $_SESSION["conex"];
         //
-?>
-<!--  <option value="" >Selecionar Usu&aacute;rio pela Letra Inicial</option>  -->
-<option value="" >Selecionar usu&aacute;rio pelo nome</option>
-<?php
-    //
-    while( $linha=$conex->fetch_array($result) ) {    
-          //   
-          /**  htmlentities - corrige possiveis falhas de acentuacao de code page  */
-          // 
-          $letra= htmlentities($linha["letra1"]);  
-          $lncodigousp=$linha["codigousp"];  
-          $lnemail=$linha["e_mail"];
-          /**  
-           *  echo "<option  value=".urlencode($letra)."  "
-           *     ."  title='Clicar para Busca'  >".$letra."</option>" ;
-          */
-          echo "<option  value=".urlencode($letra)."  title='Clicar para busca'  >".$letra."</option>" ;
-          //  echo "<option  value=".$lncodigousp."  title='Clicar para Busca'  >".$lnemail."</option>" ;
-          //
-    }  
-    /**  Final - while( $linha=$conex->fetch_array($result) ) {  */
-    //
-?>
-</select>
-<?php
+       //   ATUALIZADO EM 20200528
+       //  Selecionar os usuarios pela primeira letra do nome e o codigousp
+       //  Selecionar os usuarios pela primeira letra do nome
+       /**
+          $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
+              ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
+              ." where a.codigousp=b.codigousp and a.pa=c.codigo and a.pa>".$_SESSION["permit_pa"] 
+              ." group by 1";
+
+       $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n ";
+       $sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
+       $sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  group by 1";
+       */
+        /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
+        mysqli_set_charset($_SESSION["conex"],'utf8');
+        //
+       $sqlcmd = "SELECT b.nome,a.codigousp, b.e_mail ";
+       $sqlcmd .=" FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c ";
+       $sqlcmd .=" WHERE a.codigousp=b.codigousp and a.pa=c.codigo  order by b.nome asc";
+       $result = mysqli_query($_SESSION["conex"],$sqlcmd);
+       if( ! $result ) {
+            //
+            //  Caso falha na consulta
+            $terr="ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;";
+            $terr .= "db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]);
+            die("{$terr}"); 
+            //
+       }       
+       //  Nr. de Registros
+       $lnletras = mysqli_num_rows($result);                
+       //
+     //  $arrusr=mysqli_fetch_array($result);
+       //
+
+       /** 
+echo "\$lnletras = $lnletras <br />";
+exit();
+ */
+
+
+       /**   Salvar letrais iniciais em um conjunto para facilitar a busca  */
+       // 
+    ?>
+    <!-- Todas pessoas -->
+    <div style="display: flex;"  >
+        <div class='titulo_usp' style='margin-left: 30%; padding:2px 0 2px 2px; font-weight: bold;font-size:large;' >
+           Mostrar:&nbsp;
+          <span style="font-size: medium;  " >
+          <input type='button' id='todos' class='botao3d'  value='Todos' title='Selecionar todos'  onclick='consulta_mostraus("Todos")' >
+        </span>
+         <span class="span_ord_proj" >
+            <!-- tag Select para ordenar  -->
+            <select   title="Ordernar"  id="ordenar"  class="ordenar" 
+                  onchange="consulta_mostraus('ordenar',todos.value,this.value)"  >
+                <option  value=""  >ordenar por</option>
+                <option  value="categoria asc"  >Categoria - asc</option>
+                <option  value="categoria desc" >Categoria - desc</option>
+                <option  value="nome asc"  >Nome - asc</option>
+                 <option  value="nome desc" >Nome - desc</option>
+            </select>
+        </span>
+       </div>
+    </div>   
+    <!--  Final - Todas pessoas/usuarios -->
+    <!--  Selecionar usuario pela letra inicial do nome  -->
+    <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
+        <p class="titulo_lista"  >ou pela letra inicial do Nome:&nbsp;</p>
+    </div>
+
+    <div class="div_select_busca" >
+        <select name="Busca_letrai" id="Busca_letrai" class="Busca_letrai" 
+           title="Selecionar usu&aacute;rio pela letra inicial do nome"  onchange="consulta_mostraus(this.id,this.value)" >
+         <?php
+           //
+           /**  Caso variavel menor que 1  */
+           if( intval($lnletras)<1 ) {
+                echo "<option value='' >Nenhum usu&aacute;rio encontrado</option>";
+            } else {
+                //
+              ?>
+                <!--  <option value="" >Selecionar Usu&aacute;rio pela Letra Inicial</option>  -->
+                <option value="" >Selecionar usu&aacute;rio pelo nome</option>
+              <?php
+                 //
+                //  while( $linha=$conex->fetch_array($result) ) {    
+                //  while( $linha=$arrusr ) {   
+                while( $linha=mysqli_fetch_array($result) ) {   
+                      //
+                      /**  htmlentities - corrige possiveis falhas de acentuacao de code page  
+                       *    $letra= htmlentities($linha["letra1"]);  
+                       *    $letra=$linha["letra1"];   
+                      */
+                      $nmusr=$linha["nome"];  
+                      $lncodigousp=$linha["codigousp"];  
+                      $lnemail=$linha["e_mail"];
+                      /**
+                       *  echo "<option  value=".urlencode($letra)."  title=\"Clicar para busca\"  >$letra</option>";  
+                       */
+                      echo "<option  value=\"$lncodigousp\"  title=\"Clicar para busca\"  >$nmusr</option>";  
+                      //
+                }  
+                /**  Final - while( $linha=$conex->fetch_array($result) ) {   */
+                //
+            //
+          } 
+        ?>
+        </select>
+      </div>   
+     <?php
          //
          /** Desativar variavel  */
-         if( isset($result) )  {
-            //   mysql_free_result($result); 
-            unset($result);
-            //
-         }  
-    }
-    //
-?>
-</div>   
-<p class="titulo_lista" >Lista dos Usu&aacute;rios&nbsp;<span style="font-size: 12px; ">-&nbsp;(de menor PA)</span></p>
-<?php
+         if( isset($result) ) {
+               //   mysql_free_result($result); 
+               unset($result);
+               //
+          } 
+          /**  Final - if( isset($result) ) { */
+          //  
 } else {
    echo  "<p class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";
-}
+}  
+//
 ?>
-<p style="height:20em;widht:20em;border:20px double #000;"> sdafklllllllllllllllllllllllllllllllllllllllllllllllj</p>
 </div>
+<!-- Final div_form -->
 <div id="div_out" class="div_out" >
 </div>
 </div>

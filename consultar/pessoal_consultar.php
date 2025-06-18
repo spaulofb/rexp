@@ -223,8 +223,12 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
     // Variavel para maiuscula 
     var lcopcao = tcopcao.toUpperCase();
     //
-      
+
+    /**  
  alert("  pessoal_consultar.php/123 --  tcopcao = "+tcopcao+" - dados = "+dados+" - string_array = "+string_array);    
+ */
+
+
 
     /*****    
      *   Reiniciar a pagina atual 
@@ -332,9 +336,10 @@ function consulta_mostrapes(tcopcao,dados,string_array) {
         var srv_ret = oXML.responseText;
         var lnip = srv_ret.search(/Nenhum|ERRO:|Uncau|Fatal erro/ui);
  
-        
+/**  
   alert("  pessoal_consultar.php/257 -- lnip = "+lnip+"  <<--- tcopcao = "+tcopcao+" - dados = "+dados
                +" - string_array = "+string_array);    
+   */                       
 
             //
             if( lnip==-1 ) {

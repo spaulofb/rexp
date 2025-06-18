@@ -3,7 +3,7 @@
 //
 //  LAFB110831.1740
 #
-ob_start(); /* Evitando warning */
+ob_start(); /**  Evitando warning */
 //
 //  Verificando se session_start - ativado ou desativado
 if(!isset($_SESSION)) {
@@ -49,8 +49,9 @@ $msg_final="</span></span>";
 // Final - Mensagens para enviar
 //
 //  Verificando SESSION incluir_arq
-if( ! isset($_SESSION["incluir_arq"]) ) {
-     ///  $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
+if( ! isset($_SESSION["incluir_arq"]) ) {  
+      //
+      /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;      */
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
@@ -92,6 +93,7 @@ $opcao_maiusc = strtoupper(trim($opcao));
 //  Arquivo da tabela de consulta usuario - importante
 $arq_tab_consulta_usuario="{$incluir_arq}includes/tabela_de_consulta_usuarios.php"; 
 //
+$opcaoup="";
 if( isset($opcao) ) {
     $opcao = trim($opcao);
     $opcaoup= strtoupper($opcao);
@@ -101,14 +103,15 @@ if( isset($opcao) ) {
 //
 
 
-/**
+/** 
 echo "ERRO: srv_mostrausuario/105  -->> \$opcaoup = $opcaoup  <<-->>  \$val = $val   -->>  \$bd_1 = $bd_1  -->>  \$bd_2 = $bd_2  <br />\n";
 exit();
  */
 
 
 
-// Vericando - caso Variavel opcao  NAO for LISTA
+//  
+/**   Vericando - caso Variavel opcao  NAO for LISTA  */
 if( $opcaoup!='LISTA' ) {
    //
    /**  Remover Tabela Temporaria   
@@ -165,7 +168,8 @@ if( $opcaoup!='LISTA' ) {
    /**  Final - if( ctype_alpha($dados) ) { */ 
    //
    /**   Caso for uma variavel numerica   */ 
-   if( ctype_digit($dados) ) {
+   //  if( ctype_digit($dados) ) {  
+   if( is_numeric($dados) ) {    
        /**
         *     Variavel $opcao numerica
         *  Alterado em 20250609
@@ -176,19 +180,17 @@ if( $opcaoup!='LISTA' ) {
    }  
    /**  Final - if( ctype_digit($dados) )  {  */
    //
+   //  Caso variavel NULA
+   $xlen= strlen(trim($parte_login));
 
-/**  
+
+   /**  
 echo "ERRO: srv_mostrausuario/179  -->>  \$opcao = $opcao  <<-->> 1)  \$parte_login =<b> $parte_login  </b><<-- <br>" 
            ."  -->> \$opcaoup = $opcaoup  <<-->>  \$val = $val   -->>  \$bd_1 = $bd_1  "
-           ." -->>  \$bd_2 = $bd_2  <br />\n";
+           ." -->>  \$bd_2 = $bd_2  <br /> \$dados = $dados  <<-->> \$xlen = $xlen ";
 exit();
  */
 
-
-
-
-   //  Caso variavel NULA
-   $xlen= strlen(trim($parte_login));
    if( intval($xlen)<1 ) {
         //
         /**  Caso variavel SEM SER TODOS ou TODAS  
@@ -225,8 +227,8 @@ exit();
    //      
 
 /**  
-echo "ERRO: srv_mostrausuario/1228  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
-       ."<br> \$sqlcmd = $sqlcmd<br />\n";
+echo "ERRO: srv_mostrausuario/229  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ."  -->>  \$m_array = $m_array  <br> \$sqlcmd = $sqlcmd<br />\n";
 exit();
  */
 
@@ -265,12 +267,12 @@ exit();
 
 /**  
 echo "ERRO: srv_mostrausuario/267  -->>  \$dados = $dados  -->> \$_SESSION[selecionados] = {$_SESSION["selecionados"]}<br/>\n "
-       ."<br> \$sqlcmd = $sqlcmd<br />\n";
+       ."<br> \$sqlcmd = $sqlcmd<br/>\n";
 exit();
  */
 
 
-
+   //    
    //  Executando o Create Table
    $result_usuarios=mysqli_query($_SESSION["conex"],$sqlcmd);      
    //                  
@@ -308,7 +310,7 @@ exit();
    //
 
 /**  
-echo "ERRO: srv_mostrausuario/311  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+echo "ERRO: srv_mostrausuario/312   -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
        ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
 exit();
  */
@@ -350,8 +352,8 @@ exit();
    //
 
 /**  
-echo "ERRO: srv_mostrausuario/353  -->>  \$_SESSION[opcoes_lista] = {$_SESSION["opcoes_lista"]}  <br />\n "
-       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+echo "ERRO: srv_mostrausuario/353  -->>  \$total_regs = $total_regs <<-->>  \$_SESSION[opcoes_lista] = {$_SESSION["opcoes_lista"]}  "
+       ."<br> \$opcaoup = $opcaoup  -- \$dados = $dados  -- \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
 exit();
  */
 

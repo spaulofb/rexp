@@ -100,6 +100,15 @@ if( class_exists('funcoes') ) {
 //  Variavel com letras maiusculas      
 $opcao_maiusc = strtoupper(trim($opcao));
 //
+//
+$opcaoup="";
+if( isset($opcao) ) {
+    $opcao = trim($opcao);
+    $opcaoup= strtoupper($opcao);
+} else {
+    $opcao = "";
+}
+//
 //  Arquivo da tabela de consulta pessoal - importante
 /**  $arq_tab_consulta_pessoal="{$_SESSION["incluir_arq"]}includes/tabela_de_consulta_pessoal.php";  */
 $arq_tab_consulta_pessoal="{$_SESSION["incluir_arq"]}includes/tb_cons_pessoal.php";
@@ -108,14 +117,17 @@ $arq_tab_consulta_pessoal="{$_SESSION["incluir_arq"]}includes/tb_cons_pessoal.ph
 
 
 /**  
-echo "ERRO: srv_mostrapessoal/111  -->>  \$opcao_maiusc = $opcao_maiusc  <br/>\n "
-       ."<br> \$dados_maiusc = $dados_maiusc <br />";
-exit();
- */
-
-
-//  if( strtoupper($opcao)!='LISTA' ) {
-if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) { 
+echo "ERRO: srv_mostrapessoal/111  -->>  \$opcaoup = $opcaoup  <<-->>  \$dados = $dados  <br>"  
+       ."  \$opcao_maiusc = $opcao_maiusc  \n "
+       ."<br> \$dados_maiusc = $dados_maiusc <br /> \$opcao = $opcao ";
+       exit();
+*/
+       
+// 
+/**   if( strtoupper($opcao)!='LISTA' ) {
+ *  if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {  
+*/
+if( preg_match("/^ORDENAR|^BUSCA_LETRAI|tod(a|o)s?/ui",$opcao_maiusc) ) {
     //
     $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
     $table_temporaria = $_SESSION["table_temporaria"];
@@ -136,14 +148,14 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
    //
    //  Caso for uma letra somente
    //  $testcase=trim($opcao);
-   $dados=trim($opcao);   
+  //   $dados=trim($val);   
    $parte_login="";
    //
    //  Variavel alfabetica
 
 
-/** 
-echo "ERRO: LINHA139 -->> srv_mostrapessoal  -->>  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
+/**  
+echo "ERRO: LINHA155 -->> srv_mostrapessoal  -->>  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
             ." -->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xtd = $xtd \n";
 exit();
  */
@@ -192,18 +204,21 @@ exit();
     } 
     //
     //  Caso variavel NULA
-    $xlen= strlen(trim($parte_login));
+    $xlen= strlen(trim($parte_login));  
+    //
 
 /**  
 echo "ERRO: srv_mostrapessoal/192  -->> OK  \$dados = $dados <<-->> \$opcao_maiusc = $opcao_maiusc <<-- <br>"
-            ." -->> \$parte_login = $parte_login  <<-->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xlen = $xlen \n";
+            ." -->> \$parte_login = $parte_login  <<-->>  \$dados_maiusc = $dados_maiusc <<--<br/> \$xlen = $xlen \n"
+            ."<br/> \$m_array = $m_array \n  -->> \$xlen = $xlen ";
 exit();
  */
 
 
+    /**   Caso variavel MENOR que 1  */  
     if( intval($xlen)<1 ) {
         //
-        //  Caso variavel SEM SER  TODOS ou TODAS
+        /**   Caso variavel SEM SER TODOS ou TODAS */
         if( ! preg_match("/TODOS|TODAS|ordenar/i",$dados) )  {
               $msg_erro .= "&nbsp;Falha grave na variavel".$msg_final;
               echo $msg_erro;  
@@ -226,10 +241,20 @@ exit();
            ." SELECT codigousp,nome,categoria,e_mail "
            ." FROM  $bd_2.pessoa  $parte_login  ";
     //
+
+
+/**  
+echo "ERRO: srv_mostrapessoal/247  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ." -->>  \$m_array = $m_array  <br> \$sqlcmd = $sqlcmd<br />\n";
+exit();
+ */
+
+
+
     //   Mostrar todos usuarios      
     //  if( strtoupper($opcao)=="TODOS" ) {
     //   if( preg_match("/TODOS|TODAS|ordenar/i",$opcao) ) {   
-    if( ! preg_match("/tod(a|o)s?|ordenar/ui",$dados) ) {
+    if( preg_match("/tod(a|o)s?|ordenar/ui",$dados) ) {
         //
         $_SESSION["selecionados"] = " - <b>Total</b>";
         //
@@ -243,11 +268,12 @@ exit();
                  $m_array=preg_replace('/nome/ui', 'nome', $m_array);             
                  $m_array=preg_replace('/sexo/ui', 'sexo', $m_array);             
                  $m_array=preg_replace('/unidade/ui', 'unidade', $m_array);             
-                 $m_array=preg_replace('/setpr/ui', 'setor', $m_array);             
+                 $m_array=preg_replace('/setor/ui', 'setor', $m_array);             
                  $sqlcmd .=" order by $m_array  "; 
-            } 
-            /**  Final - if( $lent>0 ) {  */
-            // 
+            }  else {
+                 $sqlcmd .=" order by odigo,nome  ";    
+            }
+            //
         } else {
              //// $sqlcmd .=" order by c.codigo,b.nome  ";    
              $sqlcmd .=" order by nome  ";    
@@ -260,6 +286,17 @@ exit();
         $sqlcmd .=" order by nome asc";
         //
    }
+   //
+
+
+/**  
+echo "ERRO: srv_mostrapessoal/293  -->>  \$dados = $dados  -->> \$_SESSION[selecionados] = {$_SESSION["selecionados"]}<br/> "
+       ."\$sqlcmd = $sqlcmd<br/>";
+exit();
+ */
+
+
+
    //
    // Executando  procedimento
    $result_usuarios=mysqli_query($conex,$sqlcmd);   
@@ -293,22 +330,21 @@ exit();
    //  Pegando os nomes dos campos do primeiro Select
    $num_fields=mysqli_num_fields($result_outro);  //  Obtem o numero de Campos do resultado
    $td_menu = $num_fields+1;   
-
-
-/**  
-echo "ERRO: srv_mostrapessoal/293  -->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
-       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
-exit();
- */
-
-
-
-
    // 
    //  Total de registros
    $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
    $total_regs=$_SESSION["total_regs"];
    //
+
+
+/**  
+echo "ERRO: srv_mostrapessoal/336  -->> \$total_regs = $total_regs <<-->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
+       ."<br> \$opcaoup = $opcaoup  --  \$dados = $dados <-> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+exit();
+  */
+
+
+
    $total_regs===1 ? $lista_usuario=" <b>1</b> pessoa " : $lista_usuario="<b>$total_regs</b> pessoas ";     
    $_SESSION["titulo"]= "<p class='titulo_consulta' style='text-align: left; margin-right: 4px; padding: 0px;' >";
    $_SESSION["titulo"].= "Lista de $lista_usuario ".$_SESSION['selecionados']."</p>"; 

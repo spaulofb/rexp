@@ -230,9 +230,9 @@ function consulta_mostraus(tcopcao,val,string_array) {
     if( typeof(string_array)=="undefined" ) var string_array="";  
     ///
 
-
+/**  
   alert("  usuario_consultar.php/123 --  tcopcao = "+tcopcao+" - val = "+val+" - string_array = "+string_array);    
-
+ */
     
     //
     // BOTAO - TODOS
@@ -388,7 +388,9 @@ function consulta_mostraus(tcopcao,val,string_array) {
     poststr += "&m_array="+encodeURIComponent(string_array); 
     //
 
-  /// alert("Ativando srv_mostraus com poststr="+poststr)
+    /**  
+       /// alert("Ativando srv_mostraus com poststr="+poststr)
+   */
 
     xAJAX_mostraus.connect(srv_php, "POST", poststr, fndone_mostraus);  
     // 

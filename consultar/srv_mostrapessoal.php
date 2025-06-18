@@ -101,6 +101,7 @@ if( class_exists('funcoes') ) {
 $opcao_maiusc = strtoupper(trim($opcao));
 //
 //
+$opcaoup="";
 if( isset($opcao) ) {
     $opcao = trim($opcao);
     $opcaoup= strtoupper($opcao);
@@ -119,15 +120,14 @@ $arq_tab_consulta_pessoal="{$_SESSION["incluir_arq"]}includes/tb_cons_pessoal.ph
 echo "ERRO: srv_mostrapessoal/111  -->>  \$opcaoup = $opcaoup  <<-->>  \$dados = $dados  <br>"  
        ."  \$opcao_maiusc = $opcao_maiusc  \n "
        ."<br> \$dados_maiusc = $dados_maiusc <br /> \$opcao = $opcao ";
-exit();
- */
-
-
+       exit();
+*/
+       
 // 
 /**   if( strtoupper($opcao)!='LISTA' ) {
  *  if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {  
 */
-if( preg_match("/^ORDENAR|^BUSCA_LETRAI/ui",$opcao_maiusc) ) {
+if( preg_match("/^ORDENAR|^BUSCA_LETRAI|tod(a|o)s?/ui",$opcao_maiusc) ) {
     //
     $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
     $table_temporaria = $_SESSION["table_temporaria"];
@@ -337,11 +337,11 @@ exit();
    //
 
 
-
+/**  
 echo "ERRO: srv_mostrapessoal/336  -->> \$total_regs = $total_regs <<-->>  \$dados = $dados  -->> \$opcaoup = $opcaoup<br />\n "
-       ."<br> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
+       ."<br> \$opcaoup = $opcaoup  --  \$dados = $dados <-> \$num_fields = $num_fields <br /> \$td_menu = $td_menu \n";
 exit();
-
+  */
 
 
 
