@@ -13,46 +13,23 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-//
-/**     Verificar a Mensagem de Erro  
- *  Crucial ter as configurações de erro ativadas
-*/ 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-//  set IE read from page only not read from cache
-//  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-//
-// Defina os cabeçalhos de controle de cache
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
+/// IMPORTANTE: para acentuacao php
 header("Content-type: text/html; charset=utf-8");
-//
-/**  Colocar as datas do Cadastro do Usuario e a validade   */  
-date_default_timezone_set('America/Sao_Paulo');
-//
-//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-//  setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
-//
-//   Para acertar a acentuacao
-//  $_POST = array_map(utf8_decode, $_POST);
-/**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
-extract($_POST, EXTR_OVERWRITE);  
-//
-// Mensagens para enviar
+
+//// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
-$msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";  
-//
+$msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
+
 $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >";
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
-//
+
 $msg_final="</span></span>";
-//   FINAL - Mensagens para enviar
-//
-//  Verificando SESSION incluir_arq - 20180618
+///   FINAL - Mensagens para enviar
+
+///
+extract($_POST, EXTR_OVERWRITE); 
+///
+///  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
@@ -63,8 +40,8 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-//
-//   CASO OCORREU ERRO GRAVE
+///
+///   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -75,43 +52,38 @@ if( intval($n_erro)>0 ) {
 *     INICIANDO CONEXAO - PRINCIPAL
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-//
-/**   Variavel recebida do script/arquivo - inicia_conexao.php  */
-// 
-/**
- *  Conexao Mysqli
- */ 
-$conex = $_SESSION["conex"];
-//
+
+///  Variavel recebida do script/arquivo - inicia_conexao.php 
 $_SESSION["m_horiz"] = $array_projeto;
-//
-if( isset($_SESSION["usuario_conectado"]) ) {
-    $usuario_conectado = $_SESSION["usuario_conectado"];
-}  
-//
-//  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
-} 
-// $_SESSION['time_exec']=180000;
-//
-//  Mensagens
-//  include_once("../mensagens.php");
+///
+if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado = $_SESSION["usuario_conectado"];
+///
+
+///   Caminho da pagina local
+$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
+
+///  Titulo do Cabecalho - Topo
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+/// $_SESSION['time_exec']=180000;
+
+///  Mensagens
+///  include_once("../mensagens.php");
 include_once("{$incluir_arq}mensagens.php");
-//
+///
 //  Definindo valores nas variaveis
 if( isset($_SESSION["permit_pa"]) ) $permit_pa=$_SESSION["permit_pa"]; 
 ///
 ///  INCLUINDO CLASS - 
-//  INCLUINDO CLASS - 
 require_once("{$incluir_arq}includes/autoload_class.php");  
-if( class_exists('funcoes') ) {
-    $funcoes=new funcoes();
-}
-//
+$funcoes=new funcoes();
 $funcoes->usuario_pa_nome();
 $_SESSION["usuario_pa_nome"]=$funcoes->usuario_pa_nome;
-//
+/*
+$funcoes=new funcoes();
+$funcoes->usuario_pa_nome();
+$usuario_pa_nome=$funcoes->usuario_pa_nome;
+*/ 
+///
 /***
 *    Depois do arquivo inicia_conexao.php 
 *      - definido Desktop ou Mobile (aplicativo movel)
@@ -134,22 +106,25 @@ $estilocss = $_SESSION["estilocss"];
 <meta http-equiv="imagetoolbar" content="no">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>REXP - Consultar Projeto</title>
+<!--  <link type="text/css" href="<?php echo $host_pasta;?>css/estilo.css" rel="stylesheet"  />  -->
 <link type="text/css" href="<?php echo $host_pasta;?>css/<?php echo $estilocss;?>" rel="stylesheet" />
 <script  type="text/javascript" src="<?php echo $host_pasta;?>js/XHConn.js" ></script>
 <script type="text/javascript"  src="<?php echo $host_pasta;?>js/functions.js"  charset="utf-8" ></script>
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/responsiveslides.min.js" ></script>
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/resize.js" ></script>
+<!--  <script type="text/javascript"  src="../js/projeto_consultar.js" ></script>  -->
 <script  language="javascript"  type="text/javascript" >
-//
-/**  
- *         JavaScript Document
-*    Define o caminho HTTP  -  20250618
-*/  
+///
+///   JavaScript Document
+///
+/****  
+    Define o caminho HTTP  -  20180416
+***/  
 var raiz_central="<?php echo  $_SESSION["url_central"];?>";    
 ///
 charset="utf-8";
-//
-//  variavel quando ocorrer Erros
+///
+///  variavel quando ocorrer Erros
 var  msg_erro_ini='<span class="texto_normal" style="color: #000; text-align: center;overflow: auto;">';
 msg_erro_ini+='ERRO:&nbsp;<span style="color: #FF0000;">';
 //  variavel quando estiver Ccorreto
@@ -157,14 +132,13 @@ var  msg_ok_ini='<span class="texto_normal" style="color: #000; text-align: cent
 msg_ok_ini+='<span style="color: #FF0000;">';
 //
 var final_msg_ini='</span></span>';
-//
-//   function  acentuarAlerts - para corrigir acentuacao
-//  Criando a function  acentuarAlerts(mensagem)
+///
+///   function  acentuarAlerts - para corrigir acentuacao
+///  Criando a function  acentuarAlerts(mensagem)
 function acentuarAlerts(mensagem) {
-    //
-    //  Paulo Tolentino
-    /**   Usar dessa forma: alert(acentuarAlerts('teste de acentuação, essência, carência, âê.'));  */ 
-    //
+    ///  Paulo Tolentino
+    ///  Usar dessa forma: alert(acentuarAlerts('teste de acentuação, essência, carência, âê.'));
+    ///
     mensagem = mensagem.replace('á', '\u00e1');
     mensagem = mensagem.replace('à', '\u00e0');
     mensagem = mensagem.replace('â', '\u00e2');
@@ -214,13 +188,13 @@ function acentuarAlerts(mensagem) {
     mensagem = mensagem.replace('Ñ', '\u00d1');
     mensagem = mensagem.replace('&', '\u0026');
     mensagem = mensagem.replace('\'', '\u0027');
-    //
+    ///
     return mensagem;
-    //
+    ///
 }
-/**    Final  -- function acentuarAlerts(mensagem)   */
-//
-//  Function principal para aquivo AJAX
+/*************  Final  -- function acentuarAlerts(mensagem)   ************/
+///
+///  Function principal para aquivo AJAX
 function consulta_mostraproj(tcopcao,val,string_array) {
 //
 //  Selecionar os PROJETOS de acordo com a op??o (todos ou pelo campo desejado)
@@ -241,17 +215,18 @@ function consulta_mostraproj(tcopcao,val,string_array) {
     if( typeof(tcopcao)=="undefined" ) var tcopcao=""; 
     if( typeof(val)=="undefined" ) var val=""; 
     if( typeof(string_array)=="undefined" ) var string_array=""; 
-    //
-
+     /****  
+          Define o caminho HTTP    -  20180228
+     ***/  
+     var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
+     var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";           
     
-  alert("  projeto_consultar.php/123 -- INICIO --  tcopcao = "+tcopcao+" -  val = "+val+" - string_array = "+string_array);    
+ ///  alert("  projeto_consultar.php/123 -- INICIO --  tcopcao = "+tcopcao+" -  val = "+val+" - string_array = "+string_array);    
     
-    //
-    //  BOTAO - TODOS
+    /// BOTAO - TODOS
     var lcopcao = tcopcao.toUpperCase();
     var quantidade= lcopcao.search(/TODOS|TODAS/i);
     if( quantidade!=-1 ) {
-        //
         if( document.getElementById("ordenar") ) {
             ///  Incluido em 20180419
            //// var melement=document.getElementById("ordenar");
@@ -337,10 +312,9 @@ function consulta_mostraproj(tcopcao,val,string_array) {
           var srv_ret = oXML.responseText;
           var lnip = srv_ret.search(/Nenhum|ERRO:/i);
           
-  alert(" projeto_consultar/308 -->> lnip = "+lnip+" <<--- lcopcao = "+lcopcao+" -  val = "+val+" - string_array = "+string_array+" \r\n\r Recebendo resultado do srv_mostraproj ="+srv_ret);
+ ///  alert(" projeto_consultar/308 -->> lnip = "+lnip+" <<--- lcopcao = "+lcopcao+" -  val = "+val+" - string_array = "+string_array+" \r\n\r Recebendo resultado do srv_mostraproj ="+srv_ret);
           
           if( lnip==-1 ) {
-             //
             if( lcopcao=="DESCARREGAR" ) {
                  srv_ret = trim(srv_ret);
                  ///
@@ -432,7 +406,6 @@ function consulta_mostraproj(tcopcao,val,string_array) {
    ///      var poststr = "grupoproj="+encodeURIComponent(lcopcao)+"&val="+encodeURIComponent(val);    
            var poststr = "grupoproj="+encodeURIComponent(lcopcao)+"&val="+encodeURIComponent(val)+"&m_array="+encodeURIComponent(string_array); 
     }                                                             
-    //
     ///  Enviando dados para o arquivo AJAX
     xAJAX_mostraproj.connect(srv_php, "POST", poststr, fndone_mostraproj);   
     ///
@@ -441,18 +414,17 @@ function consulta_mostraproj(tcopcao,val,string_array) {
 ///
 </script>
 <?php
-//
-//     Alterado em 20170925   
-//   require_once("{$_SESSION["incluir_arq"]}includes/dochange.php");
+///     Alterado em 20170925   
+///   require_once("{$_SESSION["incluir_arq"]}includes/dochange.php");
 require("{$_SESSION["incluir_arq"]}includes/domenu.php");
-//
-//   Consultar - PROJETO
+
+////   Consultar - PROJETO
 if( isset($_GET["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_GET["m_titulo"];    
 } elseif( isset($_POST["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_POST["m_titulo"];      
 }  
-//
+///
 ?>
 </head>
 <body  id="id_body"  oncontextmenu="return false" onselectstart="return false"  ondragstart="return false" onkeydown="javascript: no_backspace(event);"   >
@@ -460,13 +432,12 @@ if( isset($_GET["m_titulo"]) ) {
 <div class="pagina_ini"  id="pagina_ini"  >
 <!-- Cabecalho -->
 <div id="cabecalho"  >
-<?php require_once("{$incluir_arq}script/cabecalho_rge.php");?>
+<?php include("{$incluir_arq}script/cabecalho_rge.php");?>
 </div>
 <!-- Final Cabecalho -->
 <!-- MENU HORIZONTAL -->
 <?php
-//
-require_once("{$incluir_arq}includes/menu_horizontal.php");
+include("{$incluir_arq}includes/menu_horizontal.php");
 //
 ?>
 <!-- Final do MENU  -->
@@ -480,24 +451,19 @@ require_once("{$incluir_arq}includes/menu_horizontal.php");
 </section>
 <!-- Final - Mensagem de ERRO e Titulo    -->
 <?php 
-//
 //     Verificano o PA - Privilegio de Acesso
-/**
- *   if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_SESSION["permit_pa"]<=$_SESSION['array_usuarios']['orientador'] ) ) {    
- */
+// if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_SESSION["permit_pa"]<=$_SESSION['array_usuarios']['orientador'] ) ) {    
 if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {    
-     //
      // Para incluir nas mensagens
-     //   include_once("../includes/msg_ok_erro_final.php");
+  //   include_once("../includes/msg_ok_erro_final.php");
      //   Definindo a variavel usuario para mensagem
-     //   $usuario="Orientador"; 
-     //   if( $_SESSION["permit_pa"]!=$array_pa['orientador'] ) $usuario="Usu&aacute;rio"; 
+  //   $usuario="Orientador"; 
+  //   if( $_SESSION["permit_pa"]!=$array_pa['orientador'] ) $usuario="Usu&aacute;rio"; 
      //      
 ?>
 <!-- Iniciando div - div_form  -->
 <div id="div_form" class="div_form" style="overflow:auto;" >
 <?php
-//
 //  CODIGO/USP
 $elemento=5; $elemento2=6;
 include("php_include/ajax/includes/conectar.php");     
@@ -507,15 +473,12 @@ $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 ///
 # Aqui está o segredo
-//  mysqli_query($conex,"SET NAMES 'utf8'");
-//  mysqli_query($conex,'SET character_set_connection=utf8');
-//  mysqli_query($conex,'SET character_set_client=utf8');
-//  mysqli_query($conex,'SET character_set_results=utf8');
-//
-/**   IMPORTANTE: para evitar problemas de acentuacao   */ 
-mysqli_set_charset($_SESSION["conex"],'utf8');
-//
-/**  Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
+mysql_query("SET NAMES 'utf8'");
+mysql_query('SET character_set_connection=utf8');
+mysql_query('SET character_set_client=utf8');
+mysql_query('SET character_set_results=utf8');
+///
+/* Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
       +-------------+--------+
       | descricao   | codigo |
       +-------------+--------+
@@ -529,39 +492,31 @@ mysqli_set_charset($_SESSION["conex"],'utf8');
 */
 ///  ALTERADO EM 20180607 -  Importante
 if( $permit_pa<$permit_aprovador ) {
-    //
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." b.cip in (select distinct cip FROM  $bd_2.anotador )"
         ."  order by b.titulo ";
-    //
     
 } elseif( $permit_pa<=$permit_orientador and $permit_pa>=$permit_aprovador ) {
-    //
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b WHERE a.codigousp=b.autor and "
         ." a.codigousp=".$usuario_conectado." order by b.titulo ";
-    //
 } else {
-    //
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." b.cip in (select distinct cip FROM  $bd_2.anotador "
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
-        //
 }
-$rst_cons_proj = mysqli_query($conex,$sqlcmd); 
+$result_cons_proj = mysql_query($sqlcmd); 
 ///                  
-if( ! $rst_cons_proj ) {
-    //
-    /**    die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));   */
-    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}";
-    $msg_erro .= "&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
+if( ! $result_cons_proj ) {
+ //   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
+    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}.&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
     echo $msg_erro;
     exit();
 }
-//  Nr. de Projetos Selecionados
-$nprojetos = mysqlI_num_rows($rst_cons_proj);
+///  Numero de Projetos Selecionados
+$nprojetos = mysql_num_rows($result_cons_proj);
 if( intval($nprojetos)<1 ) {
      ?>
      <script type="text/javascript">
@@ -576,8 +531,8 @@ if( intval($nprojetos)<1 ) {
      </script>     
    <?php
 } else {
-    //
-    //   Ordernar por:
+///
+///   Ordernar por:
 ?> 
 <div style="display: flex; "  >
  <div class='titulo_usp' style='margin-left: 30%; padding:2px 0 2px 2px; font-weight: bold;font-size:large;  '>
@@ -607,50 +562,37 @@ if( intval($nprojetos)<1 ) {
 <p class="titulo_usp" >Selecionar:</p>
 </div>
 <div  class="div_select_busca"  >
-<select  name="busca_proj" id="busca_proj"   class="Busca_letrai"  title="Selecione o Projeto"  
-       onchange="consulta_mostraproj('busca_proj',this.value)"  >
-    <!-- Identificacao do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
-<?php  
-//  
+<select  name="busca_proj" id="busca_proj"   class="Busca_letrai"  title="Selecione o Projeto"  onchange="javascript:  consulta_mostraproj('busca_proj',this.value)"  >
+    <!-- Identifica??o do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
+<?php    
 if( intval($nprojetos)<1 ) {
-      //
-      $usuario_pa_nome = $_SESSION["usuario_pa_nome"];
-      $opcao_msg="N&atilde;o existe Projeto vinculado a esse {$usuario_pa_nome}.";
-      echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$usuario_pa_nome}.</option>";
-      //
+      $opcao_msg="N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.";
+      echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
 } else {
-   //
-   $usuario_pa_nome = $_SESSION["usuario_pa_nome"];  
-   echo "<option value='' style='cursor:pointer;' >Projeto a ser acessado por esse {$usuario_pa_nome}</option>";
-   //
-   while( $linha=mysqli_fetch_array($rst_cons_proj) ) { 
-          //
+   ///  
+   echo "<option value='' style='cursor:pointer;' >Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]}</option>";
+   while( $linha=mysql_fetch_assoc($result_cons_proj) ) {
           $_SESSION["cip"]=$linha['cip'];
           $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
           $autor_nome = $linha['nome'];  
           $fonterec=htmlentities($linha['fonterec']);
           $fonteprojid=ucfirst(htmlentities($linha['fonteprojid']));         
-          //
-          /**   PARTES do Titulo do Projeto - dividindo em sete partes  */
+          //  PARTES do Titulo do Projeto - dividindo em sete partes 
           $partes_antes=6;          
           $projeto_titulo_parte="";
           $palavras_titulo = explode(" ",trim($linha['titulo']));
-          $cnt_words=count($palavras_titulo);
-          for( $i=0; $i<$cnt_words; $i++  ) {  
-               //
+          $contador_palavras=count($palavras_titulo);
+          for( $i=0; $i<$contador_palavras; $i++  ) {
                $projeto_titulo_parte .="{$palavras_titulo[$i]} ";
-               if( $i==$partes_antes and $cnt_words>$partes_antes  ) {
+               if( $i==$partes_antes and $contador_palavras>$partes_antes  ) {
                     $projeto_titulo_parte=trim($projeto_titulo_parte);
                     $tamanho_campo=strlen($projeto_titulo_parte);
                     if( $tamanho_campo>40  ) $projeto_titulo_parte.="...";
-         //      $projeto_titulo_parte .="<span style='font-weight: bold;font-size: large;' >...</span>";
+              //      $projeto_titulo_parte .="<span style='font-weight: bold;font-size: large;' >...</span>";
                     break;
                }
-               //
           }
-          /**  Final - for( $i=0; $i<$cnt_words; $i++  ) {  */
-          //
-          //  Definindo Titulo do Projeto
+          ///  Definindo Titulo do Projeto
           $titulo_projeto="";
           if( strlen(trim($fonterec))>=1  ) {
                $titulo_projeto.= $fonterec."/";
@@ -675,17 +617,9 @@ if( intval($nprojetos)<1 ) {
           }
           */
           ///           
-   } 
-   /**  Final - while( $linha=mysqli_fetch_array($rst_cons_proj) ) {   */
-   //     
-   //  Desativar variavel $rst_cons_proj   
-   if( isset($rst_cons_proj) )  {
-        //   mysql_free_result($rst_cons_proj); 
-        unset($rst_cons_proj);   
-   } 
-   //
+   }       
+   if( isset($result_cons_proj) ) mysql_free_result($result_cons_proj); 
 }            
-//
 ?>                
 </select>
 </div>
@@ -702,7 +636,6 @@ if( intval($nprojetos)<1 ) {
 } else {
    echo  "<p  class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";
 }
-//
 ?>
 </div>
 <!-- Final - div - div_form  -->
@@ -710,7 +643,7 @@ if( intval($nprojetos)<1 ) {
  <!-- Final Corpo -->
 <!-- Rodape -->
 <div id="rodape"  >
-<?php require_once("{$incluir_arq}includes/rodape_index.php"); ?>
+<?php include_once("{$incluir_arq}includes/rodape_index.php"); ?>
 </div>
 <!-- Final do  Rodape -->
 </div>

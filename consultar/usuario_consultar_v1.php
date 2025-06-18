@@ -417,7 +417,7 @@ $_SESSION["m_titulo"]="Usuário";
 <div class="pagina_ini"  id="pagina_ini"  >
 <!-- Cabecalho -->
 <div id="cabecalho"  >
-<?php include("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");?>
+<?php require_once("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");?>
 </div>
 <!-- Final Cabecalho -->
 <!-- MENU HORIZONTAL -->

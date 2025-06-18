@@ -1,44 +1,32 @@
 <?php
-//
 //  AJAX da opcao CONSULTAR  - Servidor PHP para mostrar PROJETO
 //
 //  LAFB&SPFB110908.1151
 #
-ob_start();  /** Evitando warning */
+ob_start(); /* Evitando warning */
 //
 //  Verificando se session_start - ativado ou desativado
 if(!isset($_SESSION)) {
    session_start();
 }
-/**     Verificar a Mensagem de Erro  
- *  Crucial ter as configurações de erro ativadas
-*/ 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-//  set IE read from page only not read from cache
+// set IE read from page only not read from cache
 //  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-//
-// Defina os cabeçalhos de controle de cache
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
-header("Content-type: text/html; charset=utf-8");
-//
-/**  Colocar as datas do Cadastro do Usuario e a validade   */  
-date_default_timezone_set('America/Sao_Paulo');
-//
-//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-//  setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
-//
-//   Para acertar a acentuacao
-//  $_POST = array_map(utf8_decode, $_POST);
-/**  extract: Importa variáveis para a tabela de símbolos a partir de um array   */ 
+header("Cache-Control","no-store, no-cache, must-revalidate");
+header("Cache-Control","post-check=0, pre-check=0");
+header("Pragma", "no-cache");
+
+//  header("content-type: application/x-javascript; charset=tis-620");
+//  header("content-type: application/x-javascript; charset=iso-8859-1");
+///  header("Content-Type: text/html; charset=ISO-8859-1",true);
+
+///  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
+setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
+///
+/// extract: Importa vari?veis para a tabela de s?mbolos a partir de um array 
 extract($_POST, EXTR_OVERWRITE);  
-//
-//  Mensagens para enviar
+///
+////  Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -46,30 +34,32 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-// Final - Mensagens para enviar
-//
-//  Verificando SESSION incluir_arq
-if( ! isset($_SESSION["incluir_arq"]) ) {  
-      //
-      /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;      */
-     $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
+/// Final - Mensagens para enviar 
+///
+$incluir_arq="";
+if( isset($_SESSION["incluir_arq"]) ) {
+    $incluir_arq=$_SESSION["incluir_arq"];  
+} else {
+    echo "Sessão incluir_arq não está ativa.";
+    exit();
+}
+///  DEFININDO A PASTA PRINCIPAL 
+/////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
+///  Verificando SESSION  pasta_raiz
+if( ! isset($_SESSION["pasta_raiz"]) ) {
+     $msg_erro .= utf8_decode("Sessão pasta_raiz não está ativa.").$msg_final;  
      echo $msg_erro;
      exit();
 }
-$incluir_arq=$_SESSION["incluir_arq"];
-//
-
-
-
-/**
-*    Caso NAO houve ERRO  
-*     INICIANDO CONEXAO - PRINCIPAL
-*/
-require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-//
-//  Conexao MYSQLI
-$conex = $_SESSION["conex"];
-//
+$pasta_raiz=$_SESSION["pasta_raiz"];
+///
+///  Definindo http ou https
+///  Definindo http ou https - IMPORTANTE
+///  Verificando protocolo do Site  http ou https   
+$_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
+$_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
+$raiz_central=$_SESSION["url_central"];
+///
 $opcao = $_POST['grupoproj'];
 ///
 if( isset($_SESSION["usuario_conectado"]) ) {
@@ -85,73 +75,40 @@ include_once("{$incluir_arq}mensagens.php");
 //
 $elemento=5; $elemento2=6;
 include("php_include/ajax/includes/conectar.php");     
-//
 require_once('php_include/ajax/includes/tabela_pa.php');
 if( isset($_SESSION["array_pa"]) ) $array_pa=$_SESSION["array_pa"]; 
 //
 //  INCLUINDO CLASS - 
-require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
-if( class_exists('funcoes') ) {
-    $funcoes=new funcoes();
-}
-//      
+require_once("{$incluir_arq}includes/autoload_class.php");  
+$funcoes=new funcoes();
+////      
 $opcao_maiusc = strtoupper(trim($opcao));
-//
-//  Arquivo da tabela de consulta projeto - importante
+
+///  Arquivo da tabela de consulta projeto - importante
 $arq_tab_consulta_projeto="{$incluir_arq}includes/tabela_consulta_projeto.php";
-//
-
-
-/** 
-echo "ERRO: srv_mostraprojeto/103  -->> \$opcao_maiusc = $opcao_maiusc  <br>"
-        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
-exit();
- */
-
-
-
-//  UPLOAD -  do Servidor para maquina local
-//  if( $opcao_maiusc=="DESCARREGAR" )  {
-if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) {
-     //
-     /**   Define o tempo m?ximo de execu??o em 0 para as conex?es lentas  */
-     //  
-     set_time_limit(0);
-     $post_array = array("grupoproj","val","m_array");
-     $cntall = count($post_array);
-
-
-
-echo "ERRO: srv_mostraprojeto/121  -->>  \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
-        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
-exit();
-
-
-
-
-     for( $i=0; $i<$cntall; $i++ ) {
-          //
-          $xyz = $post_array[$i];  
-          /**   Verificar strings com simbolos: # ou ,   para transformar em array PHP  */
-          // 
-          $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
-          if( isset($_POST[$xyz]) ) {
-               //
-               $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
-               if( $pos1 === false ) {
-                    //  $$xyz=trim($_POST[$xyz]);
-                    //   Para acertar a acentuacao - utf8_encode
-                    // $$xyz = utf8_decode(trim($_POST[$xyz])); 
-                    $$xyz = trim($_POST[$xyz]); 
-               } else {
-                    $$xyz = explode($div_array_por,$_POST[$xyz]);   
-               }
-               //
-          }
-          /**  Final - if( isset($_POST[$xyz]) ) { */
-          //
+///
+///  UPLOAD -  do Servidor para maquina local
+if( $opcao_maiusc=="DESCARREGAR" )  {
+    // Define o tempo m?ximo de execu??o em 0 para as conex?es lentas
+    set_time_limit(0);
+    $post_array = array("grupoproj","val","m_array");
+    for( $i=0; $i<count($post_array); $i++ ) {
+        $xyz = $post_array[$i];
+        //  Verificar strings com simbolos: # ou ,   para transformar em array PHP
+        $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
+        if ( isset($_POST[$xyz]) ) {
+            $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
+            if ( $pos1 === false ) {
+                ///  $$xyz=trim($_POST[$xyz]);
+                ///   Para acertar a acentuacao - utf8_encode
+               /// $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = trim($_POST[$xyz]); 
+            } else {
+                 $$xyz = explode($div_array_por,$_POST[$xyz]);   
+            }
+        }
     }    
-    /**  Final - for( $i=0; $i<$cntall; $i++ ) { */
+    ///
     ///  Verificando Array (usuario_conectado, projeto, autor_codigo)
     if( sizeof($m_array)==3 ) {
          $usuario_conectado=$m_array[0];
@@ -166,7 +123,6 @@ exit();
     $host  = $protocolo."://".$_SERVER['HTTP_HOST']; 
     ///
     setlocale(LC_ALL,'pt_BR.UTF8');
-    //
     mb_internal_encoding('UTF8'); 
     mb_regex_encoding('UTF8');
     ///  Arquivo do Projeto
@@ -180,7 +136,7 @@ exit();
     *     Acentuacao e espacos no arquivo PDF  --- ALterado em 20180613 
     *            utilizando  utf8_encode       
     */
-    // if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
+    //// if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
     $dir_arq=utf8_decode("{$pasta}$arquivo");
     
     ///  Funcionando 100%    
@@ -195,48 +151,28 @@ exit();
         $_SESSION["pasta_arq_projeto"]=$pasta;
         ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_projeto"]}%#sepa%#rar%#{$_SESSION["arquivo_projeto"]}"; 
-    } 
-    // 
+    }  
     exit();     
-    //
-}  
-/** Final - if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) { */
-//
-//  Mostrar todas as anotacoes de um Projeto
-/**  if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) { */
-if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {      
-     //
-     // Definindo SESSION
-     if( ! isset($_SESSION['selecionados']) ) {
-            $_SESSION['selecionados']=""; 
-     } 
-     //
-     //  Criando uma tabela Temporaria para consultar PROJETO
-     $_SESSION['table_consultar_projeto'] = "$bd_2.temp_consultar_projeto";
-     $table_consultar_projeto = $_SESSION['table_consultar_projeto'];  
-
-
-echo "ERRO: srv_mostraprojeto/205  -->>  \$opcao_maiusc = $opcao_maiusc  <br>"
-        ."   -->> \$table_consultar_projeto = $table_consultar_projeto <<-->>  \$bd_1 = $bd_1  <<-- <br>"
-        ."  -->>   \$bd_2 = $bd_2  <br />\n";
-exit();
-
-
-
-
-        $sql_temp = "DROP TABLE IF EXISTS   ".$table_consultar_projeto."    ";  
+}
+////  Mostrar todas as anotacoes de um Projeto
+if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
+         /// Definindo SESSION
+         if( ! isset($_SESSION['selecionados']) ) $_SESSION['selecionados']="";
+        ///  Criando uma tabela Temporaria para consultar PROJETO
+        $_SESSION['table_consultar_projeto'] = "$bd_2.temp_consultar_projeto";
+        $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION['table_consultar_projeto']."    ";  
         $drop_result = mysql_query($sql_temp); 
         if( ! $drop_result  ) {
-            // die('ERRO: Falha consultando a tabela '.$table_consultar_projeto.' - '.mysql_error());         
-            /*  $msg_erro .= "Removendo a Tabela {$table_consultar_projeto} - db/mysql:&nbsp; ".mysql_error();
+            // die('ERRO: Falha consultando a tabela '.$_SESSION['table_consultar_projeto'].' - '.mysql_error());         
+            /*  $msg_erro .= "Removendo a Tabela {$_SESSION['table_consultar_projeto']} - db/mysql:&nbsp; ".mysql_error();
             echo $msg_erro.$msg_final;  */            
-            echo $funcoes->mostra_msg_erro("Removendo a Tabela {$table_consultar_projeto} -&nbsp;db/mysql:&nbsp;".mysql_error());            
+            echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION['table_consultar_projeto']} -&nbsp;db/mysql:&nbsp;".mysql_error());            
             exit();       
         }
         $_SESSION["selecionados"]=""; $where_cond="";
         ///  Selecionar os Projetos de acordo com o opcao - Alterado em 20180418
         /***
-        $sqlcmd ="CREATE TABLE  IF NOT EXISTS ".$table_consultar_projeto."   ";
+        $sqlcmd ="CREATE TABLE  IF NOT EXISTS ".$_SESSION['table_consultar_projeto']."   ";
         $sqlcmd .= "SELECT a.numprojeto as nr, a.titulo as Titulo, "
                  ." b.nome as Autor, a.cip as Detalhes, "
                  ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as Data, "
@@ -245,7 +181,7 @@ exit();
         ***/
         /// Contador de linhas - resultado do Select/Mysql
         mysql_query("SET @xnr:=0");
-        $sqlcmd ="CREATE TABLE IF NOT EXISTS ".$table_consultar_projeto."   ";
+        $sqlcmd ="CREATE TABLE IF NOT EXISTS ".$_SESSION['table_consultar_projeto']."   ";
         $sqlcmd .= "SELECT @xnr:=@xnr+1 as nr,a.numprojeto as np, a.titulo as Titulo, "
                  ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as Data, "
                  ." a.autor as codautor, b.nome as Autor, a.cip as Detalhes, "
@@ -292,14 +228,14 @@ exit();
         $result_consult_projeto = mysql_query($sqlcmd);
         if( ! $result_consult_projeto ) {
             /// die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error());
-            /* $msg_erro .= "&nbsp;Criando a Tabela  {$table_consultar_projeto} - db/mysql:&nbsp; ";
+            /* $msg_erro .= "&nbsp;Criando a Tabela  {$_SESSION['table_consultar_projeto']} - db/mysql:&nbsp; ";
             echo  $msg_erro.mysql_error().$msg_final; */
-             echo $funcoes->mostra_msg_erro("Criando a Tabela  {$table_consultar_projeto}&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());                        
+             echo $funcoes->mostra_msg_erro("Criando a Tabela  {$_SESSION['table_consultar_projeto']}&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());                        
              exit();
         }       
         ////
         ///  Selecionando todos os registros da Tabela temporaria de consulta Anotacoes
-        $query2 = "SELECT * from  ".$table_consultar_projeto."  ";
+        $query2 = "SELECT * from  ".$_SESSION['table_consultar_projeto']."  ";
         $resultado_outro = mysql_query($query2);                                    
         if( ! $resultado_outro ) {
              //  die("ERRO: Selecionando os Projetos - mysql =  ".$cip.mysql_error());  
@@ -345,8 +281,7 @@ exit();
         require_once("{$arq_tab_consulta_projeto}");  
         if( isset($cip) ) unset($cip);
         ///
-} elseif( $opcao_maiusc=="DETALHES" )  {  
-     //
+}  elseif( $opcao_maiusc=="DETALHES" )  {
     //  MUITO IMPORTANTE PASSAR A VARIAVEL val para cip
     $cip=$val;
     //  Selecionando Projeto
