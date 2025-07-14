@@ -119,6 +119,16 @@ if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) {
      set_time_limit(0);
      $post_array = array("grupoproj","val","m_array");
      $cntall = count($post_array);
+
+
+
+echo "ERRO: srv_mostraprojeto/121  -->>  \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
+        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
+exit();
+
+
+
+
      for( $i=0; $i<$cntall; $i++ ) {
           //
           $xyz = $post_array[$i];  
@@ -142,42 +152,29 @@ if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) {
           //
     }    
     /**  Final - for( $i=0; $i<$cntall; $i++ ) { */
-    //
-    /**   Verificando Array (usuario_conectado, projeto, autor_codigo)  */
+    ///  Verificando Array (usuario_conectado, projeto, autor_codigo)
     if( sizeof($m_array)==3 ) {
          $usuario_conectado=$m_array[0];
          $pasta_projeto=$m_array[1];
          $cod_autor_proj=$m_array[2];
     }   
-    //
-    // $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];
+    ///
+    /// $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];
     $pasta = "{$_SESSION["incluir_arq"]}doctos_img/A".$cod_autor_proj;   
     $pasta .= "/".$pasta_projeto."/";             
-    //
-
-
-/**  
-echo "ERRO: srv_mostraprojeto/160  -->> \$pasta = $pasta <br>  \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
-        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
-exit();
- */
-
-
-
-
+    ///
     $host  = $protocolo."://".$_SERVER['HTTP_HOST']; 
-    //
+    ///
     setlocale(LC_ALL,'pt_BR.UTF8');
     //
     mb_internal_encoding('UTF8'); 
     mb_regex_encoding('UTF8');
-    //
-    //  Arquivo do Projeto
+    ///  Arquivo do Projeto
     header('Content-Type: text/html; charset=utf-8');
     if( ! ini_set('default_charset', 'utf-8') ) {
-          ini_set('default_charset', 'utf-8');
+         ini_set('default_charset', 'utf-8');
     } 
-    //
+    ////
     $arquivo = trim($val);
     /****
     *     Acentuacao e espacos no arquivo PDF  --- ALterado em 20180613 
@@ -186,16 +183,6 @@ exit();
     // if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
     $dir_arq=utf8_decode("{$pasta}$arquivo");
     //
-
-
-
-echo "ERRO: srv_mostraprojeto/192  -->>  \$dir_arq = $dir_arq <<-- <br> \$pasta = $pasta <br>  \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
-        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
-exit();
-
-
-
-
     //  Funcionando 100%    
     //  if( ! file_exists("{$pasta}$arquivo") ) {
     if( ! file_exists("$dir_arq") ) {    
@@ -308,7 +295,7 @@ if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {
           $sqlcmd .= $where_cond." order by a.cip desc";    
      }
      //
-     //  Execuntando o mysqli_query
+     //  Execuntando o mysql_query
      $result_consult_projeto = mysqli_query($conex,$sqlcmd);
      if( ! $result_consult_projeto ) {
             //
@@ -364,7 +351,7 @@ exit();
 
 
         // 
-        //  $projeto_titulo = mysqli_result($resultado_outro,0,"Titulo");
+        //  $projeto_titulo = mysql_result($resultado_outro,0,"Titulo");
         $td_menu = $num_fields+1;   
         //
         $_SESSION['total_regs']==1 ? $lista_usuario=" <b>1</b> Projeto " : $lista_usuario="<b>".$_SESSION['total_regs']."</b> Projetos ";
@@ -411,113 +398,70 @@ exit();
         ///
 } elseif( $opcao_maiusc=="DETALHES" )  {  
      //
-     /**   IMPORTANTE: essa parte abaixo para acentuacao  PHP/MySQL - 20250623   */
-     ini_set('default_charset','utf8');
-     mysqli_set_charset($_SESSION["conex"],'utf8');
-     //
-     //  MUITO IMPORTANTE PASSAR A VARIAVEL val para cip
-     $cip=$val;
-     //  Selecionando Projeto
+    //  MUITO IMPORTANTE PASSAR A VARIAVEL val para cip
+    $cip=$val;
+    //  Selecionando Projeto
      $sqlcmd = "SELECT a.numprojeto,a.titulo as  titulo_projeto,a.autor as autor_projeto_cod, "
                 ." a.coresponsaveis, b.nome as autor_projeto_nome,  "
                 ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto, a.relatproj as Arquivo "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
-     //            
-     $rsqlp = mysqli_query($conex,$sqlcmd);
-     if( ! $rsqlp ) {
+     ///           
+     $resultado_projeto = mysqli_query($conex,$sqlcmd);
+     if( ! $resultado_projeto ) {
           /*  $msg_erro .= "Selecionando Projeto  db/mysql - ".mysqli_error($_SESSION["conex"]).$msg_final;            
           echo  $msg_erro;  */
           echo $funcoes->mostra_msg_erro("Selecionando o Projeto -&nbsp;db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]));
           exit();
      }         
-     //
-     //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysqli_fetch_array - IMPORTANTE
-     $array_nome=mysqli_fetch_array($rsqlp);
+     //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array - IMPORTANTE
+     $array_nome=mysql_fetch_array($resultado_projeto);
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }                  
-     //
-     //  Desativar variavel 
-     if( isset($rsqlp) ) {
-          //
-          //   mysqli_free_result($rsqlp);     
-          unset($rsqlp);     
-     }  
-     /**  Final - if( isset($rsqlp) ) { */
-     //
+     if( isset($resultado_projeto) ) mysql_free_result($resultado_projeto);     
+     ////
      $coresp_dados="";
-
-/**  
-echo "ERRO: srv_mostraprojeto/434  -->> \$array_nome count = ".count($array_nome)."   <<--->>  \$coresponsaveis = $coresponsaveis  <br>";
-exit();
- */
-
-
-     /**  Caso variavel IGUAL ou MAIOR que 1  */
-     if( intval($coresponsaveis)>=1 ) {
-          //
+     if( $coresponsaveis>=1 ) {
          if( $coresponsaveis==1 ) $tit_coresp="Corespons&aacute;vel";
-         if( $coresponsaveis>1 ) $tit_coresp="Corespons&aacute;veis";  
-         //
-         /**   Precisa iniciar zerando variavel @contador_regs  */
+         if( $coresponsaveis>1 ) $tit_coresp="Corespons&aacute;veis";
+         // Precisa iniciar zerando variavel @contador_regs
          $result_set=mysqli_query($conex,"set @contador_regs=0;");
          if( ! $result_set ) {
-              /**   $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
-              echo  $msg_erro;  
-              */
-              $terr="set @contador_regs=0; -&nbsp;db/mysqli:&nbsp;";
-              echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));              
+              /*  $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
+              echo  $msg_erro;  */
+              
+              echo $funcoes->mostra_msg_erro("set @contador_regs=0; -&nbsp;db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]));              
               exit();
          }         
-         //
-         /**   IMPORTANTE: essa parte abaixo para acentuacao  PHP/MySQL - 20250623   */
-         ini_set('default_charset','utf8');
-         mysqli_set_charset($_SESSION["conex"],'utf8');
-         //
-         /**  SELECT/MYSQLI   */
          $result_coresp=mysqli_query($conex,"SELECT @contador_regs:=@contador_regs+1 as n, "
                    ." b.nome as coresponsavel_nome FROM $bd_2.corespproj  a, $bd_1.pessoa b "
                    ." WHERE a.projetoautor=$autor_projeto_cod and a.projnum=$numprojeto and "
                    ." b.codigousp=a.coresponsavel order by b.nome ");
-         //
+         ///
          if( ! $result_coresp ) {
-              /**   $msg_erro .= "Select tabelas corespproj e pessoa -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
-              *    echo  $msg_erro;  
-              */                
-              $terr="Select tabelas corespproj e pessoa -&nbsp;db/mysqli:&nbsp;";
-              echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+              /*  $msg_erro .= "Select tabelas corespproj e pessoa -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
+              echo  $msg_erro;  */                
+              echo $funcoes->mostra_msg_erro("Select Tabelas corespproj e pessoa - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
               exit();
          }   
-         // 
+         ///// 
          $coresp_dados .="<div style='text-align:center;font-size:small; overflow: auto;margin:0;'>";
          $coresp_dados .="<p style='text-align:center;font-size:small;font-weight:bold;margin:0;' >"
                         ."$tit_coresp:&nbsp;</p>";                              
          ///               
          $nregs_coresp = mysqli_num_rows($result_coresp);
          for( $nc=0; $nc<$nregs_coresp; $nc++ ) {
-              //
-              //  $n=mysqli_result($result_coresp,$nc,"n");
-              $n=$nc+1;
-              $coresponsavel_nome=mysqli_result($result_coresp,$nc,"coresponsavel_nome");
-              $coresp_dados .="<span style='text-align:center;font-size:small;' >"
+           //  $n=mysql_result($result_coresp,$nc,"n");
+             $n=$nc+1;
+             $coresponsavel_nome=mysql_result($result_coresp,$nc,"coresponsavel_nome");
+             $coresp_dados .="<span style='text-align:center;font-size:small;' >"
                      ."$n)&nbsp;$coresponsavel_nome</span><br>";                                              
-              // 
          }                           
          $coresp_dados .="</div>";                        
          //
      }
-     //         
-     
-
-     /**   
-echo "ERRO: srv_mostraprojeto/490  -->> \$coresp_dados = $coresp_dados  <<--->>  \$coresponsaveis = $coresponsaveis  <br>";
-exit();
-    */
-     
-
-
-     //  
-     /**   Selecionando as ANOTACOES do PROJETO    */    
+     //          
+     //  Selecionando as ANOTACOES do PROJETO        
     $sqlcmd = "SELECT  a.numero as numero_anotacao, a.titulo as titulo_anotacao,  "
                 ." concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anotacao "
                 ."  FROM $bd_2.anotacao a, $bd_1.pessoa b "
@@ -525,46 +469,35 @@ exit();
      ///                          
      $resultado_anotacao = mysqli_query($conex,$sqlcmd);
      if( ! $resultado_anotacao ) {
-          /**  
+          /*
           $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto."  db/mysql - ".mysqli_error($_SESSION["conex"]).$msg_final;
-          echo $msg_erro; 
-          */
-          $terr="Selecionando Anota&ccedil;&otilde;es do Projeto: {$numprojeto} -&nbsp;db/mysqli:&nbsp;";
-          echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));          
+          echo $msg_erro;  */
+          echo $funcoes->mostra_msg_erro("Selecionando Anota&ccedil;&otilde;es do Projeto: {$numprojeto} -&nbsp;db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]));          
           exit();
-     }     
-     //
-     /**   Definindo os nomes dos campos recebidos do MYSQL SELECT - mysqli_fetch_array  */    
-     if( isset($array_nome) ) {
-         unset($array_nome);  
-     } 
-     //
-     //  Nr. de Registros 
+     }         
+     //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array
+     if( isset($array_nome) ) unset($array_nome);
      $num_anotacoes = mysqli_num_rows($resultado_anotacao);
      $anotacoes ="" ;
-
-
-/**  
-echo "ERRO: srv_mostraprojeto/530  -->> \$coresp_dados = $coresp_dados  <<--->>  \$coresponsaveis = $coresponsaveis  <br>"
-         ." \$num_anotacoes =<b>  $num_anotacoes </b> ";
-exit();
- */
-     
-
-
      if( intval($num_anotacoes)>=1  ) {
-          //
           $anotacoes ="<div style='width: 100%; overflow: auto;padding-top:2px;'  >";
-          //
+         /*  Mostra Anotacao por Anotacao - Desativado
+          while( $reg_anot=mysql_fetch_array($resultado_anotacao) ) {
+              // Anotacao do Projeto                            
+              $anotacoes .="<p style='text-align:center;font-size: medium;'>"
+                 ."<b>Anota&ccedil;&atilde;o</b>:&nbsp;".$reg_anot['numero_anotacao']."&nbsp;-&nbsp;"
+                 ."<b>Data da Anota&ccedil;&atilde;o</b>:&nbsp;".$reg_anot['data_anotacao']."</p>";
+              $anotacoes .="<div style='text-align:center;font-size: medium; overflow: auto;'>"
+                 ."<b>T&iacute;tulo da Anota&ccedil;&atilde;o</b>:<br>"                
+                 .$reg_anot['titulo_anotacao']."</div>";                                     
+          }
+          */
           $anotacoes .="<p style='text-align:center;font-size: small;padding-top:2px;' >";
           $anotacoes .="Total de Anota&ccedil;&otilde;es desse Projeto:&nbsp;";
           $anotacoes .="<span style='font-weight:bold;' >$num_anotacoes</span></p>";
           $anotacoes .="</div>" ;
-          //
-     }  
-     /**  Final -   if( intval($num_anotacoes)>=1  ) {  */
-     //
-     //   Projeto
+     }
+     ///   Projeto
      $confirmar0 ="<div class='confirmar0' >";
      $confirmar0 .="<p style='text-align:center;font-size: medium;'>"
                ."<b>Projeto $numprojeto </b><br>"
@@ -576,28 +509,25 @@ exit();
      $confirmar0 .="<p style='text-align:center;font-size:small;padding-top:1em;'>"
                     ."<b>Data in&iacute;cio do Projeto</b>:&nbsp;$data_projeto </p>";
      $confirmar0 .="<p style='text-align:center;font-size: small;  margin-top:4px;'>"
-                    ."<b>Arquivo do Projeto</b>:&nbsp;$Arquivo</p>";      
-     //
+                    ."<b>Arquivo do Projeto</b>:&nbsp;$Arquivo</p>";  
+                    
      $confirmar0 .=$coresp_dados."<br/>";
      $confirmar0 .=$anotacoes;  
-     //
-     //  Verifica qual Navegador utilizado 
+     ///
+     ///  Verifica qual é o navegador
      if( isset($navegador) ) {
-          //
-          $confirmar1 =$confirmar0;
-          if( strtoupper($navegador)!="CHROME" ) {
-                $confirmar1 .="<div style='width: 100%; text-align: center;'>";                                         
-                $confirmar1 .="<button class='botao3d_menu_vert'  style='text-align:center; cursor: pointer;'  " 
+            $confirmar1 =$confirmar0;
+            if( strtoupper($navegador)!="CHROME" ) {
+                  $confirmar1 .="<div style='width: 100%; text-align: center;'>";                                         
+                  $confirmar1 .="<button class='botao3d_menu_vert'  style='text-align:center; cursor: pointer;'  " 
                                ." onclick='javascript: limpar_form();' >Ok";                                  
-                $confirmar1 .="</button></div>";                  
-                //
-          }
-          //                                       
-          echo $confirmar1."</div>";               
+                  $confirmar1 .="</button></div>";                  
+            }
+            ////                                       
+           echo $confirmar1."</div>";               
      } else {
-          //  Precisa da variavel navegador - que indentifica
-          echo $funcoes->mostra_msg_erro("Faltando a variavel navegador.");
-          //
+            ///  Precisa da variavel navegador - que indentifica
+            echo $funcoes->mostra_msg_erro("Faltando a variavel navegador.");
      }    
      ///
 }
