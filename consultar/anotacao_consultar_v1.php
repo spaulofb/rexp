@@ -569,16 +569,7 @@ if( $permit_pa<$permit_aprovador ) {
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
 }
 //  $result = mysql_query($sqlcmd); 
-//  $result = mysqli_query($conex,$sqlcmd); 
-
-
-
-$stmt = mysqli_prepare($conex, $sqlcmd);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-
-
+$result = mysqli_query($conex,$sqlcmd); 
 //
 //  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
@@ -593,15 +584,7 @@ if( ! $result ) {
 }
 //  Numero de Projetos Selecionados
 //  $nprojetos = mysql_num_rows($result);
-$nprojetos = mysqli_num_rows($result);
-//
-
-/**    echo "LINHA/589  -->>  \$nprojetos = $nprojetos ";
-  *   exit();
- */
-
-
-
+$nprojetos = mysqlI_num_rows($result);
 if( intval($nprojetos)<1 ) {
      ?>
      <script type="text/javascript">
@@ -629,72 +612,62 @@ if( intval($nprojetos)<1 ) {
               echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
         } else {
               echo "<option value='' >Selecione o Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
-              //
-              //  while( $linha=mysql_fetch_assoc($result) ) {
-              while( $linha = mysqli_fetch_assoc($result)) {
-                     //
-                     // seu código
-                     $_SESSION["cip"]=$linha['cip'];
-                     $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
-                     $autor_nome = $linha['nome'];
-                     /**  Desativado por nao ter valores nos campos fonterec e fonteprojid
+              ////
+              while( $linha=mysql_fetch_assoc($result) ) {
+                        $_SESSION["cip"]=$linha['cip'];
+                        $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
+                        $autor_nome = $linha['nome'];
+                        /*  Desativado por nao ter valores nos campos fonterec e fonteprojid
                         $titulo_projeto = htmlentities($linha['fonterec'])."/".ucfirst(htmlentities($linha['fonteprojid']))
-                                          .": ".$linha['titulo'];   
-                    */
-                    $fonterec=htmlentities($linha['fonterec']);
-                    $fonteprojid=  ucfirst(htmlentities($linha['fonteprojid']));         
-                    //  PARTES do Titulo do Projeto - dividindo em sete partes 
-                    $partes_antes=6;
-                    $projeto_titulo_parte="";
-                    $palavras_titulo = explode(" ",trim($linha['titulo']));
-                    $contador_palavras=count($palavras_titulo);
-                    for( $i=0; $i<$contador_palavras; $i++  ) {
-                         $projeto_titulo_parte .="{$palavras_titulo[$i]} ";
-                         if( $i==$partes_antes and $contador_palavras>$partes_antes  ) {
-                             $projeto_titulo_parte=trim($projeto_titulo_parte);
-                             $tamanho_campo=strlen($projeto_titulo_parte);
-                             if( $tamanho_campo>40  ) $projeto_titulo_parte.="...";
-                             //  $projeto_titulo_parte .="<span style='font-weight: bold;font-size: large;' >...</span>";
-                             break;
+                                          .": ".$linha['titulo'];   */
+                        $fonterec=htmlentities($linha['fonterec']);
+                        $fonteprojid=  ucfirst(htmlentities($linha['fonteprojid']));         
+                         ///  PARTES do Titulo do Projeto - dividindo em sete partes 
+                         $partes_antes=6;
+                         $projeto_titulo_parte="";
+                         $palavras_titulo = explode(" ",trim($linha['titulo']));
+                         $contador_palavras=count($palavras_titulo);
+                         for( $i=0; $i<$contador_palavras; $i++  ) {
+                               $projeto_titulo_parte .="{$palavras_titulo[$i]} ";
+                               if( $i==$partes_antes and $contador_palavras>$partes_antes  ) {
+                                    $projeto_titulo_parte=trim($projeto_titulo_parte);
+                                    $tamanho_campo=strlen($projeto_titulo_parte);
+                                    if( $tamanho_campo>40  ) $projeto_titulo_parte.="...";
+                                  ///  $projeto_titulo_parte .="<span style='font-weight: bold;font-size: large;' >...</span>";
+                                    break;
+                               }
                          }
-                         //
-                    }
-                    /**  Final - for( $i=0; $i<$contador_palavras; $i++  ) {  */
-                    //
-                    //  Definindo o Titulo do Projeto
-                    $titulo_projeto="";
-                    if( strlen(trim($fonterec))>=1  ) {
-                        $titulo_projeto.= $fonterec."/";
-                    }
-                    if( strlen(trim($fonteprojid))>=1  ) {
-                        $titulo_projeto.= $fonteprojid.": ";
-                    }
-                    $titulo_projeto .= trim($projeto_titulo_parte);                    
-                    //  Usando esse option para incluir espaco sobre linhas
-                    //  echo  "<option value='' disabled ></option>";                  
-                    /** 
+                         ///  Definindo o Titulo do Projeto
+                         $titulo_projeto="";
+                         if( strlen(trim($fonterec))>=1  ) {
+                               $titulo_projeto.= $fonterec."/";
+                         }
+                         if( strlen(trim($fonteprojid))>=1  ) {
+                              $titulo_projeto.= $fonteprojid.": ";
+                         }
+                         $titulo_projeto .= trim($projeto_titulo_parte);                    
+                        ///  Usando esse option para incluir espaco sobre linhas
+                        ///  echo  "<option value='' disabled ></option>";                  
+                        /*
                         echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >"
                                .utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
-                    */
-                    echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >";
-                    /**  IMPORTANTE: Detectar codificacao  de caracteres  - 20171005   */
-                    $codigo_caracter=mb_detect_encoding($titulo_projeto);
-                    //  if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-                    // echo utf8_decode(htmlentities($titulo_projeto))."&nbsp;&nbsp;</option>";
-                    //     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
-                    echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-                    // echo utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";  ///
-                    /***
+                        */
+                        echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >";
+                        /* IMPORTANTE: Detectar codificacao  de caracteres  - 20171005   */
+                        $codigo_caracter=mb_detect_encoding($titulo_projeto);
+                      ///  if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
+                            //// echo utf8_decode(htmlentities($titulo_projeto))."&nbsp;&nbsp;</option>";
+                           ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
+                                echo  $titulo_projeto."&nbsp;&nbsp;</option>";
+                             /// echo utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";  ///
+                             /***
                         } else {
                             echo  $titulo_projeto."&nbsp;&nbsp;</option>";                                  
                         }
-                    **/
-                    //    
+                        ***/
+                        ////    
               }
-              /**  Final - while( $linha=mysql_fetch_assoc($result) ) {   */
-              //
         }
-        //
         ?>
         </select>
 </div>
