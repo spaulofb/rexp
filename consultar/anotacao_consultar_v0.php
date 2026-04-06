@@ -35,7 +35,6 @@ extract($_POST, EXTR_OVERWRITE);
 ///  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
-    //
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
     ///  echo $msg_erro;
     ///  exit();
@@ -528,16 +527,10 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
 <?php 
 /// Selecionando o Projeto do Orientador/Usuario
 # Aqui está o segredo
-/**
-*   mysql_query("SET NAMES 'utf8'");
-*   mysql_query('SET character_set_connection=utf8');
-*   mysql_query('SET character_set_client=utf8');
-*   mysql_query('SET character_set_results=utf8');
-*/
-//
-/**   IMPORTANTE: para evitar problemas de acentuacao   */ 
-mysqli_set_charset($_SESSION["conex"],'utf8');
-//
+mysql_query("SET NAMES 'utf8'");
+mysql_query('SET character_set_connection=utf8');
+mysql_query('SET character_set_client=utf8');
+mysql_query('SET character_set_results=utf8');
 ///
 /* Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
       +-------------+--------+
@@ -568,23 +561,18 @@ if( $permit_pa<$permit_aprovador ) {
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-//  $result = mysql_query($sqlcmd); 
-$result = mysqli_query($conex,$sqlcmd); 
-//
-//  Verificando se houve erro no Select/MySql                  
+$result = mysql_query($sqlcmd); 
+///  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
-    //
     //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
     /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error();
     echo $msg_erro.$msg_final;  */            
     //  Parte do Class                
     echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error());
     exit();                  
-    //
 }
-//  Numero de Projetos Selecionados
-//  $nprojetos = mysql_num_rows($result);
-$nprojetos = mysqlI_num_rows($result);
+///  Numero de Projetos Selecionados
+$nprojetos = mysql_num_rows($result);
 if( intval($nprojetos)<1 ) {
      ?>
      <script type="text/javascript">

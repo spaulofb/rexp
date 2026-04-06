@@ -299,7 +299,7 @@ require_once("{$_SESSION["incluir_arq"]}includes/menu_horizontal_index.php");
 <!-- Iniciar o Programa -->
 <!--  Final do Iniciar Programa -->
 <header class="header_title"  >
-    <p><?php echo htmlentities(utf8_decode("Sistemas Técnicos Administrativos - Registro de Anotações (SISTAM/REXP)"));?></p>
+    <p><?php echo htmlentities("Sistemas Técnicos Administrativos - Registro de Anotações (SISTAM/REXP)");?></p>
 </header>
 <section class="section_index"  >
 <!--  Iniciando Texto -->

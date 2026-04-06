@@ -74,17 +74,15 @@ if( ! isset($_SESSION["arquivo_projeto"]) ) {
    echo $msg_erro;
    exit();
 } else {
-    // 
-    ini_set('default_charset', 'UTF8');
-    //
-    //  IMPORTANTE: utf8_decode para acentuacao e simbolos - 20180730
-    //  $file = "{$_GET["file"]}";
-    //  $file = utf8_decode("{$_SESSION["arquivo_projeto"]}");
-    $file = "{$_SESSION["arquivo_projeto"]}";
-    //
-    // $caminho_arquivo="{$pasta}{$_GET["file"]}";
-    $caminho_arquivo="{$pasta}{$file}";
-    //
+   /// 
+  ini_set('default_charset', 'UTF8');
+   ///
+   ///  IMPORTANTE: utf8_decode para acentuacao e simbolos - 20180730
+   ///  $file = "{$_GET["file"]}";
+   $file = utf8_decode("{$_SESSION["arquivo_projeto"]}");
+  /// $caminho_arquivo="{$pasta}{$_GET["file"]}";
+   $caminho_arquivo="{$pasta}{$file}";
+   ///
 }
 //// Atualizado em 20180926                                
 $resultado = file_exists("{$caminho_arquivo}");

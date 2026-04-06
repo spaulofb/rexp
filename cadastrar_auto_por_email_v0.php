@@ -91,7 +91,7 @@ if( intval($n_erro)>0 ) {
 $n_erro=0;
 ///  HOST mais a pasta principal do site - host_pasta
 if( ! isset($_SESSION["host_pasta"]) ) {
-     $msg_erro .= "Sessão host_pasta não está ativa.".$msg_final;  
+     $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -187,7 +187,7 @@ $_SESSION["m_horiz"] = $array_voltar;
 $pagina_atual="http://".$_SESSION["http_host"].$_SESSION["pasta_raiz"]."cadastrar_auto_por_email.php";
 //
 //  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]="Registro de Anotação";
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
 ///
 /// $_SESSION['time_exec']=180000;
 ///  INCLUINDO CLASS - 

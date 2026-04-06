@@ -243,9 +243,11 @@ function consulta_mostraproj(tcopcao,val,string_array) {
     if( typeof(string_array)=="undefined" ) var string_array=""; 
     //
 
-    
+/**  
   alert("  projeto_consultar.php/123 -- INICIO --  tcopcao = "+tcopcao+" -  val = "+val+" - string_array = "+string_array);    
-    
+   */      
+
+
     //
     //  BOTAO - TODOS
     var lcopcao = tcopcao.toUpperCase();
@@ -335,10 +337,13 @@ function consulta_mostraproj(tcopcao,val,string_array) {
     var fndone_mostraproj = function (oXML) { 
           //  Recebendo o resultado do php/ajax
           var srv_ret = oXML.responseText;
-          var lnip = srv_ret.search(/Nenhum|ERRO:/i);
-          
+          var lnip = srv_ret.search(/Nenhum|ERRO:/i);   
+
+  /**  
   alert(" projeto_consultar/308 -->> lnip = "+lnip+" <<--- lcopcao = "+lcopcao+" -  val = "+val+" - string_array = "+string_array+" \r\n\r Recebendo resultado do srv_mostraproj ="+srv_ret);
+        */        
           
+
           if( lnip==-1 ) {
              //
             if( lcopcao=="DESCARREGAR" ) {

@@ -59,8 +59,9 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
 	 for( $opcoes_pri=0; $opcoes_pri<$count_m_horiz; $opcoes_pri++ ) {
 		 if ( is_array($m_horiz[$opcoes_pri])==1 ) {
 		     //  Sub-menu 1
-             ///  Alterado em 20171004 - utf8_decode
-			 $sub_menu1 = utf8_decode($m_horiz[$opcoes_pri][0]) ;
+             //  Alterado em 20171004 - utf8_decode
+			 //  $sub_menu1 = utf8_decode($m_horiz[$opcoes_pri][0]) ;
+             $sub_menu1 = $m_horiz[$opcoes_pri][0] ;
 			 $sub_menu1_count = count($m_horiz[$opcoes_pri]);
 		     echo  "<li class='otimizacaositesbuscai' >"
 			       ."<a class='otimizacaositesbuscai' href='#' >".$sub_menu1."</a>";
@@ -79,9 +80,11 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
      						."<span>".$m_sub."</span></a>"; 
 	     			   echo  "</li>";
 				  } else if ( is_array($m_horiz[$opcoes_pri][$opcoes_submenu] )==1 ) {
-			  		       ///  Sub-menu 2
-                           ///  Alterado em 20171004 - utf8_decode
-                  		   $sub_menu2 = utf8_decode($m_horiz[$opcoes_pri][$opcoes_submenu][0]);
+                          //
+			  		      //  Sub-menu 2
+                          //  Alterado em 20171004 - utf8_decode
+                  		  //  $sub_menu2 = utf8_decode($m_horiz[$opcoes_pri][$opcoes_submenu][0]);
+                          $sub_menu2 = $m_horiz[$opcoes_pri][$opcoes_submenu][0];
 			               $sub_menu2_count = count($m_horiz[$opcoes_pri][$opcoes_submenu]);
 						   echo  "<li class='otimizacaositesbuscai' >";
 						   echo  "<a class='otimizacaositesbuscai' href='#' >"
@@ -103,9 +106,11 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
  		     echo "</ul>";
 			 echo "</li>";
 		 } elseif (is_array($m_horiz[$opcoes_pri])<1 ) { 
-               ////  Alterado em 20171004 - utf8_decode
- 		       $m_sub = utf8_decode($m_horiz[$opcoes_pri]); 
-               $m_sub = strtr($m_sub, $map);
+              //
+              //  Alterado em 20171004 - utf8_decode
+ 		      //  $m_sub = utf8_decode($m_horiz[$opcoes_pri]); 
+              $m_sub = $m_horiz[$opcoes_pri]; 
+              $m_sub = strtr($m_sub, $map);
  		       echo  "<li class='otimizacaositesbuscai'  >";
                if( strtoupper(trim($m_sub))=="SAIR" )  {
                    echo  "<a class='otimizacaositesbuscai'  href='#'  "

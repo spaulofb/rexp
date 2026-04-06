@@ -73,10 +73,11 @@ $conex = $_SESSION["conex"];
 $opcao = $_POST['grupoproj'];
 ///
 if( isset($_SESSION["usuario_conectado"]) ) {
-   //// $orientador = $_SESSION["usuario_conectado"];    
+    // $orientador = $_SESSION["usuario_conectado"];    
     $usuario_conectado = $_SESSION["usuario_conectado"];       
 } else {
-     $msg_erro .= utf8_decode("Sessão usuario_conectado não está ativa.").$msg_final;  
+     //
+     $msg_erro .= "Sessão usuario_conectado não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -184,32 +185,40 @@ exit();
     *            utilizando  utf8_encode       
     */
     // if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
-    $dir_arq=utf8_decode("{$pasta}$arquivo");
+    // $dir_arq=utf8_decode("{$pasta}$arquivo");
+    // Converte de UTF-8 para ISO-8859-1 (o que o utf8_decode fazia)
+     $arquivo = mb_convert_encoding($arquivo, "ISO-8859-1", "UTF-8");
+     //  
+    $dir_arq="{$pasta}$arquivo";
     //
 
 
-
-echo "ERRO: srv_mostraprojeto/192  -->>  \$dir_arq = $dir_arq <<-- <br> \$pasta = $pasta <br>  \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
+/**  
+echo  "ERRO: srv_mostraprojeto/197 -->>  \$dir_arq =<b> $dir_arq  </b><<-- <br> \$pasta = $pasta <br> "
+        ." \$cntall = $cntall <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
         ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
 exit();
-
+ */
 
 
 
     //  Funcionando 100%    
     //  if( ! file_exists("{$pasta}$arquivo") ) {
     if( ! file_exists("$dir_arq") ) {    
-       /**   $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
-         echo $msg_erro;  */  
-       $terr="&nbsp;Esse Arquivo: $arquivo n&atilde;o tem no Servidor";  
-       echo  $funcoes->mostra_msg_erro("$terr");
-       //
+         //
+         /**   $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
+               echo $msg_erro;  */  
+         $terr="&nbsp;Esse Arquivo: $arquivo n&atilde;o tem no Servidor";  
+         echo  $funcoes->mostra_msg_erro("$terr");
+         //
     } else {
-        ///  Codigo %#sepa%#rar%#  para separar pasta e arquivo
+        //
+        //  Codigo %#sepa%#rar%#  para separar pasta e arquivo
         $_SESSION["arquivo_projeto"]=$arquivo;
         $_SESSION["pasta_arq_projeto"]=$pasta;
         ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_projeto"]}%#sepa%#rar%#{$_SESSION["arquivo_projeto"]}"; 
+        //
     } 
     // 
     exit();     
@@ -217,6 +226,16 @@ exit();
 }  
 /** Final - if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) { */
 //
+
+
+/**  
+echo  "ERRO: srv_mostraprojeto/224  -->> \$cntall = $cntall <<---->>  \$opcao_maiusc =<b> $opcao_maiusc </b> <br>"
+        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
+exit();
+ */
+
+
+
 //  Mostrar todas as anotacoes de um Projeto
 /**  if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) { */
 if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {      
@@ -308,18 +327,31 @@ if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {
           $sqlcmd .= $where_cond." order by a.cip desc";    
      }
      //
+
+
+/**  
+echo  "ERRO: srv_mostraprojeto/325  -->> \$sqlcmd = $sqlcmd  "
+         ."<br>  --->>  \$opcao_maiusc =<b> $opcao_maiusc </b> <br>"
+        ."   -->>  \$bd_1 = $bd_1  <<-->>   \$bd_2 = $bd_2  <br />\n";
+exit();
+ */
+
+
+
+     //
      //  Execuntando o mysqli_query
      $result_consult_projeto = mysqli_query($conex,$sqlcmd);
      if( ! $result_consult_projeto ) {
-            //
-            /**     die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"])); 
+          //
+          /**     die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"])); 
             *      $msg_erro .= "&nbsp;Criando a Tabela  {$tb_cons_proj} - db/mysql:&nbsp; ";
             *       echo  $msg_erro.mysqli_error($_SESSION["conex"]).$msg_final; 
-            */
-            $terr="Criando a Tabela  {$tb_cons_proj} -&nbsp;db/mysqli:&nbsp;";
-             echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                        
-             exit();
+          */
+           $terr="Criando a Tabela  {$tb_cons_proj} -&nbsp;db/mysqli:&nbsp;";
+           echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                        
+           exit();
      }       
+     /**  Final - if( ! $result_consult_projeto ) { */
      //
      /**   Selecionando todos os registros da Tabela temporaria de consulta Anotacoes  */
      $query2 = "SELECT * FROM $tb_cons_proj  ";
@@ -335,9 +367,10 @@ if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {
             exit();
      }         
      //
-     //  Total de registros
+     /**   Total de registros   */
      $n_regs_projeto = mysqli_num_rows($resultado_outro);
      $_SESSION["total_regs"] = $n_regs_projeto;
+     //
      //  Caso NAO encontrou Projeto        
      if( intval($n_regs_projeto)<1 ) {
           /**
@@ -356,11 +389,12 @@ if( preg_match("/TOD(a|o)s?|^BUSCA_PROJ/ui",$opcao_maiusc) ) {
      //
 
 /**  
-echo "ERRO: srv_mostraprojeto/357  -->> \$num_fields = $num_fields <<--  \$n_regs_projeto =<b> $n_regs_projeto </b> <<-->>  \$opcao_maiusc = $opcao_maiusc  <br>"
+echo "ERRO: srv_mostraprojeto/384  -->> \$num_fields = $num_fields <<-- \$n_regs_projeto =<b> $n_regs_projeto </b> <<-- <br>"
+          ." ->>  \$opcao_maiusc = $opcao_maiusc  <br>"
         ."   -->> \$tb_cons_proj = $tb_cons_proj <<-->>  \$bd_1 = $bd_1  <<-- <br>"
         ."  -->>   \$bd_2 = $bd_2  <br />\$sql_temp = $sql_temp";
 exit();
- */        
+ */
 
 
         // 
