@@ -39,6 +39,7 @@ if( intval($pagina)<1 ) {
 //  $maximo = 16;
 $maximo=10;
 //
+
 // Calculando o registro inicial
 $inicio = $pagina - 1;
 $inicio = $maximo * $inicio;
@@ -51,7 +52,7 @@ $inicio = $maximo * $inicio;
 echo "ERRO: LINHA/45 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
         ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
        ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
-       ."<br> \$_SESSION[num_rows] = {$_SESSION["num_rows"]}  ";
+       ."<br>  -->> \$_SESSION[num_rows] = {$_SESSION["num_rows"]}   <<-- ";
 exit();
 
 
