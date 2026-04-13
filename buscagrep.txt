@@ -1,0 +1,114 @@
+./includes/cadastrar_auto_ajax_original.php:212:require_once("../includes/functions.php");    
+./includes/cadastrar_auto_por_email_ajax_original.php:233:require_once("{$incluir_arq}includes/functions.php");    
+./includes/cadastrar_auto_por_email_ajax.php:233:require_once("{$incluir_arq}includes/functions.php");    
+./includes/cadastrar_auto_ajax.php:212:require_once("../includes/functions.php");    
+./includes/cadastrar_auto_ajax_v0.php:212:require_once("../includes/functions.php");    
+./includes/alterar_senha_ajax.php:230:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./includes/cadastrar_auto_ajax_s.php:216:require_once("../includes/functions.php");    
+./inicia_conexao_v2.php:172:// functions PHP
+./inicia_conexao_v2.php:173:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./menu_original.php:169:require("{$_SESSION["incluir_arq"]}includes/functions.php");
+./inicia_conexao_v1.php:165:// functions PHP
+./inicia_conexao_v1.php:166:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/anotacao_cadastrar_original.php:83:  ////  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_original.php:84:  include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/participante_cadastrar_ajax.php:199:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/projeto_cadastrar_v1.php:106: echo "ERRO: linha106 -->> REQUEST_METHOD  -->>  ANTES do functions.php   ";
+./cadastrar/projeto_cadastrar_v1.php:112:    // include("../includes/functions.php");
+./cadastrar/projeto_cadastrar_v1.php:113:    require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/participante_cadastrar_v1.php:150:/**  require_once("{$_SESSION["incluir_arq"]}library/functions.php");  */
+./cadastrar/anotacao_cadastrar_v2.php:94://  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_v2.php:95:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/projeto_cadastrar_v0.php:104:    /// include("../includes/functions.php");
+./cadastrar/projeto_cadastrar_v0.php:105:    include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/pessoal_cadastrar_ajax_v1.php:234:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/pessoal_cadastrar_ajax.php:234:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotacao_cadastrar_ajax_orig.php:70:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/anotacao_cadastrar_ajax_original.php:246:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/anotacao_cadastrar_mobile.php:74:  ////  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_mobile.php:75:  include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/pessoal_cadastrar_ajax_v0.php:234:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotacao_cadastrar_v1.php:94://  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_v1.php:95:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/anotacao_cadastrar_ajax_v2.php:84:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/anotacao_cadastrar_ajax_v2.php:838:     *  Local: includes/functions.php
+./cadastrar/projeto_cadastrar.php:106: echo "ERRO: linha106 -->> REQUEST_METHOD  -->>  ANTES do functions.php   ";
+./cadastrar/projeto_cadastrar.php:112:    // include("../includes/functions.php");
+./cadastrar/projeto_cadastrar.php:113:    require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/participante_cadastrar_v2.php:150:/**  require_once("{$_SESSION["incluir_arq"]}library/functions.php");  */
+./cadastrar/projeto_cadastrar_ajax_orig.php:337:///  require_once("../includes/functions.php");    
+./cadastrar/projeto_cadastrar_ajax_orig.php:338:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/projeto_cadastrar_orig.php:100:    /// include("../includes/functions.php");
+./cadastrar/projeto_cadastrar_orig.php:101:    include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/projeto_cadastrar_ajax.php:295://  require_once("../includes/functions.php");    
+./cadastrar/projeto_cadastrar_ajax.php:296:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/anotador_cadastrar_ajax_v0.php:231:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotador_cadastrar_ajax.php:239:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotador_cadastrar_ajax.php:352:        /**  function mysqli_result no arquivo ./includes/functions.php:  */
+./cadastrar/anotacao_cadastrar_nova_original.php:115:  include("../includes/functions.php");
+./cadastrar/participante_cadastrar_ajax_v2.php:199:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/anotacao_cadastrar_orig.php:93://  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_orig.php:94:include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/anotacao_cadastrar_v0.php:96://  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_v0.php:97:include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/projeto_cadastrar_ajax_v0.php:295://  require_once("../includes/functions.php");    
+./cadastrar/projeto_cadastrar_ajax_v0.php:296:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/anotacao_cadastrar_nova.php:82:  ////  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_nova.php:83:  include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/anotacao_cadastrar.php:94://  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar.php:95:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./cadastrar/participante_cadastrar_ajax_v0.php:199:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/pessoal_cadastrar_ajax_orig.php:258:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotacao_cadastrar_ajax.php:84:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/anotacao_cadastrar_ajax.php:838:     *  Local: includes/functions.php
+./cadastrar/anotador_cadastrar_ajax_v1.php:239:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotador_cadastrar_ajax_v1.php:352:        /**  function mysqli_result no arquivo ./includes/functions.php:  */
+./cadastrar/projeto_cadastrar_ajax_v1.php:295://  require_once("../includes/functions.php");    
+./cadastrar/projeto_cadastrar_ajax_v1.php:296:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/anotacao_cadastrar_ajax_v0.php:70:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/participante_ajax.php:215:require_once("../includes/functions.php");    
+./cadastrar/participante_cadastrar_v0.php:248:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/participante_cadastrar_ajax_orig.php:247:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/participante_cadastrar_ajax_v1.php:207:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./cadastrar/proj_exp_ajax.php:219:require_once("../includes/functions.php");    
+./cadastrar/participante_cadastrar.php:150:/**  require_once("{$_SESSION["incluir_arq"]}library/functions.php");  */
+./cadastrar/anotacao_cadastrar_ajax_v1.php:84:require_once("{$_SESSION["incluir_arq"]}includes/functions.php"); 
+./cadastrar/anotador_cadastrar_ajax_orig.php:231:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./cadastrar/anotacao_cadastrar_nova_v0.php:82:  ////  include("../includes/functions.php");
+./cadastrar/anotacao_cadastrar_nova_v0.php:83:  include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./auth_user_patrimonio.php:344:     require("script/ipfunctions.php");
+./remover/projeto_remover.php:89:   ///  include("../includes/functions.php");
+./remover/projeto_remover.php:90:  include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./remover/projeto_remover_original.php:89:   ///  include("../includes/functions.php");
+./remover/projeto_remover_original.php:90:  include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./remover/anotador_remover_ajax.php:275:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./remover/anotador_remover_ajax_anotador.php:275:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./remover/projeto_remover_orientador.php:89:   ///  include("../includes/functions.php");
+./remover/projeto_remover_orientador.php:90:  include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./remover/anotador_remover_ajax_original.php:275:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./menu.php:165:require("{$_SESSION["incluir_arq"]}includes/functions.php");
+./inicia_conexao_v0.php:165:// functions PHP
+./inicia_conexao_v0.php:166:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./menu_ajax.php:61:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./inicia_conexao_orig.php:172:// functions PHP
+./inicia_conexao_orig.php:173:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./menu_orig.php:169:require("{$_SESSION["incluir_arq"]}includes/functions.php");
+./menu_ajax_original.php:61:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_original.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/projeto_alterar_original.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./alterar/projeto_alterar.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");
+./alterar/anotacao_alterar.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_antigo.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_copia.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_nova_original.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_mobile.php:100:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/anotacao_alterar_nova_antiga.php:117:  include("../includes/functions.php");
+./alterar/projeto_alterar_ajax_original.php:267:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./alterar/anotacao_alterar_nova.php:103:   include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+./alterar/projeto_alterar_ajax.php:267:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
+./inicia_conexao.php:186:// functions PHP
+./inicia_conexao.php:187:require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+./consultar/anotacao_consultar_original.php:495:include("{$incluir_arq}includes/functions.php");
+./consultar/anotacao_consultar_v0.php:495:include("{$incluir_arq}includes/functions.php");
+./consultar/anotacao_consultar_v1.php:496:include("{$incluir_arq}includes/functions.php");
+./consultar/anotacao_consultar.php:492:include("{$incluir_arq}includes/functions.php");

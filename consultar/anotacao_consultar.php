@@ -64,8 +64,8 @@ $usuario_conectado = $_SESSION["usuario_conectado"];
 ///
 ///   Caminho da pagina local
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
-
-///  Titulo do Cabecalho - Topo
+//
+//  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
 /// $_SESSION['time_exec']=180000;
 ///
@@ -111,15 +111,11 @@ $estilocss = $_SESSION["estilocss"];
     Define o caminho HTTP  -  20180416
 ***/  
 var raiz_central="<?php echo  $_SESSION["url_central"];?>";    
-///
-///   JavaScript Document
-///
-/****  
-    Define o caminho HTTP  -  20180416
-***/  
-var raiz_central="<?php echo  $_SESSION["url_central"];?>";    
-///
-///   Corrigindo acentuacao
+//
+//   Caminho da pagina local
+var pagina_local="<?php echo  $_SESSION["pagina_local"];?>";    
+//
+//   Corrigindo acentuacao
 charset="UTF-8";
 ///
 ///  variavel quando ocorrer Erros
@@ -268,13 +264,13 @@ function consulta_mostraanot(idselecproj, idopcao,string_array) {
     if( typeof(idopcao)=='string' ) {
          var idopcao=trim(idopcao);
     }
-     /****  
-          Define o caminho HTTP    -  20180228
-     ***/  
-     var raiz_central="<?php echo $_SESSION["url_central"];?>";       
-     var pagina_local="<?php echo $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";           
-    
- ///  alert(" anotacao_consultar.php/210 -  idselecproj = "+idselecproj+" --  idopcao  =  "+idopcao+" - string_array = "+string_array)      
+    //
+
+    /**  
+ alert(" anotacao_consultar.php/210 -  idselecproj = "+idselecproj+" --  idopcao  =  "
+           +idopcao+" - string_array = "+string_array+"\r\n  raiz_central = "+raiz_central
+        +" - pagina_local = "+pagina_local);      
+    */
 
     /// tag Select para desativar o campo Select ordenar
     var quantidade=idselecproj.search(/BUSCA_PROJ|busca_porcpo/i);

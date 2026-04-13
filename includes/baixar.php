@@ -1,7 +1,8 @@
 <?php
-///  Alterado em 20180725
-///  require('../inicia_conexao.php');
-///  Verificando se session_start - ativado ou desativado
+//
+//  Alterado em 20180725
+//  require('../inicia_conexao.php');
+//  Verificando se session_start - ativado ou desativado
 if( ! isset($_SESSION)) {
    session_start();
 }

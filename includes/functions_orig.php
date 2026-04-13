@@ -1,5 +1,17 @@
 <?php
-///  function_exists - verifica se a function NAO esta ativa
+/**
+*      FUNTCION PHP
+*  v20250520
+*/
+//
+/**     Verificar a Mensagem de Erro  
+ *  Crucial ter as configurações de erro ativadas
+*/ 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+/**   function_exists - verifica se a function NAO esta ativa   */
 if( ! function_exists("get_ftp_mode") ) {
      function get_ftp_mode($file) {   
         $path_parts = pathinfo($file);
@@ -176,11 +188,46 @@ if( ! function_exists("mime_type") ) {
    }
 }
 ///**********************************************************************************/
-///
-///  Primeiro verifica se a function nao existe
+//
+/**  function igual ao cmoando mysql_field_name  */
+if( ! function_exists("mysqli_field_name") ) {
+    //
+   function mysqli_field_name($result, $field_offset) { 
+       //
+       $properties = mysqli_fetch_field_direct($result, $field_offset);
+       return is_object($properties) ? $properties->name : null;    
+   }   
+   //
+}
+/**  Final - if( ! function_exists("mysqli_field_name") ) {  */
+//
+/*****
+*    IMPORTANTE: function exatamente como o
+*                comando mysql_result no  MYSQLI 
+*   Atualizado em 20240527  
+****/
+///  function mysqli_result($res, $row, $field=0) {
+if( ! function_exists("mysqli_result") ) {
+    //
+    function mysqli_result($res, $row, $fldnm='') {
+          //
+          mysqli_data_seek($res, $row);
+          //
+          /**
+          *     return mysqli_fetch_array($res)[$field];
+          */
+         return mysqli_fetch_assoc($res)[$fldnm];
+         //
+    }
+}
+/****  Final - function mysqli_result($res, $row, $fldnm='') {   */
+//
+//  Primeiro verifica se a function nao existe
 if( ! function_exists("stringParaBusca") ) {
-    ///  Funcao para busca com acentos em MySQL
+    //
+    //  Funcao para busca com acentos em MySQL
     function stringParaBusca($str) {
+        //
         //// Transformando tudo em minusculas
         $str = trim(strtolower($str));
 
@@ -214,15 +261,18 @@ if( ! function_exists("stringParaBusca") ) {
         return $str;
         ///
     }
-    ///  Final - Funcao para busca com acentos
+    /**  Final - function stringParaBusca($str) {  */
+    //
 }
-///*******************************************************************************
-///
-///  Primeiro verifica se a function nao existe
+/**  Final - if( ! function_exists("stringParaBusca") ) {   */
+//
+//  Primeiro verifica se a function nao existe
 if( ! function_exists("stringParaBusca2") ) {
-    ///  Funcao para modificar minuscula para Maiuscula
+     //
+    //  Funcao para modificar minuscula para Maiuscula
     function stringParaBusca2($str) {
-          ///  Usar para substituir caracteres com acentos para Maiuscula
+         // 
+         //  Usar para substituir caracteres com acentos para Maiuscula
          $substituir = array(
                         '/&aacute;/i' => '?',
                         '/&Eacute;/i' => '?',
@@ -301,12 +351,14 @@ if( ! function_exists("stringParaBusca2") ) {
          return $texto;
          ///
     }
-    ///  Final - Funcao para modificar minuscula para Maiuscula
+    /**  Final - function stringParaBusca2($str) {  */
+    //
 }
-///*******************************************************************************************/  
-///
-///  function_exists - verifica se a  function function NAO esta ativa
+/**  Final - if( ! function_exists("stringParaBusca2") ) {  */
+//
+/**  function_exists - verifica se a  function NAO esta ativa  */
 if( ! function_exists("tamanho_arquivo") ) {
+    //
     ///  Definindo o tamanho do arquivo
     function tamanho_arquivo($valor) {
 	      $i=0;
@@ -322,8 +374,8 @@ if( ! function_exists("tamanho_arquivo") ) {
          */
      }
 }
-///**********************************************************************************/
-///
+/**  Final - if( ! function_exists("tamanho_arquivo") ) {  */
+//
 ///  function_exists - verifica se a  function NAO esta ativa
 if( ! function_exists("isUserID") ) {
     ///  Corrigindo o campo  username/login 
@@ -339,7 +391,8 @@ if( ! function_exists("isUserID") ) {
 ///
 ///  function_exists - verifica se a  function NAO esta ativa
 if( ! function_exists("TirarAcento") ) {
-    ///  Tirar acentos da palavra
+    //
+    //  Tirar acentos da palavra
     function TirarAcento($Palavra) {
         $Palavra = $Palavra;
         ///
@@ -482,7 +535,8 @@ if( ! function_exists("ValidaData") ) {
             ////
             return $res;
      }
-     ///  Final - verificando a data
+     //  Final - verificando a data  
+     //
 }
 ////
 ?>

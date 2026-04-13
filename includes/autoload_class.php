@@ -42,42 +42,47 @@
  * 
  ****/
         
-///
-/// Verifica class Autoload
-if( ! class_exists('Autoload') ) {
-    ///        
+//
+// Verifica class Autoload
+/**
+ * ALTERADO EM 2026 - Versão Corrigida
+ * PHP 7+ / 8+
+ */
+
+if (!class_exists('Autoload')) {
     class Autoload {
         public function __construct() {
-            spl_autoload_extensions('.class.php');
+            // Registra o método 'load' desta classe como o autoloader oficial
             spl_autoload_register(array($this, 'load'));
-        
         }
+
         private function load($className) {
-            $extension = spl_autoload_extensions();
-            $diretorios = array('includes/', '../includes/',"./");     
-            $encontrado=0;
-            foreach( $diretorios as $diretorio ) {  
-                  $arquivos = array($className,$className.".php",$className.".class.php");
-                  foreach( $arquivos as $arquivo ) {       
-                      if ( file_exists($diretorio.$arquivo) ) {  
-                           $encontrado=1;
-                           //  Alterado em 20160815
-                           ///  require_once($diretorio.$arquivo) ;   
-                         ////  include($diretorio.$arquivo);
-                           ////  require_once(__DIR__ . '/' . $className . $extension);
-                           require_once("$diretorio". $className . $extension);
-                           break;       
-                      }
-                  }      
+            // Lista de diretórios para busca
+            $diretorios = array('includes/', '../includes/', "./");
+            // Possíveis extensões de arquivo
+            $extensoes = array('.class.php', '.php');
+
+            foreach ($diretorios as $diretorio) {
+                foreach ($extensoes as $ext) {
+                    $arquivo = $diretorio . $className . $ext;
+
+                    if (file_exists($arquivo)) {
+                        require_once($arquivo);
+                        return; // Arquivo encontrado e carregado, sai da função
+                    }
+                }
             }
-            if( intval($encontrado)<1  ) {
-                 echo "A classe $class n&atilde;o existe.";   
-            }
+
+            // Se chegou aqui, não achou em nenhum lugar
+            // Opcional: registrar em log, mas evite dar 'echo' em autoloaders
         }
-    }      
-    /// Final - class Autoload {
+    }
+
+    // CRUCIAL: Instanciar a classe para ativar o registro!
+    new Autoload();
 }
-///  
+/**   Final - if (!class_exists('Autoload')) {  */
+//  
 /// }
 /*
 

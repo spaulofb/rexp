@@ -1,6 +1,5 @@
 <?php
-//
-//  Verificando se session_start - ativado ou desativado
+///  Verificando se session_start - ativado ou desativado
 if(!isset($_SESSION)) {
    session_start();
 }
@@ -13,15 +12,12 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-// Final - Mensagens para enviar
-//
-/**  CONEXAO/MYSQLI  */
-$conex = $_SESSION["conex"];
-//
-//  Conexao com o banco:
+//// Final - Mensagens para enviar
+
+///  Conexao com o banco:
 $campos_query = "*";
-//
-// Declaracao da pagina inicial
+
+/// Declaracao da pagina inicial
 $pagina = $_SESSION["pagina"];
 $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
@@ -30,72 +26,44 @@ if( isset($_SESSION["incluir_arq"]) ) {
     echo "ERRO: Sessão incluir_arq não está ativa.";
     exit();
 }
-//
-//  Verifica se pagina menor que 1
+///  Verifica se pagina menor que 1
 if( intval($pagina)<1 ) {
     $pagina="1";
 }
-//  Maximo de registros por pagina
-//  $maximo = 16;
+///  Maximo de registros por pagina
+///  $maximo = 16;
 $maximo=10;
-//
-// Calculando o registro inicial
+
+/// Calculando o registro inicial
 $inicio = $pagina - 1;
 $inicio = $maximo * $inicio;
-//
-//  Variaveis recebidos e criando absoletos
-
-
-
-         
-echo "ERRO: LINHA/45 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
-        ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
-       ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
-       ."<br> \$_SESSION[num_rows] = {$_SESSION["num_rows"]}  ";
-exit();
-
-
-
-
-
+///  Variaveis recebidos e criando absoletos
 if( isset($_SESSION["num_rows"]) ) {
-     //
-     // if ( $_SESSION["num_rows"]>=1 ) {
-     if( intval($_SESSION["num_rows"])>=1 ) {
-          unset($_SESSION["num_rows"]);
-          /// Conta os resultados no total da minha query
-          ///  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
-          ///  $query    = mysql_query($strCount);
-          $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
-          $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
-          $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
-          for( $z=1; $z<99999 ; $z++ ) {
-              $valor_final[$z] = $z*$maximo;
-              if( $valor_final[$z]>$total_regs ) {
-                   $_SESSION["pagina_final"] = $maximo-($valor_final[$z]-$total_regs);
-                   $_SESSION["pagina_final"] = $total_regs-$_SESSION["pagina_final"];
-                    $_SESSION["pagina_final"] = (int) ($_SESSION["pagina_final"]/$maximo)+1;
-                    break;
-              }
-          }
-          //
+    /// if ( $_SESSION["num_rows"]>=1 ) {
+    if( intval($_SESSION["num_rows"])>=1 ) {
+         unset($_SESSION["num_rows"]);
+         /// Conta os resultados no total da minha query
+         ///  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
+         ///  $query    = mysql_query($strCount);
+         $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
+         $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+         $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
+         for( $z=1; $z<99999 ; $z++ ) {
+             $valor_final[$z] = $z*$maximo;
+             if( $valor_final[$z]>$total_regs ) {
+                  $_SESSION["pagina_final"] = $maximo-($valor_final[$z]-$total_regs);
+                  $_SESSION["pagina_final"] = $total_regs-$_SESSION["pagina_final"];
+                   $_SESSION["pagina_final"] = (int) ($_SESSION["pagina_final"]/$maximo)+1;
+                  break;
+             }
+         }
     }
-    //
-}   
-// 
-
-
-
-
-
-
-//  \$row = array  e  \$total_regs = total_regs de registros encontrados
+}    
+///  \$row = array  e  \$total_regs = total_regs de registros encontrados
 $row=$_SESSION["row"]; $total_regs = $_SESSION["total_regs"];
-if( isset($_SESSION["usuario_conectado"]) ) {
-     $usuario_conectado=$_SESSION["usuario_conectado"];
-} 
-//
-// Verifica se variavel total_regs menou ou igual a 0 (ZERO)
+if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado=$_SESSION["usuario_conectado"];
+
+/// Verifica se variavel total_regs menou ou igual a 0 (ZERO)
 if( intval($total_regs)<=0 ) {
     echo "<p  class='titulo_usp'  >Nenhum registro encontrado.</p>";
 } else {
@@ -103,13 +71,12 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temporaria  -  20180810
     ***/   
     if( ! isset($_SESSION["table_consultar_anotacao"]) ) {
-         $merr="Falha SESSION table_consultar_anotacao não definida.";
-         echo $funcoes->mostra_msg_erro("$merr");
-         exit();
+        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_anotacao não definida."));
+        exit();
     }
     $table_temporaria = $_SESSION["table_consultar_anotacao"];
-    //
-    // Definindo as variaveis
+
+    /// Definindo as variaveis
     $num_fields=0; $m_ordenar="nome"; $max_length="";
      /// 
     $strQuery="SELECT $campos_query from  $table_temporaria  LIMIT $inicio,$maximo";  
