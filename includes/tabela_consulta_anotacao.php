@@ -39,13 +39,11 @@ if( intval($pagina)<1 ) {
 //  $maximo = 16;
 $maximo=10;
 //
-
 // Calculando o registro inicial
 $inicio = $pagina - 1;
 $inicio = $maximo * $inicio;
 //
 //  Variaveis recebidos e criando absoletos
-
 
 
          
