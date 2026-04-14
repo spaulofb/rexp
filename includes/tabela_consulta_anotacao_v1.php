@@ -18,13 +18,6 @@ $msg_final="</span></span>";
 /**  CONEXAO/MYSQLI  */
 $conex = $_SESSION["conex"];
 //
-/**
- *    2. Force o MySQLi a falar UTF-8
-*             Muitas vezes o erro nasce na conexão. Logo após o seu mysqli_connect, adicione esta linha. 
-*             Ela força o banco a entregar os dados já no formato correto para a página:
- */
-mysqli_set_charset($conex, "utf8");
-//
 /**   Verificando essa SESSAO importante - URL principal
  *   Caso NAO exista criar - alterado em 20180614
  */
@@ -204,8 +197,7 @@ if( intval($total_regs)<=0 ) {
     $cabecalho_array = array("DATA","DETALHES");
     $align_right_array=array("CIA","NR","NUMPROJETO","NA");
 
-
-    /**  
+         
 echo "ERRO: LINHA/163 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
         ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
        ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
@@ -213,7 +205,7 @@ echo "ERRO: LINHA/163 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = 
         ."<br>  -->> \$m_function = $m_function  <<-- \$campos_fora = ".gettype($campos_fora)
     ." <<--  <strong> {$url_central} E {$_SESSION["titulo"]} </strong>  -->> \$cabecalho_array = ".gettype($cabecalho_array)." -->>  \$align_right_array=<b>".gettype($align_right_array)."</b> ";
 exit();
- */
+
 
 
 
@@ -225,138 +217,120 @@ exit();
 ***/    
     ///
     echo "<div id='div_pagina' class='div_pagina' style='margin-left: 1px; width: 99%; height: 100%;' >";
-    //
     echo $_SESSION["titulo"];
-    //
-    // 1. Defina as traduções dos nomes das colunas aqui (Mais fácil de manter)
-    $nomes_amigaveis = [
-        'TITULO'     => 'Título',
-        'NUMPROJETO' => 'Nr/Projeto',
-        'NR'         => 'Nr',
-        'NA'         => 'NA'
-    ];
-    //
-    echo "<table class='div_pagina' style='margin-left: 3px;' cellpadding='1' cellspacing='2'>";
+    echo "<table class='div_pagina' style='margin-left: 3px;' cellpadding='1' cellspacing='2' >";
     echo "<tr>";
-    //
-    for( $ncol = 0; $ncol < $num_fields; $ncol++ ) {
-        //
-        $field_name = $fields[$ncol];
-        $field_name_upper = strtoupper(trim($field_name));
-        //
-        // Pula os campos ignorados
-        if (in_array($field_name_upper, $campos_fora)) continue;
-        //
-        // 2. Define o alinhamento
-        $text_align = "left";
-        if( $field_name_upper == 'DETALHES' || in_array($field_name_upper, $cabecalho_array)) {
-            $text_align = "center";
-        }
-        //
-        // 3. Busca o nome amigável ou usa o original formatado
-        $label = isset($nomes_amigaveis[$field_name_upper]) 
-                ? $nomes_amigaveis[$field_name_upper] 
-                : ucfirst($field_name);
-        //
-        // Se realmente precisar tratar encoding, faça aqui:
-        // $label = mb_convert_encoding($label, "UTF-8"); 
-        //
-        // 4. Imprime o TH (Unificado)
-        echo "<th class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;'>";
-        echo htmlspecialchars($label);
-        echo "</th>";
-        //
+    for( $column_num=0; $column_num<$num_fields; $column_num++ ) {
+            //
+            $field_name = $fields[$column_num]; $text_align="left";
+            $field_name_upper=strtoupper(trim($field_name));
+            ///  if( $field_name_upper=='ARQUIVO' or $field_name_upper=='DATA' or $field_name_upper=='DETALHES' ) $text_align="center";
+            if( in_array($field_name_upper,$campos_fora) ) continue;
+            if( $field_name_upper=='DETALHES' ) $text_align="center";
+            /////  if( $field_name_upper=='TITULO' ) $field_name="Título/Anotação";
+            if( $field_name_upper=='TITULO' ) $field_name="Título";
+            if( $field_name_upper=='NUMPROJETO' ) $field_name="Nr/Projeto";
+           //// if( $field_name_upper=='NR' ) $field_name="Nr/Anotação";
+            if( $field_name_upper=='NR' ) $field_name="Nr";
+            ///  if( $field_name_upper=='CIA' ) $field_name="CIA";
+            if( $field_name_upper=='NA' ) $field_name="NA";
+            if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
+            $campo_nome=utf8_decode(ucfirst($field_name));
+            if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
+                echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
+                    ."$campo_nome</th>";
+            } else {
+                echo "<th class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
+                    ."$campo_nome</th>";
+            } 
+            //   
     }
-    /**   Final - for( $ncol = 0; $ncol < $num_fields; $ncol++ ) {   */
     echo "</tr>";
     //
-    // print the body of the table
-    //  $conjunto = $_SESSION["conjunto"];
-     // $conta_linha=0; $sem_link=0;
-    //
-    while( $linha = mysqli_fetch_assoc($query) ) { // fetch_assoc é mais fácil que row
-        //   
-        echo "<tr align='left' class='font_size'>";
-        //
-        for( $ncol = 0; $ncol < $num_fields; $ncol++ ) {
-            //
-            $field_name = $fields[$ncol];
-            $field_name_upper = strtoupper(trim($field_name));
-            $valor_original = $linha[$field_name]; // Pega o valor pela chave (nome da coluna)
-            // 
-            if (in_array($field_name_upper, $campos_fora)) continue; 
-            //
-            // 1. Definição de Alinhamento
-            $text_align = "left";
-            if( $field_name_upper == 'DATA' || $field_name_upper == 'DETALHES') $text_align = "center";
-            if( in_array($field_name_upper, $align_right_array)) $text_align = "right";
-            //
-
-            // 2. Lógica para TÍTULO
-            if( preg_match("/ITULO|TÍTULO/i", $field_name_upper)) {
-                $detalhes_val = trim($linha['Detalhes'] ?? '');
-                $arquivo_val = trim($linha['Arquivo'] ?? '');
-                
-                // Tratamento de caracteres (Simplificado)
-                $titulo_exibir = (mb_detect_encoding($valor_original) != "UTF-8") 
-                                ? htmlentities($valor_original) 
-                                : $valor_original;
-
-                $conteudo = "<a href='#' onclick='consulta_mostraanot(\"DESCARREGAR\",\"$arquivo_val\",\"$usuario_conectado#anotacao#$detalhes_val\"); return true;' class='linkum' title='Clicar'>
-                                <span style='font-size:larger;'>$titulo_exibir</span>
-                            </a>";
-                $classe_td = "class='itemOn'";
-                //
-            } 
-            
-            // 3. Lógica para DETALHES
-            else if( $field_name_upper == 'DETALHES' ) {
-                $detalhes_val = trim($linha['Detalhes'] ?? '');
-                $conteudo = "<a href='#' onclick='consulta_mostraanot(\"DETALHES\",\"$valor_original\",\"$usuario_conectado#anotacao#$detalhes_val\"); return true;' class='linkum'>
-                                <img src='../imagens/enviar.gif' alt='Detalhes'>
-                            </a>";
-                $classe_td = "class='itemOn'";
-            } 
-            
-            // 4. Outros campos
-            else {
-                $conteudo = $valor_original;
-                $classe_td = "";
-            }
-            //
-            // Impressão Única da Célula
-            echo "<td $classe_td 
-                    onmouseover='mouse_over_menu(this);' 
-                    onmouseout='mouse_out_menu(this);' 
-                    style='text-align: $text_align; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;'>";
-            //
-            echo $conteudo;
-            echo "</td>";
-            //
-        }
-        /**   Final - for( $ncol = 0; $ncol < $num_fields; $ncol++ ) {  */
-        //
-        echo "</tr>";
-        //
-        //  $conta_linha++;
-        //
+    /// print the body of the table
+    $conjunto = $_SESSION["conjunto"];
+    $conta_linha=0; $sem_link=0;
+    while( $linha = mysqli_fetch_row($query)) {
+        /// link        
+         ?>       
+        <tr align="left"  class="font_size" >
+        <?php
+        for( $column_num=0; $column_num<$num_fields; $column_num++) {
+            $text_align="left";  
+            $field_name_upper = strtoupper(trim($fields[$column_num]));             
+            $nome_campo=$fields[$column_num];
+            if( in_array($field_name_upper,$campos_fora) ) continue;
+            ///  if( strtoupper($field_name)=='RELATEXT' ) {
+            if( $column_num<1 ) $selecionado=$linha[$column_num];
+         ///   if( strtoupper($field_name)=='ARQUIVADO_COMO' ) {
+            ////  Alterado em 20180918
+            $Detalhes=trim(mysqli_result($query,$conta_linha,"Detalhes"));
+         
+            ////  if( preg_match("/ITULO|DATA/i",$field_name_upper) ) {
+             if( preg_match("/ITULO|TÍTULO/i",$field_name_upper) ) {
+                ///  $valor=htmlentities(trim(mysqli_result($query,$conta_linha,"relatext")));                   
+                //// $valor=htmlentities(trim(mysqli_result($query,$conta_linha,"Arquivo")));   
+                $valor=trim(mysqli_result($query,$conta_linha,"Arquivo"));                                
+               ///  $valor = substr($valor,strpos($valor,"_")+1,strlen(trim($valor)));
+                ///  $valor="<img src='../imagens/enviar.gif' alt='Enviar Arquivo'  style='text-align: center; vertical-align:text-bottom;'  >";
+                $m_relatext=$linha[$column_num];  $sem_link=1;
+                $titulo=$linha[$column_num];
+                ?>                        
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"   style="text-align: left; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;" >
+                <?php
+                  $cmdhtml = "<a href='#' onclick='javascript: consulta_mostraanot(\"DESCARREGAR\",\"$valor\",\"$usuario_conectado#anotacao#$Detalhes\");return true;'  "
+                        ."  id='relattext'  class='linkum'  title='Clicar' "
+                        ."  style='text-align: center; vertical-align:top; line-height:normal;' >";  
+                  $cmdhtml .="<span style='font-size:larger; ' >";
+                  /* IMPORTANTE: Detectar codificacao  de caracteres  - 20171005   */
+                   $codigo_caracter=mb_detect_encoding($titulo);
+                   if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
+                        $cmdhtml .=htmlentities($titulo)."</span>";
+                        ////
+                   } else {
+                       $cmdhtml .="$titulo</span>";
+                   }
+                   ///           
+                  $cmdhtml .="</a>";
+                  echo $cmdhtml;
+            } else if( $field_name_upper=='DETALHES' ) {
+                  $valor=$linha[$column_num]; $text_align="center";
+                  $detalhes="<img src='../imagens/enviar.gif' alt='Mostrar detalhes dessa Anotação'  style='text-align: center; vertical-align:text-bottom;'  >";  
+                ?>                        
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);" 
+                     style="text-align: <?php echo $text_align;?>; white-space:nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;" >
+                <?php
+                  $cmdhtml2 = "<a href='#' onclick='javascript: consulta_mostraanot(\"DETALHES\",\"$valor\",\"$usuario_conectado#anotacao#$Detalhes\");return true;'  "
+                        ."  id='detalhes'  class='linkum' title='Clicar'  "
+                        ."  style='text-align: center; vertical-align:top; line-height:normal;' >";  
+                  $cmdhtml2 .=$detalhes."</a>";
+                  $cmdhtml2 .="</td>";
+                  echo $cmdhtml2;                  
+            } else {
+                if( $field_name_upper=='DATA' ) $text_align="center";
+                /***
+                if( $field_name_upper=='NUMPROJETO' )  $text_align="right";
+                if( $field_name_upper=='NR' )  $text_align="right";
+                ***/
+                /// Encontrar campo nesse array
+                if( in_array("$field_name_upper",$align_right_array) ) $text_align="right";
+                /// 
+                $valor=$linha[$column_num];    
+                ?>                        
+                <td style="text-align: <?php echo $text_align;?>; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;" >                
+                <?php  echo $valor;?></td>
+                <?php                
+            }   
+        }  
+        /// Final do For
+        ?>
+        </tr>
+       <?php
+       $conta_linha++;
+       //
     }  
-    /**   Final - while( $linha = mysqli_fetch_assoc($query) ) {   */
+    /**  Final -  while( $linha = mysqli_fetch_row($query)) {  */
     //
-
-/**  
-echo "ERRO: LINHA/341 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
-        ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
-       ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
-       ."<br>  -->> \$num_rows = $num_rows  <<-->>  \$total_regs = $total_regs  <<-- \$td_menu =<b> $td_menu </b> "
-        ."<br>  -->> \$m_function = $m_function  <<-- \$campos_fora = ".gettype($campos_fora)
-    ." <<--  <strong> {$url_central} E {$_SESSION["titulo"]} </strong>  -->> \$cabecalho_array = ".gettype($cabecalho_array)." -->>  \$align_right_array=<b>".gettype($align_right_array)."</b> ";
-exit();
- */
-
-
-
-
     // Calculando pagina anterior
     $menos = $pagina - 1;
 
@@ -366,20 +340,12 @@ exit();
     $pgs = ceil($total_regs/$maximo);
     /// $pgs = 10;
     if( intval($pgs)>10 ) $pgs=10;
-    //
-    //  Total de paginas
+    
+    ///  Total de paginas
     $_SESSION["numero_de_pags"] = (int) ($total_regs/$maximo);
     $_SESSION["valor_com_pags"] = (int) ($_SESSION["numero_de_pags"]*$maximo);
     if( $_SESSION["valor_com_pags"]<$total_regs ) $_SESSION["numero_de_pags"]++;
-    //
-
-
-
-
-
-
-
-    //  Maior que 1
+   ///  Maior que 1
     if( intval($pgs)>1 ) {
         //
         $td_menu=$td_menu*2;

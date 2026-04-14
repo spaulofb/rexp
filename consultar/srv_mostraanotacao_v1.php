@@ -119,7 +119,17 @@ mysqli_set_charset($conex, "utf8");
 
 if( $opcao_maiusc=="DESCARREGAR" )  {
     //
-    /**   Final -   Define o tempo m?ximo de execu??o em 0 para as conex?es lentas  */
+
+
+    
+echo "ERRO: LINHA/118 -->> DESCARREGAR  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   ";
+exit();
+
+
+
+
+
+    // Define o tempo m?ximo de execu??o em 0 para as conex?es lentas
     set_time_limit(0);
     $post_array = array("grupoanot","val","m_array");
     for( $i=0; $i<count($post_array); $i++ ) {
@@ -138,16 +148,13 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             } 
         }
     }      
-    /**  Final - for( $i=0; $i<count($post_array); $i++ ) {   */
-    //
-    //  Verificar se variavel m_array definida como ARRAY
-    //  $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];
-    if( ! isset($_SESSION["projeto_autor"]) ) $projeto_autor=""; 
-    if( isset($_SESSION["projeto_autor"]) ) {
-          $projeto_autor = trim($_SESSION["projeto_autor"]);
-    } 
-    //
-   //  Verificando Permissao de Acesso do USUARIO
+    ///
+    ///  Verificar se variavel m_array definida como ARRAY
+    /// $pasta = "/var/www/html/rexp3/doctos_img/A".$m_array[0];
+    if( ! isset($_SESSION["projeto_autor"]) )   $projeto_autor=""; 
+    if( isset($_SESSION["projeto_autor"]) )   $projeto_autor = trim($_SESSION["projeto_autor"]);
+    ///
+    ///  Verificando Permissao de Acesso do USUARIO
     /* Exemplo do resultado  do  Permissao de Acesso 
           - criando array
           +-------------+--------+
@@ -161,47 +168,33 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           | anotador    |     50 | 
           +-------------+--------+
     ****/
-    //  Caso for super,chefe ou vice
-    //
-     //  $pasta = "../doctos_img/A".$m_array[0];
-    //  $pasta = "../doctos_img/A".$projeto_autor;
+    ///  Caso for super,chefe ou vice
+    ///
+ 
+    ///  $pasta = "../doctos_img/A".$m_array[0];
+    ///  $pasta = "../doctos_img/A".$projeto_autor;
     $pasta = "{$_SESSION["incluir_arq"]}doctos_img/A".$projeto_autor;
     $pasta .= "/".$m_array[1]."/";     
-    /**
-     *   $output = shell_exec('for arq in `ls '.$pasta.'/*.*`; do mv $arq `echo $arq | tr  [:upper:] [:lower:] `; done');    
-     */
-    // 
+    ///  $output = shell_exec('for arq in `ls '.$pasta.'/*.*`; do mv $arq `echo $arq | tr  [:upper:] [:lower:] `; done');    
     ///  Definindo http ou https
     ///  Definindo http ou https - IMPORTANTE
     ///  Verificando protocolo do Site  http ou https   
     $_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
     $host  = $protocolo."://".$_SERVER['HTTP_HOST']; 
-    //
+    ///
     setlocale(LC_ALL,'pt_BR.UTF8');
     mb_internal_encoding('UTF8'); 
     mb_regex_encoding('UTF8');
-    //
-    //  Arquivo do Projeto
+    ///  Arquivo do Projeto
     header('Content-Type: text/html; charset=utf-8');
     if( ! ini_set('default_charset', 'utf-8') ) {
          ini_set('default_charset', 'utf-8');
     } 
-    //
-    // Arquivo da Anotacao do Projeto - 20260414
-    //  $val = utf8_decode(trim($val)); 
+    ////
+    /// Arquivo da Anotacao do Projeto - 20180913
+    $val = utf8_decode(trim($val)); 
     $arquivo = trim($val);
-    //  $arquivo = trim($arq_anotacao);
-
-
-   /**   
-echo "ERRO: LINHA/182 -->> DESCARREGAR  -->>  \$opcao_maiusc = $opcao_maiusc  <<--  <br>  "
-    ."  -->>  \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]} "
-    ."<br> \$arquivo = $arquivo  ";
-exit();
-   */
-
-
-
+   ///  $arquivo = trim($arq_anotacao);
     
 ////  $dir_arq=utf8_decode("{$pasta}$arquivo"); 
     $dir_arq="{$pasta}{$arquivo}";
@@ -212,28 +205,22 @@ exit();
     ////  $resultado=@file_exists(utf8_decode("{$pasta}$arquivo"));
     $resultado=file_exists("$dir_arq");
     if( ! $resultado ) {
-        /** $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
-         *   echo $msg_erro;  
-        */
-        $merr="&nbsp;Esse Arquivo: ".$arquivo." n&atilde;o tem no Servidor";
-        echo $funcoes->mostra_msg_erro("$merr");       
-        //  
-    } else {
-        //
-        //  SESSIONs para diretorio e arquivo - Anotacao do Projeto
-        //  echo $pasta."%".$arquivo;  
-        //  $_SESSION["arquivo_anotacao"]=utf8_encode($arquivo);
-        $_SESSION["arquivo_anotacao"]=$arquivo;
+         /* $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
+         echo $msg_erro;  
+         */
+          echo  $funcoes->mostra_msg_erro("&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor");         
+    }  else {
+        ///  SESSIONs para diretorio e arquivo - Anotacao do Projeto
+        ///  echo $pasta."%".$arquivo;  
+        $_SESSION["arquivo_anotacao"]=utf8_encode($arquivo);
         $_SESSION["pasta_arq_anotacao"]=$pasta;
-        //  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
+        ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_anotacao"]}%#sepa%#rar%#{$_SESSION["arquivo_anotacao"]}"; 
-        //
+        ///
     } 
-    //
     exit();     
-    //
 }
-/****  Final -  UPLOAD -  do Servidor para maquina local  *******/
+/*******  Final -  UPLOAD -  do Servidor para maquina local  *******/
 //
 //  Botao Busca Projeto
 if( $opcao_maiusc=="BUSCA_PROJ" )  {
