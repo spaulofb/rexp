@@ -44,19 +44,6 @@ $inicio = $pagina - 1;
 $inicio = $maximo * $inicio;
 //
 //  Variaveis recebidos e criando absoletos
-
-
-         
-echo "ERRO: LINHA/45 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
-        ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
-       ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
-       ."<br>  -->> \$_SESSION[num_rows] = {$_SESSION["num_rows"]}   <<-- ";
-exit();
-
-
-
-
-
 if( isset($_SESSION["num_rows"]) ) {
      //
      // if ( $_SESSION["num_rows"]>=1 ) {
@@ -64,9 +51,11 @@ if( isset($_SESSION["num_rows"]) ) {
           unset($_SESSION["num_rows"]);
           /// Conta os resultados no total da minha query
           ///  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
-          ///  $query    = mysql_query($strCount);
-          $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
-          $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+          ///  $query    = mysqli_query($strCount);
+          //  $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
+          $_SESSION["row"] = mysqli_fetch_array($resultado_outro);
+          //  $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
+          $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
           $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
           for( $z=1; $z<99999 ; $z++ ) {
               $valor_final[$z] = $z*$maximo;
@@ -77,17 +66,13 @@ if( isset($_SESSION["num_rows"]) ) {
                     break;
               }
           }
+          /**   Final - for( $z=1; $z<99999 ; $z++ ) {  */
           //
     }
     //
-}   
+}
+/**  Final - if( isset($_SESSION["num_rows"]) ) {  */   
 // 
-
-
-
-
-
-
 //  \$row = array  e  \$total_regs = total_regs de registros encontrados
 $row=$_SESSION["row"]; $total_regs = $_SESSION["total_regs"];
 if( isset($_SESSION["usuario_conectado"]) ) {
@@ -112,24 +97,35 @@ if( intval($total_regs)<=0 ) {
     $num_fields=0; $m_ordenar="nome"; $max_length="";
      /// 
     $strQuery="SELECT $campos_query from  $table_temporaria  LIMIT $inicio,$maximo";  
-    $query      = mysql_query($strQuery);
+    $query      = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-         ////  die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
+         ////  die('ERRO: Sem resultado - Select - falha: '.mysqli_error());   
          $msg_erro .= "&nbsp;Select - falha:&nbsp;db/mysql:&nbsp;";
-         $msg_erro .= mysql_error().$msg_final;
+         $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
          exit();          
     }
    ///  Numero de registros
-    $num_rows = mysql_num_rows($query);
+    $num_rows = mysqli_num_rows($query);
+
+         
+echo "ERRO: LINHA/112 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
+        ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
+       ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
+       ."<br>  -->> \$num_rows = $num_rows  <<-->>  \$total_regs = $total_regs  <<-- ";
+exit();
+
+
+
+
     ///   Pegando os nomes dos campos  do primeiro Select
-    $num_fields=mysql_num_fields($query);  ///  Obtem o numero de campos do resultado
+    $num_fields=mysqli_num_fields($query);  ///  Obtem o numero de campos do resultado
     $td_menu = $num_fields+1;                 
     
     ///  Parte tentando pegar o tamanho maior da coluna (campo)
     $max_length="";
     for( $i = 0;$i<$num_fields; $i++) { ///  Pega o nome dos campos
-         $fields[] = mysql_field_name($query,$i);
+         $fields[] = mysqli_field_name($query,$i);
          ///  Pegando o maximo do espaco ocupado de cada campo 
          ///  vindo do primeiro Select - $query
          $max_length .= " MAX(LENGTH(TRIM($fields[$i]))) as campo$i ";
@@ -140,15 +136,15 @@ if( intval($total_regs)<=0 ) {
      $temp_tabela=$_SESSION["table_consultar_anotacao"];
      ////  $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_consultar_anotacao"]."   ";
      $sqlcmd="SELECT ".$max_length." FROM  $temp_tabela  ";     
-     $result_max_length = mysql_query($sqlcmd);          
+     $result_max_length = mysqli_query($sqlcmd);          
      ///
      if( ! $result_max_length ) {
-         ////  die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());                  
-          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysql_error();
+         ////  die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error());                  
+          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysqli_error();
           echo $msg_erro.$msg_final;  
           exit();          
      }        
-     $num_rows = mysql_num_rows($query);
+     $num_rows = mysqli_num_rows($query);
      $num_rows = (int) strlen(trim($num_rows)); 
      $campo_n=2;
      /*  Como repetir uma string ou caractere 
@@ -207,7 +203,7 @@ if( intval($total_regs)<=0 ) {
     /// print the body of the table
     $conjunto = $_SESSION["conjunto"];
     $conta_linha=0; $sem_link=0;
-    while( $linha = mysql_fetch_row($query)) {
+    while( $linha = mysqli_fetch_row($query)) {
         /// link        
          ?>       
         <tr align="left"  class="font_size" >
@@ -221,13 +217,13 @@ if( intval($total_regs)<=0 ) {
             if( $column_num<1 ) $selecionado=$linha[$column_num];
          ///   if( strtoupper($field_name)=='ARQUIVADO_COMO' ) {
             ////  Alterado em 20180918
-            $Detalhes=trim(mysql_result($query,$conta_linha,"Detalhes"));
+            $Detalhes=trim(mysqli_result($query,$conta_linha,"Detalhes"));
          
             ////  if( preg_match("/ITULO|DATA/i",$field_name_upper) ) {
              if( preg_match("/ITULO|TÍTULO/i",$field_name_upper) ) {
-                ///  $valor=htmlentities(trim(mysql_result($query,$conta_linha,"relatext")));                   
-                //// $valor=htmlentities(trim(mysql_result($query,$conta_linha,"Arquivo")));   
-                $valor=trim(mysql_result($query,$conta_linha,"Arquivo"));                                
+                ///  $valor=htmlentities(trim(mysqli_result($query,$conta_linha,"relatext")));                   
+                //// $valor=htmlentities(trim(mysqli_result($query,$conta_linha,"Arquivo")));   
+                $valor=trim(mysqli_result($query,$conta_linha,"Arquivo"));                                
                ///  $valor = substr($valor,strpos($valor,"_")+1,strlen(trim($valor)));
                 ///  $valor="<img src='../imagens/enviar.gif' alt='Enviar Arquivo'  style='text-align: center; vertical-align:text-bottom;'  >";
                 $m_relatext=$linha[$column_num];  $sem_link=1;
