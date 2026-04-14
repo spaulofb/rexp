@@ -105,39 +105,63 @@ if( intval($total_regs)<=0 ) {
          echo $msg_erro;  
          exit();          
     }
-   ///  Numero de registros
+    //  Nr. de registros
     $num_rows = mysqli_num_rows($query);
+    //
+    //   Pegando os nomes dos campos  do primeiro Select
+    $num_fields=mysqli_num_fields($query);  ///  Obtem o numero de campos do resultado
+    $td_menu = $num_fields+1;      
+     //
+     $max_length = "";
+     $fields = array(); // Inicializa o array para NAO dar erro
+     for( $i = 0; $i < $num_fields; $i++) {
+          //
+          // Pega as informações do campo atual (corrigido para MySQLi)
+          $finfo = mysqli_fetch_field_direct($query, $i);
+          $nome_do_campo = $finfo->name;
+          $fields[] = $nome_do_campo;
+          //
+          // Monta a string SQL para pegar o tamanho máximo do conteúdo
+          // Usamos alias (campo0, campo1...) para facilitar a leitura depois
+          $max_length .= " MAX(LENGTH(TRIM(`$nome_do_campo`))) as campo$i ";
+          //
+          // Adiciona vírgula se não for o último campo
+          if( $i < ($num_fields - 1)) {
+              $max_length .= ", ";
+          }
+          // 
+          // Verifica se o campo é o 'codautor'
+          if ($nome_do_campo == "codautor") {
+              $ncodautor = $nome_do_campo;
+          }
+          //
+    }
+    /**  Final - for( $i = 0; $i < $num_fields; $i++) {  */
+    //
+     /**   Selecionando o maximo espaco ocupado em cada campo da tabela   */
+     $temp_tabela=$_SESSION["table_consultar_anotacao"];
+     ////  $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_consultar_anotacao"]."   ";
+     $sqlcmd="SELECT ".$max_length." FROM  $temp_tabela  ";     
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
+
+
 
          
-echo "ERRO: LINHA/112 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
+echo "ERRO: LINHA/163 -->> tabela_consulta_anotacao.php  -->>  \$opcao_maiusc = $opcao_maiusc  <<-->>  "
         ." \$total_regs = $total_regs  -- \$alterar = $alterar -- \$projeto_autor = $projeto_autor  <br>  -->>"
        ." \$_SESSION[protocolo] = {$_SESSION["protocolo"]} E  \$_SESSION[url_central] = {$_SESSION["url_central"]}   "
-       ."<br>  -->> \$num_rows = $num_rows  <<-->>  \$total_regs = $total_regs  <<-- ";
+       ."<br>  -->> \$num_rows = $num_rows  <<-->>  \$total_regs = $total_regs  <<-- \$td_menu =<b> $td_menu </b> ";
 exit();
 
 
 
+     
 
-    ///   Pegando os nomes dos campos  do primeiro Select
-    $num_fields=mysqli_num_fields($query);  ///  Obtem o numero de campos do resultado
-    $td_menu = $num_fields+1;                 
-    
-    ///  Parte tentando pegar o tamanho maior da coluna (campo)
-    $max_length="";
-    for( $i = 0;$i<$num_fields; $i++) { ///  Pega o nome dos campos
-         $fields[] = mysqli_field_name($query,$i);
-         ///  Pegando o maximo do espaco ocupado de cada campo 
-         ///  vindo do primeiro Select - $query
-         $max_length .= " MAX(LENGTH(TRIM($fields[$i]))) as campo$i ";
-         if( $i<($num_fields-1) ) $max_length.= ", "; 
-         if( $fields[$i]=="codautor" ) $ncodautor=$fields[$i];
-     }
-     ///   Selecionando o maximo espaco ocupado em cada campo da tabela
-     $temp_tabela=$_SESSION["table_consultar_anotacao"];
-     ////  $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_consultar_anotacao"]."   ";
-     $sqlcmd="SELECT ".$max_length." FROM  $temp_tabela  ";     
-     $result_max_length = mysqli_query($sqlcmd);          
-     ///
+
+
+
+
+     //
      if( ! $result_max_length ) {
          ////  die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error());                  
           $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysqli_error();
