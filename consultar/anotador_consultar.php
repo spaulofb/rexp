@@ -43,8 +43,8 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-///
-///   CASO OCORREU ERRO GRAVE
+//
+//   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -53,33 +53,39 @@ if( intval($n_erro)>0 ) {
 /***
 *    Caso NAO houve ERRO  
 *     INICIANDO CONEXAO - PRINCIPAL
-***/
+*/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-
-///  Variavel recebida do script/arquivo - inicia_conexao.php 
-$_SESSION["m_horiz"] = $array_projeto;
-///
-$usuario_conectado = $_SESSION["usuario_conectado"];
-///   Caminho da pagina local
-$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
-
-///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
-/// $_SESSION['time_exec']=180000;
 //
-///  INCLUINDO CLASS - 
+//  Variavel recebida do script/arquivo - inicia_conexao.php 
+$_SESSION["m_horiz"] = $array_projeto;
+//
+$usuario_conectado = $_SESSION["usuario_conectado"];
+//
+//   Caminho da pagina local
+$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
+//
+//  Titulo do Cabecalho - Topo
+if( ! isset($_SESSION["titulo_cabecalho"]) ) {
+    $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+} 
+// $_SESSION['time_exec']=180000;
+//
+//  INCLUINDO CLASS - 
 require_once("{$incluir_arq}includes/autoload_class.php");  
 $funcoes=new funcoes();
 $funcoes->usuario_pa_nome();
 $_SESSION["usuario_pa_nome"]=$funcoes->usuario_pa_nome;
-///
-/***
+//
+/**  CONEXAO/MYSQLI  */
+$conex = $_SESSION["conex"];
+//
+/**
 *    Depois do arquivo inicia_conexao.php 
 *      - definido Desktop ou Mobile (aplicativo movel)
 */
 $estilocss = $_SESSION["estilocss"];
-///
-///
+//
+//
 ?>
 <!DOCTYPE html >
 <html lang="pt-br"  >
@@ -104,12 +110,18 @@ $estilocss = $_SESSION["estilocss"];
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/responsiveslides.min.js" ></script>
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/resize.js" ></script>
 <script  language="javascript"  type="text/javascript"  charset="utf-8" >
-/* <![CDATA[ */
-///   JavaScript Document
-///
+/***
+          Javascript Document 
+          
+    Define o caminho HTTP  -  20180416
+*/  
+//
 var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
-///
-///   Corrigindo acentuacao
+//
+//   Caminho da pagina local
+var pagina_local="<?php echo  $_SESSION["pagina_local"];?>";    
+//
+//   Corrigindo acentuacao
 charset="UTF-8";
 ///
 ///  variavel quando ocorrer Erros
@@ -188,7 +200,8 @@ function enviando_dados(source,val,string_array) {
         ///  Ocultando ID  e utilizando na tag input comando onkeypress
          exoc("label_msg_erro",0);  
     } else {
-        alert("funcion exoc nao existe");
+         alert("funcion exoc inexistente - ADMINISTRADOR CORRIGIR.");
+        return;        
     }
     ///  
     ///  Verificando variaveis
@@ -220,25 +233,40 @@ function enviando_dados(source,val,string_array) {
     }
     ///
     var opcao = source.toUpperCase();
-     /****  
-          Define o caminho HTTP    -  20180228
-     ***/  
-     var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
-     var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";           
+    //
     
-////  alert(" CONTINUAR anotador_consultar.js/137 --- INICIO --- source = "+opcao+" -- val = "+val+" -string_array = "+string_array);
+  //  alert(" CONTINUAR anotador_consultar.js/137 --- INICIO --- source = "+opcao+" -- val = "+val+" -string_array = "+string_array);
 
-    ///  Caso NAO selecionou Projeto
-    if( string_array=="" &&  opcao=="PROJETO" && val.toUpperCase()=="PROJETO" ) {
-         ///  Caso string_array estiver  nula
+    //  Caso NAO selecionou Projeto
+    const variaveis = [opcao, val];
+    const busca = /PROJETO/i; // O 'i' faz ignorar maiúsculas/minúsculas
+
+
+    // Verifica se PELO MENOS UMA variável contém a palavra
+    const existeEmAlguma = variaveis.some(v => busca.test(v));
+    //
+
+
+    alert(" LINHA/247  -- existeEmAlguma = "+existeEmAlguma);
+
+
+    /**  if( string_array=="" &&  opcao=="PROJETO" && val.toUpperCase()=="PROJETO" ) {  */
+    if( string_array=="" && existeEmAlguma ) {
+         //
+         //  Caso string_array estiver  nula
          if( string_array.length<1 )  {
               ///  Retornar na pagina - reset 
               location.href=pagina_local;
               return;
          }
     } 
-    ///
-    if( ( typeof(string_array)!='undefined') && ( opcao=="PROJETO" || opcao=="LISTA" )  ) {
+    /**  Final - if( string_array=="" && existeEmAlguma ) {  */
+    //
+    //
+    var res = opcao.search(/^projeto$|^lista$/ui);
+      /** if( ( typeof(string_array)!='undefined') && ( opcao=="PROJETO" || opcao=="LISTA" )  ) { */
+     if( ( typeof(string_array)!='undefined') && ( res!=-1 )  ) {
+        // 
         if( document.getElementById('resultado_anotador') ) {
            document.getElementById('resultado_anotador').style.display="none";    
         }
@@ -246,71 +274,105 @@ function enviando_dados(source,val,string_array) {
         var m_id_title = document.getElementById("projeto").title;
         var m_id_name  = document.getElementById("projeto").name;
         if( m_id_type=="select-one" ) {  
+             //
              var m_id_value = trim(document.getElementById(m_id_name).value);
              if( m_id_value=="" ) {
+                  //
                    document.getElementById("label_msg_erro").style.display="block";
                    var msg_erro = "<span class='texto_normal' style='color: #000; text-align: center;'>";
                    msg_erro += "<span style='color: #FF0000;'>ERRO:&nbsp;";
                    var final_msg_erro = "&nbsp;</span></span>";
+                   //
                    m_tit_cpo = "<span style='color: #000000;'>&nbsp;&nbsp;"+m_id_title+"</span>";
                    msg_erro = msg_erro+'&nbsp;Corrigir campo.'+m_tit_cpo+final_msg_erro;
                    document.getElementById("label_msg_erro").innerHTML=msg_erro;    
                    document.getElementById(m_id_name).focus();
+                   //
                    return;
-                   ////
+                   //
              } else {
-                  ///  Desativando IDs 
+                  //
+                  //  Desativando IDs 
                   exoc("anotacao_escolhida",0);                   
                   exoc("resultado_anotador",0);
                   exoc("div_out",0);
-                  ///
+                  //
              }
-        } 
+        }
+        /**   Final - if( m_id_type=="select-one" ) {  */
+        // 
     }
-    ///  Utilizando Navegador 
+    //
+    //  Utilizando Navegador 
     var browser="";
     if( typeof navegador=="function" ) {
          var browser=navegador();
     }  
-    ///
-    var poststr = "source="+encodeURIComponent(source)+"&val="+encodeURIComponent(val)+"&m_array="+escape(string_array)+"&navegador="+browser; 
-         
-    /*   Aqui eu chamo a class do AJAX */
+    //
+    var poststr = "source="+encodeURIComponent(source)+"&val="+encodeURIComponent(val);
+    poststr += "&m_array="+escape(string_array)+"&navegador="+browser; 
+
+alert("LINHA/312  = poststr = "+poststr);
+    
+
+
+     //
+    /***   Aqui eu chamo a class  */
     var myConn = new XHConn();
-        
-    /*  Um alerta informando da não inclus?o da biblioteca - AJAX   */    
-    if( !myConn ) {
-          alert("XMLHTTP não disponível. Tente um navegador mais novo ou melhor.");
-          return false;
+    //
+    /***  Um alerta informando inexistente na biblioteca   ***/
+    // IMPORTANTE: descobrir erros nos comandos - try e catch
+    try {
+       if( !myConn ) {
+            alert("XMLHTTP inexistente. Tente um navegador mais novo ou melhor.");
+            return false;
+        }
+    } catch(err) {
+         //
+         // Enviando mensagem de erro
+         exoc("label_msg_erro",1,err.message);  
+         //
     }
-    ///
-    ///  Serve tanto para o arquivo projeto, anotacao e outros - Cadastrar
-   ///   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
+    //
+
+
+
+
+    //
+    //  Serve tanto para o arquivo projeto, anotacao e outros - Cadastrar
+    //   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
     var receber_dados = "srv_mostraanotador.php";
-    ///
+    //
      var inclusao = function (oXML) { 
-                     ///  Recebendo os dados do arquivo ajax
-                     ///  Importante ter trim no  oXML.responseText para tirar os espacos
-                     var m_dados_recebidos = trim(oXML.responseText);
-                     var lnip = m_dados_recebidos.search(/Nenhum|ERRO:/i);
+                  //
+                  //  Recebendo os dados do arquivo ajax
+                  //  Importante ter trim no  oXML.responseText para tirar os espacos
+                  var m_dados_recebidos = trim(oXML.responseText);
+                  var lnip = m_dados_recebidos.search(/Nenhum|ERRO:/ui);
 
- ///  alert(" anotador_consultar.php/261 ---> lnip = "+lnip+"  <<<---  opcao = "+opcao+" <<<---  source="+source+" -- val = "+val+"  -- string_array = "+string_array+"  -- \r\n m_dados_recebidos = "+m_dados_recebidos);                                                        
+  alert(" anotador_consultar.php/350 ---> lnip = "+lnip+"  <<<---  opcao = "+opcao+" <<<---"
+       +"  source="+source+" -- val = "+val+"  -- string_array = "+string_array
+       +"  -- \r\n m_dados_recebidos = "+m_dados_recebidos);                                                        
 
-                     ///  Caso ocorreu erro
+                     //  Caso ocorreu erro
                      if( parseInt(lnip)!=-1 ) {
-                         /*   Caso receber esses dados - centro da pagina:
+                         /**   Caso receber esses dados - centro da pagina:
                                    Nenhuma Anota&ccedil;&atilde;o desse Projeto 
                                    IMPORTANTE: javascript regular expression                             
                          */
                          /// if( m_dados_recebidos.search(/Nenhuma/i)==-1  ) {
-                         if( m_dados_recebidos.search(/Nenhuma\s{1,}([A-Za-z&;$#@()*%!]+)\s{1,}desse\s{1,}projeto/i)==-1  ) {    
-                              ///  Ativando ID mensagem de erro
+                         var zw=m_dados_recebidos.search(/Nenhuma\s{1,}([A-Za-z&;$#@()*%!]+)\s{1,}desse\s{1,}projeto/i);
+                         if( zw==-1  ) {    
+                              //
+                              //  Ativando ID mensagem de erro
                               exoc("label_msg_erro",1,m_dados_recebidos);
                               return;                   
                          }
+                         //
                      }
-                     ////
-                     if(  opcao=="CONJUNTO" ) { 
+                     //
+                     if( opcao=="CONJUNTO" ) { 
+                         //
                             var m_elementos = "instituicao|unidade|depto|setor|bloco|sala";
                             var new_elements = m_elementos.split("|");
                             //// Desativando alguns campos
@@ -384,7 +446,7 @@ function enviando_dados(source,val,string_array) {
                                    ///  Ativando ID anotacao_escolhida
                                    exoc("anotacao_escolhida",1,myArguments);                   
                             }
-                            ///
+                            //
                      } else if( opcao=="DESCARREGAR"  ) {
                            ///
                            var srv_ret = trim(m_dados_recebidos);
@@ -447,22 +509,22 @@ function enviando_dados(source,val,string_array) {
        ///
        return;
 }  
-///  FINAL da Function enviar_dados_cad para AJAX 
-///
-/* ]]> */
+//  FINAL da Function enviar_dados_cad para AJAX 
+//
 </script>
 <?php
-///     Alterado em 20170925   
-///   require_once("{$_SESSION["incluir_arq"]}includes/dochange.php");
+//
+//     Alterado em 20260428
+//   require_once("{$_SESSION["incluir_arq"]}includes/dochange.php");
 require("{$_SESSION["incluir_arq"]}includes/domenu.php");
-
-///   Consultar - Anotador
+//
+//   Consultar - Anotador
 if( isset($_GET["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_GET["m_titulo"];    
 } elseif( isset($_POST["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_POST["m_titulo"];      
 }  
-///
+//
 ?>
 </head>
 <body  id="id_body"  oncontextmenu="return false" onselectstart="return false"  ondragstart="return false"    onkeydown="javascript: no_backspace(event);"   >
@@ -471,13 +533,20 @@ if( isset($_GET["m_titulo"]) ) {
 <!-- Cabecalho -->
 <div id="cabecalho"  >
 <?php 
-$incluir_arq=trim($_SESSION["incluir_arq"]);
-include("{$incluir_arq}script/cabecalho_rge.php");?>
+//
+//  include("{$incluir_arq}script/cabecalho_rge.php");
+require_once("{$incluir_arq}script/cabecalho_rge.php");
+//
+?>
 </div>
 <!-- Final Cabecalho -->
 <!-- MENU HORIZONTAL -->
 <?php
-include("{$incluir_arq}includes/menu_horizontal.php");
+//
+/** Parte do Menu - array -  arquivo  array_menu.php  */  
+// include("{$incluir_arq}includes/menu_horizontal.php");
+require_once("{$incluir_arq}includes/menu_horizontal.php");
+//
 ?>
 <!-- Final do MENU  -->
 <!--  Corpo -->
@@ -490,15 +559,32 @@ include("{$incluir_arq}includes/menu_horizontal.php");
 </section>
 <!-- Final - Mensagem de ERRO e Titulo    -->
 <?php 
-////   IP do usuario conectado
-if ( isset($_SERVER["REMOTE_ADDR"]) )    {
-    $usuario_ip = $_SERVER["REMOTE_ADDR"];
-} else if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
-    $usuario_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-} else if ( isset($_SERVER["HTTP_CLIENT_IP"]) )    {
-    $usuario_ip = $_SERVER["HTTP_CLIENT_IP"];
+//
+/**  IP do Usuario Conectado   */  
+/** function - definindo IP */
+function get_client_ip() {
+     //
+    $ipaddress = '';
+    //
+    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        // O X-Forwarded-For pode vir com uma lista de IPs (ip1, ip2). Pegamos o primeiro.
+        $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ipaddress = trim($ips[0]);
+    } else if (isset($_SERVER['REMOTE_ADDR'])) {
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $ipaddress = 'IP_DESCONHECIDO';
+    }
+    
+    // Opcional: Validar se o IP é realmente válido
+    return filter_var($ipaddress, FILTER_VALIDATE_IP) ? $ipaddress : 'IP_INVALIDO';
 }
-///  IPS permitidos  
+/**  Final - function get_client_ip() {  */
+$usuario_ip = get_client_ip();
+//
+//  IPS permitidos  
 $ips_permitidos = array("143.107.143.231","143.107.143.232","189.123.108.225",$usuario_ip);
 if( ! in_array($usuario_ip, $ips_permitidos) ) {
     ?>
@@ -508,17 +594,24 @@ if( ! in_array($usuario_ip, $ips_permitidos) ) {
       /* ]]> */
    </script>
    <?php
+   //
    echo "<p style='text-align: center; font-size: medium;' >P&aacute;gina em constru&ccedil;&atilde;o</p>";
    exit();
+   //
 }
 //
-//     Verificano o PA - Privilegio de Acesso
-//   INVES de superusuario e?  super
-//  if( ( $_SESSION["permit_pa"]>$array_pa['superusuario']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {    
-if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {  
-     /// Para incluir nas mensagens
-     /// include_once("../includes/msg_ok_erro_final.php");
-     ////      
+//  Verificano o PA - Privilegio de Acesso
+
+/**
+ *     - INVES de superusuario 
+ *  if( ( $_SESSION["permit_pa"]>$array_pa['superusuario']  and $_SESSION["permit_pa"]<=$array_pa['orientador'] ) ) {    
+ */
+$permit_pa=$_SESSION["permit_pa"];
+if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) {  
+     //
+     // Para incluir nas mensagens
+     // include_once("../includes/msg_ok_erro_final.php");
+     //      
 ?>
 <div id="div_form" class="div_form" style="overflow: auto;" >
 <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
@@ -527,19 +620,29 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
 </div>
 <div class="div_select_projeto"  >
      <?php 
-         ///  $elemento=5; $elemento2=6;
-           /////  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-  ////           include("php_include/ajax/includes/conectar.php");            
+         //
+         //  $elemento=5; $elemento2=6;
+         //  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
+  //     include("php_include/ajax/includes/conectar.php");            
            $sem_projeto=utf8_decode("Esse {$_SESSION["usuario_pa_nome"]} n&atilde;o tem Projeto para adicionar Anotador.");
-           ///
+           //
            $nerro=0;
            # IMPORTANTE: Aqui esta o segredo
-           mysql_query("SET NAMES 'utf8'");
-           mysql_query('SET character_set_connection=utf8');
-           mysql_query('SET character_set_client=utf8');
-           mysql_query('SET character_set_results=utf8');
-           ///
-           /* Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
+           //
+           //  mysql_query("SET NAMES 'utf8'");
+           //  mysql_query('SET character_set_connection=utf8');
+           //  mysql_query('SET character_set_client=utf8');
+           //  mysql_query('SET character_set_results=utf8');
+           //
+           /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
+           mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+           //
+
+           exit();
+
+           //
+           //
+           /**  Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
               +-------------+--------+
               | descricao   | codigo |
               +-------------+--------+
@@ -552,6 +655,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
               +-------------+--------+
            ***/
            if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
+                //
                  $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo, "
                       ." b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                       ." b.autor=".$usuario_conectado." order by b.titulo "; 

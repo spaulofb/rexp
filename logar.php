@@ -40,30 +40,37 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
 }
 $incluir_arq=trim($_SESSION["incluir_arq"]);
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-///
+//
+//
+/**  CONEXAO/MYSQLI  */
+$conex = $_SESSION["conex"];
+//
 /***
 *    Caso NAO houve ERRO  
 ***/
 if( intval($n_erro)<1 )  {
-    ////   CONECTANDO
+    //
+    //   CONECTANDO
     include("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-    ///
-    ///  HOST mais a pasta principal do site - host_pasta
+    //
+    //  HOST mais a pasta principal do site - host_pasta
     if( ! isset($_SESSION["host_pasta"]) ) {
          $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
          echo $msg_erro;
          exit();
-    }
+    }  
+    /**  Final - if( ! isset($_SESSION["host_pasta"]) ) {   */
     $host_pasta=trim($_SESSION["host_pasta"]);
     if( strlen($host_pasta)<1 ) $n_erro=2;
-    ///
-    /***
+    //
+    /**
     *    Caso NAO houve ERRO  
     */
     if( intval($n_erro)<1 ) {
-        ///  DEFININDO A PASTA PRINCIPAL 
-        /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
-        ///  Verificando SESSION  pasta_raiz
+        //
+        //  DEFININDO A PASTA PRINCIPAL 
+        //  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
+        //  Verificando SESSION  pasta_raiz
         if( ! isset($_SESSION["pasta_raiz"]) ) {
              $msg_erro .= "Sessão pasta_raiz não está ativa.".$msg_final;  
              echo $msg_erro;
@@ -81,14 +88,16 @@ if( intval($n_erro)<1 )  {
         ///  include("../includes/array_menu.php");
         include("{$incluir_arq}includes/array_menu.php");
         if( isset($_SESSION["array_pa"]) ) {
+            //
             $array_pa = $_SESSION["array_pa"];   
-            ///  Permissao do anotador    
+            //  Permissao do anotador    
             $permit_anotador = $array_pa['anotador'];
             ///  Permissao do orientador
             $permit_orientador = $array_pa['orientador'];
+            //
         }
-        ///
-        ///  Verifica desktop ou aparelho movel - retorna estilo css
+        //
+        //  Verifica desktop ou aparelho movel - retorna estilo css
         if( ! isset($_SESSION["dirprincipal"]) ) {
              $msg_erro .= "Sessão usuario_conectado não está ativa.".$msg_final;  
              echo $msg_erro;
@@ -168,10 +177,10 @@ $estilocss = $_SESSION["estilocss"];
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/resize.js" ></script>
 <!-- <script type="text/javascript" src="<?php echo $host_pasta;?>js/verifica_mobile.js" ></script> -->
 <?php
+//
 $_SESSION['n_upload']="ativando";
-///  $_SESSION["http_host"]= "http://sol.fmrp.usp.br".$_SESSION["pasta_raiz"];
-
-$_SESSION["http_host"]= $_SESSION['url_folder'];
+//
+//  $_SESSION["http_host"]= $_SESSION['url_folder'];
 
 ///  Para mudar de pagina no MENU
 ///  include("{$_SESSION["incluir_arq"]}includes/dochange.php");
@@ -184,12 +193,22 @@ include("{$_SESSION["incluir_arq"]}includes/domenu.php");
 <div class="pagina_ini"  id="pagina_ini"  >
 <!-- Cabecalho  -->
 <div id="cabecalho" style="z-index:2;" >
-<?php include("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");?>
+<?php  
+//
+ //  include("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");
+ require("{$_SESSION["incluir_arq"]}script/cabecalho_rge.php");
+ //
+ ?>
 </div>
 <!-- Final Cabecalho -->
 <!-- MENU HORIZONTAL -->
 <?php
-include("includes/menu_horizontal.php");
+/**  
+ *     MENU HORIZONTAL
+ */
+//  include("includes/menu_horizontal.php");
+require_once("includes/menu_horizontal.php");
+//
 ?>
 <!-- Final do MENU  -->
 <!--  Corpo -->
@@ -209,11 +228,12 @@ include("includes/menu_horizontal.php");
     <article>
      <div  class="titulo_usp" align="center"  style="padding: 2px 0 2px 0;  font-size: medium;" >
      <?php
-       ///  Conectando
+       //
+       //  Conectando
       $elemento=5; $elemento2=6;
       require_once("php_include/ajax/includes/conectar.php");
       $array_pa=$_SESSION["array_pa"];
-      /* Exemplo do resultado  do  Permissao de Acesso - $array_pa
+      /**  Exemplo do resultado  do  Permissao de Acesso - $array_pa
       +-------------+--------+
       | descricao   | codigo |
       +-------------+--------+
@@ -225,26 +245,28 @@ include("includes/menu_horizontal.php");
       | anotador    |     50 | 
       +-------------+--------+
     */
-       ///
+     //
     $usuario_conectado = $_SESSION["usuario_conectado"];
     $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
-             ." WHERE (a.codigousp=b.codigousp ) and a.codigousp=\"$usuario_conectado\" order by a.pa  ";
-    ////   
-    $resultado_pa=mysql_query($cmdsql);
+             ." WHERE (a.codigousp=b.codigousp ) and a.codigousp=\"$usuario_conectado\" ";
+    $cmdsql.=" order by a.pa  ";         
+    //   
+    $resultado_pa=$conex->query($cmdsql);
     if( ! $resultado_pa  ) {
-        $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
+        $msg_erro .= "SELECT participante/pessoa: ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo $msg_erro;
         exit();  
     }
-    ///  Numero de registros
-    $regs = mysql_num_rows($resultado_pa);
-    ///  Verificando o numero de registros    
-       ///  Verificando o numero de registros    
+    //  Nr. de registros
+    $regs = mysqli_num_rows($resultado_pa);
+    //
+    //  Verificando o nr. de registros    
     if( intval($regs)>1 ) {
-         ///  $num_pas = count($array_usuarios);         
+         //
+         //  $num_pas = count($array_usuarios);         
          $num_pas= (int) count($array_pa); 
-        ///
-        ?>
+        //
+      ?>
         <table width="100%" border="1" cellspacing="2" cellpadding="1" height="100%" style="margin-top: 2px; vertical-align: top; border: 2px double #000000; ">
         <tr align="center" style="margin-top: 2px; vertical-align: top; text-align: center; " >
          <td>
@@ -252,22 +274,33 @@ include("includes/menu_horizontal.php");
         <select name="permit_pa"  id="permit_pa"  class="td_select"  onchange="javascript:  dochange('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
         <option value="" >Selecione</option>
         <?php
-         while( $linha=mysql_fetch_array($resultado_pa) ) {       
-                $codigo_pa= (int) $linha["pa"];
-               foreach( $array_pa as $chave => $valor )  { 
-                      $campo_nome = ucfirst($chave);
-                      $valor= (int) $valor;
-                      if( $valor==$codigo_pa ) {
-                           echo "<option  value=".$valor." title='Clicar'  >";
-                           $codigo_caracter=mb_detect_encoding($campo_nome);
-                           if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-                                echo  htmlentities($campo_nome)."&nbsp;</option>";
-                           } else {
-                                echo  $campo_nome."&nbsp;</option>" ;
-                           }
-                      }                
-                }
-         }   
+          //
+          // 1. Mudamos para mysqli_fetch_assoc para acessar as colunas pelo nome
+          while( $linha = mysqli_fetch_assoc($resultado_pa)) {
+               //
+               $codigo_pa = (int) $linha["pa"];
+               //
+               foreach ($array_pa as $chave => $valor) {
+                    //
+                    $valor_int = (int) $valor;
+                    //
+                    // 2. Comparação direta (usando === para boa prática no PHP 8)
+                    if( $valor_int === $codigo_pa) {
+                    $campo_nome = ucfirst($chave);
+                    //
+                    // 3. No PHP 8.3 e com banco em UTF8, a detecção manual de encoding é desnecessária.
+                    // Usamos htmlspecialchars para proteger o HTML de caracteres especiais.
+                    $nome_seguro = htmlspecialchars($campo_nome, ENT_QUOTES, 'UTF-8');
+                    //
+                    // 4. Saída formatada com aspas duplas para facilitar a leitura
+                    echo "<option value=\"{$valor_int}\" title=\"Clicar\">";
+                    echo "{$nome_seguro}&nbsp;</option>";
+                    }
+               }
+               //
+          }
+          /**  Final - while( $linha = mysqli_fetch_assoc($resultado_pa)) { */
+          //
         ?>
         </select>
         </span>
@@ -275,35 +308,39 @@ include("includes/menu_horizontal.php");
         </tr>
         </table>
         <?php
-          /// Desativando variavel 
-         if( isset($resultado_pa) )  mysql_free_result($resultado_pa);
-         ///   
-         ///     
+           //
+           // Desativando variavel 
+           if( isset($resultado_pa) ) {
+              unset($resultado_pa);
+           } 
+           //   
+          //     
     } else if( intval($regs)==1 ) {
-         /*  Caso o total seja zero sair com exit() 
-               destroy qualquer session               
-         */
+         //
+         /**  Caso o total seja zero sair com exit()   */
          ///  include("php_include/ajax/includes/sair.php");        
          $permit_pa=mysql_result($resultado_pa,0,"pa"); 
          # Aqui está o segredo
-         mysql_query("SET NAMES 'utf8'");
-         mysql_query('SET character_set_connection=utf8');
-         mysql_query('SET character_set_client=utf8');
-         mysql_query('SET character_set_results=utf8');
-         mysql_set_charset('utf8');
-         ///
-         $cmdsql="SELECT a.descricao,b.nome FROM rexp.pa a, pessoal.pessoa b  "
-                ." WHERE a.codigo=$permit_pa and b.codigousp=\"$usuario_conectado\"  ";
+         /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
+          mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+          //
+          //
+          $cmdsql="SELECT a.descricao,b.nome FROM rexp.pa a, pessoal.pessoa b  ";
+          $cmdsql.=" WHERE a.codigo=$permit_pa and b.codigousp=\"$usuario_conectado\"  ";
           ///   
-          $res_pa_descr=mysql_query($cmdsql);
+          $res_pa_descr=$conex->query($cmdsql);
           if( ! $res_pa_descr  ) {
-               die('ERRO: SELECT pa/permissao de acesso '.mysql_error());
+               die('ERRO: SELECT pa/permissao de acesso '.mysqli_error($_SESSION["conex"]));
                exit();  
            }
-           $regs = mysql_num_rows($res_pa_descr);
-           $descricao_pa = mysql_result($res_pa_descr,0,"descricao"); 
-           $nome_do_usuario = mysql_result($res_pa_descr,0,"nome"); 
-           /// Tabela abaixo do arquivo logar.php  - (Chefe, Orientador, Anotador e etc...)
+           // Nr. de Registros
+           $regs = mysqli_num_rows($res_pa_descr);
+           //
+           $descricao_pa = mysqli_result($res_pa_descr,0,"descricao"); 
+           $nome_do_usuario = mysqli_result($res_pa_descr,0,"nome"); 
+           //
+           // Tabela abaixo do arquivo logar.php  - (Chefe, Orientador, Anotador e etc...)
+           //
          ?>
           <table width="100%" border="1" cellspacing="2" cellpadding="1" height="100%">
              <tr>
@@ -314,6 +351,7 @@ include("includes/menu_horizontal.php");
              </tr>
            </table>
           <?php                        
+            //
     }       
     ////       
      ?>
@@ -326,7 +364,7 @@ include("includes/menu_horizontal.php");
  <!-- Final Corpo -->
  <!-- Rodape -->
 <div id="rodape"   >
-<?php include_once("includes/rodape_index.php"); ?>
+<?php require_once("includes/rodape_index.php"); ?>
 </div>
 <!-- Final do  Rodape -->
 </div>
