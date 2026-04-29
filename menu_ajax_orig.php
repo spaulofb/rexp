@@ -75,7 +75,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
        } 
 	}
 }
-///
+//
 //   Para acertar a acentuacao - utf8_encode
 //  $source = utf8_decode($source); $val = utf8_decode($val);
 
@@ -94,7 +94,7 @@ $php_errormsg='';
 if( isset($_SESSION["url_central"]) ) {
      $http_host = $url_central = @trim($_SESSION["url_central"]);     
 } else {
-    echo "<p style='background-color: #000000;color:#FFFFFF;font-size:large;'>ERRO: grave falha na session url_central. Contato com Administrador.</p>";
+    echo "<p style='background-color: #000000;color:#FFFFFF;font-size:large;'> ERRO: grave falha na session url_central. Contato com Administrador.</p>";
     exit();
 }
 ///
@@ -148,7 +148,7 @@ if( $source_maiusc=="LOGAR" ) {
       | anotador    |     50 | 
       +-------------+--------+
     */
-    ///
+    //
     $usuario_conectado = $_SESSION["usuario_conectado"];
     $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
              ." WHERE (a.codigousp=b.codigousp ) and a.codigousp=\"$usuario_conectado\" order by a.pa  ";

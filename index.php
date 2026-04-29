@@ -94,7 +94,7 @@ if( strtoupper(trim($estilocss))=="ESTILO_MOBILE.CSS"  ) {
         $lcportrait=$_SESSION["lcportrait"];
     }
 }
-///
+//
 ?>
 <!DOCTYPE html>
 <html lang="pt-br" >
