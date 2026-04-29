@@ -60,7 +60,8 @@ var pasta_raiz ="<?php echo $_SESSION["pasta_raiz"];?>";
       Funcao principal para enviar dados via AJAX
 */
 function dochange(source,val,m_array)  {
-    /// Verificando se a function exoc existe 
+    //
+    // Verificando se a function exoc existe 
     if(typeof exoc=="function" ) {
          ///  Ocultando ID  e utilizando na tag input comando onkeypress
          exoc("label_msg_erro",0);  

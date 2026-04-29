@@ -80,12 +80,30 @@ if( intval($n_erro)<1 )  {
         ///
         ///  Definindo http ou https - IMPORTANTE
         ///  Verificando protocolo do Site  http ou https   
-        $_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
-        $_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
+        $xerr=0;
+        if( ! isset($_SESSION["url_central"]) ) {
+            $xerr=1;
+        } else {
+            //
+            $xnrs=trim($_SESSION["url_central"]);
+            //
+            if( ! filter_var($xnrs, FILTER_VALIDATE_URL)) {
+                  $xerr=1;
+            }
+            ///  if( strlen($xnrs)<3 )
+        }
+        //
+        /**  Caso SESSION url_central  */
+        if( intval($xerr)>0 ) {
+             //
+             $_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
+             $_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
+             //
+        }
         $raiz_central=$_SESSION["url_central"];
-        ///
-        ///    MENU HORIZONTAL
-        ///  include("../includes/array_menu.php");
+        //
+        //    MENU HORIZONTAL
+        //  include("../includes/array_menu.php");
         include("{$incluir_arq}includes/array_menu.php");
         if( isset($_SESSION["array_pa"]) ) {
             //
@@ -138,11 +156,11 @@ $php_errormsg='';
 ***/
 ///   Caminho da pagina local
 $pagina_local=$_SESSION["protocolo"]."://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
-
-///  Titulo do Cabecalho - Topo
+//
+//  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]= utf8_decode("Registro de Anotação") ;
-///
-/// $_SESSION['time_exec']=180000;
+//
+// $_SESSION['time_exec']=180000;
 ///
 /***
 *    Depois do arquivo inicia_conexao.php 
@@ -271,7 +289,7 @@ require_once("includes/menu_horizontal.php");
         <tr align="center" style="margin-top: 2px; vertical-align: top; text-align: center; " >
          <td>
         <span  class="td_inicio1" style="background-color: #FFFFFF; color: #000000; border: none;"  >Selecione para logar como:&nbsp;&nbsp;
-        <select name="permit_pa"  id="permit_pa"  class="td_select"  onchange="javascript:  dochange('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
+        <select name="permit_pa"  id="permit_pa"  class="td_select"  onchange="dochange('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
         <option value="" >Selecione</option>
         <?php
           //
