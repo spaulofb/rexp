@@ -312,8 +312,9 @@ function enviando_dados(source,val,string_array) {
     var poststr = "source="+encodeURIComponent(source)+"&val="+encodeURIComponent(val);
     poststr += "&m_array="+escape(string_array)+"&navegador="+browser; 
 
-alert("LINHA/312  = poststr = "+poststr);
-    
+/**  
+ *   alert("LINHA/312  = poststr = "+poststr);
+ */
 
 
      //

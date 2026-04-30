@@ -203,6 +203,19 @@ if( ! isset($permit_pa)  ) {
     }
     $ssot="{$_SESSION["total"]}"; 
     //
+
+    //  Verifica IPs Admin - Permissao
+    //  if( in_array($_SERVER['REMOTE_ADDR'], $_SESSION["ipsperm"])  ) {
+            // echo('Acesso <br>');  
+            /**
+            *  Verifica os Bancos de Dados ativos - MariaDB  
+            */
+            //  require_once("{$_SESSION["incluir_arq"]}includes/painel.php");  
+    //  }
+    //
+
+
+
     //
     if( intval($ssot)<1 ) {
         //

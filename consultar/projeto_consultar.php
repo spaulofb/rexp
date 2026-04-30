@@ -566,7 +566,7 @@ if( ! $rst_cons_proj ) {
     exit();
 }
 //  Nr. de Projetos Selecionados
-$nprojetos = mysqlI_num_rows($rst_cons_proj);
+$nprojetos = mysqli_num_rows($rst_cons_proj);  
 if( intval($nprojetos)<1 ) {
      ?>
      <script type="text/javascript">
@@ -607,6 +607,25 @@ if( intval($nprojetos)<1 ) {
 <?php
 }
 ///  Final - if( intval($nprojetos)<1 ) {  
+
+
+
+    //  Verifica IPs Admin - Permissao
+    if( in_array($_SERVER['REMOTE_ADDR'], $_SESSION["ipsperm"])  ) {
+            // echo('Acesso <br>');
+            /**
+            *  Verifica os Bancos de Dados ativos - MariaDB
+	    *  require_once("{$_SESSION["incluir_arq"]}includes/painel.php");  
+            */
+	    require_once("{$_SESSION["incluir_arq"]}includes/painel_new.php");  
+	    //
+     }
+    //
+
+
+
+
+
 ?>
 <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
 <p class="titulo_usp" >Selecionar:</p>
@@ -616,7 +635,8 @@ if( intval($nprojetos)<1 ) {
        onchange="consulta_mostraproj('busca_proj',this.value)"  >
     <!-- Identificacao do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
 <?php  
-//  
+//   
+//  Projetos
 if( intval($nprojetos)<1 ) {
       //
       $usuario_pa_nome = $_SESSION["usuario_pa_nome"];

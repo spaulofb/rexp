@@ -129,12 +129,8 @@ if( class_exists('funcoes') ) {
 if( isset($_SESSION["anotacao_cip_altexc"]) ) {
      unset($_SESSION["anotacao_cip_altexc"]); 
 } 
-//
-//
-/**  CONEXAO/MYSQLI  */
-$conex = $_SESSION["conex"];
-//
-/**
+////
+/***
 *    Depois do arquivo inicia_conexao.php 
 *      - definido Desktop ou Mobile (aplicativo movel)
 */
