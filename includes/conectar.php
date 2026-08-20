@@ -18,7 +18,7 @@ $con_user=  'soldbm';
 $con_pass= 'lexus2P5W1!';
 
 /// IPs Administradores - v20260430
-$ipsperm = ['143.107.143.231','143.107.143.251'];
+$ipsperm = ['143.107.143.231','143.107.143.232','143.107.143.251'];
 $_SESSION["ipsperm"]=$ipsperm;
 //
 
@@ -29,7 +29,7 @@ $_SESSION["ipsperm"]=$ipsperm;
 ///  Verificando o acesso a conexao-  atualizado 20191122 
 ///  $lnkcon= mysql_connect($con_host, $con_user,$con_pass ) or die("ERRO/Acesso sgbd.");
 /// $lnkcon= mysql_pconnect($con_host, $con_user,$con_pass ) or die("ERRO/Acesso sgbd.");
-$conex = $_SESSION["conex"] = $lnkcon= mysqli_connect($con_host, $con_user,$con_pass );
+$_SESSION["conex"] = $lnkcon= mysqli_connect($con_host, $con_user,$con_pass );
 ///
 /// Verificando Conexao 
 if( mysqli_connect_errno() )  {
@@ -43,9 +43,12 @@ if( mysqli_connect_errno() )  {
     $m_erro = TRUE; 
     exit(); 
 }
-///   Conexao sucesso 
-///
-///  $lnkdb = mysql_select_db($db_array[$elemento], $lnkcon) or die("ERRO/Conectar  bd");
+/**  Final - if( mysqli_connect_errno() )  {   */
+//
+//   Conexao sucesso 
+$conex = $_SESSION["conex"];
+//
+//  $lnkdb = mysql_select_db($db_array[$elemento], $lnkcon) or die("ERRO/Conectar  bd");
 ///
 /// Enviando para um arquivo com as variaveis  das Tabelas 
 $bd_1=$db_array[$elemento];

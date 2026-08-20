@@ -91,12 +91,6 @@ $funcoes=new funcoes();
 ///
 ///  Arquivo da tabela de consulta anotador - importante
 $arq_tab_consulta_anotador="{$incluir_arq}includes/tabela_anotador_selecionada.php";
-
-
-echo "ERRO:  LINHA/84  -->>  \$source_maiusc = $source_maiusc  ";
-exit();
-
-
 //  
 if( $source_maiusc=="SAIR" ) {
     //
@@ -113,23 +107,21 @@ if( $source_maiusc=="SAIR" ) {
     //
     exit();
     #
-} elseif( $source_maiusc=="PROJETO" )  {
-   /** 
-      $msg_erro .= "-->>  DENTRO DO IF PROJETO - \$source = $source  -  \$val = $val  -  \$m_array =  $m_array  ";
-       echo  $msg_erro;
-         exit();      
-    */
+}
+/**  Final - if( $source_maiusc=="SAIR" ) {   */
+//
+if( $source_maiusc=="PROJETO" )  {
+    //
     $elemento=5; $elemento2=6;
     // include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
     // include("php_include/ajax/includes/conectar.php");  
     require("{$incluir_arq}includes/conectar.php");  
-
     //
     # IMPORTANTE: Aqui esta o segredo
-    mysqli_query("SET NAMES 'utf8'");
-    mysqli_query('SET character_set_connection=utf8');
-    mysqli_query('SET character_set_client=utf8');
-    mysqli_query('SET character_set_results=utf8');
+    mysqli_query($conex,"SET NAMES 'utf8' ");
+    mysqli_query($conex,'SET character_set_connection=utf8');
+    mysqli_query($conex,'SET character_set_client=utf8');
+    mysqli_query($conex,'SET character_set_results=utf8');
     ///
     ///  Select/MySQL
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.autor,b.fonterec,b.fonteprojid,"
@@ -139,11 +131,22 @@ if( $source_maiusc=="SAIR" ) {
                  ."  FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                  ." b.cip=".$m_array." order by b.titulo "; 
     ///                 
-    $result_projeto = mysqli_query($sqlcmd);               
+    $result_projeto = mysqli_query($conex,$sqlcmd);               
     ///                  
     if( ! $result_projeto ) {
-          die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
+           //
+           die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: ');  
      }
+     //
+
+
+   $msg_erro .= "ERRO:-->>  DENTRO DO IF PROJETO/149 - \$source = $source  -  \$val = $val  -  \$m_array =  $m_array  ";
+       echo  $msg_erro;
+         exit();      
+
+
+
+
      //   Vericando se o LOGIN/USUSAIO se ja esta cadastrado na Tabela usuario
     $m_usuario_arr = array('USUARIO','LOGIN','USER','USERID','USER_ID','M_LOGIN','M_USER');
     $m_senha_arr = array('SENHA','PASSWD','PASSWORD');
@@ -310,7 +313,7 @@ if( $source_maiusc=="SAIR" ) {
 
   */
           ///
-          mysqli_query("SET @xnr:=0");
+          mysqli_query($conex,"SET @xnr:=0");
           $sqlcmd  = "CREATE TABLE  IF NOT EXISTS ".$_SESSION["table_temp_anotador"]."   ";
           $sqlcmd .= "SELECT @xnr:=@xnr+1 as nr, a.numero as na, b.nome as Anotador, "
                  ." a.titulo as Titulo_Anotacao,  c.titulo as projeto_titulo,  "
@@ -382,10 +385,10 @@ if( $source_maiusc=="SAIR" ) {
         $anotacao=$array_proj_anot[1];        
     }
     # IMPORTANTE: Aqui esta o segredo
-    mysqli_query("SET NAMES 'utf8'");
-    mysqli_query('SET character_set_connection=utf8');
-    mysqli_query('SET character_set_client=utf8');
-    mysqli_query('SET character_set_results=utf8');
+    mysqli_query($conex,"SET NAMES 'utf8'");
+    mysqli_query($conex,'SET character_set_connection=utf8');
+    mysqli_query($conex,'SET character_set_client=utf8');
+    mysqli_query($conex,'SET character_set_results=utf8');
     ///
     ///  Selecionando Projeto
      $sqlcmd  = "SELECT a.numprojeto, a.titulo as  titulo_projeto, b.nome as autor_projeto,  "
