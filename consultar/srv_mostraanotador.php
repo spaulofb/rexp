@@ -6,16 +6,21 @@ ob_start(); /* Evitando warning */
 if(!isset($_SESSION)) {
    session_start();
 }
-///
+//
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // sempre modificada
 header("Pragma: no-cache"); // HTTP/1.0
 header("Cache: no-cache");
 //  header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 // For?a a recarregamento do site toda vez que o navegador entrar na p?gina
-header("http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'");
+//  header("http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'");   
+header("Cache-Control: no-store, no-cache, must-revalidate");
 /// IMPORTANTE: para acentuacao php
 header("Content-type: text/html; charset=utf-8");
-
+//
 //  header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0")
 //   Colocar as datas do Cadastro do Usuario e a validade
 date_default_timezone_set('America/Sao_Paulo');
@@ -30,25 +35,28 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-///   FINAL - Mensagens para enviar
-
-///  Verificando SESSION incluir_arq
+//   FINAL - Mensagens para enviar
+//
+//  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
 }
 $incluir_arq=$_SESSION["incluir_arq"];
-
 //
 // extract: Importa vari?veis para a tabela de s?mbolos a partir de um array 
 extract($_POST, EXTR_OVERWRITE);  
-///
-///  Conjunto de arrays 
+//
+/**  Incluir functions do PHP */
+include_once("{$incluir_arq}includes/functions.php");
+//
+//  Conjunto de arrays 
 include_once("{$incluir_arq}includes/array_menu.php");
+//
 // Conjunto de Functions
 include("{$incluir_arq}script/stringparabusca.php");        
-
+//
 $post_array = array("source","val","m_array");
 for( $i=0; $i<count($post_array); $i++ ) {
     $xyz = $post_array[$i];
@@ -56,58 +64,72 @@ for( $i=0; $i<count($post_array); $i++ ) {
     $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
     if ( isset($_POST[$xyz]) ) {
         $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
-       if ( $pos1 === false ) {
+       if( $pos1 === false ) {
            //  $$xyz=trim($_POST[$xyz]);
            //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
-       } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
+            //   Atualizado em 20260820
+           //  $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = utf8_decode_seguro(trim($_POST[$xyz])); 
+            //
+       } else {
+           $$xyz = explode($div_array_por,$_POST[$xyz]);
+       } 
     }
 }
+/**   Final - for( $i=0; $i<count($post_array); $i++ ) {   */
 //
 //   Para acertar a acentuacao - utf8_encode
 //   $source = utf8_decode($source); $val = utf8_decode($val); 
-
 if( strtoupper($val)=="SAIR" ) $source=$val;
-
 $_SESSION["source"]=trim($source); 
 $source_maiusc=strtoupper(trim($source));
-///
-///  INCLUINDO CLASS - 
-////  require_once('../includes/autoload_class.php');  
+//
+//  INCLUINDO CLASS - 
+//  require_once('../includes/autoload_class.php');  
 require_once("{$incluir_arq}includes/autoload_class.php");  
 $funcoes=new funcoes();
 ///
 ///  Arquivo da tabela de consulta anotador - importante
 $arq_tab_consulta_anotador="{$incluir_arq}includes/tabela_anotador_selecionada.php";
 
-///  
+
+echo "ERRO:  LINHA/84  -->>  \$source_maiusc = $source_maiusc  ";
+exit();
+
+
+//  
 if( $source_maiusc=="SAIR" ) {
+    //
     // Eliminar todas as variaveis de sessions
     $_SESSION = array();
-
+    //
     session_destroy();
     if( isset($total) ) unset($total);
     if( isset($login_senha) ) unset($login_senha); 
     if( isset($senha_down) )  unset($senha_down); 
     //
     //  echo  "<a href='http://www-gen.fmrp.usp.br'  title='Sair' >Sair</a>";
-    echo  "http://www-gen.fmrp.usp.br/";
+    //  echo  "http://www-gen.fmrp.usp.br/";
+    //
     exit();
     #
 } elseif( $source_maiusc=="PROJETO" )  {
-  /*
-   $msg_erro .= "-->>  DENTRO DO IF PROJETO - \$source = $source  -  \$val = $val  -  \$m_array =  $m_array  ";
-   echo  $msg_erro;
-   exit();      
+   /** 
+      $msg_erro .= "-->>  DENTRO DO IF PROJETO - \$source = $source  -  \$val = $val  -  \$m_array =  $m_array  ";
+       echo  $msg_erro;
+         exit();      
     */
     $elemento=5; $elemento2=6;
-    //// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-    include("php_include/ajax/includes/conectar.php");  
+    // include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
+    // include("php_include/ajax/includes/conectar.php");  
+    require("{$incluir_arq}includes/conectar.php");  
+
+    //
     # IMPORTANTE: Aqui esta o segredo
-    mysql_query("SET NAMES 'utf8'");
-    mysql_query('SET character_set_connection=utf8');
-    mysql_query('SET character_set_client=utf8');
-    mysql_query('SET character_set_results=utf8');
+    mysqli_query("SET NAMES 'utf8'");
+    mysqli_query('SET character_set_connection=utf8');
+    mysqli_query('SET character_set_client=utf8');
+    mysqli_query('SET character_set_results=utf8');
     ///
     ///  Select/MySQL
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.autor,b.fonterec,b.fonteprojid,"
@@ -117,7 +139,7 @@ if( $source_maiusc=="SAIR" ) {
                  ."  FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                  ." b.cip=".$m_array." order by b.titulo "; 
     ///                 
-    $result_projeto = mysql_query($sqlcmd);               
+    $result_projeto = mysqli_query($sqlcmd);               
     ///                  
     if( ! $result_projeto ) {
           die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
@@ -217,7 +239,7 @@ if( $source_maiusc=="SAIR" ) {
                                ." FROM $bd_1.pessoa a, $bd_2.corespproj b where "
                                ."  a.codigousp=b.coresponsavel  and  b.projnum=$numprojeto and  b.projetoautor='$autor' ";
                     ///                                    
-                    $result_coresp = mysql_query($sqlcmd);               
+                    $result_coresp = mysqli_query($sqlcmd);               
                     ///                  
                     if( ! $result_coresp ) {
                         die('ERRO: Selecionando os Co-Respons&aacute;veis: '.mysql_error());  
@@ -264,7 +286,7 @@ if( $source_maiusc=="SAIR" ) {
           $table_consultar_anotador = $_SESSION["table_temp_anotador"] = "$bd_2.temp_consultar_anotador";
           //  $sql_temp = "DROP TEMPORARY TABLE IF EXISTS   ".$_SESSION["table_temp_anotador"]."    ";
           $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotador   ";
-          $result_anotadores=mysql_query($sql_temp);
+          $result_anotadores=mysqli_query($sql_temp);
           if( ! $result_anotadores ) {
                /// die('ERRO: '.mysql_error());  
                echo $funcoes->mostra_msg_erro("DROP TABLE IF EXISTS $table_consultar_anotador - db/mysql:&nbsp;".mysql_error());            
@@ -288,7 +310,7 @@ if( $source_maiusc=="SAIR" ) {
 
   */
           ///
-          mysql_query("SET @xnr:=0");
+          mysqli_query("SET @xnr:=0");
           $sqlcmd  = "CREATE TABLE  IF NOT EXISTS ".$_SESSION["table_temp_anotador"]."   ";
           $sqlcmd .= "SELECT @xnr:=@xnr+1 as nr, a.numero as na, b.nome as Anotador, "
                  ." a.titulo as Titulo_Anotacao,  c.titulo as projeto_titulo,  "
@@ -298,7 +320,7 @@ if( $source_maiusc=="SAIR" ) {
                  ." FROM $bd_2.anotacao a, $bd_1.pessoa b, $bd_2.projeto c "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and c.cip=$cip order by a.data desc ";
           ///       
-          $result_anotadores = mysql_query($sqlcmd);                                    
+          $result_anotadores = mysqli_query($sqlcmd);                                    
           ///                  
           if( ! $result_anotadores ) {
                  ///  die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
@@ -307,7 +329,7 @@ if( $source_maiusc=="SAIR" ) {
           } 
           ///// SELECT ALL from many-to-many table where a match is found
           $query2 = "SELECT * from  ".$_SESSION["table_temp_anotador"]."  ";
-         $resultado_outro = mysql_query($query2);                                    
+         $resultado_outro = mysqli_query($query2);                                    
          if( ! $resultado_outro ) {
               /* $msg_erro .= "Selecionando as Anota&ccedil;&otilde;es do Projeto  - Falha: ".mysql_error().$msg_final;
                  echo $msg_erro;    */     
@@ -360,16 +382,16 @@ if( $source_maiusc=="SAIR" ) {
         $anotacao=$array_proj_anot[1];        
     }
     # IMPORTANTE: Aqui esta o segredo
-    mysql_query("SET NAMES 'utf8'");
-    mysql_query('SET character_set_connection=utf8');
-    mysql_query('SET character_set_client=utf8');
-    mysql_query('SET character_set_results=utf8');
+    mysqli_query("SET NAMES 'utf8'");
+    mysqli_query('SET character_set_connection=utf8');
+    mysqli_query('SET character_set_client=utf8');
+    mysqli_query('SET character_set_results=utf8');
     ///
     ///  Selecionando Projeto
      $sqlcmd  = "SELECT a.numprojeto, a.titulo as  titulo_projeto, b.nome as autor_projeto,  "
        ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
-     $resultado_projeto = mysql_query($sqlcmd);
+     $resultado_projeto = mysqli_query($sqlcmd);
      if( ! $resultado_projeto ) {
          //// die("ERRO: Selecionando Projeto: cip = ".$cip." - ".mysql_error());  
           echo $funcoes->mostra_msg_erro("Selecionando Projeto: cip = ".$cip." - db/mysql:&nbsp;".mysql_error());
@@ -398,7 +420,7 @@ if( $source_maiusc=="SAIR" ) {
                  ." concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anotacao, "
                  ." a.relatext as Arquivo FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and a.numero=$anotacao  ";                
-     $resultado_anotacao = mysql_query($sqlcmd);
+     $resultado_anotacao = mysqli_query($sqlcmd);
      if( ! $resultado_anotacao ) {
           $msg_erro .= "Selecionando Anota&ccedil;&atilde;o $anotacao do  Projeto: ".$numprojeto." -  db/mysql:&nbsp;".mysql_error().$msg_final;  
           echo $msg_erro;
@@ -422,7 +444,7 @@ if( $source_maiusc=="SAIR" ) {
          ///  Selecionando as Testemunhas da Anotacao          
          $cmd_sql = "SELECT codigousp as cod_testemunha, nome as nome_testemunha "
                   ." FROM  $bd_1.pessoa where codigousp $in ";
-         $res_testemunhas = mysql_query($cmd_sql);
+         $res_testemunhas = mysqli_query($cmd_sql);
          if( ! $res_testemunhas ) {
              $msg_erro .= "Selecionando testesmunhas da  Anota&ccedil;&atilde;o. mysql =  db/mysql:&nbsp;".mysql_error().$msg_final;  
              echo $msg_erro;
@@ -641,47 +663,47 @@ if( $source_maiusc=="SUBMETER" )  {
          if( strtoupper(trim($sn))=="NAO"  ) {
               $_SESSION['tabela']="pessoal.usuario";
               //  Start a transaction - ex. procedure    
-              mysql_query('DELIMITER &&'); 
-              mysql_query('begin'); 
+              mysqli_query('DELIMITER &&'); 
+              mysqli_query('begin'); 
               //  Execute the queries          
-              //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-              mysql_query("LOCK TABLES ".$_SESSION['tabela']." DELETE, pessoal.pessoa DELETE ");
+              //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+              mysqli_query("LOCK TABLES ".$_SESSION['tabela']." DELETE, pessoal.pessoa DELETE ");
               /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
               //  DELETE   
               $res_usuario = "DELETE from ".$_SESSION['tabela']."  WHERE codigousp=$codigousp  ";
                //                  
-               $sqlcmd =  mysql_query($res_usuario);
+               $sqlcmd =  mysqli_query($res_usuario);
                if( $sqlcmd ) { 
                    mysql_free_result($sqlcmd);
                    $_SESSION['tabela']="pessoal.pessoa";
                    $res_pessoa= "DELETE  from ".$_SESSION['tabela']." WHERE codigousp=$codigousp "; 
                    //                  
-                   $sqlcmd =  mysql_query($res_pessoa);      
+                   $sqlcmd =  mysqli_query($res_pessoa);      
                    if( $sqlcmd ) { 
                         //  Concluindo as tabelas para Orientador Novo para ser aceito pelo Aprovador
                         $msg_ok .="<span style='text-align:center; color: #000000;'>"
                                  ."<br>Orientador $nome n&atilde;o foi aceito pelo Aprovador.<br></span>".$msg_final;
-                        mysql_query('commit'); 
+                        mysqli_query('commit'); 
                         echo $msg_ok;                    
                    } else { 
                         //  mysql_error() - para saber o tipo do erro
                         $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysql_error().$msg_final;
-                        mysql_query('rollback'); 
+                        mysqli_query('rollback'); 
                         echo $msg_erro;         
                         $lnerro=1;
                    }                
                } else { 
                   //  mysql_error() - para saber o tipo do erro
                   $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysql_error().$msg_final;
-                  mysql_query('rollback'); 
+                  mysqli_query('rollback'); 
                   echo $msg_erro; 
                   $lnerro=1;        
                }       
                /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-               mysql_query("UNLOCK  TABLES");
+               mysqli_query("UNLOCK  TABLES");
                //  Complete the transaction 
-               mysql_query('end'); 
-               mysql_query('DELIMITER');         
+               mysqli_query('end'); 
+               mysqli_query('DELIMITER');         
                //  Caso Tabela acima foi aceita incluir dados na outra abaixo
                mysql_free_result($sqlcmd);
                //   Mandar mensagem para o novo Orientador - cancelado
@@ -730,7 +752,7 @@ if( $source_maiusc=="SUBMETER" )  {
                }
              //    FINAL _ NAO APROVANDO NOVO ORIENTADOR                   
          } elseif( strtoupper(trim($sn))=="SIM" ) {
-             $rs_check = mysql_query("Select  a.codigousp,a.login,a.pa,a.aprovado,b.e_mail,b.nome from "
+             $rs_check = mysqli_query("Select  a.codigousp,a.login,a.pa,a.aprovado,b.e_mail,b.nome from "
                     ." pessoal.usuario a,  pessoal.pessoa b where  "
                     ." trim(a.codigousp)=$codigousp and "
                     ."  upper(trim(b.e_mail))='$upper_email'  and  a.codigousp=b.codigousp  ");
@@ -759,26 +781,26 @@ if( $source_maiusc=="SUBMETER" )  {
                 // defina o campo aprovou (approved) como 1 e tb activation_code para Ativar a Conta
                 $_SESSION['tabela']="pessoal.usuario";
                 //  Start a transaction - ex. procedure    
-                mysql_query('DELIMITER &&'); 
-                mysql_query('begin'); 
+                mysqli_query('DELIMITER &&'); 
+                mysqli_query('begin'); 
                 //  Execute the queries          
-                mysql_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
+                mysqli_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
                 $sqlcmd = "UPDATE  ".$_SESSION['tabela']." SET aprovado='1',"
                         ." activation_code=$activation_code,datacad='$datacad',datavalido='$datavalido',senha=password('$new_pwd') "
                         ."  WHERE  trim(codigousp)=$codigousp   ";
-                $rs_activ = mysql_query($sqlcmd);     
+                $rs_activ = mysqli_query($sqlcmd);     
                 // Verificando se houve erro no update            
                 if( ! $rs_activ ) {
                      mysql_free_result($rs_activ);
                      $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysql_error();
-                     mysql_query('rollback'); 
+                     mysqli_query('rollback'); 
                 } else {
-                     mysql_query('commit'); 
+                     mysqli_query('commit'); 
                 }
-                mysql_query("UNLOCK  TABLES");
+                mysqli_query("UNLOCK  TABLES");
                 //  Complete the transaction 
-                mysql_query('end'); 
-                mysql_query('DELIMITER');         
+                mysqli_query('end'); 
+                mysqli_query('DELIMITER');         
                 mysql_free_result($rs_activ);                            
                 //   Mandar mensagem para o novo Orientador - caso nao tenha erro
                 if( strlen(trim($m_erro))<1 ) {  // Enviar a mensagem por email

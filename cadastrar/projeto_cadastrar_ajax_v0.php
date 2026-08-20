@@ -372,15 +372,15 @@ if( ( $source_upper=="CORESPONSAVEIS" ) or  ( $source_upper=="COLABS" ) ) {
      require_once("php_include/ajax/includes/conectar.php");
      //
      //  mysql_select_db($db_array[$elemento]); 
-     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
      //  
      //  Conexao MYSQLI
      $conex = $_SESSION["conex"];
      //
-     //  mysql_query("SET NAMES 'utf8'");
-     //  mysql_query('SET character_set_connection=utf8');
-     //  mysql_query('SET character_set_client=utf8');
-     //  mysql_query('SET character_set_results=utf8');
+     //  mysqli_query("SET NAMES 'utf8'");
+     //  mysqli_query('SET character_set_connection=utf8');
+     //  mysqli_query('SET character_set_client=utf8');
+     //  mysqli_query('SET character_set_results=utf8');
      //
      mysqli_set_charset($conex,'utf8');
      //   
@@ -950,7 +950,7 @@ exit();
          require_once("dds_rcbs_arq_ajax_proj.php");
          //
          /**          INSERIR USUARIO  
-         *     mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+         *     mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          */
          ///
          $proc="SELECT codigousp FROM $bd_1.usuario WHERE codigousp=$m_autor ";
@@ -995,9 +995,9 @@ exit();
               $n_erro=0;
               ///           
               //   mysqli_query($_SESSION["conex"],"SET NAMES 'utf8'");
-              //   mysql_query('SET character_set_connection=utf8');
-              //   mysql_query('SET character_set_client=utf8');
-              //   mysql_query('SET character_set_results=utf8');
+              //   mysqli_query('SET character_set_connection=utf8');
+              //   mysqli_query('SET character_set_client=utf8');
+              //   mysqli_query('SET character_set_results=utf8');
               //
               mysqli_set_charset($conex,'utf8');
               //   
@@ -1026,7 +1026,7 @@ exit();
               mysqli_query($_SESSION["conex"],'begin'); 
               //
               //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-              //   - Use mysql_select_db() ou mysql_query()
+              //   - Use mysql_select_db() ou mysqli_query()
               $_SESSION["conex"]->query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
               //
               /**  IMPORTANTE: usar utf8_encode enviar dados do PHP para MySql  */

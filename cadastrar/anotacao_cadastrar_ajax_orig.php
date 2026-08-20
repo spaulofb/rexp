@@ -216,15 +216,15 @@ if( strtoupper(trim($source))=="CONJUNTO" )  {
        $nome_cpo="";
        if( in_array($table_atual,$tabs_sig_nome) ) $nome_cpo="nome,";
        
-      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
      /*
-       $result=mysql_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
+       $result=mysqli_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
                          ." $table_atual where ".$_SESSION["where"]."  group by 1 order by  ".$_SESSION["select_cpo"]);
                           
        */
        //  $sqlcmd="SELECT $select_cpo, $nome_cpo count(*) FROM  $table_atual where $where   group by 1  order by $select_cpo ";
        $sqlcmd="SELECT $select_cpo, $nome_cpo count(*) FROM  $bd_1.$table_atual WHERE $where  GROUP BY 1 ORDER BY $select_cpo ";
-       $result=mysql_query($sqlcmd);
+       $result=mysqli_query($sqlcmd);
        ///
         if( strtoupper($table_atual)=="BEM" ) $table_atual=$_SESSION["select_cpo"]; 
         if( ! $result ) die('ERRO: Select - falha: '.mysql_error());
@@ -314,8 +314,8 @@ if( ( $source_upper=="CORESPONSAVEIS" ) or ( $source_upper=="COLABS" ) ) {
    if( $source_upper=="COLABS" ) $m_co = "Colab.";
    ///  Cod/Num_USP/Coautor
    mysql_select_db($db_array[$elemento]);
-   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-   $result=mysql_query("Select codigousp,nome,categoria from $bd_1.pessoa  order by nome ");
+   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+   $result=mysqli_query("Select codigousp,nome,categoria from $bd_1.pessoa  order by nome ");
    if( ! $result ) {
          // die('ERRO: Select pessoa - falha: '.mysql_error());  
          $msg_erro .= "Select Tabela pessoa - db/mysql:&nbsp;".mysql_error().$msg_final;
@@ -412,7 +412,7 @@ if( $source_upper=="ANOTACAO" ) { ////  IF  - Tabela ANOTACAO
     ///
     if( strtoupper(trim($val))=="VERIFICANDO" ) {
        if( $_SESSION["permit_pa"]==$array_pa["orientador"]  )  {
-           $result_proj=mysql_query("SELECT  numprojeto FROM $bd_2.projeto  WHERE autor=".$_SESSION["usuario_conectado"]);
+           $result_proj=mysqli_query("SELECT  numprojeto FROM $bd_2.projeto  WHERE autor=".$_SESSION["usuario_conectado"]);
            /// Verificando FALHA no MySql SELECT
            if( ! $result_proj ) {
                 $msg_erro .= "Select Tabela projeto - falha: ".mysql_error().$msg_final;
@@ -434,7 +434,7 @@ if( $source_upper=="ANOTACAO" ) { ////  IF  - Tabela ANOTACAO
             $regs=0;
             ///
             ///  Quando usar esse Select necessita do GROUP
-           $result_anotacao=mysql_query("SELECT  a.anotacao, a.cip, a.numprojeto,"
+           $result_anotacao=mysqli_query("SELECT  a.anotacao, a.cip, a.numprojeto,"
                           ." b.nome as projeto_autor_nome "
                           ." FROM $bd_2.projeto a, $bd_1.pessoa b  "
                           ." WHERE a.autor=b.codigousp  and  cip=".$cip_codigouso[0]);
@@ -475,13 +475,13 @@ if( $source_upper=="ANOTACAO" ) { ////  IF  - Tabela ANOTACAO
             $array_altera = explode(",",$m_array);
             if( $array_altera[0]==1 ) {
     			///  Quando usar esse Select necessita do GROUP
-    	    	/*	$result_altera=mysql_query("SELECT  a.anotacao, a.cip,a.numprojeto, "
+    	    	/*	$result_altera=mysqli_query("SELECT  a.anotacao, a.cip,a.numprojeto, "
 			                       ." a.autor,b.nome FROM "
 			                       ." projeto a, $bd_1.pessoa b where "
 								   ."  a.cip=".$array_altera[1]."  and b.codigousp=a.autor   "
 								   ." order by a.cip ");	  
                 */
-                $result_altera=mysql_query("SELECT  a.cia,a.numero,a.projeto,a.autor,a.data,b.numprojeto "
+                $result_altera=mysqli_query("SELECT  a.cia,a.numero,a.projeto,a.autor,a.data,b.numprojeto "
                                    ." FROM $bd_2.anotacao a, $bd_2.projeto b WHERE "
                                    ." a.projeto=".$array_altera[1]." and b.cip=".$array_altera[1]."   "
                                    ." order by a.numero DESC ");
@@ -547,7 +547,7 @@ if( strtoupper($val)=="ANOTACAO" ) {
     ///
     $projeto=$arr_nome_val['projeto'];
     ///   Essa SESSION  vindo da parte acima
-	$result_anot=mysql_query("SELECT  anotacao,autor as projeto_autor "
+	$result_anot=mysqli_query("SELECT  anotacao,autor as projeto_autor "
                              ." FROM $bd_2.projeto  WHERE cip=$projeto  ");
     ///
     if( ! $result_anot ) {
@@ -578,10 +578,10 @@ if( strtoupper($val)=="ANOTACAO" ) {
     //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  // Melhor  179
     //  INSERINDO DADOS NAS TABELAS ANOTACAO E PROJETO
     /////           
-    mysql_query("SET NAMES 'utf8'");
-    mysql_query('SET character_set_connection=utf8');
-    mysql_query('SET character_set_client=utf8');
-    mysql_query('SET character_set_results=utf8');
+    mysqli_query("SET NAMES 'utf8'");
+    mysqli_query('SET character_set_connection=utf8');
+    mysqli_query('SET character_set_client=utf8');
+    mysqli_query('SET character_set_results=utf8');
     ///                         
     $campos_nome=$_SESSION["campos_nome"];
     ///  IMPORTANTE:  html_entity_decode para variavel PHP para MySql
@@ -598,24 +598,24 @@ if( strtoupper($val)=="ANOTACAO" ) {
     
     ///
     ///  START a transaction - ex. procedure  -  inserindo nova Anotacao no Projeto   
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     ///  Execute the queries 
-    ///  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+    ///  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     mysql_select_db($db_array[$elemento]);
     //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-    //   - Use mysql_select_db() ou mysql_query()
-    mysql_query("LOCK TABLES $bd_2.anotacao INSERT, $bd_2.projeto UPDATE ");
+    //   - Use mysql_select_db() ou mysqli_query()
+    mysqli_query("LOCK TABLES $bd_2.anotacao INSERT, $bd_2.projeto UPDATE ");
     ///
     ////  $sqlcmd="INSERT INTO  $bd_2.anotacao(".$_SESSION["campos_nome"].")  values(".$_SESSION["campos_valor"].") ";
     $sqlcmd="INSERT INTO  $bd_2.anotacao  (".$campos_nome.") values(".utf8_encode($campos_valor).") ";
-    $success=mysql_query($sqlcmd); 
+    $success=mysqli_query($sqlcmd); 
     //  Complete the transaction 
     if( $success ) { 
         //  mysql_db_query - Esta funcao esta obsoleta, 
-        //       nao use esta funcao - Use mysql_select_db() ou mysql_query()
+        //       nao use esta funcao - Use mysql_select_db() ou mysqli_query()
         //  UPDATE no campo anotacao da Tabela Projeto do campo numero TB ANOTACAO
-        $result=mysql_query("UPDATE $bd_2.projeto SET anotacao=$anotacao  WHERE  cip=$projeto  ");
+        $result=mysqli_query("UPDATE $bd_2.projeto SET anotacao=$anotacao  WHERE  cip=$projeto  ");
         if( $result ) {
             /*  $autor=$arr_nome_val['autor'];
             if( ! isset($_SESSION["projeto_autor"]) ) $projeto_autor="";
@@ -634,21 +634,21 @@ if( strtoupper($val)=="ANOTACAO" ) {
             ///
             $_SESSION["anotacao_numero"]=$anotacao;
             /// Efetiva a transa??o nos duas tabelas (anotacao e projeto)
-            mysql_query('commit'); 
+            mysqli_query('commit'); 
         } else { 
            ///  mysql_error() - para saber o tipo do erro
            $msg_erro .="&nbsp;Anota&ccedil;&atilde;o <b>N&Atilde;O</b> foi cadastrada. Update projeto".mysql_error().$msg_final;
-           mysql_query('rollback'); 
+           mysqli_query('rollback'); 
            echo $msg_erro;         
         }
     } else {
         $msg_erro .="&nbsp;Anota&ccedil;&atilde;o <b>N&Atilde;O</b> foi cadastrada. Insert anotacao " .mysql_error().$msg_final;
-        mysql_query('rollback'); 
+        mysqli_query('rollback'); 
         echo $msg_erro;         
     }
-    mysql_query("UNLOCK  TABLES");
-    mysql_query('end'); 
-    mysql_query('DELIMITER');
+    mysqli_query("UNLOCK  TABLES");
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');
    ///  FINAL -  TABELA ANOTACAO  -  BD  REXP
    ///
 }
@@ -672,30 +672,30 @@ if( strtoupper($val)=="ORIENTADOR" ) {
     $_SESSION["tabela"]="$bd_2.orientador";
     include("dados_recebidos_arq_ajax.php");
     //  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     //  Execute the queries 
     mysql_select_db($db_array[$elemento]);
-   //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+   //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysql_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
-   $res_coord = mysql_query("INSERT into ".$session_tabela." (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") "); 
+   $res_coord = mysqli_query("INSERT into ".$session_tabela." (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysql_query("UNLOCK  TABLES");
+   mysqli_query("UNLOCK  TABLES");
    //  Complete the transaction 
    if ( $res_coord ) { 
          $msg_ok .="<p class='titulo_usp'>&nbsp;Orientador cadastrado</p>".$msg_final;
          echo  $msg_ok;
-         mysql_query('commit'); 
+         mysqli_query('commit'); 
    } else { 
         //  mysql_error() - para saber o tipo do erro
         $msg_erro .="&nbsp;Orientador n&atilde;o foi cadastrado. ERRO = ".mysql_error().$msg_final;
-         mysql_query('rollback'); 
+         mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysql_query('end'); 
-   mysql_query('DELIMITER');         
+   mysqli_query('end'); 
+   mysqli_query('DELIMITER');         
    exit();
 }
 //
@@ -708,7 +708,7 @@ if( $source_upper=="ANOTADOR" ) {
             $elemento=6;
             include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
             mysql_select_db($db_array[$elemento]);
-            $res_pessoa=mysql_query("SELECT  e_mail,"
+            $res_pessoa=mysqli_query("SELECT  e_mail,"
                                    ."(Select login from $bd_1.usuario where codigousp=".$m_array." ) "
                                    ." as login  FROM $bd_1.pessoa where  "
                                    ."   codigousp=".$m_array);
@@ -743,7 +743,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
     $sqlcmd = "Select codigo,(select nome from $bd_1.pessoa where codigousp=$lncodigousp ) as nome "
                ." FROM $bd_2.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
-    $resultado = mysql_query($sqlcmd);
+    $resultado = mysqli_query($sqlcmd);
     if( ! $resultado ) {
         ///  die('ERRO: Select tabelas anotador e pessoa - falha: '.mysql_error());  
         $msg_erro .= "Select Tabelas anotador e pessoa - db/mysql:&nbsp;".mysql_error().$msg_final;
@@ -759,24 +759,24 @@ if( strtoupper($val)=="ANOTADOR" ) {
      }  
      ///
     ///  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     ///  Execute the queries 
     ///  mysql_select_db($db_array[$elemento]);
-   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysql_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
-   $res_coord = mysql_query("INSERT into ".$session_tabela." (cip,codigo,pa,data) "
+   $res_coord = mysqli_query("INSERT into ".$session_tabela." (cip,codigo,pa,data) "
             ."  values($lnprojeto,$lncodigousp,$pa_anotador,'$data_atual') "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysql_query("UNLOCK  TABLES");
+   mysqli_query("UNLOCK  TABLES");
    ///  Complete the transaction 
    if ( $res_coord ) { 
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
     $sqlcmd = "Select codigo,(select nome from $bd_1.pessoa where codigousp=$lncodigousp ) as nome "
                ." From $bd_2.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
-    $resultado = mysql_query($sqlcmd);
+    $resultado = mysqli_query($sqlcmd);
     if( ! $resultado ) {
           ///   die('ERRO: Select tabelas anotador e pessoa apos INSERT - falhou: '.mysql_error());  
           $msg_erro .= "Select Tabelas anotador e pessoa apos INSERT - db/mysql:&nbsp;".mysql_error().$msg_final;
@@ -792,11 +792,11 @@ if( strtoupper($val)=="ANOTADOR" ) {
    } else { 
         ///  mysql_error() - para saber o tipo do erro
         $msg_erro .="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado. ERRO = ".mysql_error().$msg_final;
-         mysql_query('rollback'); 
+         mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysql_query('end'); 
-   mysql_query('DELIMITER');         
+   mysqli_query('end'); 
+   mysqli_query('DELIMITER');         
    exit();
 }
 //    
@@ -884,7 +884,7 @@ if( strtoupper($val)=="PROJETO" ) {
     mysql_select_db($db_array[$elemento]);
 	///
     ///  Select -  MySQL
-    $result=mysql_query("SELECT  cip,autor FROM $bd_2.projeto WHERE "
+    $result=mysqli_query("SELECT  cip,autor FROM $bd_2.projeto WHERE "
 	                 ." trim(fonterec)=trim('".$fonterec."')  and  "
 					 ." trim(fonteprojid)=trim('".$fonteprojid."') and "
                      ." autor=".$m_autor." and datainicio='$m_datainicio'  ");
@@ -913,8 +913,8 @@ if( strtoupper($val)=="PROJETO" ) {
 		  //  Verificando o numero de coresponsaveis/coautores
 		  //  INSERIR USUARIO  
     	  mysql_select_db($db_array[$elemento]);
-	      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-		  $result_usu = mysql_query("SELECT codigousp from  $bd_1.usuario where codigousp=$m_autor   ");
+	      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+		  $result_usu = mysqli_query("SELECT codigousp from  $bd_1.usuario where codigousp=$m_autor   ");
           // Verificando se houve erro no Select Tabdla Usuario
           if( ! $result_usu ) {
                 //  die("ERRO: Select Tabela usuario   - ".mysql_error());
@@ -930,40 +930,40 @@ if( strtoupper($val)=="PROJETO" ) {
           } else {
                 $n_erro=0;
                 ///  START a transaction - ex. procedure    
-                mysql_query('DELIMITER &&'); 
-                mysql_query('begin'); 
+                mysqli_query('DELIMITER &&'); 
+                mysqli_query('begin'); 
                 //  Execute the queries 
                 mysql_select_db($db_array[$elemento]);
                 //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-                //   - Use mysql_select_db() ou mysql_query()
-                mysql_query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
+                //   - Use mysql_select_db() ou mysqli_query()
+                mysqli_query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
                 $sqlcmd="INSERT into $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
-                $success=mysql_query($sqlcmd); 
+                $success=mysqli_query($sqlcmd); 
                 //  Complete the transaction 
                 if ( $success ) { 
                       ///  Cadastrando na tabela corespproj os coresponsaveis
                       for( $x=0; $x<$count_coresp;  $x++ ) {
-                           $result=mysql_query("INSERT into $bd_2.corespproj values(".$m_autor.", ".$_SESSION["numprojeto"].", ".$n_coresponsaveis[$x].")");
+                           $result=mysqli_query("INSERT into $bd_2.corespproj values(".$m_autor.", ".$_SESSION["numprojeto"].", ".$n_coresponsaveis[$x].")");
                            if( !$result ) {
-                                mysql_query('rollback'); 
+                                mysqli_query('rollback'); 
                                 $msg_erro .="&nbsp;CORESP. n&atilde;o foi cadastrado (autor/projeto/coresp):".$m_autor.", ".$_SESSION["numprojeto"].", ".$n_coresponsaveis[$x].mysql_error().$msg_final;
-                                mysql_query('rollback'); 
+                                mysqli_query('rollback'); 
                                 echo  $msg_erro;
                            }
                      }
                     if( $result ) {
-                         mysql_query('commit');                                  
+                         mysqli_query('commit');                                  
                     } else { 
                         $n_erro=1;
-                        mysql_query('rollback'); 
+                        mysqli_query('rollback'); 
                     }
                 } else {
                     $n_erro=1;
-                    mysql_query('rollback'); 
+                    mysqli_query('rollback'); 
                 }              
-                mysql_query("UNLOCK  TABLES");
-                mysql_query('end'); 
-                mysql_query('DELIMITER');
+                mysqli_query("UNLOCK  TABLES");
+                mysqli_query('end'); 
+                mysqli_query('DELIMITER');
                 ///
                 if( $n_erro==1 ) {
                      $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi cadastrado. ERRO#1 = ".mysql_error().$msg_final;
@@ -973,7 +973,7 @@ if( strtoupper($val)=="PROJETO" ) {
                      //  Incluindo arquivo para a Anotacao do Projeto 
                     //  projeto, autor/orientador e numero da anotacao
                     $m_regs=0;
-                    $result_proj=mysql_query("SELECT  cip,autor FROM $bd_2.projeto WHERE "
+                    $result_proj=mysqli_query("SELECT  cip,autor FROM $bd_2.projeto WHERE "
                                 ." trim(fonterec)=trim('".$fonterec."')  and  "
                                 ." trim(fonteprojid)=trim('".$fonteprojid."') and "
                                 ." autor=".$m_autor." and datainicio='$m_datainicio' and datafinal='$m_final'  ");
@@ -984,7 +984,7 @@ if( strtoupper($val)=="PROJETO" ) {
                          mysql_free_result($result_proj);                       
                          $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                          $sqlcmd="INSERT into $bd_2.anotador (cip,codigo,pa,data) values($projeto_cip,$m_autor,$lnpa,'$data_atual')";
-                         $res_anotador=mysql_query($sqlcmd); 
+                         $res_anotador=mysqli_query($sqlcmd); 
                          if( $res_anotador )  {
                               $msg_ok .="<p class='titulo_usp'>&nbsp;Para concluir o Projeto enviar o arquivo em formato PDF.</p>".$msg_final;
                               echo  $msg_ok."falta_arquivo_pdf".$_SESSION["numprojeto"]."&".$m_autor;
@@ -1027,12 +1027,12 @@ if( strtoupper($val)=="PROJETO" ) {
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
     //  Vericando se o Codigo/USP se ja esta cadastrado na Tabela pessoa
 	mysql_select_db($db_array[$elemento]);
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
     
     $arr_nome_val['codigousp'] = strlen(trim($arr_nome_val['codigousp']))>0 ? 
             $arr_nome_val['codigousp'] : 0;    
     if ( $arr_nome_val['codigousp']==0) {
-        $result=mysql_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
+        $result=mysqli_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
         if( ! $result ) {
             mysql_free_result($result);          
             die("Falha erro no Select/Atribuir codigoUSP".mysql_error());
@@ -1053,7 +1053,7 @@ if( strtoupper($val)=="PROJETO" ) {
         $array_t_value[$i_codigousp] = $codigo_prx;
     }
     
-	$result_usu=mysql_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']) ;
+	$result_usu=mysqli_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']) ;
 	if( ! $result_usu ) {
           mysql_free_result($result_usu);	      
 		  die("Falha erro no Select".mysql_error());
@@ -1081,22 +1081,22 @@ if( strtoupper($val)=="PROJETO" ) {
            ///
            ///  INSERINDO 
            ///  Start a transaction - ex. procedure			   
-           mysql_query('DELIMITER &&'); 
-           mysql_query('begin'); 
+           mysqli_query('DELIMITER &&'); 
+           mysqli_query('begin'); 
            ///
-           $success=mysql_query("insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") "); 
+           $success=mysqli_query("insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") "); 
            ///  Complete the transaction 
            if ( $success ) { 
-               mysql_query('commit'); 
+               mysqli_query('commit'); 
                $msg_ok .="<p class='titulo_usp'>&nbsp;".$arr_nome_val['nome']." foi cadastrado.</p>".$msg_final;
                echo $msg_ok;
            } else { 
-               mysql_query('rollback'); 
+               mysqli_query('rollback'); 
                $msg_erro .="&nbsp;".$arr_nome_val['nome']." n&atilde;o foi cadastrado.".$msg_final;
                echo $msg_erro;	     
            } 
-           mysql_query('end'); 
-           mysql_query('DELIMITER'); 
+           mysqli_query('end'); 
+           mysqli_query('DELIMITER'); 
 		  }
 	///  Final - Tabela pessoa 
 }  elseif( strtoupper($val)=="USUARIO" ) {
@@ -1117,7 +1117,7 @@ if( strtoupper($val)=="PROJETO" ) {
     }
 	 //  Verificando campos 
 	//  Verificando se nao existe Usuario com esse login  na Tabela usuario
-    $result_usu = mysql_query("SELECT   login  FROM  usuario where "
+    $result_usu = mysqli_query("SELECT   login  FROM  usuario where "
                         ."  trim(login)=trim('".$arr_nome_val['login']."')");
     if ( ! $result_usu ) {
         $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." - falha no mysql/query:".mysql_error().$msg_final;
@@ -1148,37 +1148,37 @@ if( strtoupper($val)=="PROJETO" ) {
           }
     }
     //  START  a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     //  Execute the queries 
-    //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+    //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-    //   - Use mysql_select_db() ou mysql_query()
+    //   - Use mysql_select_db() ou mysqli_query()
     // Gera a ativação de codigo com 6 digitos
     $activ_code = rand(100000,999999);
 
     // echo "cpo_nome=".$cpo_nome."<br>  cpo_valor=".$cpo_valor."<br><br>";
     // exit();
-    $success=mysql_query("insert into  usuario "
+    $success=mysqli_query("insert into  usuario "
                 ."  (".$cpo_nome.",activation_code) values(".$cpo_valor.",'$activ_code') "); 
     //  Complete the transaction 
     if ( $success ) { 
         $msg_ok .="<p class='titulo_usp'>Usu&aacute;rio:&nbsp;"
         .$arr_nome_val['login']." foi cadastrado.</p>".$msg_final;
         $m_erro=0;      
-        mysql_query('commit'); 
+        mysqli_query('commit'); 
     } else { 
         $msg_erro .="Usu&aacute;rio:&nbsp;"
         .$arr_nome_val['login']." n&atilde;o foi cadastrado.".$msg_final;
         echo $msg_erro;   
         $m_erro=1;      
-        mysql_query('rollback'); 
+        mysqli_query('rollback'); 
     }
-    mysql_query('end'); 
-    mysql_query('DELIMITER');
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');
     // 
     if( $m_erro<1 ) {
-        $res_email = mysql_query("Select e_mail from $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']." ");
+        $res_email = mysqli_query("Select e_mail from $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']." ");
         if( ! $res_email ) {
             mysql_free_result($res_email);          
             die("ERRO: Select pessoa campo e_mail falha: ".mysql_error());

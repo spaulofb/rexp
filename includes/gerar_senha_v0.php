@@ -18,7 +18,7 @@ function GenPwd($length = 8) {
   $m_pwd = strtoupper(trim($password));
   ///
   ///  Verificando Senha 
-  $verificar_senha=mysql_query("SELECT login,codigousp FROM  usuario WHERE "
+  $verificar_senha=mysqli_query("SELECT login,codigousp FROM  usuario WHERE "
                               ." upper(trim(senha))=password('$m_pwd')  ");
   ///
   if( ! $verificar_senha  ) {

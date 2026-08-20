@@ -56,7 +56,7 @@ if( strtoupper($opcao)!='LISTA' ) {
    ///
    $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_temporaria"]."    ";
-   $result_usuarios=mysql_query($sql_temp);
+   $result_usuarios=mysqli_query($sql_temp);
    if( ! $result_usuarios ) {
         die('ERRO: '.mysql_error());  
    }   
@@ -134,7 +134,7 @@ if( strtoupper($opcao)!='LISTA' ) {
         $_SESSION["selecionados"] = "";        
         $sqlcmd .=" order by nome asc";
    }
-   $result_usuarios=mysql_query($sqlcmd);   
+   $result_usuarios=mysqli_query($sqlcmd);   
    ////                  
    if( ! $result_usuarios ) {
         /// die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
@@ -144,7 +144,7 @@ if( strtoupper($opcao)!='LISTA' ) {
    } 
    ///  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  ".$_SESSION["table_temporaria"]."  ";
-   $result_outro = mysql_query($query2);                                    
+   $result_outro = mysqli_query($query2);                                    
    if( ! $result_outro ) {
          ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
         $msg_erro .= "&nbsp;Selecionando as pessoas:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;

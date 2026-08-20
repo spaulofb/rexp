@@ -7,7 +7,7 @@ if( !isset($_SESSION) ) {
 if ( isset($_SESSION["i_codigousp"]) ) $i_codigo = $_SESSION["i_codigousp"];
 $codigousp = strlen(trim($codigousp))>0 ? $codigousp : 0;   
 if ( $codigousp==0 ) {
-        $result=mysql_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
+        $result=mysqli_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
         if( ! $result ) {
             mysql_free_result($result);          
             $msg_erro .= "Falha erro no Select/Atribuir codigoUSP".mysql_error().$msg_final;
@@ -30,7 +30,7 @@ if ( $codigousp==0 ) {
         }
         $array_t_value[$i_codigousp] = $codigo_prx;
 } else {
-    $result_usu=mysql_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$codigousp) ;
+    $result_usu=mysqli_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$codigousp) ;
     if( ! $result_usu ) {
          mysql_free_result($result_usu);          
          $msg_erro .= "Falha no Select pessoa campo codigousp - ".mysql_error().$msg_final;

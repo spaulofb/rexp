@@ -107,7 +107,7 @@ if( $opcao_maiusc=="USUARIO" ) {
     $sqlcmd = "SELECT b.nome,b.e_mail,b.categoria "
             ."  FROM $bd_1.usuario a, $bd_1.pessoa b "
             ."  WHERE a.codigousp=b.codigousp and a.codigousp=".$val;
-    $result_usuario = mysql_query($sqlcmd);
+    $result_usuario = mysqli_query($sqlcmd);
     if( ! $result_usuario ) {
           $msg_erro .= "Consultando Usu&aacute;rio das tabelas usuario e pessoa. Falha db/mysql: ".mysql_error().$msg_final;  
           echo $msg_erro;
@@ -192,7 +192,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
    $sqlcmd = "SELECT cip,numprojeto,autor FROM $bd_2.projeto  "
              ." WHERE autor=$m_usuario ";
    //          
-    $result_usuario_rm = mysql_query($sqlcmd);
+    $result_usuario_rm = mysqli_query($sqlcmd);
     if( ! $result_usuario_rm ) {
         $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysql_error().$msg_final;
         echo   $msg_erro;
@@ -214,28 +214,28 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
    
 /*   if( isset($projeto) ) {
         //  Start a transaction - ex. procedure    
-          mysql_query('DELIMITER &&'); 
-          mysql_query('begin'); 
+          mysqli_query('DELIMITER &&'); 
+          mysqli_query('begin'); 
           //  Execute the queries          
-          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-          mysql_query("LOCK TABLES  $bd_2.anotacao DELETE, $bd_2.anotador DELETE,  $bd_2.corespproj DELETE,  $bd_2.participante DELETE ");
+          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          mysqli_query("LOCK TABLES  $bd_2.anotacao DELETE, $bd_2.anotador DELETE,  $bd_2.corespproj DELETE,  $bd_2.participante DELETE ");
              //  DELETE   
           $res_usuario="DELETE from $bd_2.anotacao  WHERE autor=$m_usuario  ";
-           $sqlcmd =  mysql_query($res_usuario);
+           $sqlcmd =  mysqli_query($res_usuario);
            if( $sqlcmd ) {  // Tabela anotacao
                $res_pessoa="DELETE  from  $bd_2.anotador  WHERE codigo=$m_usuario "; 
-               $sqlcmd =mysql_query($res_pessoa);      
+               $sqlcmd =mysqli_query($res_pessoa);      
                if( $sqlcmd ) { // Tabela anotador
                    $res_pessoa="DELETE  from  $bd_2.corespproj  WHERE projetoautor=$m_usuario "; 
-                   $sqlcmd =mysql_query($res_pessoa);      
+                   $sqlcmd =mysqli_query($res_pessoa);      
                    if( $sqlcmd ) {  // Tabela corespproj
                        $res_pessoa="DELETE  from  $bd_2.participante  WHERE codigousp=$m_usuario "; 
-                       $sqlcmd =mysql_query($res_pessoa);      
+                       $sqlcmd =mysqli_query($res_pessoa);      
                        if( $sqlcmd ) {  // Tabela participante
                            $res_pessoa="DELETE  from  $bd_2.projeto  WHERE autor=$m_usuario "; 
-                           $sqlcmd =mysql_query($res_pessoa);      
+                           $sqlcmd =mysqli_query($res_pessoa);      
                            if( $sqlcmd ) {  // Tabela projeto
-                                mysql_query('commit'); 
+                                mysqli_query('commit'); 
                                 $lnerro=0;
                            } else {
                                $msg_erro .="&nbsp;Falha Tabela projeto delete - ".mysql_error().$msg_final;
@@ -259,11 +259,11 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
               $msg_erro .="&nbsp;Falha Tabela anotacao delete - ".mysql_error().$msg_final;             
               $lnerro=1;        
            }       
-           if( $lnerro==1 ) mysql_query('rollback'); 
-           mysql_query("UNLOCK  TABLES");
+           if( $lnerro==1 ) mysqli_query('rollback'); 
+           mysqli_query("UNLOCK  TABLES");
            //  Complete the transaction 
-           mysql_query('end'); 
-           mysql_query('DELIMITER');         
+           mysqli_query('end'); 
+           mysqli_query('DELIMITER');         
            if( $lnerro==1 ) {
               echo $msg_erro; 
               exit();               
@@ -306,7 +306,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
          } else echo $dir.' does not exists'; 
      }
      //
-     $delcmd = mysql_query("DELETE FROM $bd_2.anotacao "
+     $delcmd = mysqli_query("DELETE FROM $bd_2.anotacao "
                     ." WHERE autor=$anotador and "
                     ."   projeto=$m_projeto  and  numero=$m_anotacao ");
      if( ! $delcmd ) {

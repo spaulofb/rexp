@@ -168,7 +168,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
       $sqlcmd = "SELECT anotacao as nanotacoes FROM  $bd_2.projeto  "
                  ." WHERE cip=$val  ";
       ///           
-      $result_consult_anotacao = mysql_query($sqlcmd);
+      $result_consult_anotacao = mysqli_query($sqlcmd);
       if( ! $result_consult_anotacao ) {
             echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysql_error());            
             exit();        
@@ -185,7 +185,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     ///  Mostrar todas as anotacoes de um Projeto
    $table_remover = $_SESSION["table_remover"] = "$bd_2.temp_remover_anotacao";
    $sql_temp = "DROP TABLE IF EXISTS  $table_remover  ";  
-   $drop_result = mysql_query($sql_temp); 
+   $drop_result = mysqli_query($sql_temp); 
    if( ! $drop_result  ) {
         /// 
         /// Parte do Class
@@ -211,7 +211,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
    /// 
    ///  Selecionar a anotacao para remover
     /// Contador de linhas - resultado do Select/Mysql
-    mysql_query("SET @xnr:=0");
+    mysqli_query("SET @xnr:=0");
     ///   Criando a tabela temporaria
     $sqlcmd ="CREATE TABLE  IF NOT EXISTS $table_remover ";
     /*
@@ -257,7 +257,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     }
     ///
     /// Executando mysql_query
-    $result_rmanotacao = mysql_query($sqlcmd);
+    $result_rmanotacao = mysqli_query($sqlcmd);
     if( ! $result_rmanotacao ) {
        ///  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error().$orientador);
         echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o -&nbsp;db/mysql:&nbsp;".mysql_error());            
@@ -266,7 +266,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     ///
     ///  Selecionando todos os registros da Tabela temporaria
     $query2 = "SELECT * from  ".$_SESSION["table_remover"]."  ";
-    $result_outro = mysql_query($query2);                                    
+    $result_outro = mysqli_query($query2);                                    
     if( ! $result_outro ) {
          /// die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysql_error());  
          echo $funcoes->mostra_msg_erro("Selecionando as anota&ccedil;&otilde;es do Projeto  -&nbsp;db/mysql:&nbsp;".mysql_error());     
@@ -325,7 +325,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                       ." FROM rexp.anotacao a, rexp.projeto b "
                       ." WHERE ( a.projeto=b.cip ) and a.projeto=$cip  and  a.numero=$nr_anotacao ";
          ///
-         $result_anotacao_rm = mysql_query($sqlcmd);
+         $result_anotacao_rm = mysqli_query($sqlcmd);
          ///
          if( ! $result_anotacao_rm ) {
              if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
@@ -361,7 +361,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                 <!-- N. Funcional USP/Matricula - Autor/ANOTADOR -->
             <?php 
               ///  Selecionando Anotador
-              $res_anotador = mysql_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa "
+              $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa "
                                     ." WHERE codigousp=$anotador order by nome "); 
               ///                                    
               if( ! $res_anotador ) {
@@ -444,7 +444,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             $test1="SELECT codigousp,nome as testemunha1_nome,categoria 
                      FROM $bd_1.pessoa WHERE codigousp=$testemunha1 order by nome ";
             ///         
-            $result1=mysql_query($test1);
+            $result1=mysqli_query($test1);
             ///  Codigo da Testemunha (1) da realizacao 
             if( ! $result1 )  {
                 echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());                  
@@ -470,7 +470,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           $test2="SELECT codigousp,nome as testemunha2_nome,categoria 
                      FROM $bd_1.pessoa WHERE codigousp=$testemunha2 order by nome ";
           ///           
-          $result=mysql_query($test2);
+          $result=mysqli_query($test2);
           ///  Codigo da Testemunha (2) da realizacao 
           if( ! $result )  {
                echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());                  
@@ -554,7 +554,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                           ." FROM $bd_2.anotacao a, $bd_2.projeto b "
                           ." WHERE ( a.projeto=b.cip ) and a.cia=$cia ";
           ///
-          $result_anotacao_rm = mysql_query($sqlcmd);
+          $result_anotacao_rm = mysqli_query($sqlcmd);
           if( ! $result_anotacao_rm ) {
                if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
                echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysql_error());                  
@@ -609,15 +609,15 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          $lnerro=0;
          $tabela="anotacao";
          $commit="commit";   
-         mysql_query('DELIMITER &&'); 
-         mysql_query('begin'); 
+         mysqli_query('DELIMITER &&'); 
+         mysqli_query('begin'); 
          //  Execute the queries          
-         //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-         mysql_query("LOCK TABLES $bd_2.$tabela  DELETE ");
+         //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+         mysqli_query("LOCK TABLES $bd_2.$tabela  DELETE ");
          ///
          ///  Removendo o registro da anotacao
          $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
-         $res_reg =  mysql_query($sqlcmd);
+         $res_reg =  mysqli_query($sqlcmd);
          if( ! $res_reg  ) $lnerro=1;
          ///
          if( intval($lnerro)>=1 ) {
@@ -625,11 +625,11 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
               $commit="rollback";
          }    
          ///                  
-         mysql_query($commit);
-         mysql_query("UNLOCK  TABLES");
+         mysqli_query($commit);
+         mysqli_query("UNLOCK  TABLES");
          ///  Complete the transaction 
-         mysql_query('end'); 
-         mysql_query('DELIMITER');
+         mysqli_query('end'); 
+         mysqli_query('DELIMITER');
          ///  Removido
          if( intval($lnerro)<1 ) {
               ////   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
@@ -637,7 +637,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
              ///  Verifica se existe ANOTACOES para o PROJETO escolhido
               $sqlcmd = "SELECT anotacao FROM  $bd_2.projeto  WHERE cip=$m_projeto ";
               ///           
-              $result_consult_anotacao = mysql_query($sqlcmd);
+              $result_consult_anotacao = mysqli_query($sqlcmd);
               if( ! $result_consult_anotacao ) {
                     echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysql_error());            
                     exit();        
@@ -648,25 +648,25 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                     $nanotacoes=$nanotacoes-1;
                     $tabela="projeto";
                     $commit="commit";   
-                    mysql_query('DELIMITER &&'); 
-                    mysql_query('begin'); 
+                    mysqli_query('DELIMITER &&'); 
+                    mysqli_query('begin'); 
                     //  Execute the queries          
-                    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-                    mysql_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
+                    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+                    mysqli_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
                     ///
                     ///  Removendo o registro da anotacao
                     $sqlcmd = "UPDATE $bd_2.$tabela SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
-                    $res_reg =  mysql_query($sqlcmd);
+                    $res_reg =  mysqli_query($sqlcmd);
                     if( ! $res_reg ) {
                         echo $funcoes->mostra_msg_erro("&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysql:&nbsp;".mysql_error());
                          $commit="rollback";
                     }    
                     ///                  
-                    mysql_query($commit);
-                    mysql_query("UNLOCK  TABLES");
+                    mysqli_query($commit);
+                    mysqli_query("UNLOCK  TABLES");
                     ///  Complete the transaction 
-                    mysql_query('end'); 
-                    mysql_query('DELIMITER');
+                    mysqli_query('end'); 
+                    mysqli_query('DELIMITER');
                     ///
                     ///  Mensagem de aviso da remocao da Anotacao
                     $txt =  'Anotação: '.$tit_anotacao.' removida era parte do Projeto: '.$tit_projeto;

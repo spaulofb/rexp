@@ -34,7 +34,7 @@ if ( $_SESSION["num_rows"]>=1 ) {
     unset($_SESSION["num_rows"]);
 	// Conta os resultados no total da minha query
 	//  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
-	//  $query    = mysql_query($strCount);
+	//  $query    = mysqli_query($strCount);
 	$_SESSION["row"]  = mysql_fetch_array($result_outro);
 	$_SESSION["total_regs"] = mysql_num_rows($result_outro);
 	$_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
@@ -71,7 +71,7 @@ if( $total_regs<=0 ) {
     $m_linhas=0; $num_fields=0; $m_ordenar="nome";    
     
 	$strQuery="SELECT $campos_query from  ".$_SESSION["table_remover"]."  LIMIT $inicio,$maximo";  
-	$query      = mysql_query($strQuery);
+	$query      = mysqli_query($strQuery);
     if( ! $query ) {
        die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
     }
@@ -91,7 +91,7 @@ if( $total_regs<=0 ) {
      }
      //   Selecionando o maximo espaco ocupado em cada campo da tabela
      $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_remover"]."   ";
-     $result_max_length = mysql_query($sqlcmd);          
+     $result_max_length = mysqli_query($sqlcmd);          
      //
      if ( ! $result_max_length ) {
           mysql_free_result($result_max_length);

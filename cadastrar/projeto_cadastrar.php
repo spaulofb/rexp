@@ -337,7 +337,7 @@ echo "LINHA279 -->> REQUEST_METHOD  -->>  \$lcdir = $lcdir  <<-- "
              *     IMPORTANTE: alterado em 20180727
              *         toda parte de acentuacao PHP?MYSQL
              *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-             *        Use mysql_select_db() ou mysql_query()
+             *        Use mysql_select_db() ou mysqli_query()
              ***/   
              ini_set('default_charset','utf8');
              /***
@@ -345,12 +345,12 @@ echo "LINHA279 -->> REQUEST_METHOD  -->>  \$lcdir = $lcdir  <<-- "
             *    pois cobre quase todos os caracteres e 
             *    símbolos do mundo
             ***/
-            //  mysql_query("SET NAMES 'utf8'"); 
+            //  mysqli_query("SET NAMES 'utf8'"); 
             $_SESSION["conex"]->set_charset("utf8");
             //
-            //  mysql_query('SET character_set_connection=utf8'); 
-            //  mysql_query('SET character_set_client=utf8'); 
-            //  mysql_query('SET character_set_results=utf8'); 
+            //  mysqli_query('SET character_set_connection=utf8'); 
+            //  mysqli_query('SET character_set_client=utf8'); 
+            //  mysqli_query('SET character_set_results=utf8'); 
             //  mysql_set_charset('utf8');
             //
             //  $local_arq = utf8_decode($local_arq); 
@@ -695,10 +695,10 @@ if( isset($_SESSION["onsubmit_tabela"])  ) {
                 $conex = $_SESSION["conex"];
                 //
                 /***          
-                *     mysql_query("SET NAMES 'utf8'");
-                *     mysql_query('SET character_set_connection=utf8');
-                *     mysql_query('SET character_set_client=utf8');
-                *     mysql_query('SET character_set_results=utf8');
+                *     mysqli_query("SET NAMES 'utf8'");
+                *     mysqli_query('SET character_set_connection=utf8');
+                *     mysqli_query('SET character_set_client=utf8');
+                *     mysqli_query('SET character_set_results=utf8');
                 ***/
                 //  Executando Select/MySQL
                 ///   Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      

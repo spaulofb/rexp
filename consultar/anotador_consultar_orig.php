@@ -534,10 +534,10 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
            ///
            $nerro=0;
            # IMPORTANTE: Aqui esta o segredo
-           mysql_query("SET NAMES 'utf8'");
-           mysql_query('SET character_set_connection=utf8');
-           mysql_query('SET character_set_client=utf8');
-           mysql_query('SET character_set_results=utf8');
+           mysqli_query("SET NAMES 'utf8'");
+           mysqli_query('SET character_set_connection=utf8');
+           mysqli_query('SET character_set_client=utf8');
+           mysqli_query('SET character_set_results=utf8');
            ///
            /* Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
               +-------------+--------+
@@ -556,7 +556,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                       ." b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                       ." b.autor=".$usuario_conectado." order by b.titulo "; 
                  ///     
-                 $result_projeto = mysql_query($sqlcmd);               
+                 $result_projeto = mysqli_query($sqlcmd);               
                  ///
                  if( ! $result_projeto ) {
                      /*  $msg_erro .="Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ";

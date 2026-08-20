@@ -406,7 +406,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
              $local_arq = utf8_encode($filename); 
              //
              //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-             //                 - Use mysql_select_db() ou mysql_query()
+             //                 - Use mysql_select_db() ou mysqli_query()
      	       $proc="UPDATE $bd_2.anotacao SET relatext='$local_arq'  ";
              $proc.=" WHERE  projeto=$nprojexp  and  numero=$anotacao_numero ";
              $nupdate = mysqli_query($_SESSION["conex"],"$proc");

@@ -116,7 +116,7 @@ if( $val_upper=="INICIANDO" ) {
                  //   $m_campo_chave="concat(length(SUBSTRING_INDEX(codigo,'.',1)),codigo)"  ; 
                  $m_nome_primeiro_campo="Descri&ccedil;&atilde;o"; 
                  $m_nome_segundo_campo ="Descri&ccedil;&atilde;o"; 
-                 $result=mysql_query("SELECT * FROM  {$_SESSION["bd_1"]}.$encontrar order by  "
+                 $result=mysqli_query("SELECT * FROM  {$_SESSION["bd_1"]}.$encontrar order by  "
                        ."  concat(length(SUBSTRING_INDEX(codigo,'.',1)),codigo)  ");           
            } else {
                  //  Select para a Tabela instituicao
@@ -124,7 +124,7 @@ if( $val_upper=="INICIANDO" ) {
                       $lc_instituicao=$_SESSION["instituicao"];
                       $where="  WHERE  clean_spaces(sigla)=clean_spaces('$lc_instituicao') ";  
                  } 
-                 $result=mysql_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar  $where ");
+                 $result=mysqli_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar  $where ");
            }
            if( ! $result ) {
                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());
@@ -309,7 +309,7 @@ if( is_array($data) ) {
                      if( isset($encontrar) ) {
                         $n_fields="";
                         if( strlen($encontrar)>1 ) {
-                             $result=mysql_query("SELECT * from  ".$encontrar." limit 0 ");            
+                             $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                              if( ! $result ) {
                                  echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());    
                                  //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
@@ -408,7 +408,7 @@ if( is_array($data) ) {
         $tab_temp_institui="temporar_hpadrao_$codigousp";
         $_SESSION["t_temp_editar_instituic"] = "{$_SESSION["bd_1"]}.$tab_temp_institui";
         $sql_editar_institui = "DROP TEMPORARY TABLE IF EXISTS  {$_SESSION["t_temp_editar_instituic"]} ";
-        $res_editar_institui=mysql_query($sql_editar_institui);
+        $res_editar_institui=mysqli_query($sql_editar_institui);
         if( ! $res_editar_institui ) {
             echo $funcoes->mostra_msg_erro("Falha no DROP tabela $tab_temp_institui - db/Mysql:&nbsp; ".mysql_error());
             exit();
@@ -418,14 +418,14 @@ if( is_array($data) ) {
         $sq_editar_institui.= "SELECT * FROM {$_SESSION["bd_1"]}.$encontrar   "
                               ." WHERE clean_spaces($nome_campo_1)!=clean_spaces('$sigla_da_instituicao') ";
         //     
-        $create_temp_tab_institui = mysql_query($sq_editar_institui);            
+        $create_temp_tab_institui = mysqli_query($sq_editar_institui);            
         if( ! $create_temp_tab_institui ) {
             echo $funcoes->mostra_msg_erro("Falha no CREATE tabela {$_SESSION["t_temp_editar_instituic"]} -"
                           ."&nbsp;db/Mysql:&nbsp; ".mysql_error());    
             exit();
         }       
         //
-        $result_instituicao=mysql_query("SELECT * FROM {$_SESSION["t_temp_editar_instituic"]} "
+        $result_instituicao=mysqli_query("SELECT * FROM {$_SESSION["t_temp_editar_instituic"]} "
                  ." WHERE  clean_spaces($nome_campo_1)=clean_spaces('$valor_campo_1') ");
         //
         if( ! $result_instituicao ) {
@@ -459,20 +459,20 @@ if( is_array($data) ) {
        //  $descricao =utf8_decode($descricao);
        //
         //  START  a transaction - ex. procedure    
-        mysql_query('DELIMITER &&'); 
+        mysqli_query('DELIMITER &&'); 
         $commit="commit";
-        mysql_query('begin'); 
+        mysqli_query('begin'); 
         //  Execute the queries 
-        //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+        //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
         //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-        //   - Use mysql_select_db() ou mysql_query()
-        mysql_query("LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE");
+        //   - Use mysql_select_db() ou mysqli_query()
+        mysqli_query("LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE");
         //  Alterando dados na Tabela instituicao
-      /*  $success=mysql_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
+      /*  $success=mysqli_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
                               ." $nome_campo_2=clean_spaces('$valor_campo_2')  "
                               ." WHERE clean_spaces($nome_campo_1)=clean_spaces('$sigla_da_hpadrao') ");
                               */
-        $success=mysql_query($success_antes);                              
+        $success=mysqli_query($success_antes);                              
         //
         if( ! $success ) {
             $commit="rollback";
@@ -481,11 +481,11 @@ if( is_array($data) ) {
             echo $funcoes->mostra_msg_ok("Cadastro alterado: <br>$valor_campo_1,$valor_campo_2");           
         }
         /*!40000 ALTER TABLE  ENABLE KEYS */;
-        mysql_query($commit);
-        mysql_query("UNLOCK  TABLES");
+        mysqli_query($commit);
+        mysqli_query("UNLOCK  TABLES");
         //  Complete the transaction 
-        mysql_query('end'); 
-        mysql_query('DELIMITER');
+        mysqli_query('end'); 
+        mysqli_query('DELIMITER');
         //
         exit();
   }
@@ -505,7 +505,7 @@ if( is_string($data) ) {
             $tabelas_array = array("atributo","categoria","financiadora","grupo","hpadrao","instituicao");
             $marray_gp = array("grupo","pessoal"); 
             if( strlen($encontrar)>1 ) {
-                $result=mysql_query("SELECT * from  ".$encontrar." limit 0 ");            
+                $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                 if( ! $result ) {
                      echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
                      exit();

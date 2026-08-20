@@ -113,47 +113,47 @@ if( $source_maiusc=="SAIR" ) {
          ///   $orientador_pa = $_SESSION["array_usuarios"]["orientador"];                                       
          if( strtoupper(trim($sn))=="NAO"  ) {
               ///  Start a transaction - ex. procedure    
-              mysql_query('DELIMITER &&'); 
-              mysql_query('begin'); 
+              mysqli_query('DELIMITER &&'); 
+              mysqli_query('begin'); 
               ///  Execute the queries          
-              //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-              mysql_query("LOCK TABLES  $bd_1.usuario  DELETE, $bd_2.participante DELETE ");
+              //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+              mysqli_query("LOCK TABLES  $bd_1.usuario  DELETE, $bd_2.participante DELETE ");
               /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
               //  DELETE  particpante 
               $res_usuario = "DELETE from $bd_2.participante  WHERE codigousp=$codigousp and pa=$orientador_pa ";
                //                  
-               $sqlcmd =  mysql_query($res_usuario);
+               $sqlcmd =  mysqli_query($res_usuario);
                if( $sqlcmd ) { 
                    //  DELETE usuario
                    $res_pessoa= "DELETE  from $bd_1.usuario WHERE codigousp=$codigousp and pa=$orientador_pa "; 
-                   $sqlcmd =  mysql_query($res_pessoa);      
+                   $sqlcmd =  mysqli_query($res_pessoa);      
                    if( $sqlcmd ) { 
                          //  Orientador nao foi aceito 
                          $m_erro=""; $lnerro=0;
                         ///  Concluindo as tabelas para Orientador Novo para ser aceito pelo Aprovador
                         $msg_ok .="<p style='font-size: medium; text-align:center; color: #000000;'>"
                                  ."<br>Orientador $nome n&atilde;o foi aceito pelo Aprovador.<br></p>".$msg_final;
-                        mysql_query('commit'); 
+                        mysqli_query('commit'); 
                         echo $msg_ok;                    
                    } else { 
                         ///  mysql_error() - para saber o tipo do erro
                         $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysql_error().$msg_final;
-                        mysql_query('rollback'); 
+                        mysqli_query('rollback'); 
                         echo $msg_erro;         
                         $lnerro=1;
                    }                
                } else { 
                   ///  mysql_error() - para saber o tipo do erro
                   $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysql_error().$msg_final;
-                  mysql_query('rollback'); 
+                  mysqli_query('rollback'); 
                   echo $msg_erro; 
                   $lnerro=1;        
                }       
                /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-               mysql_query("UNLOCK  TABLES");
+               mysqli_query("UNLOCK  TABLES");
                //  Complete the transaction 
-               mysql_query('end'); 
-               mysql_query('DELIMITER');         
+               mysqli_query('end'); 
+               mysqli_query('DELIMITER');         
                //  Caso Tabela acima foi aceita incluir dados na outra abaixo
                //   Mandar mensagem para o novo Orientador - cancelado
                if( $lnerro<1 ) {
@@ -203,7 +203,7 @@ if( $source_maiusc=="SAIR" ) {
                ///    FINAL _ NAO APROVANDO NOVO ORIENTADOR                   
          } elseif( strtoupper(trim($sn))=="SIM" ) {   //  Foi APROVADO como Orientador
              ////   Verifica se o  participante, pessoa e usuario  existe 
-             $rs_check = mysql_query("SELECT a.codigousp,a.pa,a.aprovado,a.codigo_ativa,"
+             $rs_check = mysqli_query("SELECT a.codigousp,a.pa,a.aprovado,a.codigo_ativa,"
                            ." b.nome,b.e_mail,c.login,c.senha,c.aprovado as usu_aprovado "
                            ."  FROM  $bd_2.participante a, "
                            ." $bd_1.pessoa b, $bd_1.usuario c WHERE a.codigousp=$codigousp "
@@ -245,10 +245,10 @@ if( $source_maiusc=="SAIR" ) {
                     */
                     $nerro=0;
                     ///  START a transaction - ex. procedure 
-                    mysql_query('DELIMITER &&'); 
-                    mysql_query('begin'); 
+                    mysqli_query('DELIMITER &&'); 
+                    mysqli_query('begin'); 
                     ///  Execute the queries          
-                    mysql_query("LOCK TABLES $bd_1.usuario UPDATE, $bd_2.participante UPDATE  ");
+                    mysqli_query("LOCK TABLES $bd_1.usuario UPDATE, $bd_2.participante UPDATE  ");
                     if( $usu_aprovado<1  ) {
                           $sqlcmd = "UPDATE  $bd_1.usuario SET aprovado='1',"
                                   ." activation_code=$activation_code, "
@@ -256,17 +256,17 @@ if( $source_maiusc=="SAIR" ) {
                                   ." senha=password('$new_pwd') "
                                   ."  WHERE  trim(codigousp)=$codigousp   ";
                           ///
-                          $rs_activ = mysql_query($sqlcmd);     
+                          $rs_activ = mysqli_query($sqlcmd);     
                           /// Verificando se houve erro no update            
                           if( ! $rs_activ ) {
                               /*****
                               $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysql_error();
                               ***/   
                               $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysql_error();
-                              mysql_query('rollback'); 
+                              mysqli_query('rollback'); 
                               $nerro=1;
                           } else {
-                              mysql_query('commit'); 
+                              mysqli_query('commit'); 
                           }
                     }
                     /// Caso NAO houve erro
@@ -276,21 +276,21 @@ if( $source_maiusc=="SAIR" ) {
                                 ." datacad='$datacad',datavalido='$datavalido', "
                                 ." codigo_ativa=$activation_code   "
                                 ." WHERE  trim(codigousp)=$codigousp and pa=$orientador_pa   ";
-                        $rs_activ = mysql_query($sqlcmd);     
+                        $rs_activ = mysqli_query($sqlcmd);     
                        /// Verificando se houve erro no update            
                         if( ! $rs_activ ) {
                              $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysql_error();
-                             mysql_query('rollback'); 
+                             mysqli_query('rollback'); 
                              $nerro=1;
                         } else {
-                             mysql_query('commit'); 
+                             mysqli_query('commit'); 
                         }
                     }
                     ///                   
-                    mysql_query("UNLOCK  TABLES");
+                    mysqli_query("UNLOCK  TABLES");
                     //  Complete the transaction 
-                    mysql_query('end'); 
-                    mysql_query('DELIMITER'); 
+                    mysqli_query('end'); 
+                    mysqli_query('DELIMITER'); 
                     ///        
                    /***
                          Mandar mensagem para o novo Orientador - caso nao tenha erro               

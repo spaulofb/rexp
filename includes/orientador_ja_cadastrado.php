@@ -72,7 +72,7 @@ if( intval($n_regs)>=1 ) {
    ///  MySql - SELECT
    $sqlcmd = "SELECT a.* FROM $bd_1.pessoa a WHERE  $where   ";
    //
-   $result_pessoa = mysql_query($sqlcmd);               
+   $result_pessoa = mysqli_query($sqlcmd);               
    if( ! $result_pessoa ) {
        $msg_erro .="&nbsp;SELECT Tabela Pessoa:&nbsp; - ".mysql_error().$msg_final;
        echo $msg_erro;
@@ -129,7 +129,7 @@ if( intval($n_regs)>=1 ) {
    /// Gera a ativação de codigo com 6 digitos
    $activation_code = rand(100000,999999);
   /// MySql - Select
-  $cmdsql = mysql_query("select activation_code  from $bd_1.usuario where codigousp=".$codigousp);
+  $cmdsql = mysqli_query("select activation_code  from $bd_1.usuario where codigousp=".$codigousp);
    if( ! $cmdsql ) {
        $msg_erro .="&nbsp;SELECT Tabela Usuario:&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error().$msg_final;
        echo $msg_erro;     
@@ -156,19 +156,19 @@ if( intval($n_regs)>=1 ) {
         list($login) = explode("@", $e_mail);
         
        ///  START a transaction - ex. procedure    
-       mysql_query('DELIMITER &&'); 
+       mysqli_query('DELIMITER &&'); 
        $commit = "commit";
-       mysql_query('begin'); 
+       mysqli_query('begin'); 
        ///  Execute the queries          
-       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-       mysql_query("LOCK TABLES $bd_1.usuario WRITE  ");
+       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+       mysqli_query("LOCK TABLES $bd_1.usuario WRITE  ");
        /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;            
        //  INSERT - usuario
        $res_usu = "insert into  $bd_1.usuario ";
        $res_usu .="  (login,datacad,datavalido,codigousp,pa,aprovado,activation_code)  "
                          ." values('$login','$datacad','$datavalido',$codigousp,$orientador_pa,$aprovado,$codigo_ativa) "; 
        ///                  
-       $sqlcmd = mysql_query($res_usu);      
+       $sqlcmd = mysqli_query($res_usu);      
        if( $sqlcmd ) { 
             if( isset($sqlcmd) ) unset($sqlcmd);
             ///  Concluindo a tabela usuario para Orientador Novo para ser aceito pelo Aprovador
@@ -180,11 +180,11 @@ if( intval($n_regs)>=1 ) {
            $lnerro=1; $participante_erro=1;
        }                
        /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-       mysql_query($commit);
-       mysql_query("UNLOCK  TABLES");
+       mysqli_query($commit);
+       mysqli_query("UNLOCK  TABLES");
        //  Complete the transaction 
-       mysql_query('end'); 
-       mysql_query('DELIMITER');         
+       mysqli_query('end'); 
+       mysqli_query('DELIMITER');         
        
        ///  Caso Tabela acima foi aceita incluir dados na outra abaixo
        if( isset($sqlcmd) ) unset($sqlcmd);
@@ -197,18 +197,18 @@ if( intval($n_regs)>=1 ) {
        ///  INSERINDO PARTICIPANTE
        ///
        ///  Start a transaction - ex. procedure    
-       mysql_query('DELIMITER &&'); 
+       mysqli_query('DELIMITER &&'); 
        $commit = "commit";
-       mysql_query('begin'); 
+       mysqli_query('begin'); 
        //  Execute the queries          
-       //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-       mysql_query("LOCK TABLES $bd_2.participante WRITE  ");
+       //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+       mysqli_query("LOCK TABLES $bd_2.participante WRITE  ");
        ///  INSERT
        $res_participante = "insert into  $bd_2.participante ";
        $res_participante .="  (codigousp,datacad,datavalido,pa,codigo_ativa,aprovado,chefe)  "
                          ." values($codigousp,'$datacad','$datavalido',$orientador_pa,$codigo_ativa,$aprovado,0) "; 
        ///                  
-       $sqlcmd =  mysql_query($res_participante);      
+       $sqlcmd =  mysqli_query($res_participante);      
        if( $sqlcmd ) { 
            if( isset($sqlcmd) )  unset($sqlcmd);
            ///  Concluindo a tabela Participante para Orientador Novo para ser aceito pelo Aprovador
@@ -218,11 +218,11 @@ if( intval($n_regs)>=1 ) {
            $commit = "rollback";
            $lnerro=1;
        }         
-       mysql_query($commit);
-       mysql_query("UNLOCK  TABLES");
+       mysqli_query($commit);
+       mysqli_query("UNLOCK  TABLES");
        ///  Complete the transaction 
-       mysql_query('end'); 
-       mysql_query('DELIMITER');    
+       mysqli_query('end'); 
+       mysqli_query('DELIMITER');    
        ///
        if( strtoupper($commit)=="COMMIT" ) {
            ///  IMPORTANTE:  acentuacao correto com htmlentities e utf8_decode
@@ -243,7 +243,7 @@ if( intval($n_regs)>=1 ) {
               if( isset($sqlcmd) ) unset($sqlcmd);
               ///  Verificando descricao na  tabela categoria 
               $categoria = strtoupper(trim($categoria));
-              $res_categoria=mysql_query("SELECT descricao FROM $bd_1.categoria where "
+              $res_categoria=mysqli_query("SELECT descricao FROM $bd_1.categoria where "
                       ." upper(trim(codigo))='$categoria' ");
               ///        
               if( ! $res_categoria ) {

@@ -225,7 +225,7 @@ exit();
 
 
         $sql_temp = "DROP TABLE IF EXISTS   ".$table_consultar_projeto."    ";  
-        $drop_result = mysql_query($sql_temp); 
+        $drop_result = mysqli_query($sql_temp); 
         if( ! $drop_result  ) {
             // die('ERRO: Falha consultando a tabela '.$table_consultar_projeto.' - '.mysql_error());         
             /*  $msg_erro .= "Removendo a Tabela {$table_consultar_projeto} - db/mysql:&nbsp; ".mysql_error();
@@ -244,7 +244,7 @@ exit();
                  ." WHERE a.autor=b.codigousp   ";
         ***/
         /// Contador de linhas - resultado do Select/Mysql
-        mysql_query("SET @xnr:=0");
+        mysqli_query("SET @xnr:=0");
         $sqlcmd ="CREATE TABLE IF NOT EXISTS ".$table_consultar_projeto."   ";
         $sqlcmd .= "SELECT @xnr:=@xnr+1 as nr,a.numprojeto as np, a.titulo as Titulo, "
                  ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as Data, "
@@ -289,7 +289,7 @@ exit();
         }
         ///
         ///  Execuntando o mysql_query
-        $result_consult_projeto = mysql_query($sqlcmd);
+        $result_consult_projeto = mysqli_query($sqlcmd);
         if( ! $result_consult_projeto ) {
             /// die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error());
             /* $msg_erro .= "&nbsp;Criando a Tabela  {$table_consultar_projeto} - db/mysql:&nbsp; ";
@@ -300,7 +300,7 @@ exit();
         ////
         ///  Selecionando todos os registros da Tabela temporaria de consulta Anotacoes
         $query2 = "SELECT * from  ".$table_consultar_projeto."  ";
-        $resultado_outro = mysql_query($query2);                                    
+        $resultado_outro = mysqli_query($query2);                                    
         if( ! $resultado_outro ) {
              //  die("ERRO: Selecionando os Projetos - mysql =  ".$cip.mysql_error());  
             /*  $msg_erro .= "&nbsp;Selecionando os Projetos - db/mysql:&nbsp; ".mysql_error().$msg_final;
@@ -355,7 +355,7 @@ exit();
                 ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto, a.relatproj as Arquivo "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
      ///           
-     $resultado_projeto = mysql_query($sqlcmd);
+     $resultado_projeto = mysqli_query($sqlcmd);
      if( ! $resultado_projeto ) {
           /*  $msg_erro .= "Selecionando Projeto  db/mysql - ".mysql_error().$msg_final;            
           echo  $msg_erro;  */
@@ -374,7 +374,7 @@ exit();
          if( $coresponsaveis==1 ) $tit_coresp="Corespons&aacute;vel";
          if( $coresponsaveis>1 ) $tit_coresp="Corespons&aacute;veis";
          // Precisa iniciar zerando variavel @contador_regs
-         $result_set=mysql_query("set @contador_regs=0;");
+         $result_set=mysqli_query("set @contador_regs=0;");
          if( ! $result_set ) {
               /*  $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysql_error().$msg_final;            
               echo  $msg_erro;  */
@@ -382,7 +382,7 @@ exit();
               echo $funcoes->mostra_msg_erro("set @contador_regs=0; -&nbsp;db/mysql:&nbsp;".mysql_error());              
               exit();
          }         
-         $result_coresp=mysql_query("SELECT @contador_regs:=@contador_regs+1 as n, "
+         $result_coresp=mysqli_query("SELECT @contador_regs:=@contador_regs+1 as n, "
                    ." b.nome as coresponsavel_nome FROM $bd_2.corespproj  a, $bd_1.pessoa b "
                    ." WHERE a.projetoautor=$autor_projeto_cod and a.projnum=$numprojeto and "
                    ." b.codigousp=a.coresponsavel order by b.nome ");
@@ -415,7 +415,7 @@ exit();
                 ."  FROM $bd_2.anotacao a, $bd_1.pessoa b "
                 ." WHERE a.autor=b.codigousp and a.projeto=$cip ";  
      ///                          
-     $resultado_anotacao = mysql_query($sqlcmd);
+     $resultado_anotacao = mysqli_query($sqlcmd);
      if( ! $resultado_anotacao ) {
           /*
           $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto."  db/mysql - ".mysql_error().$msg_final;

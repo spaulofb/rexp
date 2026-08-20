@@ -11,15 +11,16 @@ if( !isset($_SESSION)) {
 }
 //
 // Funciona em todas as versoes
-ini_set('include_path', '/var/www/cgi-bin/');
+//  ini_set('include_path', '/var/www/cgi-bin/');
 //  
 ini_set('default_charset','UTF-8');
 //
 $php_errormsg = '';
 //
 //  Navegador permitido
-require_once('php_include/ajax/includes/navegador_permitido.php');
-///
+//  require_once('php_include/ajax/includes/navegador_permitido.php');
+require_once('includes/navegador_permitido.php');
+//
 if( ! empty($php_errormsg) ) {
     die("<br>ERRO NA BUSCA DO NAVEGADOR PERMITIDO<br>");
 }

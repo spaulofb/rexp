@@ -573,7 +573,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               $elemento=5;
               ///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");    
               include("php_include/ajax/includes/conectar.php");                    
-              $result=mysql_query("SELECT codigo,descricao FROM pessoal.categoria order by codigo ");
+              $result=mysqli_query("SELECT codigo,descricao FROM pessoal.categoria order by codigo ");
               ///          
               if( ! $result ) {
                    $msg_erro  .= "Select Tabela categoria - db/mysql:&nbsp;".mysql_error().$msg_final;
@@ -613,7 +613,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               //  PA => Privilegio de acesso
               $elemento=6;      // Selecionando o BD rexp
               include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");                    
-              $result=mysql_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
+              $result=mysqli_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
               if ( ! $result ) {
                    mysql_free_result($result);
                    die("ERRO: Select Tabela pa - ".mysql_error());
@@ -654,9 +654,9 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
 				   //  INSTITUICAO
 	             $elemento=3;
 	            include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");				    
-                //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_query()
+                //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysqli_query()
 				//  $result=mysql_db_query($db_array[$elemento],"SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
-                $result=mysql_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
+                $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if ( ! $result ) {
                      mysql_free_result($result);
                      $msg_erro  .= "Select Tabela instituicao - db/mysql: ".mysql_error().$msg_final;

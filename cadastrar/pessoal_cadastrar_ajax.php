@@ -650,8 +650,8 @@ if( strtoupper($cpowh)=="INSTITUICAO" ) {
               $nome_cpo="nome,";   
          }
          /**
-         *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query() 
-         *     $result=mysql_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
+         *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query() 
+         *     $result=mysqli_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
          *   ." $table_atual where ".$_SESSION["where"]."  group by 1 order by  ".$_SESSION["select_cpo"]);
          */
          //  Selecionando Banco de Dados/DB
@@ -1363,7 +1363,7 @@ if( $val_upper=="PESSOAL" ) {
              //
              /**
              *          Verifica se esse Chefe existe
-             *     $sqlcmd=mysql_query("SELECT nome from $bd_1.chefe WHERE  trim(nome)=trim(\"$novo_chefe\")  ");
+             *     $sqlcmd=mysqli_query("SELECT nome from $bd_1.chefe WHERE  trim(nome)=trim(\"$novo_chefe\")  ");
              */
              // 
              //  Select/MYSQLI              
@@ -1436,8 +1436,8 @@ if( $val_upper=="PESSOAL" ) {
                  //
                  //      Execute the queries 
                  //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-                 //   - Use mysql_select_db() ou mysql_query()
-                 //  mysql_query("LOCK TABLES $bd_1.chefe WRITE ");
+                 //   - Use mysql_select_db() ou mysqli_query()
+                 //  mysqli_query("LOCK TABLES $bd_1.chefe WRITE ");
                  mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.chefe INSERT ");
                  $sqlcmd="INSERT into $bd_1.chefe (chefecodusp,nome) ";
                  $sqlcmd.=" values($chefecodusp,'$novo_chefe') ";
@@ -1448,7 +1448,7 @@ if( $val_upper=="PESSOAL" ) {
                       //
                       // Ocorreu erro
                       $n_erro=1;
-                      //  mysql_query('rollback'); 
+                      //  mysqli_query('rollback'); 
                       $commit="rollback";
                       $txt="Inserindo dados na Tabela chefe - db/mysqli:&nbsp;";
                       echo $funcoes->mostra_msg_erro("$txt".mysqli_error($conex));
@@ -1610,22 +1610,22 @@ exit();
                 ///   Incluir novo chefe na Tabela Pessoa
                 if( isset($novo_chefe) ) {
                        ///  Start a transaction - ex. procedure               
-                       mysql_query('DELIMITER &&'); 
-                       mysql_query('begin'); 
-                       mysql_query("LOCK TABLES $bd_1.pessoa WRITE ");
+                       mysqli_query('DELIMITER &&'); 
+                       mysqli_query('begin'); 
+                       mysqli_query("LOCK TABLES $bd_1.pessoa WRITE ");
                        ///
-                       $success=mysql_query("update $bd_1.pessoa set chefe=$chefecodusp  WHERE codigousp=$codigousp "); 
+                       $success=mysqli_query("update $bd_1.pessoa set chefe=$chefecodusp  WHERE codigousp=$codigousp "); 
                        //  Complete the transaction 
                        if( $success ) { 
-                           mysql_query('commit'); 
+                           mysqli_query('commit'); 
                        } else { 
-                           mysql_query('rollback'); 
+                           mysqli_query('rollback'); 
                            $msg_erro .="&nbsp;Chefe n&atilde;o foi cadastrado.".$msg_final;
                            echo $msg_erro;         
                        } 
-                       mysql_query("UNLOCK  TABLES");
-                       mysql_query('end'); 
-                       mysql_query('DELIMITER'); 
+                       mysqli_query("UNLOCK  TABLES");
+                       mysqli_query('end'); 
+                       mysqli_query('DELIMITER'); 
                        ///
                 }    
            } 

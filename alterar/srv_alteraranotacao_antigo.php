@@ -149,7 +149,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
         ***/
          mysql_set_charset('utf8');
         ///                         
-        $result_consult_anotacao = mysql_query($sqlcmd0);
+        $result_consult_anotacao = mysqli_query($sqlcmd0);
         if( ! $result_consult_anotacao ) {
             /* $msg_erro .= "Consultando a tabela anota&ccedil;&atilde;o  - Falha: ".mysql_error().$msg_final;
                 echo $msg_erro;  */
@@ -174,7 +174,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
                   ." fonterec, fonteprojid, numprojeto FROM $bd_2.projeto "
                   ."  WHERE cip=$cip  ";
         ///                  
-        $sqlcmd2 = mysql_query($sqlcmd1);
+        $sqlcmd2 = mysqli_query($sqlcmd1);
         if( ! $sqlcmd2 ) {
             /* $msg_erro .= "Consultando a tabela projeto - Falha: ".mysql_error().$msg_final;
             echo $msg_erro;  */
@@ -217,7 +217,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
         $titulo_projeto .= trim($projeto_titulo_parte);
         ///
         $cmdsql= "Select nome as nome_autor_projeto FROM $bd_1.pessoa WHERE codigousp=$autor_projeto  ";
-        $res_cmdsql = mysql_query($cmdsql);
+        $res_cmdsql = mysqli_query($cmdsql);
         if( ! $res_cmdsql ) {
             echo $funcoes->mostra_msg_erro("Select Tabela pessoa  campo codigousp -&nbsp;db/mysql:&nbsp;".mysql_error());
             exit();                
@@ -348,7 +348,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
             <!-- Codigo da Testemunha (1) da realizacao  -->
             <?php 
                 /// Select para a Testemunha 1    
-                $result2=mysql_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
+                $result2=mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
                 if( ! $result2 ) {
                     /* $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysql_error().$msg_final;
                     echo $msg_erro;  */
@@ -375,7 +375,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
                 //  mysql_db_query -  essa funcao esta desativada usar mysql_query
                 //  $result=mysql_db_query($db_array[$elemento],"SELECT codigousp,nome,categoria FROM pessoa order by nome ");
                 // Select para a Testemunha 2                
-                $result=mysql_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa order by nome ");
+                $result=mysqli_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa order by nome ");
                 if( ! $result ) {
                    /* $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysql_error().$msg_final;
                     echo $msg_erro;  */
@@ -451,7 +451,7 @@ if( $opcao_maiusc=="BUSCA_PROJ" )  {
      ///  Verifica se existe ANOTACOES para o PROJETO escolhido
       $sqlcmd = "SELECT sum(anotacao) as nanotacoes FROM  $bd_2.projeto  "
                  ." WHERE cip=$val  ";
-      $result_consult_anotacao = mysql_query($sqlcmd);
+      $result_consult_anotacao = mysqli_query($sqlcmd);
       if( ! $result_consult_anotacao ) {
             echo $funcoes->mostra_msg_erro("Selecionando Anotação na tabela  -&nbsp;db/mysql:&nbsp;".mysql_error());            
             exit();        
@@ -475,7 +475,7 @@ if( $opcao_maiusc=="SUBSTITUIR"  )  {
                  ." FROM $bd_1.pessoa  WHERE codigousp={$_SESSION["anotador_substituto_codigousp"]}  ";
 
      //
-     $resultado_anotador_nome = mysql_query($sqlcmd1);
+     $resultado_anotador_nome = mysqli_query($sqlcmd1);
      if( ! $resultado_anotador_nome ) {
         /* $msg_erro .= "Consultando a tabela pessoa nome do anotador  - Falha: ".mysql_error().$msg_final;
         echo $msg_erro;  */
@@ -514,13 +514,13 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
             //  $sqlcmd .= $where_cond." order by titulo";
             $sqlcmd .= $where_cond." order by numero";
             //
-            $result = mysql_query($sqlcmd);
+            $result = mysqli_query($sqlcmd);
         */
         /// Criando uma tabela Temporaria para consultar ANOTACOES de um Projeto 
         $table_alterar_anotacao = $_SESSION["table_alterar_anotacao"] = "$bd_2.temp_alterar_anotacao";
         ///  Removendo uma tabela temporaria  caso exista
         $sql_temp = "DROP TABLE IF EXISTS  $table_alterar_anotacao  ";  
-        $drop_result = mysql_query($sql_temp); 
+        $drop_result = mysqli_query($sql_temp); 
         if( ! $drop_result  ) {
             //  NAO USAR DIE  TEM  FALHA
             //  die('ERRO: Falha consultando a tabela '.$_SESSION["table_alterar_anotacao"].' - '.mysql_error());         
@@ -568,7 +568,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
                  ." WHERE a.autor=b.codigousp and  c.cip=$cip and ";
         ****/         
         /// Contador de linhas - resultado do Select/Mysql
-        mysql_query("SET @xnr:=0");
+        mysqli_query("SET @xnr:=0");
         $sqlcmd ="CREATE TABLE  IF NOT EXISTS $table_alterar_anotacao  ";
         $sqlcmd .= "SELECT @xnr:=@xnr+1 as nr, a.numero as cia, a.titulo as titulo, "
                  ."  b.nome as Autor, c.titulo as projeto_titulo,  "
@@ -597,7 +597,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
         }
         ///
         ///  Executando Criando uma Tabela Temporaria
-        $result_consult_anotacao = mysql_query($sqlcmd);
+        $result_consult_anotacao = mysqli_query($sqlcmd);
         if( ! $result_consult_anotacao ) {
             /*  $msg_erro .= "Consultando a tabela anota&ccedil;&atilde;o  - Falha: ".mysql_error().$msg_final;
                echo $msg_erro;  */               
@@ -607,7 +607,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
         /// 
         ///  Selecionando todos os registros da Tabela temporaria de consulta Anotacoes
         $query2 = "SELECT * FROM  $table_alterar_anotacao  ";
-        $resultado_outro = mysql_query($query2);                                    
+        $resultado_outro = mysqli_query($query2);                                    
         if( ! $resultado_outro ) {
              /*  $msg_erro .= "Selecionando as Anota&ccedil;&otilde;es do Projeto  - Falha: ".mysql_error().$msg_final;
              echo $msg_erro;        */             
@@ -658,7 +658,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
                 ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
      ///
-     $resultado_projeto = mysql_query($sqlcmd);
+     $resultado_projeto = mysqli_query($sqlcmd);
      if( ! $resultado_projeto ) {
           /// die("ERRO: Selecionando Projeto: cip = ".$cip." - ".mysql_error());  
           echo $funcoes->mostra_msg_erro("Select Tabelas projeto e pessoa campos cip e autor - db/mysql:&nbsp;".mysql_error());
@@ -692,7 +692,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
                  ." a.relatext as Arquivo FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and a.numero=$anotacao  ";           
       ////     
-     $resultado_anotacao = mysql_query($sqlcmd);
+     $resultado_anotacao = mysqli_query($sqlcmd);
      if( ! $resultado_anotacao ) {
          /* $msg_erro .= "Selecionando Anota&ccedil;&atilde;o $anotacao do  Projeto: ".$numprojeto." - ".mysql_error().$msg_final;  
           echo $msg_erro;  */
@@ -719,7 +719,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
          $cmd_sql = "SELECT codigousp as cod_testemunha, nome as nome_testemunha  FROM  $bd_1.pessoa "
                    ."  WHERE  codigousp $in ";
           ///         
-         $res_testemunhas = mysql_query($cmd_sql);
+         $res_testemunhas = mysqli_query($cmd_sql);
          if( ! $res_testemunhas ) {
              /* $msg_erro .= "Selecionando testesmunhas da  Anota&ccedil;&atilde;o. mysql = ".mysql_error().$msg_final;  
              echo $msg_erro;  */       
@@ -778,7 +778,7 @@ if( $opcao_maiusc=="SUBMETER" )  {
      foreach( $arr_nome_val as $key => $value )  $$key=$value;  
      //
      $titulo=trim($titulo);
-     $result_alt_anot = mysql_query("SELECT * FROM  $bd_2.anotacao  "
+     $result_alt_anot = mysqli_query("SELECT * FROM  $bd_2.anotacao  "
                  ." WHERE projeto={$_SESSION["projeto_cip"]} and "
                  ." numero!={$_SESSION["n_anotacao"]} and trim(titulo)='$titulo'  ");
      ///
@@ -809,13 +809,13 @@ if( $opcao_maiusc=="SUBMETER" )  {
 */  
      $n_erro=0;
      //  START a transaction - ex. procedure    
-     mysql_query('DELIMITER &&'); 
+     mysqli_query('DELIMITER &&'); 
      $commit = "commit";
-     mysql_query('begin'); 
+     mysqli_query('begin'); 
      //  Execute the queries 
      //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-     //   - Use mysql_select_db() ou mysql_query()
-     mysql_query("LOCK TABLES $bd_2.anotacao  UPDATE ");
+     //   - Use mysql_select_db() ou mysqli_query()
+     mysqli_query("LOCK TABLES $bd_2.anotacao  UPDATE ");
      //  $sqlcmd="UPDATE $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
      $texto="Anota&ccedil;&atilde;o {$_SESSION["n_anotacao"]} do "
              ." Projeto {$_SESSION["numprojeto"]} do "
@@ -825,7 +825,7 @@ if( $opcao_maiusc=="SUBMETER" )  {
                       ." testemunha1=$testemunha1,testemunha2=$testemunha2,data='$data'  "
                       ."  WHERE projeto={$_SESSION["projeto_cip"]} and numero={$_SESSION["n_anotacao"]}  ";       
      ///                      
-     $success=mysql_query($sqlcmd); 
+     $success=mysqli_query($sqlcmd); 
      ///  Nota: Se voce esta usando transacoes, voce deve chamar mysql_affected_rows() apos sua query 
      ///        INSERT, UPDATE, ou DELETE, nao depois de commit.  - IMPORTANTE
      $numero_registros=mysql_affected_rows();
@@ -852,10 +852,10 @@ if( $opcao_maiusc=="SUBMETER" )  {
                }
            }      
      }  // Final do IF success                   
-     mysql_query($commit);
-     mysql_query("UNLOCK  TABLES");
-     mysql_query('end'); 
-     mysql_query('DELIMITER');
+     mysqli_query($commit);
+     mysqli_query("UNLOCK  TABLES");
+     mysqli_query('end'); 
+     mysqli_query('DELIMITER');
      //  Correto para comparar tem que ser com  == 
     /*
            if( $n_erro==1 ) {

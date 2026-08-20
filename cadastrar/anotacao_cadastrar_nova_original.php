@@ -122,7 +122,7 @@ if( isset($_POST['fileframe']) ) {
       $elemento=5; $elemento2=6; 
       include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
       $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
-      $select_numprojeto = mysql_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
+      $select_numprojeto = mysqli_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
       if( ! $select_numprojeto ) {
             mysql_free_result($select_numprojeto);
             die('ERRO: Select projeto campo numprojeto - falha: '.mysql_error());  
@@ -249,8 +249,8 @@ if( isset($_POST['fileframe']) ) {
 			$local_arq=html_entity_decode(trim($filename));
             //
            //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-           //                 - Use mysql_select_db() ou mysql_query()
-     	    $success = mysql_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
+           //                 - Use mysql_select_db() ou mysqli_query()
+     	    $success = mysqli_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
 			              ." where ( projeto=$nprojexp  and  autor=$autor_cod and  numero=$anotacao_numero  ) ");
 			//
 			if( ! $success ) {
@@ -464,7 +464,7 @@ function jsUpload(upload_field) {
             // $result = $mySQL->runQuery("select codigousp,nome,categoria from pessoa  order by nome ",$db_array[$elemento]); 
             $elemento=5; $elemento2=6;
             include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-            $res_anotador = mysql_query("SELECT codigousp,nome,categoria FROM pessoa where "
+            $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM pessoa where "
                              ."  codigousp=".$_SESSION["usuario_conectado"]." order by nome "); 
             if( ! $res_anotador ) {
                 mysql_free_result($res_anotador);
@@ -504,11 +504,11 @@ function jsUpload(upload_field) {
            $_SESSION["orientador"]="supervisor";
            $_SESSION["anotacao_numero"]=0;
            /*
-   		   $result_pessoa = mysql_query("SELECT codigousp,nome,categoria FROM pessoal.pessoa "
+   		   $result_pessoa = mysqli_query("SELECT codigousp,nome,categoria FROM pessoal.pessoa "
                             ." where upper(categoria)='DOC' order by nome "); 
            */    
 //           $anotador_cip = $_SESSION['anotador_cip'];
-//           $result_pessoa = mysql_query("SELECT a.codigousp,a.nome,a.categoria FROM pessoal.pessoa a, "
+//           $result_pessoa = mysqli_query("SELECT a.codigousp,a.nome,a.categoria FROM pessoal.pessoa a, "
 //                             ." rexp.projeto b where a.codigousp=b.autor and "
 //                             ." b.cip=$anotador_cip order by a.nome "); 
      /*
@@ -544,7 +544,7 @@ function jsUpload(upload_field) {
                              ." b.autor=".$_SESSION["usuario_conectado"]." order by b.titulo ";               
         }  
         //
-        $result_pessoa=mysql_query($sqlcmd);
+        $result_pessoa=mysqli_query($sqlcmd);
         //                  
 		if( ! $result_pessoa ) {
                 $msg_erro .= "Selecionando os projetos autorizados para esse Anotador - falha no mysql/query:"
@@ -677,7 +677,7 @@ function jsUpload(upload_field) {
             //  Conectar
             $elemento=5; $elemento2=6;
             include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");	
-		    $result2=mysql_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
+		    $result2=mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
 		?>
         <select onfocus="javascript: document.getElementById('label_msg_erro').style.display='none';" name="testemunha1" id="testemunha1" class="td_select"  title="Código da Testemunha (1) da realiza??o " >
 		<?php
@@ -700,7 +700,7 @@ function jsUpload(upload_field) {
             $elemento=5;
             //  mysql_db_query -  essa funcao esta desativada usar mysql_query
 		    //  $result=mysql_db_query($db_array[$elemento],"SELECT codigousp,nome,categoria FROM pessoa order by nome ");
-            $result=mysql_query("SELECT codigousp,nome,categoria FROM pessoa order by nome ");
+            $result=mysqli_query("SELECT codigousp,nome,categoria FROM pessoa order by nome ");
             if( ! $result ) {
                 $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysql_error().$msg_final;
                 echo $msg_erro;

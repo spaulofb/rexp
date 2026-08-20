@@ -221,12 +221,12 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                $elemento=5;
                include("php_include/ajax/includes/conectar.php");  
                /////           
-                mysql_query("SET NAMES 'utf8'");
-                mysql_query('SET character_set_connection=utf8');
-                mysql_query('SET character_set_client=utf8');
-                mysql_query('SET character_set_results=utf8');
+                mysqli_query("SET NAMES 'utf8'");
+                mysqli_query('SET character_set_connection=utf8');
+                mysqli_query('SET character_set_client=utf8');
+                mysqli_query('SET character_set_results=utf8');
                 ///                         
-               $result=mysql_query("SELECT codigo,descricao FROM  $bd_1.categoria order by codigo ");
+               $result=mysqli_query("SELECT codigo,descricao FROM  $bd_1.categoria order by codigo ");
                ///                
           ?>
           <span class="td_informacao2"  >
@@ -261,7 +261,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
               //  PA => Privilegio de acesso
               $elemento=6;      // Selecionando o BD rexp
               //  include("php_include/ajax/includes/conectar.php");                    
-              /// $result=mysql_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
+              /// $result=mysqli_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
           ?>
           <span class="td_informacao2"  >
               <label for="pa"  title="Categoria" >PA:</label>
@@ -299,7 +299,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                  $elemento=3;
                 include("php_include/ajax/includes/conectar.php");                    
                 //  $result=mysql_db_query($db_array[$elemento],"SELECT sigla,nome FROM instituicao order by nome ");
-                $result=mysql_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
+                $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if( ! $result ) {
                     die('ERRO: Select - falha: '.mysql_error());
                     exit();
@@ -400,7 +400,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                include("php_include/ajax/includes/conectar.php");                                    
         ///       $sqlcmd="SELECT distinct codigousp,nome FROM  $bd_1.pessoa  where categoria like 'DOC%' order by nome "; 
                $sqlcmd="SELECT distinct chefecodusp,nome FROM  $bd_1.chefe  order by nome "; 
-               $result = mysql_query($sqlcmd);
+               $result = mysqli_query($sqlcmd);
                /// Verifica se houve erro
                 if( ! $result ) {
                            die('ERRO: Select tabela pessoa - falha: '.mysql_error());  

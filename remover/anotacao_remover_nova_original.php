@@ -396,7 +396,7 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
                 ." b.cip in (select distinct cip FROM $bd_2.anotador "
                 ." where codigo=".$usuario_conectado.")  order by b.titulo ";
       }
-      $result = mysql_query($sqlcmd); 
+      $result = mysqli_query($sqlcmd); 
       //                  
       if( ! $result ) {
           // die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

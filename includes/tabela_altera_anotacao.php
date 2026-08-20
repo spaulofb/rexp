@@ -66,7 +66,7 @@ if( isset($_SESSION["num_rows"]) ) {
         unset($_SESSION["num_rows"]);
         // Conta os resultados no total da minha query
         //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
-        //  $query    = mysql_query($strCount);
+        //  $query    = mysqli_query($strCount);
         $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
         $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
         $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
@@ -107,13 +107,13 @@ if( intval($total_regs)<=0 ) {
     ///  Selecionando os campos da Tabela Temporaria
     ///     Executando Select/MySQL
     ///   Utilizado pelo Mysql/PHP - IMPORTANTE 20180614      
-    mysql_query("SET NAMES 'utf8'");
-    mysql_query('SET character_set_connection=utf8');
-    mysql_query('SET character_set_client=utf8');
-    mysql_query('SET character_set_results=utf8');
+    mysqli_query("SET NAMES 'utf8'");
+    mysqli_query('SET character_set_connection=utf8');
+    mysqli_query('SET character_set_client=utf8');
+    mysqli_query('SET character_set_results=utf8');
     ///                         
 	$strQuery="SELECT $campos_query FROM  $table_alterar_anotacao  LIMIT $inicio,$maximo";  
-	$query      = mysql_query($strQuery);
+	$query      = mysqli_query($strQuery);
     if( ! $query ) {
           ////  die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
          $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
@@ -139,7 +139,7 @@ if( intval($total_regs)<=0 ) {
      ///
      ///   Selecionando o maximo espaco ocupado em cada campo da tabela
      $sqlcmd="SELECT ".$max_length." FROM  $table_alterar_anotacao   ";
-     $result_max_length = mysql_query($sqlcmd);          
+     $result_max_length = mysqli_query($sqlcmd);          
      ///
      if( ! $result_max_length ) {
          //// die('ERRO: Select maximo tamanho dos campos da tb  $table_alterar_anotacao - falha: '.mysql_error());                  

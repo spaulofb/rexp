@@ -537,7 +537,7 @@ if( $source_upper=="CONJUNTO" )  {
          //
          /**
           *     mysql_db_query - Esta funcao e obsoleta, nao use esta funcao 
-          *                    - Use mysql_select_db() ou mysql_query()
+          *                    - Use mysql_select_db() ou mysqli_query()
          */
          $where = $_SESSION["where"];
          $select_cpo="{$_SESSION["select_cpo"]}";
@@ -705,10 +705,10 @@ if( $val_upper=="PARTICIPANTE" ) {
       //
       ///  IMPORTANTE:  para acentuacao entre MySql e PHP
       /***          
-          mysql_query("SET NAMES 'utf8'");
-          mysql_query('SET character_set_connection=utf8');
-          mysql_query('SET character_set_client=utf8');
-          mysql_query('SET character_set_results=utf8');
+          mysqli_query("SET NAMES 'utf8'");
+          mysqli_query('SET character_set_connection=utf8');
+          mysqli_query('SET character_set_client=utf8');
+          mysqli_query('SET character_set_results=utf8');
         ***/
       //  Executando Select/MySQL
       //   Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      
@@ -944,14 +944,14 @@ if( $val_upper=="PARTICIPANTE" ) {
          //
          //  Execute the queries 
          //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-         //   - Use mysql_select_db() ou mysql_query()
-         //  mysql_query("LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
+         //   - Use mysql_select_db() ou mysqli_query()
+         //  mysqli_query("LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
          mysqli_query($_SESSION["conex"],"LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
          //
          // Gera a ativação de codigo com 6 digitos
          if( intval($usuario_inserir)==1 ) {
              //
-             /** $success=mysql_query("insert into  $bd_1.usuario "
+             /** $success=mysqli_query("insert into  $bd_1.usuario "
               *      ."  (".$cpo_nome.",activation_code) values(".$cpo_valor.",'$activ_code') "); 
              */
              $success=mysqli_query($_SESSION["conex"],"INSERT INTO $bd_1.usuario "

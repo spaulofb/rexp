@@ -312,34 +312,34 @@ if( strtoupper($val)=="SENHA" ) {
     mysql_select_db($db_array[$elemento]);
     $_SESSION['tabela']=$bd_1.".usuario";
     //  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     //  Execute the queries          
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-    mysql_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
+    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+    mysqli_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
     /*!40000 UPDATE TABLE usuario DISABLE KEYS */;            
    // $res_usuario = "UPDATE ".$_SESSION['tabela']." SET  senha=password('$senha') WHERE trim(login)='$login'  "; 
    $res_usuario = "UPDATE ".$_SESSION['tabela']." SET  senha=password('$senha') WHERE codigousp=$usuario_conectado  "; 
     //                  
-    $sqlcmd =  mysql_query($res_usuario);      
+    $sqlcmd =  mysqli_query($res_usuario);      
     if( $sqlcmd ) { 
          ///  Concluindo as tabelas para Orientador Novo para ser aceito pelo Aprovador
          $msg_ok .="<span style='font-size:large; color:#000000; padding: 0 0 1em 0;'>"
                        ."<b>SENHA alterada.</b><br/></span>".$msg_final;
-        mysql_query('commit'); 
+        mysqli_query('commit'); 
         echo $msg_ok;                    
     } else { 
         ///  mysql_error() - para saber o tipo do erro
         $msg_erro .="&nbsp;Falha Alterar SENHA - ".mysql_error().$msg_final;
-        mysql_query('rollback'); 
+        mysqli_query('rollback'); 
         echo $msg_erro; 
         $lnerro=1;        
     }           
     /*!40000 UPDATE TABLE usuario ENABLE KEYS */;
-    mysql_query("UNLOCK  TABLES");
+    mysqli_query("UNLOCK  TABLES");
     //  Complete the transaction 
-    mysql_query('end'); 
-    mysql_query('DELIMITER');         
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');         
     //
     if( $lnerro<1 ) {
         $_SESSION["senha_down"]=$senha ;   

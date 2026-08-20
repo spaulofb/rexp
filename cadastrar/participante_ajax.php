@@ -259,7 +259,7 @@ if( $source_upper=="SAIR" ) {
 if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto e o e_mail
      $elemento=5;
      include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
-    $res_pessoa=mysql_query("SELECT  e_mail FROM $bd_1.pessoa WHERE  codigousp=".$val);
+    $res_pessoa=mysqli_query("SELECT  e_mail FROM $bd_1.pessoa WHERE  codigousp=".$val);
     //                          
     if( ! $res_pessoa ) {
          mysql_free_result($res_pessoa);
@@ -274,7 +274,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
        mysql_free_result($res_pessoa);
        $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
              ." FROM $bd_1.usuario where codigousp=$val ";
-       $resultado_usuario=mysql_query($sqlcmd);                       
+       $resultado_usuario=mysqli_query($sqlcmd);                       
        $n_usu = mysql_num_rows($resultado_usuario);
        $aprovado_usu=9;
        if( $n_usu<1  ) {
@@ -353,8 +353,8 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
 	   $tabs_sig_nome= array("instituicao","unidade","depto","setor");			    
 	   $nome_cpo="";
 	   if( in_array($table_atual,$tabs_sig_nome) ) $nome_cpo="nome,";
-      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
- 	   $result=mysql_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
+      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+ 	   $result=mysqli_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
     			         ." $table_atual where ".$_SESSION["where"]."  group by 1 order by  ".$_SESSION["select_cpo"]);
 		//
 		if( strtoupper($table_atual)=="BEM"  )   $table_atual=$_SESSION["select_cpo"]; 
@@ -475,7 +475,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
                  ." $bd_1.pessoa a, $bd_1.usuario b, $bd_2.participante c where  "
                  ." $where  a.codigousp=b.codigousp and a.codigousp=c.codigousp and c.pa=".$pa;
       ///
-      $resultado_pessoa = mysql_query($sqlcmd);               
+      $resultado_pessoa = mysqli_query($sqlcmd);               
       if( ! $resultado_pessoa ) {
             die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
       }
@@ -501,7 +501,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           ///  Desativando variavel  
           if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
           $sqlcmd = "SELECT nome as nome_pessoa from $bd_1.pessoa where codigousp=$codigousp ";
-          $resultado_pessoa = mysql_query($sqlcmd);                       
+          $resultado_pessoa = mysqli_query($sqlcmd);                       
           ///  Nome do Novo Participante para ser incluido
           $nome = mysql_result($resultado_pessoa,0,"nome_pessoa");
           $participante_cadast=0;
@@ -509,7 +509,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
           $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario where codigousp=$codigousp ";
-          $resultado_usuario=mysql_query($sqlcmd);                       
+          $resultado_usuario=mysqli_query($sqlcmd);                       
           $n_usu = mysql_num_rows($resultado_usuario);
           $aprovado_usu=9;
           ///  Caso encontrado 
@@ -534,22 +534,22 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
     $success="";    
     if( intval($m_erro)<1 ) {
          ///  START  a transaction - ex. procedure    
-        mysql_query('DELIMITER &&'); 
+        mysqli_query('DELIMITER &&'); 
         $commit="commit";
-        mysql_query('begin'); 
+        mysqli_query('begin'); 
         //  Execute the queries 
-        //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+        //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
         //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-        //   - Use mysql_select_db() ou mysql_query()
-        ///  mysql_query("LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
-         mysql_query("LOCK TABLES  $bd_1.usuario  WRITE, $bd_2.participante WRITE ");
+        //   - Use mysql_select_db() ou mysqli_query()
+        ///  mysqli_query("LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
+         mysqli_query("LOCK TABLES  $bd_1.usuario  WRITE, $bd_2.participante WRITE ");
  
          /// Gera a ativação de codigo com 6 digitos
         if( $usuario_inserir==1 ) {
-            /* $success=mysql_query("insert into  $bd_1.usuario "
+            /* $success=mysqli_query("insert into  $bd_1.usuario "
                     ."  (".$cpo_nome.",activation_code) values(".$cpo_valor.",'$activ_code') "); 
            */
-            $success=mysql_query("insert into  $bd_1.usuario "
+            $success=mysqli_query("insert into  $bd_1.usuario "
                     ."  (login,senha,datacad,datavalido,codigousp,pa,aprovado,activation_code) "
                      ."  values('$login',password('$senha'),'$datacad','$datavalido',$codigousp,$pa,1,'$activ_code') ");                     
              if( ! $success ) {
@@ -561,7 +561,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
                       .ucfirst($descr_pa).".<br>Falha: ".mysql_error().$msg_final;
             echo $msg_erro;               
         } else {           
-            $success=mysql_query("insert into  $bd_2.participante "
+            $success=mysqli_query("insert into  $bd_2.participante "
                     ."  (codigousp,datacad,datavalido,pa,codigo_ativa,aprovado) "
                     ."  values($codigousp,'$datacad','$datavalido',$pa,'$activ_code',1) ");                     
             
@@ -578,11 +578,11 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
             }
         }                  
         /*!40000 ALTER TABLE  ENABLE KEYS */;
-        mysql_query($commit);
-        mysql_query("UNLOCK  TABLES");
+        mysqli_query($commit);
+        mysqli_query("UNLOCK  TABLES");
         //  Complete the transaction 
-        mysql_query('end'); 
-        mysql_query('DELIMITER');
+        mysqli_query('end'); 
+        mysqli_query('DELIMITER');
         // 
     }        
     if( intval($m_erro)<1 ) {

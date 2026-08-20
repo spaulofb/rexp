@@ -411,15 +411,15 @@ if( ( $source_upper=="CORESPONSAVEIS" ) or  ( $source_upper=="COLABS" ) ) {
     include("php_include/ajax/includes/conectar.php");
     //
     //  mysql_select_db($db_array[$elemento]);
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
     //  
     //  Conexao MYSQLI
     $conex = $_SESSION["conex"];
     //
-    //  mysql_query("SET NAMES 'utf8'");
-    //  mysql_query('SET character_set_connection=utf8');
-    //  mysql_query('SET character_set_client=utf8');
-    //  mysql_query('SET character_set_results=utf8');
+    //  mysqli_query("SET NAMES 'utf8'");
+    //  mysqli_query('SET character_set_connection=utf8');
+    //  mysqli_query('SET character_set_client=utf8');
+    //  mysqli_query('SET character_set_results=utf8');
     //
     mysqli_set_charset($conex,'utf8');
     //   
@@ -879,7 +879,7 @@ if( $val_upper=="PROJETO" ) {
          include("dados_recebidos_arq_ajax.php"); 
          /// 
          /**          INSERIR USUARIO  
-         *     mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+         *     mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          */
          ///
          $proc="SELECT codigousp FROM $bd_1.usuario WHERE codigousp=$m_autor ";
@@ -919,9 +919,9 @@ if( $val_upper=="PROJETO" ) {
               $n_erro=0;
               ///           
               //   mysqli_query($_SESSION["conex"],"SET NAMES 'utf8'");
-              //   mysql_query('SET character_set_connection=utf8');
-              //   mysql_query('SET character_set_client=utf8');
-              //   mysql_query('SET character_set_results=utf8');
+              //   mysqli_query('SET character_set_connection=utf8');
+              //   mysqli_query('SET character_set_client=utf8');
+              //   mysqli_query('SET character_set_results=utf8');
               //
               mysqli_set_charset($conex,'utf8');
               //   
@@ -949,7 +949,7 @@ if( $val_upper=="PROJETO" ) {
               mysqli_query($_SESSION["conex"],'begin'); 
               //
               //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-              //   - Use mysql_select_db() ou mysql_query()
+              //   - Use mysql_select_db() ou mysqli_query()
               $_SESSION["conex"]->query("LOCK TABLES $bd_2.projeto INSERT, $bd_2.corespproj INSERT ");
               //
               /**  IMPORTANTE: usar utf8_encode enviar dados do PHP para MySql  */
@@ -1024,7 +1024,7 @@ if( $val_upper=="PROJETO" ) {
                   //  projeto, autor/orientador e numero da anotacao
                   $m_regs=0;
                   /**
-                         $result_proj=mysql_query("SELECT  cip,autor,numprojeto FROM $bd_2.projeto WHERE "
+                         $result_proj=mysqli_query("SELECT  cip,autor,numprojeto FROM $bd_2.projeto WHERE "
                                 ." trim(fonterec)=trim('".$fonterec."')  and  "
                                 ." trim(fonteprojid)=trim('".$fonteprojid."') and "
                                 ." autor=".$m_autor." and datainicio='$m_datainicio' and datafinal='$m_final'  ");

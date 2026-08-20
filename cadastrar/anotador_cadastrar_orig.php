@@ -173,10 +173,10 @@ $cols=4;
         <?php 
            ///   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
            /***          
-              mysql_query("SET NAMES 'utf8'");
-              mysql_query('SET character_set_connection=utf8');
-              mysql_query('SET character_set_client=utf8');
-              mysql_query('SET character_set_results=utf8');
+              mysqli_query("SET NAMES 'utf8'");
+              mysqli_query('SET character_set_connection=utf8');
+              mysqli_query('SET character_set_client=utf8');
+              mysqli_query('SET character_set_results=utf8');
            ***/
            ///  Executando Select/MySQL
            ///   Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      
@@ -188,7 +188,7 @@ $cols=4;
            mysql_set_charset('utf8');
            ///                         
            ///  Select/MySQl - todos Projetos desse autor
-           $result = mysql_query("SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
+           $result = mysqli_query("SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
                                      $usuario_conectado." order by b.titulo "); 
            ///                  
            if( ! $result ) {
@@ -244,7 +244,7 @@ $cols=4;
               $sqlcmd = "SELECT 'Outro_PA' as tipo_pa, a.nome, a.codigousp,a.categoria, a.e_mail"
                         ." FROM $bd_1.pessoa a order by a.nome";
               ///          
-              $result = mysql_query($sqlcmd); 
+              $result = mysqli_query($sqlcmd); 
               if( !$result ) {
                   die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.&nbsp;db/mysql:&nbsp;".mysql_error());
               }

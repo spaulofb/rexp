@@ -336,10 +336,10 @@ if( $source_upper=="PROJETO" ) {
     ///    $elemento=5; $elemento2=6;
     ///    include("php_include/ajax/includes/conectar.php");
     # Aqui está o segredo
-    mysql_query("SET NAMES 'utf8'");
-    mysql_query('SET character_set_connection=utf8');
-    mysql_query('SET character_set_client=utf8');
-    mysql_query('SET character_set_results=utf8');
+    mysqli_query("SET NAMES 'utf8'");
+    mysqli_query('SET character_set_connection=utf8');
+    mysqli_query('SET character_set_client=utf8');
+    mysqli_query('SET character_set_results=utf8');
     ///
     ////   Incluir todos os anotadores e superiores (orientadores, etc)  //** ALTERANDO:LAFB110916.1515 **//
     $sqlcmd = "SELECT 'Outro_PA' as tipo_pa, a.nome, a.codigousp,a.categoria, a.e_mail, b.cip "
@@ -347,7 +347,7 @@ if( $source_upper=="PROJETO" ) {
                  ." and b.codigo!=$projeto_autor_cod "
                  ." order by a.nome";
     ///                        
-    $result = mysql_query($sqlcmd); 
+    $result = mysqli_query($sqlcmd); 
     if( !$result ) {
          ///  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.".mysql_error());
          echo $funcoes->mostra_msg_erro("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
@@ -423,7 +423,7 @@ if( $source_upper=="CODIGOUSP" ) {
     include("php_include/ajax/includes/conectar.php"); 
     //  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
-    $resultado = mysql_query($sqlcmd);
+    $resultado = mysqli_query($sqlcmd);
     if( ! $resultado ) {
           $msg_erro .=' Falha na consulta da pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
          echo $msg_erro;               
@@ -519,7 +519,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
        $sqlcmd = "SELECT  anotador_ci as usuario_ci FROM $bd_2.anotador  "
                    ." WHERE codigo=$lncodigousp and cip=$lnprojeto ";
        ///           
-       $resultado = mysql_query($sqlcmd);
+       $resultado = mysqli_query($sqlcmd);
        if( ! $resultado ) {
            $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
            echo $msg_erro;               
@@ -576,28 +576,28 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
       ///  Iniciar uma transaction - ex. procedure    
-      mysql_query('DELIMITER &&'); 
-      mysql_query('begin'); 
-      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-      ///  mysql_query("LOCK TABLES $bd_1.pessoa UPDATE");
-      mysql_query("LOCK TABLES $bd_1.anotador DELETE");    
+      mysqli_query('DELIMITER &&'); 
+      mysqli_query('begin'); 
+      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+      ///  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
+      mysqli_query("LOCK TABLES $bd_1.anotador DELETE");    
      /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
      ///
-     /// mysql_query("LOCK TABLES pessoal.pessoa UPDATE");
+     /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
       $sqlcmd = "DELETE FROM $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto  ";
-      $resultado = mysql_query($sqlcmd);
+      $resultado = mysqli_query($sqlcmd);
       if( ! $resultado ) {
           $msg_erro .='Delete tabela anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
-          mysql_query('rollback'); 
+          mysqli_query('rollback'); 
           $n_erro=1;
           echo $msg_erro;               
       } else {
-          mysql_query('commit');  
+          mysqli_query('commit');  
       }
-      /// mysql_query("UNLOCK  TABLES");
-      mysql_query("UNLOCK  TABLES");
-      mysql_query('end'); 
-      mysql_query('DELIMITER');
+      /// mysqli_query("UNLOCK  TABLES");
+      mysqli_query("UNLOCK  TABLES");
+      mysqli_query('end'); 
+      mysqli_query('DELIMITER');
       ///  Ocorreu erro
       if( intval($n_erro)>0 ) {
           ///  Ocorreu ERRO para remover Anotador/Projeto na tabela anotador
@@ -607,7 +607,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
       ///   Verifica se é necessário incluir registro do anotador na tabela usuário
      /***
    $sqlcmd = "SELECT aprovado from $bd_1.usuario where  codigousp=$lncodigousp ";
-   $resultado = mysql_query($sqlcmd);
+   $resultado = mysqli_query($sqlcmd);
    if( ! $resultado ) {
         $msg_erro .=' Falha na consulta do anotador na tabela usuario: db/mysql= '.mysql_error().$msg_final;  
         echo $msg_erro;               
@@ -621,14 +621,14 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $sqlcmd = "SELECT aprovado from $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
       ///
-      $resultado = mysql_query($sqlcmd);
+      $resultado = mysqli_query($sqlcmd);
       if( ! $resultado ) {
           $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
           echo $msg_erro;               
           exit();                                          
       } 
       ///   Incluir registro do anotador na tabela anotador
-      //***mysql_query("LOCK TABLES rexp.anotador WRITE");
+      //***mysqli_query("LOCK TABLES rexp.anotador WRITE");
       ///  Chave auto incremento
       $cip = $lnprojeto;
       $codigo = $lncodigousp;
@@ -642,54 +642,54 @@ if( strtoupper($val)=="ANOTADOR" ) {
       if( intval($nregs)>0 ) {
           ///
           ///  Iniciar uma transaction - ex. procedure    
-          mysql_query('DELIMITER &&'); 
-          mysql_query('begin'); 
+          mysqli_query('DELIMITER &&'); 
+          mysqli_query('begin'); 
           ///  Execute the queries 
           mysql_select_db($db_array[$elemento]);
-          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-          mysql_query("LOCK TABLES $bd_2.participante  DELETE");
+          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          mysqli_query("LOCK TABLES $bd_2.participante  DELETE");
           ////   
           $sqlcmd = "DELETE FROM  $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
           ///        
-          $resultado = mysql_query($sqlcmd);
+          $resultado = mysqli_query($sqlcmd);
           /// Verificando se houve erro ou nao
           if( ! $resultado ) {
                 $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
                 $n_erro=1;
-                mysql_query('rollback'); 
-                //***mysql_query("UNLOCK  TABLES");
+                mysqli_query('rollback'); 
+                //***mysqli_query("UNLOCK  TABLES");
                 echo $msg_erro;               
           } else {
                /// Executando
-               mysql_query('commit'); 
+               mysqli_query('commit'); 
           }
           ///
           /// Concluir a transaction
-          //***mysql_query("UNLOCK  TABLES");
-          mysql_query('commit'); 
-          mysql_query('end'); 
-          mysql_query('DELIMITER');            
+          //***mysqli_query("UNLOCK  TABLES");
+          mysqli_query('commit'); 
+          mysqli_query('end'); 
+          mysqli_query('DELIMITER');            
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
                 exit();                                                 
           }
           ///
-          /// mysql_query("UNLOCK  TABLES");
+          /// mysqli_query("UNLOCK  TABLES");
      }  
      ///
      ////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-     mysql_query("SET NAMES 'utf8' ");
-     mysql_query("SET character_set_connection=utf8");
-     mysql_query("SET character_set_client=utf8");
-     mysql_query("SET character_set_results=utf8");
+     mysqli_query("SET NAMES 'utf8' ");
+     mysqli_query("SET character_set_connection=utf8");
+     mysqli_query("SET character_set_client=utf8");
+     mysqli_query("SET character_set_results=utf8");
     
      ///  Buscar o Titulo do Projeto e dados do Orientador/Chefe
      $sqlcmd = "SELECT a.titulo,a.numprojeto,b.nome as nome_autor,b.e_mail as orientador_email "
               ." FROM $bd_2.projeto as a, $bd_1.pessoa b "
               ." WHERE cip=$lnprojeto and a.autor=b.codigousp ";
      ///              
-     $resultado = mysql_query($sqlcmd);
+     $resultado = mysqli_query($sqlcmd);
      if( ! $resultado ) {
          $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
          echo $msg_erro;               

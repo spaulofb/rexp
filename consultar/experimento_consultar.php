@@ -207,7 +207,7 @@ $_SESSION["cols"]=4;
 			 // @require_once("/var/www/cgi-bin/php_include/ajax/includes/class.MySQL.php");
    			// $result = $mySQL->runQuery("select codigousp,nome,categoria from pessoa  order by nome ",$db_array[$elemento]); 
            include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");			
-   		   $result = mysql_query("SELECT codigousp,nome,categoria FROM pessoa  order by nome "); 
+   		   $result = mysqli_query("SELECT codigousp,nome,categoria FROM pessoa  order by nome "); 
 	       while($linha=mysql_fetch_assoc($result)) {
                 $arr_cnc["codigousp"][]=htmlentities($linha['codigousp']);
                 $arr_cnc["nome"][]=  ucfirst(htmlentities($linha['nome']));

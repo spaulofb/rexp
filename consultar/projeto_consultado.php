@@ -8,8 +8,8 @@ $elemento=5; $m_linhas=0;
 */
 include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
 mysql_select_db($db_array[$elemento]);
-//  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-$result_nome=mysql_query("select codigousp,nome,categoria from pessoa  order by nome ");
+//  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+$result_nome=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
 if( ! $result_nome ) {
      mysql_free_result($result_nome);
      die('ERRO: Select pessoa - falha: '.mysql_error());  
@@ -87,7 +87,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
            $elemento=6;
            include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
 		  // $result_obj = $mySQL->runQuery("select codigo,descricao from objetivo order by codigo ",$db_array[$elemento]); 
-          $result_obj = mysql_query("select codigo,descricao from objetivo "
+          $result_obj = mysqli_query("select codigo,descricao from objetivo "
 		                              ."  where codigo=".mysql_result($result,0,"objetivo")); 
 		 //							  
          if( ! $result_obj ) {
@@ -187,8 +187,8 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
                 	mysql_select_db($db_array[$elemento]);
 					//  Criando uma tabela temporaria
 					$temp_tabela="tmp_pessoa_nome";
-                    $result_tb_temp1 = mysql_query("DROP TABLE IF EXISTS  $temp_tabela ");
-					$result_tb_temp2 = mysql_query("CREATE TABLE $temp_tabela "
+                    $result_tb_temp1 = mysqli_query("DROP TABLE IF EXISTS  $temp_tabela ");
+					$result_tb_temp2 = mysqli_query("CREATE TABLE $temp_tabela "
 					               ." SELECT  a.coresponsavel,b.nome FROM "
 			                       ." corespproj a, pessoal.pessoa b where "
 								   ." ( a.projetoautor=".$_SESSION["autor_codigousp"]." and "
@@ -201,7 +201,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 					}			   
                     mysql_free_result($result_tb_temp1);					
                     mysql_free_result($result_tb_temp2);
-             		$query=mysql_query("SELECT * FROM  $temp_tabela order by  $m_ordenar ");
+             		$query=mysqli_query("SELECT * FROM  $temp_tabela order by  $m_ordenar ");
 					//
 					if( ! $query )	{
                          mysql_free_result($query);
@@ -221,7 +221,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
              			  if( $i<($num_fields-1) ) $max_length.= ", "; 
                  	}
                  	//   Selecionando o maximo espaco ocupado em cada campo da tabela
-                    $result_max_length = mysql_query("SELECT ".$max_length." FROM  $temp_tabela  "
+                    $result_max_length = mysqli_query("SELECT ".$max_length." FROM  $temp_tabela  "
 				                                     ." order  by  $m_ordenar  ");  		
 					//
 					if ( ! $result_max_length ) {

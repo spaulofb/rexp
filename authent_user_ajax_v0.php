@@ -236,7 +236,7 @@ if( ! isset($permit_pa)  ) {
     $cmdsql="SELECT lower(substring_index(substring_index(descricao,'-',1),' ',1)) as descricao, "
                ." codigo FROM $bd_2.pa order by codigo ";
     ///   
-    ////  $resultado_pa=mysql_query($cmdsql);
+    ////  $resultado_pa=mysqli_query($cmdsql);
     $resultado_pa=mysqli_query( $_SESSION["conex"], $cmdsql);
     ///
     /// Verifica ERRO - mysqli_query
@@ -325,7 +325,7 @@ if( intval($_SESSION["total"])==1 and ( ! isset($permit_pa) ) ) {
         $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
                  ." WHERE (a.codigousp=b.codigousp ) and ".$_SESSION['user_cond']." order by a.pa  ";
         ///   
-        ////  $result_pa=mysql_query($cmdsql);
+        ////  $result_pa=mysqli_query($cmdsql);
         $result_pa=mysqli_query($_SESSION["conex"], $cmdsql);
         ///
         /// Verifica ERRO - mysqli_query

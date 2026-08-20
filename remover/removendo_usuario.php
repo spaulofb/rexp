@@ -9,23 +9,23 @@ if(!isset($_SESSION)) {
 ///
 $lnerro=0;
 ///  Start a transaction - ex. procedure    
-mysql_query('DELIMITER &&'); 
-mysql_query('begin'); 
+mysqli_query('DELIMITER &&'); 
+mysqli_query('begin'); 
 //  Execute the queries          
-////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-mysql_query("LOCK TABLES $bd_1.usuario  DELETE, $bd_2.participante DELETE,  $bd_2.anotador DELETE ");
+////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+mysqli_query("LOCK TABLES $bd_1.usuario  DELETE, $bd_2.participante DELETE,  $bd_2.anotador DELETE ");
 /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
 ///  Removendo o anotador do Projeto  
 $sqlcmd = "DELETE from $bd_2.anotador  WHERE codigo=$cod_usuario  ";
 //                  
-$res_anotador =  mysql_query($sqlcmd);
+$res_anotador =  mysqli_query($sqlcmd);
 if( $res_anotador ) { 
      /***
           Removendo participante
     */
     $sqlcmd= "DELETE from $bd_2.participante WHERE codigousp=$cod_usuario "; 
     ///                  
-    $res_anotacao =mysql_query($sqlcmd);      
+    $res_anotacao =mysqli_query($sqlcmd);      
     if( ! $res_anotacao ) { 
            echo $funcoes->mostra_msg_erro("&nbsp;Removendo participante&nbsp;-db/mysql:&nbsp;".mysql_error());
             $lnerro=1;
@@ -35,7 +35,7 @@ if( $res_anotador ) {
      if( intval($lnerro)<1 ) {
           $sqlcmd= "DELETE from $bd_1.usuario WHERE codigousp=$cod_usuario "; 
           ///                  
-          $res_projeto =mysql_query($sqlcmd);      
+          $res_projeto =mysqli_query($sqlcmd);      
           if( ! $res_projeto ) { 
                 ///  mysql_error() - para saber o tipo do erro
                 /*    $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor - db/mysql:&nbsp; "
@@ -57,17 +57,17 @@ if( $res_anotador ) {
 ///
 if( intval($lnerro)<1 ) {
     ///  Usuario/Anotador?participante foi removido - sem projetos
-    mysql_query('commit'); 
+    mysqli_query('commit'); 
 } else {
     ///  Caso tenha ocorrido erros
-    mysql_query('rollback');  
+    mysqli_query('rollback');  
 }  
 ////
 /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-mysql_query("UNLOCK  TABLES");
+mysqli_query("UNLOCK  TABLES");
 //  Complete the transaction 
-mysql_query('end'); 
-mysql_query('DELIMITER');         
+mysqli_query('end'); 
+mysqli_query('DELIMITER');         
 ////
 ///  FINAL IMPORTANTE PASSAR RESULTADO PARA ESSA SESSAO
 ///

@@ -81,7 +81,7 @@ if( ( $data_upper=="COAUTORES" ) or  ( $data_upper=="COLABS" ) ) {
    */
     ///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
     include("php_include/ajax/includes/conectar.php");
-    $result = mysql_query("select codigousp,nome,categoria from pessoa  order by nome ");
+    $result = mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
     /// Verificar erro
     if( ! $result ) {
           ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

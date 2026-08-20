@@ -172,14 +172,14 @@ if( $opcao_maiusc=="TODOS" )  {
             //  $sqlcmd .= $where_cond." order by titulo";
             $sqlcmd .= $where_cond." order by numero";
             //
-            $result = mysql_query($sqlcmd);
+            $result = mysqli_query($sqlcmd);
         */
         /// Criando uma tabela Temporaria para consultar ANOTACOES de um Projeto 
         $_SESSION["table_consultar_anotacao"] = "$bd_2.temp_consultar_anotacao";
         $table_consultar_anotacao = $_SESSION["table_consultar_anotacao"];
         ///  Removendo tabela temporaria caso exista
         $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotacao  ";  
-        $drop_result = mysql_query($sql_temp); 
+        $drop_result = mysqli_query($sql_temp); 
         if( ! $drop_result  ) {
             ///  NAO USAR DIE  TEM  FALHA
             ///  die('ERRO: Falha consultando a tabela '.$_SESSION["table_consultar_anotacao"].' - '.mysql_error());         
@@ -214,7 +214,7 @@ if( $opcao_maiusc=="TODOS" )  {
         ///
         $sqlcmd .= $where_cond." order by a.numero desc";
         ///  Executando o mysql_query 
-        $result_consult_anotacao = mysql_query($sqlcmd);
+        $result_consult_anotacao = mysqli_query($sqlcmd);
         if( ! $result_consult_anotacao ) {
              /*  $msg_erro .= "Criando a Tabela {$_SESSION["table_consultar_anotacao"]} 
                 - Falha: ".mysql_error().$msg_final;
@@ -226,7 +226,7 @@ if( $opcao_maiusc=="TODOS" )  {
         ///  Selecionando todos os registros da Tabela temporaria de consulta Anotacoes
         $table_consultar_anotacao=$_SESSION["table_consultar_anotacao"];
         $query2 = "SELECT *  FROM $table_consultar_anotacao ";
-        $resultado_outro = mysql_query($query2);                                    
+        $resultado_outro = mysqli_query($query2);                                    
         if( ! $resultado_outro ) {
              /* $msg_erro .= "Selecionando as Anota&ccedil;&otilde;es do Projeto  - Falha: ".mysql_error().$msg_final;
              echo $msg_erro;    */     
@@ -293,7 +293,7 @@ if( $opcao_maiusc=="TODOS" )  {
      $sqlcmd  = "SELECT a.numprojeto, a.titulo as  titulo_projeto, b.nome as autor_projeto,  "
                 ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
-     $resultado_projeto = mysql_query($sqlcmd);
+     $resultado_projeto = mysqli_query($sqlcmd);
      if( ! $resultado_projeto ) {
           // die("ERRO: Selecionando Projeto: cip = ".$cip." - ".mysql_error());  
              /* $msg_erro .= "Selecionando Tabela projeto  - db/mysql:&nbsp; ".mysql_error().$msg_final;
@@ -328,7 +328,7 @@ if( $opcao_maiusc=="TODOS" )  {
                  ." concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anotacao, "
                  ." a.relatext as Arquivo FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and a.numero=$anotacao  ";                
-     $resultado_anotacao = mysql_query($sqlcmd);
+     $resultado_anotacao = mysqli_query($sqlcmd);
      if( ! $resultado_anotacao ) {
           /* $msg_erro .= "Selecionando Anota&ccedil;&atilde;o $anotacao do  Projeto: ".$numprojeto." - ".mysql_error().$msg_final;  
           echo $msg_erro;  */
@@ -354,7 +354,7 @@ if( $opcao_maiusc=="TODOS" )  {
          } 
          //  Selecionando as Testemunhas da Anotacao          
          $cmd_sql = "SELECT codigousp as cod_testemunha, nome as nome_testemunha  FROM  $bd_1.pessoa where codigousp $in ";
-         $res_testemunhas = mysql_query($cmd_sql);
+         $res_testemunhas = mysqli_query($cmd_sql);
          if( ! $res_testemunhas ) {
              /* $msg_erro .= "Selecionando testesmunhas da  Anota&ccedil;&atilde;o. mysql = ".mysql_error().$msg_final;  
              echo $msg_erro;  */

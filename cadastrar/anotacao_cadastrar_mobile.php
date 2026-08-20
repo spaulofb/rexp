@@ -96,7 +96,7 @@ if( isset($_POST['fileframe']) ) {
          if( isset($_SESSION["cip"]) ) $cip=$_SESSION["cip"];  
       }
       //
-      $select_numprojeto = mysql_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
+      $select_numprojeto = mysqli_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
       if( ! $select_numprojeto ) {
             die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());  
             exit();
@@ -234,10 +234,10 @@ if( isset($_POST['fileframe']) ) {
           ///  $local_arq0 = $_SESSION["dir"].$filename;                 
           ///  $nprojexp=$_POST["nprojexp"]; 
           ///  $anotacao_numero=$_POST["anotacao_numero"];
-          mysql_query("SET NAMES 'utf8'"); 
-          mysql_query('SET character_set_connection=utf8'); 
-          mysql_query('SET character_set_client=utf8'); 
-          mysql_query('SET character_set_results=utf8'); 
+          mysqli_query("SET NAMES 'utf8'"); 
+          mysqli_query('SET character_set_connection=utf8'); 
+          mysqli_query('SET character_set_client=utf8'); 
+          mysqli_query('SET character_set_results=utf8'); 
           mysql_set_charset('utf8');
           
           ///  $local_arq = utf8_decode($local_arq); 
@@ -245,8 +245,8 @@ if( isset($_POST['fileframe']) ) {
           $local_arq = utf8_encode($filename); 
           ///
           ///  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-          ///                 - Use mysql_select_db() ou mysql_query()
-           $nupdate = mysql_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
+          ///                 - Use mysql_select_db() ou mysqli_query()
+           $nupdate = mysqli_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
                           ." WHERE  projeto=$nprojexp  and  numero=$anotacao_numero ");
           ///
           if( ! $nupdate ) {
@@ -255,7 +255,7 @@ if( isset($_POST['fileframe']) ) {
               $_SESSION["msg_upload"].=$msg_erro_final;        
          } else {
               ///  Selecionando a Anotacao do Projeto 
-              $success=mysql_query("SELECT numero as nanotacao, projeto as nprojeto,autor as autor_anotacao 
+              $success=mysqli_query("SELECT numero as nanotacao, projeto as nprojeto,autor as autor_anotacao 
                              FROM $bd_2.anotacao WHERE  projeto=$nprojexp  and  numero=$anotacao_numero  ");
               ///
               if( ! $success ) {
@@ -489,14 +489,14 @@ function jsUpload(upload_field) {
                ///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
                 include("php_include/ajax/includes/conectar.php");
                 /////           
-                mysql_query("SET NAMES 'utf8'");
-                mysql_query('SET character_set_connection=utf8');
-                mysql_query('SET character_set_client=utf8');
-                mysql_query('SET character_set_results=utf8');
+                mysqli_query("SET NAMES 'utf8'");
+                mysqli_query('SET character_set_connection=utf8');
+                mysqli_query('SET character_set_client=utf8');
+                mysqli_query('SET character_set_results=utf8');
                 ///                         
                ///  IMPORTANTE: passar SESSION para uma variavel
                $usuario_conectado=$_SESSION["usuario_conectado"];
-               $res_anotador = mysql_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa  "
+               $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa  "
                                  ."  WHERE  codigousp=$usuario_conectado  order by nome "); 
                ///
                if( ! $res_anotador ) {
@@ -537,10 +537,10 @@ function jsUpload(upload_field) {
         <?php  
            ////   Primeira Parte  da  Anotacao  selecionando  o Projeto
             /////           
-            mysql_query("SET NAMES 'utf8'");
-            mysql_query('SET character_set_connection=utf8');
-            mysql_query('SET character_set_client=utf8');
-            mysql_query('SET character_set_results=utf8');
+            mysqli_query("SET NAMES 'utf8'");
+            mysqli_query('SET character_set_connection=utf8');
+            mysqli_query('SET character_set_client=utf8');
+            mysqli_query('SET character_set_results=utf8');
             ///                         
            $_SESSION["orientador"]="supervisor";
            $_SESSION["anotacao_numero"]=0;
@@ -565,7 +565,7 @@ function jsUpload(upload_field) {
                    ///              
             }  
             ///
-            $result_pessoa=mysql_query($sqlcmd);
+            $result_pessoa=mysqli_query($sqlcmd);
             ///                  
             if( ! $result_pessoa ) {
                     $msg_erro .= "Selecionando os projetos autorizados para esse Anotador - falha no mysql/query:&nbsp;"
@@ -700,7 +700,7 @@ function jsUpload(upload_field) {
             $elemento=5; $elemento2=6;
             ///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");    
             include("php_include/ajax/includes/conectar.php");    
-            $result2=mysql_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
+            $result2=mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa order by nome ");
         ?>
         <select style="font-size:x-small;" onfocus="javascript: document.getElementById('label_msg_erro').style.display='none';" name="testemunha1" id="testemunha1" class="td_select"  title="Código da Testemunha (1) da realização " >
         <?php
@@ -725,7 +725,7 @@ function jsUpload(upload_field) {
             $elemento=5;
             //  mysql_db_query -  essa funcao esta desativada usar mysql_query
             //  $result=mysql_db_query($db_array[$elemento],"SELECT codigousp,nome,categoria FROM pessoa order by nome ");
-            $result=mysql_query("SELECT codigousp,nome,categoria FROM pessoa order by nome ");
+            $result=mysqli_query("SELECT codigousp,nome,categoria FROM pessoa order by nome ");
             if( ! $result ) {
                 $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysql_error().$msg_final;
                 echo $msg_erro;

@@ -210,8 +210,8 @@ if( isset($_POST['fileframe']) ) {
 			//  $local_arq0 = $_SESSION[dir].$filename;
 			$nprojexp = $_POST[nprojexp]; $autor_cod = $_POST[autor_cod];
 			$local_arq  = html_entity_decode(trim($filename));
-           //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-     	    $success = mysql_query("UPDATE  $bd_2.projeto SET relatproj='$local_arq'  "
+           //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+     	    $success = mysqli_query("UPDATE  $bd_2.projeto SET relatproj='$local_arq'  "
 			              ." where ( numprojeto=$nprojexp  and  autor=$autor_cod ) ");
 			//
 			if( ! $success ) {
@@ -219,7 +219,7 @@ if( isset($_POST['fileframe']) ) {
    			    $_SESSION["msg_upload"].=$msg_erro_final;		
 			} else {
                  mysql_free_result($success);
-                 $success=mysql_query("SELECT nome from $bd_1.pessoa where codigousp=$autor_cod  ");
+                 $success=mysqli_query("SELECT nome from $bd_1.pessoa where codigousp=$autor_cod  ");
                  $_SESSION["msg_upload"] .= $msg_erro."Projeto $nprojexp do autor ".mysql_result($success,0,0)." foi conclu&iacute;do.";
 				 $_SESSION["msg_upload"] .=$msg_erro_final;		    
             }		  
@@ -907,10 +907,10 @@ $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 ///
 # Aqui está o segredo
-mysql_query("SET NAMES 'utf8'");
-mysql_query('SET character_set_connection=utf8');
-mysql_query('SET character_set_client=utf8');
-mysql_query('SET character_set_results=utf8');
+mysqli_query("SET NAMES 'utf8'");
+mysqli_query('SET character_set_connection=utf8');
+mysqli_query('SET character_set_client=utf8');
+mysqli_query('SET character_set_results=utf8');
 ///
 if ( $permit_pa<=$permit_orientador ) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
@@ -922,7 +922,7 @@ if ( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from  $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysql_query($sqlcmd); 
+$result = mysqli_query($sqlcmd); 
 ///                  
 if( ! $result ) {
     ///   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

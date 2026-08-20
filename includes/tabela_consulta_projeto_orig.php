@@ -44,7 +44,7 @@ if( isset($_SESSION["num_rows"]) ) {
         unset($_SESSION["num_rows"]);
 	    // Conta os resultados no total da minha query
 	    //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
-	    //  $query    = mysql_query($strCount);
+	    //  $query    = mysqli_query($strCount);
 	    $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
 	    $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
 	    $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
@@ -82,7 +82,7 @@ if( intval($total_regs)<=0 ) {
     $num_fields=0; $m_ordenar="nome"; $max_length="";
     /// 
     $strQuery="SELECT $campos_query FROM  $table_temporaria  LIMIT $inicio,$maximo";  
-	$query = mysql_query($strQuery);
+	$query = mysqli_query($strQuery);
     if( ! $query ) {
          ///   die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
          $msg_erro .= "&nbsp;Select - falha:&nbsp;db/mysql:&nbsp;";
@@ -110,7 +110,7 @@ if( intval($total_regs)<=0 ) {
      $temp_tabela=$_SESSION['table_consultar_projeto'];
      /// $sqlcmd="SELECT ".$max_length." FROM  ".$_SESSION['table_consultar_projeto']."   ";
      $sqlcmd="SELECT ".$max_length." FROM  $temp_tabela  ";
-     $result_max_length = mysql_query($sqlcmd);          
+     $result_max_length = mysqli_query($sqlcmd);          
      ///
      if( ! $result_max_length ) {
            ////  die('ERRO: Select maximo tamanho dos campos da tb  table_consultar_projeto - falha: '.mysql_error());

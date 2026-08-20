@@ -150,7 +150,7 @@ include("includes/menu_horizontal.php");
     $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
              ." WHERE (a.codigousp=b.codigousp ) and a.codigousp=\"$usuario_conectado\" order by a.pa  ";
     ////   
-    $resultado_pa=mysql_query($cmdsql);
+    $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
         $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
         echo $msg_erro;
@@ -207,7 +207,7 @@ include("includes/menu_horizontal.php");
          $cmdsql="SELECT a.descricao,b.nome FROM rexp.pa a, pessoal.pessoa b  "
                 ." WHERE a.codigo=$permit_pa and b.codigousp=\"$usuario_conectado\"  ";
           ///   
-          $res_pa_descr=mysql_query($cmdsql);
+          $res_pa_descr=mysqli_query($cmdsql);
           if( ! $res_pa_descr  ) {
                die('ERRO: SELECT pa/permissao de acesso '.mysql_error());
                exit();  

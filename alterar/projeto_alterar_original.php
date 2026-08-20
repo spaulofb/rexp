@@ -242,7 +242,7 @@ if( isset($_POST['fileframe']) ) {
                  *     IMPORTANTE: alterado em 20180727
                  *         toda parte de acentuacao PHP?MYSQL
                  *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-                         Use mysql_select_db() ou mysql_query()
+                         Use mysql_select_db() ou mysqli_query()
               ***/   
               ini_set('default_charset','utf8');
               /***
@@ -250,10 +250,10 @@ if( isset($_POST['fileframe']) ) {
                     *    pois cobre quase todos os caracteres e 
                     *    símbolos do mundo
               ***/
-              mysql_query("SET NAMES 'utf8'"); 
-              mysql_query('SET character_set_connection=utf8'); 
-              mysql_query('SET character_set_client=utf8'); 
-              mysql_query('SET character_set_results=utf8'); 
+              mysqli_query("SET NAMES 'utf8'"); 
+              mysqli_query('SET character_set_connection=utf8'); 
+              mysqli_query('SET character_set_client=utf8'); 
+              mysqli_query('SET character_set_results=utf8'); 
               mysql_set_charset('utf8');
                   
               ///  $local_arq = utf8_decode($local_arq); 
@@ -261,7 +261,7 @@ if( isset($_POST['fileframe']) ) {
               $local_arq = utf8_encode($filename); 
 
               /****  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao 
-              *          - Use mysql_select_db() ou mysql_query()
+              *          - Use mysql_select_db() ou mysqli_query()
               ***/
               ///  Recebendo as sessoes enviadas do arquivo projeto_alterar_ajax.php
               $cip=""; $autor_cod="";$nprojexp="";
@@ -273,7 +273,7 @@ if( isset($_POST['fileframe']) ) {
               $sqlcmd = "SELECT numprojeto as nprojexp,autor as autor_cod "
                       ."  FROM $bd_2.projeto  WHERE cip=$cip ";
               ///
-              $result_consult_projeto = mysql_query($sqlcmd);
+              $result_consult_projeto = mysqli_query($sqlcmd);
               /***
               if( ! $result_consult_projeto ) {
                    $msg_erro .= "Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o=".$opcao.' - '.mysql_error().$msg_final;  
@@ -302,11 +302,11 @@ if( isset($_POST['fileframe']) ) {
                   if( strlen(trim($cip))>0 ) {
                         ///  START a transaction - ex. procedure  
                         $n_erro=0;  
-                        mysql_query('DELIMITER &&'); 
-                        mysql_query('begin'); 
-                        mysql_query("LOCK TABLES $bd_2.projeto UPDATE ");
-                        //// $success = mysql_query("UPDATE $bd_2.projeto SET relatproj='$local_arq'  WHERE numprojeto=$nprojexp and autor=$autor_cod  ");
-                        $success = mysql_query("UPDATE $bd_2.projeto SET relatproj='$local_arq' 
+                        mysqli_query('DELIMITER &&'); 
+                        mysqli_query('begin'); 
+                        mysqli_query("LOCK TABLES $bd_2.projeto UPDATE ");
+                        //// $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq'  WHERE numprojeto=$nprojexp and autor=$autor_cod  ");
+                        $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq' 
                                           WHERE cip=$cip ");
                         ///
                         if( ! $success ) {
@@ -314,24 +314,24 @@ if( isset($_POST['fileframe']) ) {
                              $n_erro=1;  
                              $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA'.mysql_error();
                              $_SESSION["msg_upload"].=$msg_erro_final;
-                             mysql_query('rollback'); 
+                             mysqli_query('rollback'); 
                         } else {
-                             mysql_query('commit'); 
+                             mysqli_query('commit'); 
                         }
-                        mysql_query("UNLOCK  TABLES");
-                        mysql_query('end'); 
-                        mysql_query('DELIMITER');
+                        mysqli_query("UNLOCK  TABLES");
+                        mysqli_query('end'); 
+                        mysqli_query('DELIMITER');
                         ///
                         /// Caso NAO Ocorreu erro
                         if( intval($n_erro)<1 ) {
                              /// Select/Mysql -  nome do usuario/autor
                              ///   Utilizado pelo Mysql/PHP        
-                             mysql_query("SET NAMES 'utf8'");
-                             mysql_query('SET character_set_connection=utf8');
-                             mysql_query('SET character_set_client=utf8');
-                             mysql_query('SET character_set_results=utf8');
+                             mysqli_query("SET NAMES 'utf8'");
+                             mysqli_query('SET character_set_connection=utf8');
+                             mysqli_query('SET character_set_client=utf8');
+                             mysqli_query('SET character_set_results=utf8');
                              ///                         
-                             $success=mysql_query("SELECT nome from $bd_1.pessoa WHERE codigousp=$autor_cod  ");
+                             $success=mysqli_query("SELECT nome from $bd_1.pessoa WHERE codigousp=$autor_cod  ");
                              /// Verificando se houve erro no Select Tabela pessoa
                              if( ! $success ) {
                                   /*  $msg_erro .= "Select tabela objetivo - falha: ".mysql_error().$msg_final;
@@ -1496,10 +1496,10 @@ $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 ///  TAG Select
 # Aqui está o segredo
-mysql_query("SET NAMES 'utf8'");
-mysql_query('SET character_set_connection=utf8');
-mysql_query('SET character_set_client=utf8');
-mysql_query('SET character_set_results=utf8');
+mysqli_query("SET NAMES 'utf8'");
+mysqli_query('SET character_set_connection=utf8');
+mysqli_query('SET character_set_client=utf8');
+mysqli_query('SET character_set_results=utf8');
 ///
 if ( $permit_pa<=$permit_orientador ) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
@@ -1511,7 +1511,7 @@ if ( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from  $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysql_query($sqlcmd); 
+$result = mysqli_query($sqlcmd); 
 ///                  
 if( ! $result ) {
    /*  $msg_erro .= "Selecionando os projetos autorizados para esse Usu&aacute;rio. db/mysql: ".mysql_error().$msg_final;

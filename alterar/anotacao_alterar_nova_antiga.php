@@ -132,7 +132,7 @@ if( isset($_POST['fileframe']) ) {
       $elemento=5; $elemento2=6; 
       include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
       $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
-      $select_numprojeto = mysql_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
+      $select_numprojeto = mysqli_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
       if( ! $select_numprojeto ) {
             ///  die('ERRO: Select projeto campo numprojeto - falha: '.mysql_error());  
             
@@ -268,8 +268,8 @@ if( isset($_POST['fileframe']) ) {
             $local_arq=html_entity_decode(trim($filename));
             //
            //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-           //                 - Use mysql_select_db() ou mysql_query()
-             $success = mysql_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
+           //                 - Use mysql_select_db() ou mysqli_query()
+             $success = mysqli_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
                           ." where ( projeto=$nprojexp  and  autor=$autor_cod and  numero=$anotacao_numero  ) ");
             //
             if( ! $success ) {
@@ -950,7 +950,7 @@ function jsUpload(upload_field) {
                 ." b.cip in (select distinct cip from rexp.anotador "
                 ." where codigo=".$usuario_conectado.")  order by b.titulo ";
         }
-        $result = mysql_query($sqlcmd); 
+        $result = mysqli_query($sqlcmd); 
         //                  
         if( ! $result ) {
              //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

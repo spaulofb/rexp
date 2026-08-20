@@ -124,7 +124,7 @@ if( strtoupper($source)=="SAIR" ) {
                  $user_cond = "upper(trim(user_name))='$user_email'";
              } else  $user_cond="upper(trim(user_email))='$user_email'";
              //
-             $res_acesso = mysql_query("SELECT `id`,`pwd`,`full_name`,`approved`,`user_level` FROM users "
+             $res_acesso = mysqli_query("SELECT `id`,`pwd`,`full_name`,`approved`,`user_level` FROM users "
                                          ." WHERE $user_cond AND "
                                          ." trim(`pwd`)=password('$pass')  AND  `banned`='0'  ");
              //
@@ -164,7 +164,7 @@ if( strtoupper($source)=="SAIR" ) {
                     $_SESSION["HTTP_USER_AGENT"] = md5($_SERVER["HTTP_USER_AGENT"]);
                     //  update the timestamp and key for cookie
                     $stamp = time();  $ckey = GenKey();
-                    $result_update= mysql_query("Update users set `ctime`='$stamp', `ckey` = '$ckey' where id='$id' ");
+                    $result_update= mysqli_query("Update users set `ctime`='$stamp', `ckey` = '$ckey' where id='$id' ");
                     // Verificando se houve erro no Update            
                     if( ! $result_update ) {
                           mysql_free_result($result_update);
@@ -246,7 +246,7 @@ if( strtoupper($source)=="SAIR" ) {
                 //
                 $email = strtoupper(trim($usr_email));
                 $user_name=trim($arr_nome_val[login]);
-                $rs_duplicate = mysql_query("SELECT count(*) as total from login_senha.users where "
+                $rs_duplicate = mysqli_query("SELECT count(*) as total from login_senha.users where "
                           ."  upper(trim(user_name))='$login'");
                 //
                 if( ! $rs_duplicate  ) {
@@ -261,7 +261,7 @@ if( strtoupper($source)=="SAIR" ) {
                           ."Por favor tente novamente como outro usu&aacute;rio.";
                 } else {
                     unset($total);
-                    $rs_duplicate=mysql_query("SELECT count(*) as total from users where "
+                    $rs_duplicate=mysqli_query("SELECT count(*) as total from users where "
                            ." upper(trim(user_email))='$email' ");
                     //
                     if( ! $rs_duplicate  ) {
@@ -280,10 +280,10 @@ if( strtoupper($source)=="SAIR" ) {
                /******************* Filtragem de entrada ****************************/
                foreach($arr_nome_val as $key => $value ) $data[$key] = html_entity_decode(filter($value));   
                //  Start a transaction - ex. procedure    
-               mysql_query('DELIMITER &&'); 
-               mysql_query('begin'); 
+               mysqli_query('DELIMITER &&'); 
+               mysqli_query('begin'); 
                //  Execute the queries 
-               $sql_insert = mysql_query("INSERT into `users`
+               $sql_insert = mysqli_query("INSERT into `users`
                  (`full_name`,`user_email`,`pwd`,`address`,`tel`,`fax`,`website`,`date`,`users_ip`,`activation_code`,`country`,`user_name`)
                    VALUES ('$data[nome]','$usr_email',password('$arr_nome_val[senha]'),'$data[endereco]','$data[telefone]','$data[fax]','$data[web]'
                        ,now(),'$user_ip','$activ_code','$data[pais]','$user_name')");
@@ -292,20 +292,20 @@ if( strtoupper($source)=="SAIR" ) {
                if( ! $sql_insert  ) { 
                     //  mysql_error() - para saber o tipo do erro
                     $m_erro="&nbsp;Ocorreu uma falha no Insert users - &nbsp;".mysql_error();
-                    mysql_query('rollback'); 
+                    mysqli_query('rollback'); 
                }
                //  Sucesso no Insert
                if( $sql_insert )  {
-                   //  mysql_insert_id() - tem ser antes do mysql_query(commit)
+                   //  mysql_insert_id() - tem ser antes do mysqli_query(commit)
                    $user_id = mysql_insert_id();      
-                   mysql_query('commit');                    
+                   mysqli_query('commit');                    
                }
-               mysql_query('end'); 
-               mysql_query('DELIMITER'); 
+               mysqli_query('end'); 
+               mysqli_query('DELIMITER'); 
                //        
                if( $sql_insert ) {
                     $md5_id = md5($user_id);
-                    $res_update = mysql_query("update users set md5_id='$md5_id' where id='$user_id'");
+                    $res_update = mysqli_query("update users set md5_id='$md5_id' where id='$user_id'");
                    //  Falha no Update
                    if( ! $res_update )  $m_erro="&nbsp;Ocorreu uma falha no Update users - &nbsp;".mysql_error();
                    if( $res_update  and ( strlen(trim($m_erro))<1  ) ) {
@@ -407,7 +407,7 @@ if( strtoupper($source)=="SAIR" ) {
          //
          $lnpa = (int) trim($arr_nome_val["pa"]);      
          $sqlselect ="select descricao from rexp.pa where codigo=$lnpa ";
-         $result_pa=mysql_query($sqlselect);
+         $result_pa=mysqli_query($sqlselect);
          if( $result_pa ) {
              $descricao_pa = trim(mysql_result($result_pa,0,"descricao"));                                                             
          }                
@@ -418,9 +418,9 @@ if( strtoupper($source)=="SAIR" ) {
               $user_login = strtoupper(trim($arr_nome_val[$cpo_usuario]));
               $lslogin =  trim($arr_nome_val[$cpo_usuario]);
 /*             ALTERADO em  20120225
-              $rs_check=mysql_query("Select a.codigousp from  $bd_1.pessoa where  upper(trim(e_mail))='$user_email'  ");
+              $rs_check=mysqli_query("Select a.codigousp from  $bd_1.pessoa where  upper(trim(e_mail))='$user_email'  ");
 */           
-              $rs_check=mysql_query("Select a.codigousp from  $bd_1.pessoa a, $bd_1.usuario b  "
+              $rs_check=mysqli_query("Select a.codigousp from  $bd_1.pessoa a, $bd_1.usuario b  "
                                ." where a.codigousp=b.codigousp and  upper(trim(a.e_mail))='$user_email'  ");
               //
               if( ! $rs_check  ) {
@@ -441,7 +441,7 @@ if( strtoupper($source)=="SAIR" ) {
                     //  Incluindo o codigousp na variavel  cod_senha
                   // $codigousp_senha = trim(mysql_result($rs_check,0,"codigousp"));                   
                    mysql_free_result($rs_check);
-                  $resultado=mysql_query("Select login from  pessoal.usuario where "
+                  $resultado=mysqli_query("Select login from  pessoal.usuario where "
                             ." upper(trim(login))='$user_login'  and  pa=$lnpa  ");
                   //          
                    if( ! $resultado ) {
@@ -460,7 +460,7 @@ if( strtoupper($source)=="SAIR" ) {
                        $new_pwd = GenPwd();
                        // $pwd_reset = PwdHash($new_pwd);
                        $pwd_reset = trim($new_pwd);
-                       $rs_activ = mysql_query("update pessoal.usuario set senha=password('$pwd_reset') WHERE "
+                       $rs_activ = mysqli_query("update pessoal.usuario set senha=password('$pwd_reset') WHERE "
                                         ." upper(trim(login))='$user_login' ");
                        //            
                        if( ! $rs_activ ) {
@@ -468,7 +468,7 @@ if( strtoupper($source)=="SAIR" ) {
                            //  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
                            die("ERRO: Atualizando senha  - ".mysql_error());
                        }
-                       $res_pa = mysql_query("Select descricao from rexp.pa where trim(codigo)=".$lnpa);
+                       $res_pa = mysqli_query("Select descricao from rexp.pa where trim(codigo)=".$lnpa);
                        if( ! $res_pa ) {
                            mysql_free_result($res_pa);          
                            die("ERRO: Falha erro no Select rexp.pa ".mysql_error());
@@ -564,12 +564,12 @@ if( strtoupper($source)=="SAIR" ) {
                $activ = mysql_real_escape_string($arr_nome_val[activ_code]);
                $upper_email=strtoupper(trim($arr_nome_val[$cpo_email]));
                // Verifique se o usu?rio ? um c?digo v?lido e ativo
-          /*     $rs_check = mysql_query("Select  id from users "
+          /*     $rs_check = mysqli_query("Select  id from users "
                         ." where upper(trim(user_email))='$upper_email' and "
                         ." md5_id='$user' and activation_code='$activ' ");
             */
                         
-               $rs_check = mysql_query("Select  a.codigousp,a.login,a.pa,b.e_mail from "
+               $rs_check = mysqli_query("Select  a.codigousp,a.login,a.pa,b.e_mail from "
                                      ." pessoal.usuario a,  pessoal.pessoa b where  "
                                       ." trim(a.codigousp)=$user and a.activation_code='$activ' and "
                                       ."  upper(trim(b.e_mail))='$upper_email'  and  a.codigousp=b.codigousp  ");
@@ -597,7 +597,7 @@ if( strtoupper($source)=="SAIR" ) {
                }  else {
                     $m_login= trim(mysql_result($rs_check,0,login));                   
                     // defina o campo aprovou (approved) como 1 para ativar a conta
-                    $rs_activ = mysql_query("Update pessoal.usuario set aprovado='1' WHERE "
+                    $rs_activ = mysqli_query("Update pessoal.usuario set aprovado='1' WHERE "
                                ." trim(codigousp)=$user  AND  activation_code=$activ ");
                     // Verificando se houve erro no update            
                     if( ! $rs_activ ) {

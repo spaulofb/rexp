@@ -361,7 +361,7 @@ include("php_include/ajax/includes/conectar.php");
 $sqlcmd = "SELECT upper(substr(nome,1,1)) as letra1,count(*) as n "
           ." FROM $bd_1.pessoa  group by 1";
 ///          
-$result = mysql_query($sqlcmd);
+$result = mysqli_query($sqlcmd);
 if( ! $result ) {
     die('ERRO: Falha consultando a tabela pessoa  - letra inicial:&nbsp;db/mysql&nbsp;'.mysql_error());  
 }  

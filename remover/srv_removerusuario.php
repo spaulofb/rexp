@@ -125,7 +125,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
    
    ///  Removendo a tabela temporaria
    $sql_rm_usu = "DROP TABLE IF EXISTS  $table_rm_usu  ";  
-   $drop_res = mysql_query($sql_rm_usu); 
+   $drop_res = mysqli_query($sql_rm_usu); 
    if( ! $drop_res  ) {
         $msg_erro .= "Falha removendo a tabela $table_rm_usu -&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;  
         echo $msg_erro;
@@ -229,7 +229,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
         $sqlcmd .=" order by nome asc";
    }
    ///  Executando o procedimento
-   $result_usuarios=mysql_query($sqlcmd);   
+   $result_usuarios=mysqli_query($sqlcmd);   
    
 ///  echo "ERRO: srv_removerusuario/213  --->>> \$sqlcmd  =  $sqlcmd  ";   
 ///  exit();
@@ -242,7 +242,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     }
     ///  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  $table_rm_usu  ";
-   $resultado_outro = mysql_query($query2);                                    
+   $resultado_outro = mysqli_query($query2);                                    
    if( ! $resultado_outro ) {
         $msg_erro .= "Falha na Tabela Tempor&aacute;ria $table_rm_usu -&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;  
         echo $msg_erro;
@@ -306,7 +306,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
              $cod_usuario=trim($val);
              ///   Com o codigo acrescentar o nome,e_mail e categoria
              $cmd_sql="select nome,e_mail,(select categoria.descricao from categoria where categoria.codigo=pessoa.categoria) as categoria_user from $bd_1.pessoa where codigousp=$cod_usuario ";
-             $res_select = mysql_query($cmd_sql);                   
+             $res_select = mysqli_query($cmd_sql);                   
              if( ! $res_select ) {
                    ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
                    /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysql_error().$msg_final;  
@@ -377,7 +377,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
             ."(Select count(autor) as n_anot from rexp.anotacao WHERE autor=$usuario_autor  ) as n_anot "
             ." FROM  $bd_1.pessoa a, $bd_2.projeto b  WHERE {$where_cond} ";
     ////                 
-    $result_projeto = mysql_query($sqlcmd);                   
+    $result_projeto = mysqli_query($sqlcmd);                   
     if( ! $result_projeto ) {
           ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
           /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysql_error().$msg_final;  
@@ -689,7 +689,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     $sqlcmd = "SELECT  count(cia) as ncia  FROM $bd_2.anotacao  "
                  ." WHERE projeto in(".$string_cip.")  ";                
     ///                 
-    $resultado_anotacao = mysql_query($sqlcmd);
+    $resultado_anotacao = mysqli_query($sqlcmd);
     if( ! $resultado_anotacao ) {
          /* $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto." - db/mysql - ".mysql_error();
               echo $msg_erro.$msg_final;  */
@@ -701,11 +701,11 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     ///  Variavel de erro  
     $lnerro=0;
     ///  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     ///  Execute the queries          
-    ///   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-    mysql_query("LOCK TABLES $bd_2.anotacao DELETE, $bd_2.corespproj DELETE, $bd_2.projeto DELETE ");
+    ///   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+    mysqli_query("LOCK TABLES $bd_2.anotacao DELETE, $bd_2.corespproj DELETE, $bd_2.projeto DELETE ");
     /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
     /***
          *   Removendo as anotacoes dos Projetos e do AUTOR/USUARIO
@@ -714,7 +714,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     if( intval($num_anotacoes)>0  ) {
          $sqlcmd= "DELETE  from $bd_2.anotacao WHERE projeto in(".$string_cip.")  "; 
          ///                  
-         $res_anotacao =mysql_query($sqlcmd);      
+         $res_anotacao =mysqli_query($sqlcmd);      
          if( ! $res_anotacao ) { 
              ///  mysql_error() - para saber o tipo do erro
              /* $msg_erro .="&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  - db/mysql:&nbsp; "
@@ -724,7 +724,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
              $lnerro=1;
          } else {
              ///  Confirmando processos - ok
-             mysql_query('commit'); 
+             mysqli_query('commit'); 
          }
     }               
     ////  Removendo os Projetos e co-reponsaveis do AUTOR/USUARIO
@@ -732,7 +732,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
         ///  Removendo co-responsaveis dos projetos desse  AUTOR/USUARIO 
         $sqlcmd= "DELETE from $bd_2.corespproj WHERE projetoautor=$cod_usuario "; 
         ///                  
-        $res_projeto =mysql_query($sqlcmd);      
+        $res_projeto =mysqli_query($sqlcmd);      
         if( ! $res_projeto ) { 
              ///  mysql_error() - para saber o tipo do erro
              /* $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  - db/mysql:&nbsp; "
@@ -747,7 +747,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
         ///  $sqlcmd= "DELETE  from $bd_2.projeto WHERE {$where_cond} "; 
         $sqlcmd= "DELETE  from $bd_2.projeto WHERE autor=$cod_usuario "; 
         ///                  
-        $res_projeto =mysql_query($sqlcmd);      
+        $res_projeto =mysqli_query($sqlcmd);      
         if( ! $res_projeto ) { 
             ///  mysql_error() - para saber o tipo do erro
             /* $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  - db/mysql:&nbsp; "
@@ -760,32 +760,32 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     ///
     if( intval($lnerro)<1 ) {
          ///  Confirmando processos - ok
-         mysql_query('commit'); 
+         mysqli_query('commit'); 
     } else {
          ///  Caso ocorrido ERRO - cancelando
-         mysql_query('rollback'); 
+         mysqli_query('rollback'); 
     }   
     ///
     /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-    mysql_query("UNLOCK  TABLES");
+    mysqli_query("UNLOCK  TABLES");
     ///  Complete the transaction 
-    mysql_query('end'); 
-    mysql_query('DELIMITER');         
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');         
     ///  FINAL - remover projetos e anotacoes do autor/usuario
     ///               
     ///  REMOVER anotador
     ///  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     ///  Execute the queries          
-    ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-    mysql_query("LOCK TABLES  $bd_2.anotador DELETE ");
+    ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+    mysqli_query("LOCK TABLES  $bd_2.anotador DELETE ");
     /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
     ///  Removendo o anotador dos Projetos - usuario/anotador 
     ///  $sqlcmd = "DELETE from $bd_2.anotador  WHERE cip=$cip  ";
     $sqlcmd = "DELETE from $bd_2.anotador  WHERE codigo=$cod_usuario  ";
     ///                  
-    $res_anotador =  mysql_query($sqlcmd);
+    $res_anotador =  mysqli_query($sqlcmd);
     if( ! $res_anotador ) { 
          ///  mysql_error() - para saber o tipo do erro
          /*   $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysql_error().$msg_final;
@@ -796,17 +796,17 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     ///
     if( intval($lnerro)<1 ) {
          ///  Confirmando processos - ok
-         mysql_query('commit'); 
+         mysqli_query('commit'); 
     } else {
          ///  Caso ocorrido ERRO - cancelando
-         mysql_query('rollback'); 
+         mysqli_query('rollback'); 
     }   
     ///
     /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-    mysql_query("UNLOCK  TABLES");
+    mysqli_query("UNLOCK  TABLES");
     ///  Complete the transaction 
-    mysql_query('end'); 
-    mysql_query('DELIMITER');         
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');         
     ///  
     ///   MENSAGEM FINAL - Projeto e Anotacoes - Removido
     ///  CASO ocorreu ERRO 
@@ -900,7 +900,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
                  ."(Select count(cip) as n_anot from $bd_2.anotador where cip=$cip  ) as n_anot  "     
                  ."  FROM $bd_1.pessoa a, $bd_2.projeto b  WHERE {$where_cond} "; 
     ////                 
-    $result_projeto = mysql_query($sqlcmd);                   
+    $result_projeto = mysqli_query($sqlcmd);                   
     if( ! $result_projeto ) {
      ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
          /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysql_error().$msg_final;  
@@ -922,14 +922,14 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
           if( $coresponsaveis==1 ) $tit_coresp="Corespons&aacute;vel";
           if( $coresponsaveis>1 ) $tit_coresp="Corespons&aacute;veis";
           /// Precisa iniciar zerando variavel @contador_regs
-          $result_set=mysql_query("set @contador_regs=0;");
+          $result_set=mysqli_query("set @contador_regs=0;");
           if( ! $result_set ) {
               /* $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysql_error().$msg_final;            
               echo  $msg_erro;  */
               echo $funcoes->mostra_msg_erro("set @contador_regs=0; -&nbsp;db/mysql:&nbsp;".mysql_error());
               exit();
           }         
-          $result_coresp=mysql_query("SELECT @contador_regs:=@contador_regs+1 as n, "
+          $result_coresp=mysqli_query("SELECT @contador_regs:=@contador_regs+1 as n, "
                    ." b.nome as coresponsavel_nome FROM $bd_2.corespproj  a, "
                    ." $bd_1.pessoa b  WHERE a.projetoautor=$autor_projeto_cod and a.projnum=$numprojeto and "
                    ." b.codigousp=a.coresponsavel order by b.nome ");
@@ -960,7 +960,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
                  ." FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip  ";   
     ///                         
-    $resultado_anotacao = mysql_query($sqlcmd);
+    $resultado_anotacao = mysqli_query($sqlcmd);
     if( ! $resultado_anotacao ) {
           /* $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto." - db/mysql - ".mysql_error();
         echo $msg_erro.$msg_final;  */
@@ -1074,22 +1074,22 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     ///
     $lnerro=0;
     ///  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     ///  Execute the queries          
-    ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-    mysql_query("LOCK TABLES $bd_2.projeto  DELETE, $bd_2.anotacao DELETE,  $bd_2.anotador DELETE ");
+    ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+    mysqli_query("LOCK TABLES $bd_2.projeto  DELETE, $bd_2.anotacao DELETE,  $bd_2.anotador DELETE ");
     /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
     ///  Removendo o anotador do Projeto  
     $sqlcmd = "DELETE from $bd_2.anotador  WHERE cip=$cip  ";
     ///                  
-    $res_anotador =  mysql_query($sqlcmd);
+    $res_anotador =  mysqli_query($sqlcmd);
     if( $res_anotador ) { 
         ///  Removendo as anotacoes do Projeto
         if( $n_anotacoes>0 ) {
              $sqlcmd= "DELETE  from $bd_2.anotacao WHERE projeto=$cip "; 
              ///                  
-             $res_anotacao =mysql_query($sqlcmd);      
+             $res_anotacao =mysqli_query($sqlcmd);      
              if( ! $res_anotacao ) { 
                  ///  mysql_error() - para saber o tipo do erro
                  /* $msg_erro .="&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  - db/mysql:&nbsp; "
@@ -1103,7 +1103,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
         if( intval($lnerro)<1 ) {
              $sqlcmd= "DELETE  from $bd_2.projeto WHERE {$where_cond} "; 
              ///                  
-             $res_projeto =mysql_query($sqlcmd);      
+             $res_projeto =mysqli_query($sqlcmd);      
              if( ! $res_projeto ) { 
                  ///  mysql_error() - para saber o tipo do erro
                  /* $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  - db/mysql:&nbsp; "
@@ -1123,16 +1123,16 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
     }       
     ///
     if( intval($lnerro)<1 ) {
-         mysql_query('commit'); 
+         mysqli_query('commit'); 
     } else {
-        mysql_query('rollback'); 
+        mysqli_query('rollback'); 
     }   
     ///
     /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-    mysql_query("UNLOCK  TABLES");
+    mysqli_query("UNLOCK  TABLES");
     ///  Complete the transaction 
-    mysql_query('end'); 
-    mysql_query('DELIMITER');         
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');         
     ///  Caso Tabela acima foi aceita incluir dados na outra abaixo
     ///   MENSAGEM FINAL - Projeto e Anotacoes - Removido
     $confirmar0 ="<hr>";

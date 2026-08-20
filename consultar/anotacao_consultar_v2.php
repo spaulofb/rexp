@@ -525,10 +525,10 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
 /// Selecionando o Projeto do Orientador/Usuario
 # Aqui está o segredo
 /**
-*   mysql_query("SET NAMES 'utf8'");
-*   mysql_query('SET character_set_connection=utf8');
-*   mysql_query('SET character_set_client=utf8');
-*   mysql_query('SET character_set_results=utf8');
+*   mysqli_query("SET NAMES 'utf8'");
+*   mysqli_query('SET character_set_connection=utf8');
+*   mysqli_query('SET character_set_client=utf8');
+*   mysqli_query('SET character_set_results=utf8');
 */
 //
 /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
@@ -564,7 +564,7 @@ if( $permit_pa<$permit_aprovador ) {
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-//  $result = mysql_query($sqlcmd); 
+//  $result = mysqli_query($sqlcmd); 
 //  $result = mysqli_query($conex,$sqlcmd); 
 
 

@@ -22,7 +22,7 @@ $_SESSION["cols"]=4;
                    $result = $mySQL->runQuery("select codigousp,nome,categoria from pessoa  order by nome ");
              */
              mysql_select_db($db_array[$elemento]);  
-             $result_pessoa = mysql_query("SELECT a.autor,a.numprojeto,b.nome FROM rexp.projeto a, pessoal.pessoa b "
+             $result_pessoa = mysqli_query("SELECT a.autor,a.numprojeto,b.nome FROM rexp.projeto a, pessoal.pessoa b "
                                           ." where a.cip=".$cip_projeto."  and "
                                           ." a.autor=b.codigousp  order by b.nome "); 
            if( ! $result_pessoa ) {
@@ -43,7 +43,7 @@ $_SESSION["cols"]=4;
                 <span class='td_inicio1' style="border:none; background-color:#FFFFFF; color:#000000;" title='Nome do Orientador do Projeto' ><?php echo $orientador_nome;?>&nbsp;</span>
                 <?php         
                  mysql_free_result($result_pessoa); 
-                 $result_anot_dt=mysql_query("select data,titulo,relatext from anotacao "
+                 $result_anot_dt=mysqli_query("select data,titulo,relatext from anotacao "
                                                ." where numero=$numero_anotacao and "
                                                ." projeto=$cip_projeto ");
                  //
@@ -105,7 +105,7 @@ $_SESSION["cols"]=4;
     <td  class="td_inicio1" style="text-align: left;" colspan="2"  >
       <?php
        //  MYSQL - Como receber dois nomes de dois codigos de dois BD e duas Tabelas
-       $result_dois_nomes = mysql_query("select b.nome as testemunha1_nome, c.nome as testemunha2_nome from "
+       $result_dois_nomes = mysqli_query("select b.nome as testemunha1_nome, c.nome as testemunha2_nome from "
                    ."  rexp.anotacao a, pessoal.pessoa b, pessoal.pessoa c where "
                    ."  ( a.projeto=$cip_projeto and a.numero=$numero_anotacao ) and "
                    ." a.testemunha1=b.codigousp and a.testemunha2=c.codigousp ");

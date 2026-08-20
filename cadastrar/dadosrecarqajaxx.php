@@ -38,7 +38,7 @@ if( isset($_SESSION["campos_nome"]) )  unset($_SESSION["campos_nome"]);
 if( isset($_SESSION["campos_valor"]) )  unset($_SESSION["campos_valor"]);
 //
 $session_tabela = $_SESSION["tabela"];
-$result_tabela = mysql_query("SELECT * FROM ".$session_tabela." limit 1");
+$result_tabela = mysqli_query("SELECT * FROM ".$session_tabela." limit 1");
 if( ! $result_tabela ) {
    die('Select '.$session_tabela.' - falha: '.mysql_error());
    exit();

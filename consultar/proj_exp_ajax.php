@@ -123,13 +123,13 @@ if( strtoupper($source)=="SAIR" ) {
          $m_select_campos=" a.codigousp,b.nome,b.categoria,a.pa  "; 
          $order=" b.nome ";
         /*
-         $result = mysql_query("SELECT a.codigousp,b.nome,b.categoria FROM "
+         $result = mysqli_query("SELECT a.codigousp,b.nome,b.categoria FROM "
                ."  pessoal.usuario a, pessoal.pessoa b where "
                .$_SESSION["where"]." and ( a.codigousp=b.codigousp )  order by b.nome "); 
          */      
           
-         $res_temp1 = mysql_query("DROP TABLE IF EXISTS  ".$_SESSION[$_SESSION['table_temp_usu']]."  ");
-         $res_temp2 = mysql_query("CREATE TABLE  ".$_SESSION[$_SESSION['table_temp_usu']]."  Select "
+         $res_temp1 = mysqli_query("DROP TABLE IF EXISTS  ".$_SESSION[$_SESSION['table_temp_usu']]."  ");
+         $res_temp2 = mysqli_query("CREATE TABLE  ".$_SESSION[$_SESSION['table_temp_usu']]."  Select "
                           .$m_select_campos." FROM  pessoal.usuario a, pessoal.pessoa b "
                           ." where ".$_SESSION['where']."  and ( a.codigousp=b.codigousp ) order by  $order  ");
 
@@ -141,7 +141,7 @@ if( strtoupper($source)=="SAIR" ) {
           if ( $res_temp2 ) {
                 mysql_free_result($res_temp1); mysql_free_result($res_temp2);
           }
-          $result_outro = mysql_query("SELECT * from ".$_SESSION[$_SESSION['table_temp_usu']]);        
+          $result_outro = mysqli_query("SELECT * from ".$_SESSION[$_SESSION['table_temp_usu']]);        
          //  CODIGO/Num_USP
          $titulo_pag="Usuário";
     }   
@@ -245,8 +245,8 @@ if( strtoupper($source)=="SAIR" ) {
 	   $tabs_sig_nome= array("instituicao","unidade","depto","setor");			    
 	   $nome_cpo="";
 	   if( in_array($table_atual,$tabs_sig_nome) ) $nome_cpo="nome,";
-      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
- 	   $result=mysql_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
+      //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+ 	   $result=mysqli_query("SELECT ".$_SESSION["select_cpo"].", $nome_cpo count(*) FROM "
     			         ." $table_atual where ".$_SESSION["where"]."  group by 1 order by  ".$_SESSION["select_cpo"]);
 		//
 		if( strtoupper($table_atual)=="BEM"  )   $table_atual=$_SESSION["select_cpo"]; 
@@ -336,8 +336,8 @@ if(  ( strtoupper(trim($source))=="CORESPONSAVEIS" ) or  ( strtoupper(trim($sour
    */
    include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
    mysql_select_db($db_array[$elemento]);
-   //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-   $result=mysql_query("select codigousp,nome,categoria from pessoa  order by nome ");
+   //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+   $result=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
    if( ! $result ) {
           mysql_free_result($result);
           die('ERRO: Select pessoal.pessoa - falha: '.mysql_error());  
@@ -442,10 +442,10 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
             $elemento=6; $m_linhas=0;
 			include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
         	mysql_select_db($db_array[$elemento]);
-		    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-			//  $result2=mysql_query("SELECT cip,titulo FROM projeto order by cip ");
+		    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+			//  $result2=mysqli_query("SELECT cip,titulo FROM projeto order by cip ");
 			// $autor_codigousp=$_SESSION["autor_codigousp"];
-			$result_ano=mysql_query("SELECT  year(datainicio) as ano,cip,numprojeto,autor,datainicio,titulo FROM "
+			$result_ano=mysqli_query("SELECT  year(datainicio) as ano,cip,numprojeto,autor,datainicio,titulo FROM "
 			                       ." projeto where autor=".$m_array." group by 1 order by ano desc ");
 			//
 		   if( ! $result_ano ) {
@@ -504,10 +504,10 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
             $elemento=6; $m_linhas=0;
 			include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
         	mysql_select_db($db_array[$elemento]);
-		    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-			//  $result2=mysql_query("SELECT cip,titulo FROM projeto order by cip ");
+		    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+			//  $result2=mysqli_query("SELECT cip,titulo FROM projeto order by cip ");
 			// $autor_codigousp=$_SESSION["autor_codigousp"];
-			$result2=mysql_query("SELECT  cip,numprojeto,autor,datainicio,titulo FROM "
+			$result2=mysqli_query("SELECT  cip,numprojeto,autor,datainicio,titulo FROM "
 			                       ." projeto where $year_ano   autor=".$autor_proj." order by numprojeto DESC ");
 			//
 		   if( ! $result2 ) {
@@ -558,17 +558,17 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
 		  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
           mysql_select_db($db_array[$elemento]);
 		  //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-          //     - Use mysql_select_db() ou mysql_query()
-		  //  $result2=mysql_query("SELECT cip,titulo FROM projeto order by cip ");
+          //     - Use mysql_select_db() ou mysqli_query()
+		  //  $result2=mysqli_query("SELECT cip,titulo FROM projeto order by cip ");
 		  //  $autor_codigousp=$_SESSION["autor_codigousp"];
           if( strtoupper($source)=="PROJETO" ) { 
-    		    $result=mysql_query("SELECT  * FROM  projeto  where cip=".$m_array[0]);
+    		    $result=mysqli_query("SELECT  * FROM  projeto  where cip=".$m_array[0]);
                 if( ! $result ) {
                      mysql_free_result($result);
                      die('ERRO: Select $source - falha: '.mysql_error());  
                 }
          }  elseif(  strtoupper($source)=="ANOTACAO"  ) { 
-                $result_anota=mysql_query("SELECT  a.cia,a.numero,a.projeto,a.autor,a.data,b.numprojeto FROM "
+                $result_anota=mysqli_query("SELECT  a.cia,a.numero,a.projeto,a.autor,a.data,b.numprojeto FROM "
                                    ." anotacao a, projeto b where "
                                    ." a.projeto=".$m_array[0]." and b.cip=".$m_array[0]."   "
                                    ." order by a.numero DESC ");
@@ -684,8 +684,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
  	$elemento=6; $m_regs=0;
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
 	mysql_select_db($db_array[$elemento]);
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-	$result=mysql_query("SELECT  cip,autor,numprojeto FROM projeto WHERE "
+    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+	$result=mysqli_query("SELECT  cip,autor,numprojeto FROM projeto WHERE "
 	        ."  numprojeto=".$expnum." and  autor='$m_autor' and datainicio='$m_datainicio'  ");
 	$m_regs=mysql_num_rows($result);
     if( $m_regs>=1 ) {
@@ -698,7 +698,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
          mysql_free_result($result);
          die('ERRO: Select projeto - falha: '.mysql_error());  
 	} else {
-          	$result=mysql_query("SELECT  ciexp,autor,projeto FROM experimento WHERE "
+          	$result=mysqli_query("SELECT  ciexp,autor,projeto FROM experimento WHERE "
 	               ."  projeto=".$expnum." and  autor='$m_autor'  ");
         	$m_regs=mysql_num_rows($result);
 	        if( $m_regs>=1 ) {
@@ -725,39 +725,39 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	      //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  // Melhor  179
           //  INSERINDO 
 		  //  Start a transaction - ex. procedure	
-		   mysql_query('DELIMITER &&'); 
-           mysql_query('begin'); 
+		   mysqli_query('DELIMITER &&'); 
+           mysqli_query('begin'); 
            //  Execute the queries 
            //
-           //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+           //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     	   	mysql_select_db($db_array[$elemento]);
-          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-		   $success=mysql_query("insert into "
+          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+		   $success=mysqli_query("insert into "
 		                         ." experimento (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") "); 
            //  Complete the transaction 
            if ( $success ) { 
-			      mysql_query('commit'); 
+			      mysqli_query('commit'); 
            } else { 
 			        //  mysql_error() - para saber o tipo do erro
        	            $msg_erro .="&nbsp;Experimento n&atilde;o foi cadastrado.".mysql_error().$msg_final;
-			        mysql_query('rollback'); 
+			        mysqli_query('rollback'); 
 		            echo $msg_erro;	     
             }
-            mysql_query('end'); 
-   		    mysql_query('DELIMITER'); 
+            mysqli_query('end'); 
+   		    mysqli_query('DELIMITER'); 
 			//		
 			if ( $success ) { 
 	  		    if(  $colab_resp==1 ) {
    				     //  mysql_db_query - Esta funcao esta obsoleta, 
-					 //       nao use esta funcao - Use mysql_select_db() ou mysql_query()
-					$result=mysql_query("insert into colabexp set "
+					 //       nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+					$result=mysqli_query("insert into colabexp set "
 					                  ." projeto=".$projeto.", expnum=".$expnum.", colab=$m_array ");
 				 }	elseif(  $colab_resp>1 ) {
         		        //  Cadastrando na tabela corespproj os coresponsaveis
 		                for(  $x=0  ; $x<$count_co;  $x++ )  {
 						    //  mysql_db_query - Esta funcao esta obsoleta, 
-							//      nao use esta funcao - Use mysql_select_db() ou mysql_query()
-						    $result=mysql_query("insert into  colabexp set "
+							//      nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+						    $result=mysqli_query("insert into  colabexp set "
 							         ." projeto=".$projeto.", expnum=".$expnum.", colab=".$n_co[$x]);
 				        }
 				 }	
@@ -791,8 +791,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
     //  Vericando se o Codigo/USP se ja esta cadastrado na Tabela pessoa
 	mysql_select_db($db_array[$elemento]);
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-	$result_usu=mysql_query("SELECT   codigousp,nome  FROM  pessoa where codigousp='".$arr_nome_val[codigousp]."'  ") ;
+    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+	$result_usu=mysqli_query("SELECT   codigousp,nome  FROM  pessoa where codigousp='".$arr_nome_val[codigousp]."'  ") ;
 	if( ! $result_usu ) {
           mysql_free_result($result_usu);	      
 		  die("Falha erro no Select".mysql_error());
@@ -844,7 +844,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 		$pessoa_nome=html_entity_decode(trim($pessoa_nome)); 
         //  Select nao precisa do upper para verificar nome
 		/*
-		$result_pessoa=mysql_query("SELECT  nome,codigousp FROM pessoa WHERE replace(trim(nome),'  ',' ')=replace('$pessoa_nome','  ',' ')  ");
+		$result_pessoa=mysqli_query("SELECT  nome,codigousp FROM pessoa WHERE replace(trim(nome),'  ',' ')=replace('$pessoa_nome','  ',' ')  ");
 	    $m_regs=mysql_num_rows($result_pessoa);
         if( $m_regs>=1 ) {
               $msg_erro .= "&nbsp;Essa Pessoa:&nbsp;".$arr_nome_val[nome]." j&aacute; est&aacute; cadastrada.".$msg_final;
@@ -865,25 +865,25 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 			  //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  // Melhor  179
                 //  INSERINDO 
 			   //  Start a transaction - ex. procedure			   
-			   mysql_query('DELIMITER &&'); 
-               mysql_query('begin'); 
+			   mysqli_query('DELIMITER &&'); 
+               mysqli_query('begin'); 
                //  Execute the queries 
                //
-               //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
-			   $success = mysql_query("insert into pessoa set {$_SESSION["campos_total"]} "); 
+               //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+			   $success = mysqli_query("insert into pessoa set {$_SESSION["campos_total"]} "); 
                //  Complete the transaction 
                if ( $success ) { 
-                    mysql_query('commit'); 
+                    mysqli_query('commit'); 
 	 	            $msg_ok .="<p class='titulo_usp'>&nbsp;"
 				              .$arr_nome_val[nome]." foi cadastrado.</p>".$msg_final;
 		            echo $msg_ok;
                } else { 
-                    mysql_query('rollback'); 
+                    mysqli_query('rollback'); 
        	            $msg_erro .="&nbsp;".$arr_nome_val[nome]." n&atilde;o foi cadastrado.".$msg_final;
 		            echo $msg_erro;	     
                } 
-               mysql_query('end'); 
-   			   mysql_query('DELIMITER'); 
+               mysqli_query('end'); 
+   			   mysqli_query('DELIMITER'); 
 		  }
           mysql_free_result($sucess);		  
 	//  Final - Tabela pessoa 
@@ -908,7 +908,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     $elemento=5; 
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
 	//  Verificando se nao existe Usuario com esse login  na Tabela usuario
-    $result_usu = mysql_query("SELECT   login  FROM  usuario where trim(login)='".$arr_nome_val[login]."'  ") ;
+    $result_usu = mysqli_query("SELECT   login  FROM  usuario where trim(login)='".$arr_nome_val[login]."'  ") ;
     $m_regs = mysql_num_rows($result_usu);
 	mysql_free_result($result_usu);
 	if(  $m_regs>=1 ) {
@@ -917,7 +917,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	} else {
      	   $m_regs=0;
 	       //  Vericando se o Codigo/USP ja esta cadastrado  na Tabela usuario
-	      $result_usu=mysql_query("SELECT  login,codigousp FROM usuario where codigousp='".$arr_nome_val[codigousp]."' ");
+	      $result_usu=mysqli_query("SELECT  login,codigousp FROM usuario where codigousp='".$arr_nome_val[codigousp]."' ");
 		  $m_regs=mysql_num_rows($result_usu);
 	      mysql_free_result($result_usu);
 	      if(  $m_regs>=1 ) {
@@ -947,8 +947,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
              //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 			 //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  //  179
 			 //  INCLUINDO
-		     //  $result=mysql_query("insert into usuario (".$campos.") values(".$campos_val.") ");
-			 $result=mysql_query("insert into usuario  set {$_SESSION["campos_total"]} "); 
+		     //  $result=mysqli_query("insert into usuario (".$campos.") values(".$campos_val.") ");
+			 $result=mysqli_query("insert into usuario  set {$_SESSION["campos_total"]} "); 
 			 if( $result ) {
     	         $msg_ok .="<p class='titulo_usp'>Usu&aacute;rio:&nbsp;"
 				              .$arr_nome_val[login]." foi cadastrado.</p>".$msg_final;

@@ -530,7 +530,7 @@ exit();
          *     IMPORTANTE: alterado em 20180727
          *         toda parte de acentuacao PHP?MYSQL
          *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-         *         Use mysql_select_db() ou mysql_query()
+         *         Use mysql_select_db() ou mysqli_query()
          */   
          ini_set('default_charset','utf8');
          //
@@ -550,7 +550,7 @@ exit();
          $sqlcmd = "SELECT codigousp from $bd_1.pessoa WHERE
                replace(nome,' ','')='$nome_tmp' or e_mail='$e_mailinf' ; ";
         ///
-        $resultado = mysql_query($sqlcmd);
+        $resultado = mysqli_query($sqlcmd);
         if( ! $resultado ) {
             $msg_erro .='Falha na busca do anotador/nome na tabela pessoa -&nbsp;db/mysqli:&nbsp;'.mysqli_error($conex).$msg_final;  
             echo $msg_erro;               
@@ -576,7 +576,7 @@ exit();
         mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
         mysqli_query($_SESSION["conex"],'begin'); 
         /**
-         *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+         *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          */
          mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.pessoa INSERT");
          //
@@ -691,7 +691,7 @@ exit();
       mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
       mysqli_query($_SESSION["conex"],'begin'); 
       //
-      /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()  */
+      /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()  */
       mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.pessoa UPDATE");
       /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
       //
@@ -699,7 +699,7 @@ exit();
       if( $e_mailinf<>$e_mail ) {
           //
           $e_mail = $e_mailinf;
-          /**   mysql_query("LOCK TABLES pessoal.pessoa UPDATE");  */
+          /**   mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");  */
           // 
           $sqlcmd = "UPDATE $bd_1.pessoa SET e_mail = '".$e_mailinf."' WHERE codigousp=$lncodigousp ";
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -801,7 +801,7 @@ exit();
           mysqli_query($_SESSION["conex"],'begin'); 
           //
           /**
-          *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+          *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
           */
           mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.usuario WRITE");
           //
@@ -920,7 +920,7 @@ exit();
    //  Execute the queries 
    mysqli_select_db($_SESSION["conex"],$db_array[$elemento]);
    /**
-    *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
+    *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
     */
    mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_2.anotador INSERT ");
    //   

@@ -162,7 +162,7 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
                    }
                    $elemento=5;
                    include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");			
-   		           $result = mysql_query("SELECT codigousp,nome,categoria FROM pessoa  order by nome "); 
+   		           $result = mysqli_query("SELECT codigousp,nome,categoria FROM pessoa  order by nome "); 
                   //  CODIGO/Num_USP
                   $m_linhas = mysql_num_rows($result);				
 				?>
@@ -210,7 +210,7 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
                    }
                    $elemento=5;
                    include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-                   $result = mysql_query("SELECT codigo,descricao FROM rexp.pa where "
+                   $result = mysqli_query("SELECT codigo,descricao FROM rexp.pa where "
                              ."  codigo>".$_SESSION["permit_pa"]." order by codigo "); 
                    //          
                    if ( ! $result ) {

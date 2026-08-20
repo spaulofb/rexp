@@ -111,7 +111,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
              ." b.autor as autor_projeto, b.titulo as tit_projeto  FROM rexp.anotacao a, rexp.projeto b "
              ." Where ( a.projeto=b.cip ) and a.projeto=$m_projeto  and  a.numero=$m_anotacao ";
     //
-    $result_anotacao_rm = mysql_query($sqlcmd);
+    $result_anotacao_rm = mysqli_query($sqlcmd);
     if( ! $result_anotacao_rm ) {
         mysql_free_result($result_anotacao_rm);
         $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysql_error().$msg_final;
@@ -151,7 +151,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
             }
             $elemento=5; $elemento2=6;
             include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
-            $res_anotador = mysql_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa where "
+            $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa where "
             ."   codigousp=$anotador order by nome "); 
             if( ! $res_anotador ) {
                 mysql_free_result($res_anotador);
@@ -229,7 +229,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
         <?php 
             $elemento=5;
             include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");    
-            $result2=mysql_query("SELECT codigousp,nome as testemunha1_nome,categoria FROM pessoa where codigousp=$testemunha1 order by nome ");
+            $result2=mysqli_query("SELECT codigousp,nome as testemunha1_nome,categoria FROM pessoa where codigousp=$testemunha1 order by nome ");
             //  Código da Testemunha (1) da realização 
             $testemunhas_result = $result2;
            //  include("testemunhas.php"); 
@@ -248,7 +248,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
         <!-- Código da Testemunha (2) da realização -->
         <?php 
             $elemento=5;
-            $result=mysql_query("SELECT codigousp,nome as testemunha2_nome,categoria FROM pessoa where codigousp=$testemunha2 order by nome ");
+            $result=mysqli_query("SELECT codigousp,nome as testemunha2_nome,categoria FROM pessoa where codigousp=$testemunha2 order by nome ");
              //  Código da Testemunha (2) da realização 
              $testemunhas_result = $result;
              //  include("testemunhas.php"); 
@@ -335,7 +335,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="ANOTACAO" ) {
      }
      //  FINAL removendo o arquivo PDF
      //  Removendo o registro da anotacao
-     $delcmd = mysql_query("DELETE FROM $bd_2.anotacao  WHERE autor=$anotador and "
+     $delcmd = mysqli_query("DELETE FROM $bd_2.anotacao  WHERE autor=$anotador and "
                     ."   projeto=$m_projeto  and  numero=$m_anotacao ");
      if( ! $delcmd ) {
          mysql_free_result($delcmd);

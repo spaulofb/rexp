@@ -132,29 +132,29 @@ function nova($recebe) {
      include("php_include/patrimonio/conectando.php");
      if( isset($_SESSION['dbname']) ) $dbname=$_SESSION['dbname'];     
       // Melhor jeito da data e hora atual
-     $result_dthora = mysql_query("SELECT now()");
+     $result_dthora = mysqli_query("SELECT now()");
      $datetime =mysql_result($result_dthora,0,0);
      //    $sqlcmd = "INSERT INTO $dbname.sessao (datahorai,usuario,ipacesso,codacesso) values(now(),$codigousp,$ipint,'$codimgsys') ";
     //  Start a transaction - ex. procedure    
-    mysql_query('DELIMITER &&'); 
-    mysql_query('begin'); 
+    mysqli_query('DELIMITER &&'); 
+    mysqli_query('begin'); 
     //  Execute the queries 
-    //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+    //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     mysql_select_db($dbname);
     //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-    //   - Use mysql_select_db() ou mysql_query()
+    //   - Use mysql_select_db() ou mysqli_query()
     $sqlcmd = "INSERT INTO $dbname.sessao (datahorai,usuario,ipacesso,codacesso) values('$datetime',$codigousp,$ipint,'$codimgsys') ";
-     $success=mysql_query($sqlcmd); 
+     $success=mysqli_query($sqlcmd); 
     //  Complete the transaction 
     if ( $success ) { 
          //  Inserindo dados na Tabela Sessao do usuario cadastrado
-         mysql_query('commit'); 
+         mysqli_query('commit'); 
     } else {
          $msg_erro .="&nbsp;INSERT INTO TABELA SESSAO - Falha db/mysql: ".mysql_error().$msg_final;
-         mysql_query('rollback'); 
+         mysqli_query('rollback'); 
     }
-    mysql_query('end'); 
-    mysql_query('DELIMITER');
+    mysqli_query('end'); 
+    mysqli_query('DELIMITER');
    //  FINAL -  TABELA ANOTACAO  -  BD  REXP
    if( $success ) { 
          //
@@ -167,7 +167,7 @@ function nova($recebe) {
                    ." clean_spaces(codacesso)=clean_spaces('$codimgsys') and "
                    ." clean_spaces(datahorai)=clean_spaces('$datetime')   "; // consulta  
          //                       
-         $sqlret2 = mysql_query($sqlcmd2);
+         $sqlret2 = mysqli_query($sqlcmd2);
          if( ! $sqlret2 ) {
              $msg_erro .="PROBLEMAS NO SELECT TABELA SESSAO  - FALHA DB/MYSQL: ".mysql_error().$msg_final;      
              echo $msg_erro;         
@@ -373,11 +373,11 @@ function login( $login, $senha, $codimgusr ) {
     } elseif( isset($_SESSION["bd_1"]) ) {
         $dbname=$_SESSION["bd_1"];
     }    
-    /*   $q=mysql_query("SELECT * FROM usuario where trim(login)='".$login."' and trim(senha)=password('{$senha}') ") or die("Erro: Usu&aacute;rio ou Senha.".mysql_error);  
+    /*   $q=mysqli_query("SELECT * FROM usuario where trim(login)='".$login."' and trim(senha)=password('{$senha}') ") or die("Erro: Usu&aacute;rio ou Senha.".mysql_error);  
 
           Verificando USUARIO/E_MAIL                 
     */     
-    $ver_usuario = mysql_query("SELECT a.login, a.codigousp, b.e_mail "
+    $ver_usuario = mysqli_query("SELECT a.login, a.codigousp, b.e_mail "
             ." FROM  {$_SESSION["bd_1"]}.usuario a, {$_SESSION["bd_1"]}.pessoal b "
             ." WHERE  ( a.codigousp=b.codigousp ) and  (".$_SESSION['user_cond'].")  ");
     //    
@@ -392,12 +392,12 @@ function login( $login, $senha, $codimgusr ) {
     /*
            Verificando SENHA
 
-     $q =   mysql_query("SELECT a.login, a.codigousp, b.e_mail  FROM  usuario a, pessoal b  "
+     $q =   mysqli_query("SELECT a.login, a.codigousp, b.e_mail  FROM  usuario a, pessoal b  "
             ." WHERE  ( clean_spaces(a.codigousp)=clean_spaces(b.codigousp) ) and  "
             ." ( trim(a.senha)=password('$senha')  )  ");
            */             
       //      
-     $q = mysql_query("SELECT a.login, a.codigousp, b.e_mail  "
+     $q = mysqli_query("SELECT a.login, a.codigousp, b.e_mail  "
               ."  FROM  $_SESSION[bd_1].usuario a, $_SESSION[bd_1].pessoal b  "
               ." WHERE  ( clean_spaces(a.codigousp)=clean_spaces(b.codigousp) ) and  "
               ." ( clean_spaces(a.senha)=clean_spaces('$senha')  )  ");     
@@ -462,7 +462,7 @@ function login( $login, $senha, $codimgusr ) {
         **/
          if( ! $ipok ) {
               $sqlcmd = "SELECT * from sessao where ipacesso=$ipint";
-              $result = mysql_query($sqlcmd);     
+              $result = mysqli_query($sqlcmd);     
               $nregs = mysql_num_rows($result);
               $tabcpos = mysql_fetch_array($result);
               if( $nregs>0 ) $ipok=1;
@@ -472,7 +472,7 @@ function login( $login, $senha, $codimgusr ) {
         **/
          if( ! $ipok) {
              $sqlcmd = "SELECT * FROM pessoal WHERE codigousp=".$_SESSION['codigousp'];
-             $result = mysql_query($sqlcmd);
+             $result = mysqli_query($sqlcmd);
              $nregs = mysql_num_rows($result);
              if( ! $result ) $nregs=0;
              if( intval($nregs)<1 ) {
@@ -552,7 +552,7 @@ function maillib($login,$codigo_img) {
     $codacesso = "*".str_replace(" ","*",(string) rand(0,9999)).chr(rand(97,122));
     $codigousp = $_SESSION['codigousp'] ;
     $sqlcmd = "SELECT e_mail from pessoal where codigousp=$codigousp ";
-    $sqlret = mysql_query($sqlcmd) or die("ERRO/CONSULTA pessoal; ".mysql_error());      
+    $sqlret = mysqli_query($sqlcmd) or die("ERRO/CONSULTA pessoal; ".mysql_error());      
     $e_mail = mysql_result($sqlret,0,"e_mail");
     //
     $_SESSION['codigo_img'] = $codigo_img;

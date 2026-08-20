@@ -285,7 +285,7 @@ if( $source_upper=="CODIGOUSP" ) {
     
     ///  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
-    $resultado = mysql_query($sqlcmd);
+    $resultado = mysqli_query($sqlcmd);
     if( ! $resultado ) {
           $msg_erro .=' Falha na consulta da pessoa: db/mysql= '.mysql_error().$msg_final;  
          echo $msg_erro;               
@@ -397,7 +397,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
      ///          
      /// Verificar se a pessoa indicada já consta como anotador (na tabela anotador)
      $sqlcmd = "SELECT * from $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto ";
-     $resultado = mysql_query($sqlcmd);
+     $resultado = mysqli_query($sqlcmd);
      if( ! $resultado ) {
           $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
           echo $msg_erro;               
@@ -419,7 +419,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
          *     IMPORTANTE: alterado em 20180727
          *         toda parte de acentuacao PHP?MYSQL
          *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-                 Use mysql_select_db() ou mysql_query()
+                 Use mysql_select_db() ou mysqli_query()
           ***/   
           ini_set('default_charset','utf8');
          ///
@@ -437,7 +437,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
          $sqlcmd = "SELECT codigousp from $bd_1.pessoa WHERE
                replace(nome,' ','')='$nome_tmp' or e_mail='$e_mailinf' ; ";
         ///
-        $resultado = mysql_query($sqlcmd);
+        $resultado = mysqli_query($sqlcmd);
         if( ! $resultado ) {
             $msg_erro .='Falha na busca do anotador/nome na tabela pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
             echo $msg_erro;               
@@ -460,26 +460,26 @@ if( strtoupper($val)=="ANOTADOR" ) {
         $n_erro=0;
         ///
         ///  Iniciar uma transaction - ex. procedure    
-        mysql_query('DELIMITER &&'); 
-        mysql_query('begin'); 
-        ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-         mysql_query("LOCK TABLES $bd_1.pessoa INSERT");
+        mysqli_query('DELIMITER &&'); 
+        mysqli_query('begin'); 
+        ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+         mysqli_query("LOCK TABLES $bd_1.pessoa INSERT");
         /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
         ///
         mysql_set_charset('utf8');
         $sqlcmd = "INSERT $bd_1.pessoa(codigousp,nome,categoria,cpf,e_mail) values($codigoprov,'$anotador_nome','OUT',$cpf,'$e_mailinf' )";
-        $resultado = mysql_query($sqlcmd);
+        $resultado = mysqli_query($sqlcmd);
         if( ! $resultado ) {
              $msg_erro .='Falha na inclus&atilde;o do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
-             mysql_query('rollback'); 
+             mysqli_query('rollback'); 
              $n_erro=1;
              echo $msg_erro;                 
         } else {
-              mysql_query('commit');  
+              mysqli_query('commit');  
         }
-        mysql_query("UNLOCK  TABLES");
-        mysql_query('end'); 
-        mysql_query('DELIMITER');
+        mysqli_query("UNLOCK  TABLES");
+        mysqli_query('end'); 
+        mysqli_query('DELIMITER');
         ///  Ocorreu erro
         if( intval($n_erro)>0 ) {
             exit();
@@ -487,7 +487,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
         ///
         /// Atualizar o codigousp como sendo o codigo unico da tabela pessoal.pessoa 
         $sqlcmd = "Select iupessoa from $bd_1.pessoa where codigousp=$codigoprov ";
-        $resultado = mysql_query($sqlcmd);
+        $resultado = mysqli_query($sqlcmd);
         if( ! $resultado ) {
             $msg_erro .='Falha na busca do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
             echo $msg_erro;               
@@ -502,7 +502,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
             exit();                                          
         }
         $sqlcmd = "UPDATE $bd_1.pessoa set codigousp=$lncodigousp where codigousp=$codigoprov";
-        $resultado = mysql_query($sqlcmd);
+        $resultado = mysqli_query($sqlcmd);
         if( ! $resultado ) {
             $msg_erro .='Falha na altera&ccedil;&atilde;o do CODIGOUSP do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
             echo $msg_erro;               
@@ -513,7 +513,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
    ///   
    ///   Verificar se a pessoa indicada como anotador tem o respectivo e_mail
    $sqlcmd = "SELECT e_mail from $bd_1.pessoa WHERE codigousp=$lncodigousp ";
-   $resultado = mysql_query($sqlcmd);
+   $resultado = mysqli_query($sqlcmd);
    if( ! $resultado ) {
         $msg_erro .='Falha na consulta do cadastro (pessoa) do anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
         echo $msg_erro;               
@@ -539,32 +539,32 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
       ///  Iniciar uma transaction - ex. procedure    
-      mysql_query('DELIMITER &&'); 
-      mysql_query('begin'); 
-      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-      mysql_query("LOCK TABLES $bd_1.pessoa UPDATE");
+      mysqli_query('DELIMITER &&'); 
+      mysqli_query('begin'); 
+      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+      mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
       /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
       ///
       ///   VERIFICA se necessario ALTERAR o e_mail do anotador
       if( $e_mailinf<>$e_mail ) {
           $e_mail = $e_mailinf;
-          /// mysql_query("LOCK TABLES pessoal.pessoa UPDATE");
+          /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
           $sqlcmd = "UPDATE $bd_1.pessoa SET e_mail = '".$e_mailinf."' WHERE codigousp=$lncodigousp ";
-          $resultado = mysql_query($sqlcmd);
+          $resultado = mysqli_query($sqlcmd);
           if( ! $resultado ) {
               /// Ocorreu ERRO - MySQL  UPDATE
               $msg_erro .='UPDATE pessoa set e_mail -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
-              mysql_query('rollback'); 
+              mysqli_query('rollback'); 
               $n_erro=1;
               echo $msg_erro;               
           } else {
-              mysql_query('commit');  
+              mysqli_query('commit');  
           }
-          /// mysql_query("UNLOCK  TABLES");
+          /// mysqli_query("UNLOCK  TABLES");
       }
-      mysql_query("UNLOCK  TABLES");
-      mysql_query('end'); 
-      mysql_query('DELIMITER');
+      mysqli_query("UNLOCK  TABLES");
+      mysqli_query('end'); 
+      mysqli_query('DELIMITER');
       ///  Ocorreu erro
       if( intval($n_erro)>0 ) {
            exit();
@@ -572,7 +572,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
       ///
       ///   Verifica se é necessário incluir registro do anotador na tabela usuário
       $sqlcmd = "SELECT aprovado FROM $bd_1.usuario WHERE codigousp=$lncodigousp ";
-      $resultado = mysql_query($sqlcmd);
+      $resultado = mysqli_query($sqlcmd);
       /// Verifica se houve ERRO - MySQL SELECT
       if( ! $resultado ) {
            $msg_erro .='Falha na consulta do anotador na tabela usuario -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
@@ -617,32 +617,32 @@ if( strtoupper($val)=="ANOTADOR" ) {
           /***
                      Incluindo anotador na tabela usuario
           **/
-          mysql_query('DELIMITER &&'); 
-          mysql_query('begin'); 
-          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-          mysql_query("LOCK TABLES $bd_1.usuario INSERT");
+          mysqli_query('DELIMITER &&'); 
+          mysqli_query('begin'); 
+          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          mysqli_query("LOCK TABLES $bd_1.usuario INSERT");
           //
-          /// mysql_query("LOCK TABLES pessoal.usuario WRITE");
+          /// mysqli_query("LOCK TABLES pessoal.usuario WRITE");
           $sqlcmd = "INSERT $bd_1.usuario values('$login',password('$senha'),'$datacad','$datavalido',$codigoprov,$pa,$aprovado,$activation_code )";
-          $resultado = mysql_query($sqlcmd);
+          $resultado = mysqli_query($sqlcmd);
           if( ! $resultado ) {
               ///  Ocorreu ERRO -  MySQL INSERT 
               $msg_erro .='Incluindo anotador na tabela usuario -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
-              mysql_query('rollback'); 
+              mysqli_query('rollback'); 
               $n_erro=1;
           } else {
-              mysql_query('commit');  
+              mysqli_query('commit');  
           }
-          mysql_query("UNLOCK  TABLES");
-          mysql_query('end'); 
-          mysql_query('DELIMITER');
+          mysqli_query("UNLOCK  TABLES");
+          mysqli_query('end'); 
+          mysqli_query('DELIMITER');
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
                echo $msg_erro;               
                exit();
           }
           ///          
-         ///  mysql_query("UNLOCK  TABLES");
+         ///  mysqli_query("UNLOCK  TABLES");
       }  
       /****  Final - Caso Anotador NAO consta na Tabela usuario     ******/
       ///
@@ -650,7 +650,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $sqlcmd = "SELECT aprovado from $bd_2.participante "
                 ."  WHERE codigousp=$lncodigousp and pa=$pa_anotador  and codigo_ativa=$projeto_autor_cod ";
       ///                
-      $resultado = mysql_query($sqlcmd);
+      $resultado = mysqli_query($sqlcmd);
       if( ! $resultado ) {
           $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
           echo $msg_erro;               
@@ -674,37 +674,37 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ///
           $n_erro=0;
           ///  Iniciar uma transaction - ex. procedure    
-          mysql_query('DELIMITER &&'); 
-          mysql_query('begin'); 
-          mysql_query("LOCK TABLES $bd_2.participante INSERT ");
+          mysqli_query('DELIMITER &&'); 
+          mysqli_query('begin'); 
+          mysqli_query("LOCK TABLES $bd_2.participante INSERT ");
           ////   
           $sqlcmd = "INSERT $bd_2.participante values($usuario_ci,$codigoprov,'$datacad','$datavalido',$pa,$codigo_ativa,$aprovado,$chefe )";
-          $resultado = mysql_query($sqlcmd);
+          $resultado = mysqli_query($sqlcmd);
           if( ! $resultado ) {
               $msg_erro .='Incluindo anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
               echo $msg_erro;               
               $num_erro=1;
               /// Ocorreu erro - cancelando
-              mysql_query('rollback'); 
+              mysqli_query('rollback'); 
           }  else {
               ///  inserindo participante - ok
-              mysql_query('commit'); 
+              mysqli_query('commit'); 
           }
           ///
           /// Concluir a transaction
-          //***mysql_query("UNLOCK  TABLES");
-          mysql_query('end'); 
-          mysql_query('DELIMITER');            
+          //***mysqli_query("UNLOCK  TABLES");
+          mysqli_query('end'); 
+          mysqli_query('DELIMITER');            
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
               exit();                                                 
           }
           /// 
-         /// mysql_query("UNLOCK  TABLES");
+         /// mysqli_query("UNLOCK  TABLES");
    }  
    ///
    ///   Incluir registro do anotador na tabela anotador
-   ///***mysql_query("LOCK TABLES rexp.anotador WRITE");
+   ///***mysqli_query("LOCK TABLES rexp.anotador WRITE");
    $anotador_ci = 0;        // Chave auto incremento
    $cip = $lnprojeto;
    $codigo = $lncodigousp;
@@ -715,28 +715,28 @@ if( strtoupper($val)=="ANOTADOR" ) {
    /***          Incluindo Anotador     
            Iniciar uma transaction - ex. procedure    
    ***/
-   mysql_query('DELIMITER &&'); 
-   mysql_query('begin'); 
+   mysqli_query('DELIMITER &&'); 
+   mysqli_query('begin'); 
    ///  Execute the queries 
    mysql_select_db($db_array[$elemento]);
-   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysql_query()
-   mysql_query("LOCK TABLES $bd_2.anotador INSERT ");
+   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+   mysqli_query("LOCK TABLES $bd_2.anotador INSERT ");
    ////   
    $sqlcmd = "INSERT into $bd_2.anotador values($anotador_ci,$cip,$codigo,$pa,'$data')";
-   $resultado = mysql_query($sqlcmd);
+   $resultado = mysqli_query($sqlcmd);
    if( ! $resultado ) {
        $msg_erro .='Incluindo anotador na tabela anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
        $n_erro=1;
-       mysql_query('rollback'); 
-       //***mysql_query("UNLOCK  TABLES");
+       mysqli_query('rollback'); 
+       //***mysqli_query("UNLOCK  TABLES");
        echo $msg_erro;               
    } else {
-       mysql_query('commit'); 
+       mysqli_query('commit'); 
    }
    /// Concluir a transaction
-   //*** mysql_query("UNLOCK  TABLES");
-   mysql_query('end'); 
-   mysql_query('DELIMITER');            
+   //*** mysqli_query("UNLOCK  TABLES");
+   mysqli_query('end'); 
+   mysqli_query('DELIMITER');            
    ///  Ocorreu erro
    if( intval($n_erro)>0 ) {
        exit();                                                 
@@ -747,7 +747,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
    ///  Buscar o e_mail do Orientador que está cadastrando esse anotador
    $codigoprov = $_SESSION["usuario_conectado"];
    $sqlcmd = "SELECT  e_mail FROM  $bd_1.pessoa WHERE codigousp=$codigoprov";
-   $resultado = mysql_query($sqlcmd);
+   $resultado = mysqli_query($sqlcmd);
    if( ! $resultado ) {
         $msg_erro .='Buscando o e_mail do orientador do projeto na tabela pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
         echo $msg_erro;               
@@ -765,17 +765,17 @@ if( strtoupper($val)=="ANOTADOR" ) {
    $e_mailorientador = mysql_result($resultado,0,"e_mail");
    ///
     ///   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-    mysql_query("SET NAMES 'utf8' ");
-    mysql_query("SET character_set_connection=utf8");
-    mysql_query("SET character_set_client=utf8");
-    mysql_query("SET character_set_results=utf8");
+    mysqli_query("SET NAMES 'utf8' ");
+    mysqli_query("SET character_set_connection=utf8");
+    mysqli_query("SET character_set_client=utf8");
+    mysqli_query("SET character_set_results=utf8");
     
    ///  Buscar o Titulo do Projeto autorizado para uso do Anotador
    $sqlcmd = "SELECT a.titulo,a.numprojeto,b.nome as nome_autor,b.e_mail as orientador_email "
              ." FROM $bd_2.projeto as a, $bd_1.pessoa b "
              ." WHERE cip=$lnprojeto and a.autor=b.codigousp ";
    ///
-   $resultado = mysql_query($sqlcmd);
+   $resultado = mysqli_query($sqlcmd);
    if( ! $resultado ) {
         $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
         echo $msg_erro;               

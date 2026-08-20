@@ -238,10 +238,10 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$array_pa['orientador'] ) )
               //
               //  IMPORTANTE:  para acentuacao entre MySql e PHP
               /***          
-                  mysql_query("SET NAMES 'utf8'");
-                  mysql_query('SET character_set_connection=utf8');
-                  mysql_query('SET character_set_client=utf8');
-                  mysql_query('SET character_set_results=utf8');
+                  mysqli_query("SET NAMES 'utf8'");
+                  mysqli_query('SET character_set_connection=utf8');
+                  mysqli_query('SET character_set_client=utf8');
+                  mysqli_query('SET character_set_results=utf8');
               **/
               //  Executando Select/MySQL
               //   Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      

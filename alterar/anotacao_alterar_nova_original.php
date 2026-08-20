@@ -115,7 +115,7 @@ if( isset($_POST['fileframe']) ) {
       $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
       ***/
       ///
-      $select_numprojeto = mysql_query("SELECT numprojeto,autor FROM $bd_2.projeto 
+      $select_numprojeto = mysqli_query("SELECT numprojeto,autor FROM $bd_2.projeto 
                                            WHERE cip=$nprojexp  ");
       ///
       if( ! $select_numprojeto ) {
@@ -296,7 +296,7 @@ if( isset($_POST['fileframe']) ) {
           *     IMPORTANTE: alterado em 20180727
           *         toda parte de acentuacao PHP?MYSQL
           *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-                     Use mysql_select_db() ou mysql_query()
+                     Use mysql_select_db() ou mysqli_query()
           ***/   
           ini_set('default_charset','utf8');
           /***
@@ -304,10 +304,10 @@ if( isset($_POST['fileframe']) ) {
                 *    pois cobre quase todos os caracteres e 
                 *    símbolos do mundo
           ***/
-          mysql_query("SET NAMES 'utf8'"); 
-          mysql_query('SET character_set_connection=utf8'); 
-          mysql_query('SET character_set_client=utf8'); 
-          mysql_query('SET character_set_results=utf8'); 
+          mysqli_query("SET NAMES 'utf8'"); 
+          mysqli_query('SET character_set_connection=utf8'); 
+          mysqli_query('SET character_set_client=utf8'); 
+          mysqli_query('SET character_set_results=utf8'); 
           mysql_set_charset('utf8');
               
           ///  $local_arq = utf8_decode($local_arq); 
@@ -315,9 +315,9 @@ if( isset($_POST['fileframe']) ) {
           $local_arq = utf8_encode($filename); 
           ///
            ///  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-           ///                 - Use mysql_select_db() ou mysql_query()
+           ///                 - Use mysql_select_db() ou mysqli_query()
            ///
-           $success = mysql_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
+           $success = mysqli_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
                           ." where ( projeto=$nprojexp  and autor=$autor_cod and numero=$anotacao_numero  ) ");
            ///
            if( ! $success ) {
@@ -1236,10 +1236,10 @@ function jsUpload(upload_field) {
 <?php 
 /// Selecionando o Projeto do Orientador/Usuario
 # Aqui está o segredo
-mysql_query("SET NAMES 'utf8'");
-mysql_query('SET character_set_connection=utf8');
-mysql_query('SET character_set_client=utf8');
-mysql_query('SET character_set_results=utf8');
+mysqli_query("SET NAMES 'utf8'");
+mysqli_query('SET character_set_connection=utf8');
+mysqli_query('SET character_set_client=utf8');
+mysqli_query('SET character_set_results=utf8');
 ///
 if( $permit_pa<=$permit_orientador ) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
@@ -1251,7 +1251,7 @@ if( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysql_query($sqlcmd); 
+$result = mysqli_query($sqlcmd); 
 ///  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
     //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

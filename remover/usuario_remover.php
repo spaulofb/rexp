@@ -159,7 +159,7 @@ $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
       ." WHERE a.codigousp=b.codigousp and a.pa=c.codigo and a.codigousp!=$usuario_conectado  " 
       ." group by 1";
 ///
-$result = mysql_query($sqlcmd);
+$result = mysqli_query($sqlcmd);
 if( ! $result ) {
     ///    $msg_erro .= "Falha consultando as tabelas usuario, pessoa e pa - letra inicial: ".mysql_error().$msg_final;  
     ///  echo $msg_erro;

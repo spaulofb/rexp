@@ -184,10 +184,10 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
               include("php_include/ajax/includes/conectar.php");
               ///  IMPORTANTE:  para acentuacao entre MySql e PHP
               /***          
-                  mysql_query("SET NAMES 'utf8'");
-                  mysql_query('SET character_set_connection=utf8');
-                  mysql_query('SET character_set_client=utf8');
-                  mysql_query('SET character_set_results=utf8');
+                  mysqli_query("SET NAMES 'utf8'");
+                  mysqli_query('SET character_set_connection=utf8');
+                  mysqli_query('SET character_set_client=utf8');
+                  mysqli_query('SET character_set_results=utf8');
                 ***/
               ///  Executando Select/MySQL
               ///   Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      
@@ -200,7 +200,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
               mysql_set_charset('utf8');                     
               ///         
               ///  Mysql - Select listando pessoas
-              $result = mysql_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa  order by nome "); 
+              $result = mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa  order by nome "); 
                if( ! $result ) {
                     die('ERRO: Select - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());
                     exit();
@@ -257,7 +257,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                    /////  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
                    include("php_include/ajax/includes/conectar.php");
                     ///                         
-                   $result = mysql_query("SELECT codigo,descricao FROM rexp.pa where "
+                   $result = mysqli_query("SELECT codigo,descricao FROM rexp.pa where "
                              ."  codigo>".$_SESSION["permit_pa"]." order by codigo "); 
                    ///          
                    if( ! $result ) {

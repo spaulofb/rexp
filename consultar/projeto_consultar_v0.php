@@ -473,10 +473,10 @@ $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 ///
 # Aqui está o segredo
-mysql_query("SET NAMES 'utf8'");
-mysql_query('SET character_set_connection=utf8');
-mysql_query('SET character_set_client=utf8');
-mysql_query('SET character_set_results=utf8');
+mysqli_query("SET NAMES 'utf8'");
+mysqli_query('SET character_set_connection=utf8');
+mysqli_query('SET character_set_client=utf8');
+mysqli_query('SET character_set_results=utf8');
 ///
 /* Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
       +-------------+--------+
@@ -507,7 +507,7 @@ if( $permit_pa<$permit_aprovador ) {
         ." b.cip in (select distinct cip FROM  $bd_2.anotador "
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result_cons_proj = mysql_query($sqlcmd); 
+$result_cons_proj = mysqli_query($sqlcmd); 
 ///                  
 if( ! $result_cons_proj ) {
  //   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  

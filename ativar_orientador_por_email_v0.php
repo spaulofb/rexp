@@ -577,7 +577,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
        <?php
             ////  INSTITUICAO  -->  Sigla e Descricao
             if( ! isset($instituicao) ) $instituicao="";
-            $resultado=mysql_query("Select nome from patrimonio.instituicao  
+            $resultado=mysqli_query("Select nome from patrimonio.instituicao  
                                   WHERE upper(trim(sigla))='".$instituicao."'  ");
            ///
            if( ! $resultado ) {
@@ -613,7 +613,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                if( strlen(trim($unidade))>=1  ) {
                     ////  UNIDADE  -->  Sigla e Descricao
                     if( ! isset($unidade) ) $unidade="";
-                    $resultado=mysql_query("Select nome from patrimonio.unidade  
+                    $resultado=mysqli_query("Select nome from patrimonio.unidade  
                                           WHERE upper(trim(sigla))='".$unidade."'  ");
                    ///
                    if( ! $resultado ) {
@@ -645,7 +645,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                   if( strlen(trim($depto))>=1  ) {
                          ////  DEPTO  -->  Sigla e Descricao
                         if( ! isset($depto) ) $depto="";
-                        $resultado=mysql_query("Select nome from patrimonio.depto  
+                        $resultado=mysqli_query("Select nome from patrimonio.depto  
                                               WHERE upper(trim(sigla))='".$depto."'  ");
                        ///
                        if( ! $resultado ) {
@@ -678,7 +678,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                   if( strlen(trim($setor))>=1  ) {
                          ////  Setor  -->  Sigla e Descricao
                         if( ! isset($setor) ) $setor="";
-                        $resultado=mysql_query("Select nome from patrimonio.setor  
+                        $resultado=mysqli_query("Select nome from patrimonio.setor  
                                               WHERE upper(trim(sigla))='".$setor."'  ");
                        ///
                        if( ! $resultado ) {

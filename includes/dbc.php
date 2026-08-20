@@ -122,7 +122,7 @@ function page_protect() {
 	     if( isset($_COOKIE['user_id']) && isset($_COOKIE['user_key']) ) {
 	           /* we double check cookie expiry time against stored in database */
 	         	$cookie_user_id  = filter($_COOKIE['user_id']);
-	            $rs_ctime = mysql_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysql_error());
+	            $rs_ctime = mysqli_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysql_error());
 	            list($ckey,$ctime) = mysql_fetch_row($rs_ctime);
 	            // coookie expiry
 	            if( (time()-$ctime) > 60*60*24*COOKIE_TIME_OUT) {
@@ -135,7 +135,7 @@ function page_protect() {
 	        		  $_SESSION['user_id'] = $_COOKIE['user_id'];
 		              $_SESSION['user_name'] = $_COOKIE['user_name'];
 		              /* query user level from database instead of storing in cookies */	
-		               list($user_level) = mysql_fetch_row(mysql_query("select user_level from users where id='$_SESSION[user_id]'"));
+		               list($user_level) = mysql_fetch_row(mysqli_query("select user_level from users where id='$_SESSION[user_id]'"));
             		  $_SESSION['user_level'] = $user_level;
 		              $_SESSION["HTTP_USER_AGENT"] = md5($_SERVER["HTTP_USER_AGENT"]);
         	   } else {
@@ -229,7 +229,7 @@ function logout() {
     global $db;
     session_start();
     if( isset($_SESSION['user_id']) || isset($_COOKIE['user_id']) ) {
-          mysql_query("update `users`  set `ckey`= '', `ctime`= '' 
+          mysqli_query("update `users`  set `ckey`= '', `ctime`= '' 
 			where `id`='$_SESSION[user_id]' OR  `id` = '$_COOKIE[user_id]'") or die(mysql_error());
     }			
     /************ Delete the sessions****************/

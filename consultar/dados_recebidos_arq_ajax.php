@@ -6,7 +6,7 @@ if(!isset($_SESSION)) {
    session_start();
 }
 //
-$result_tabela = mysql_query("SELECT * FROM ".$_SESSION["tabela"]."   limit 1");
+$result_tabela = mysqli_query("SELECT * FROM ".$_SESSION["tabela"]."   limit 1");
 if( ! $result_tabela ) {
     mysql_free_result($result_tabela);
    die('Sem resultado - Select - falha: '.mysql_error());

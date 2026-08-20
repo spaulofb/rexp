@@ -231,7 +231,7 @@ if( intval($_SESSION["total"])==1 ) {
         $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
                  ." WHERE (a.codigousp=b.codigousp ) and ".$_SESSION['user_cond']." order by a.pa  ";
         ///   
-        $result_pa=mysql_query($cmdsql);
+        $result_pa=mysqli_query($cmdsql);
         if( ! $result_pa  ) {
             $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
             echo $msg_erro; 

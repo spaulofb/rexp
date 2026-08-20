@@ -230,7 +230,7 @@ include("includes/menu_horizontal.php");
     $cmdsql="SELECT a.pa FROM $bd_2.participante a, $bd_1.pessoa b "
              ." WHERE (a.codigousp=b.codigousp ) and a.codigousp=\"$usuario_conectado\" order by a.pa  ";
     ////   
-    $resultado_pa=mysql_query($cmdsql);
+    $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
         $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
         echo $msg_erro;
@@ -286,16 +286,16 @@ include("includes/menu_horizontal.php");
          ///  include("php_include/ajax/includes/sair.php");        
          $permit_pa=mysql_result($resultado_pa,0,"pa"); 
          # Aqui está o segredo
-         mysql_query("SET NAMES 'utf8'");
-         mysql_query('SET character_set_connection=utf8');
-         mysql_query('SET character_set_client=utf8');
-         mysql_query('SET character_set_results=utf8');
+         mysqli_query("SET NAMES 'utf8'");
+         mysqli_query('SET character_set_connection=utf8');
+         mysqli_query('SET character_set_client=utf8');
+         mysqli_query('SET character_set_results=utf8');
          mysql_set_charset('utf8');
          ///
          $cmdsql="SELECT a.descricao,b.nome FROM rexp.pa a, pessoal.pessoa b  "
                 ." WHERE a.codigo=$permit_pa and b.codigousp=\"$usuario_conectado\"  ";
           ///   
-          $res_pa_descr=mysql_query($cmdsql);
+          $res_pa_descr=mysqli_query($cmdsql);
           if( ! $res_pa_descr  ) {
                die('ERRO: SELECT pa/permissao de acesso '.mysql_error());
                exit();  

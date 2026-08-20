@@ -167,13 +167,13 @@ $cols=4;
         <!-- Identificação do Projeto [CIP][ - Titulo] -->
         <?php 
           /////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-            mysql_query("SET NAMES 'utf8'");
-            mysql_query('SET character_set_connection=utf8');
-            mysql_query('SET character_set_client=utf8');
-            mysql_query('SET character_set_results=utf8');
+            mysqli_query("SET NAMES 'utf8'");
+            mysqli_query('SET character_set_connection=utf8');
+            mysqli_query('SET character_set_client=utf8');
+            mysqli_query('SET character_set_results=utf8');
            ///                         
             ///  Selecionando o Projeto desse Anotador
-           $result = mysql_query("SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
+           $result = mysqli_query("SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
             $usuario_conectado." order by b.titulo "); 
            //                  
            if( ! $result ) {

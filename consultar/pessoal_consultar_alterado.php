@@ -236,7 +236,7 @@ include("php_include/ajax/includes/conectar.php");
 ///  Selecionar os usuarios pela primeira letra do nome
 $sqlcmd = "SELECT upper(substr(nome,1,1)) as letra1,count(*) as n "
     ." FROM pessoal.pessoa  group by 1";
-$result = mysql_query($sqlcmd);
+$result = mysqli_query($sqlcmd);
 if( ! $result ) {
     die('ERRO: Falha consultando a tabela pessoa  - letra inicial: '.mysql_error());  
 }       

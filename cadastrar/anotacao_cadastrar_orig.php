@@ -130,7 +130,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
             if( isset($_SESSION["cip"]) ) $cip=$_SESSION["cip"];  
         }
         ///
-        $select_numprojeto = mysql_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
+        $select_numprojeto = mysqli_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
         if( ! $select_numprojeto ) {
               die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());  
               exit();
@@ -305,10 +305,10 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 		      ///  $local_arq0 = $_SESSION["dir"].$filename;                 
 		      ///  $nprojexp=$_POST["nprojexp"]; 
               ///  $anotacao_numero=$_POST["anotacao_numero"];
-              mysql_query("SET NAMES 'utf8'"); 
-              mysql_query('SET character_set_connection=utf8'); 
-              mysql_query('SET character_set_client=utf8'); 
-              mysql_query('SET character_set_results=utf8'); 
+              mysqli_query("SET NAMES 'utf8'"); 
+              mysqli_query('SET character_set_connection=utf8'); 
+              mysqli_query('SET character_set_client=utf8'); 
+              mysqli_query('SET character_set_results=utf8'); 
               mysql_set_charset('utf8');
               
               ///  $local_arq = utf8_decode($local_arq); 
@@ -316,8 +316,8 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
               $local_arq = utf8_encode($filename); 
               ///
               ///  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-              ///                 - Use mysql_select_db() ou mysql_query()
-     	      $nupdate = mysql_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
+              ///                 - Use mysql_select_db() ou mysqli_query()
+     	      $nupdate = mysqli_query("UPDATE $bd_2.anotacao SET relatext='$local_arq'  "
 			                  ." WHERE  projeto=$nprojexp  and  numero=$anotacao_numero ");
 		      ///
 		      if( ! $nupdate ) {
@@ -329,7 +329,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 			  } else {
                   //
                   ///  Selecionando a Anotacao do Projeto 
-                  $success=mysql_query("SELECT numero as nanotacao, projeto as nprojeto,autor as autor_anotacao  FROM $bd_2.anotacao WHERE  projeto=$nprojexp  and  numero=$anotacao_numero  ");
+                  $success=mysqli_query("SELECT numero as nanotacao, projeto as nprojeto,autor as autor_anotacao  FROM $bd_2.anotacao WHERE  projeto=$nprojexp  and  numero=$anotacao_numero  ");
                   ///
                   if( ! $success ) {
                       //
@@ -624,10 +624,10 @@ function jsUpload(upload_field) {
                     $conex = $_SESSION["conex"];
                     //
                     /**
-                        mysql_query("SET NAMES 'utf8'");
-                        mysql_query('SET character_set_connection=utf8');
-                        mysql_query('SET character_set_client=utf8');
-                        mysql_query('SET character_set_results=utf8');
+                        mysqli_query("SET NAMES 'utf8'");
+                        mysqli_query('SET character_set_connection=utf8');
+                        mysqli_query('SET character_set_client=utf8');
+                        mysqli_query('SET character_set_results=utf8');
                     */
                     /// 
                     /***

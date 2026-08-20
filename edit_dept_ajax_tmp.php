@@ -127,7 +127,7 @@ if( $val_upper=="INICIANDO" ) {
                $m_title="C&oacute;digo";  $m_nome_primeiro_campo="C&oacute;digo";
            } elseif( strtoupper(trim($m_campo_chave))=="SIGLA" ) $m_title="Sigla";
            //
-           $result=mysql_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar $where $order_by ");
+           $result=mysqli_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar $where $order_by ");
            //
            if( ! $result ) {
                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());
@@ -191,7 +191,7 @@ if( $val_upper=="INICIANDO" ) {
                        //  INSTITUICAO
                       //  Esta funcao mysql_db_query esta obsoleta  usar  mysql_query
                       //  $result=mysql_db_query($dbname,"SELECT sigla FROM instituicao order by nome ");
-                      $result=mysql_query("SELECT sigla,nome FROM {$_SESSION["bd_1"]}.instituicao  "
+                      $result=mysqli_query("SELECT sigla,nome FROM {$_SESSION["bd_1"]}.instituicao  "
                                            ." WHERE  clean_spaces(sigla)=clean_spaces('$sigla_instituicao') "
                                            ." order by sigla,nome ");
                       //
@@ -235,7 +235,7 @@ if( $val_upper=="INICIANDO" ) {
                   //  UNIDADE
                   //  Esta funcao mysql_db_query esta obsoleta  usar  mysql_query
                   //  $result=mysql_db_query($dbname,"SELECT sigla FROM unidade order by nome ");
-                  $result=mysql_query("SELECT sigla,nome FROM {$_SESSION["bd_1"]}.unidade "
+                  $result=mysqli_query("SELECT sigla,nome FROM {$_SESSION["bd_1"]}.unidade "
                                       ." WHERE clean_spaces(instituicao)=clean_spaces('$sigla_instituicao') and "
                                       ." clean_spaces(sigla)=clean_spaces('$sigla_unidade') "
                                       ." order by sigla,nome ");
@@ -403,7 +403,7 @@ if( is_array($data) ) {
                      if( isset($encontrar) ) {
                         $n_fields="";
                         if( strlen($encontrar)>1 ) {
-                             $result=mysql_query("SELECT * from  ".$encontrar." limit 0 ");            
+                             $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                              if( ! $result ) {
                                  echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());    
                                  //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
@@ -510,7 +510,7 @@ if( is_array($data) ) {
         $_SESSION["table_temp_editar_depto"] = "{$_SESSION["bd_1"]}.$m_tabela_temp";
         $sql_temp_editar = "DROP TEMPORARY TABLE IF EXISTS   {$_SESSION["table_temp_editar_depto"]}    ";
         //  $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION['table_temp_usu']."    ";
-        $result_editar_depto=mysql_query($sql_temp_editar);
+        $result_editar_depto=mysqli_query($sql_temp_editar);
         if( ! $result_editar_depto ) {
             echo $funcoes->mostra_msg_erro("Falha no DROP tabela $m_tabela_temp - db/Mysql:&nbsp; ".mysql_error());    
             exit();
@@ -522,14 +522,14 @@ if( is_array($data) ) {
                       ." clean_spaces(instituicao)=clean_spaces('$instituicao') and  "
                       ." clean_spaces(unidade)=clean_spaces('$unidade') ";
         //     
-        $res_create_tab_editar_depto = mysql_query($sqlcmd_editar);            
+        $res_create_tab_editar_depto = mysqli_query($sqlcmd_editar);            
         if( ! $res_create_tab_editar_depto ) {
             echo $funcoes->mostra_msg_erro("Falha no CREATE tabela {$_SESSION["table_temp_editar_depto"]} -"
                           ."&nbsp;db/Mysql:&nbsp; ".mysql_error());    
             exit();
         }       
         //
-        $result1=mysql_query("SELECT sigla FROM {$_SESSION["table_temp_editar_depto"]} "
+        $result1=mysqli_query("SELECT sigla FROM {$_SESSION["table_temp_editar_depto"]} "
                  ." WHERE  clean_spaces(sigla)=clean_spaces('$sigla') ");
         //
         if( ! $result1 ) {
@@ -560,20 +560,20 @@ if( is_array($data) ) {
        //  $descricao =utf8_decode($descricao);
        //
         //  START  a transaction - ex. procedure    
-        mysql_query('DELIMITER &&'); 
+        mysqli_query('DELIMITER &&'); 
         $commit="commit";
-        mysql_query('begin'); 
+        mysqli_query('begin'); 
         //  Execute the queries 
-        //  $success = mysql_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
+        //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
         //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
-        //   - Use mysql_select_db() ou mysql_query()
-        mysql_query("LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE ");
+        //   - Use mysql_select_db() ou mysqli_query()
+        mysqli_query("LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE ");
         //  Alterando dados na Tabela
-        /*  $success=mysql_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
+        /*  $success=mysqli_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
                              ." $nome_campo_2=clean_spaces('$valor_campo_2') "
                              ." WHERE clean_spaces($nome_campo_1)=clean_spaces('$sigla_do_depto') ");
           */                   
-        $success=mysql_query($success_antes);           
+        $success=mysqli_query($success_antes);           
         //
         if( ! $success ) {
             $commit="rollback";
@@ -585,11 +585,11 @@ if( is_array($data) ) {
             echo $funcoes->mostra_msg_ok("Cadastro alterado: <br>$valor_campo_1,$valor_campo_2");           
         }
         /*!40000 ALTER TABLE  ENABLE KEYS */;
-        mysql_query($commit);
-        mysql_query("UNLOCK  TABLES");
+        mysqli_query($commit);
+        mysqli_query("UNLOCK  TABLES");
         //  Complete the transaction 
-        mysql_query('end'); 
-        mysql_query('DELIMITER');
+        mysqli_query('end'); 
+        mysqli_query('DELIMITER');
         //
   }
   exit();
@@ -613,7 +613,7 @@ if( is_string($data) ) {
         // $tabelas_array = array("atributo","categoria","financiadora","grupo","hpadrao","instituicao");
         //  $marray_gp = array("grupo","pessoal"); 
         if( strlen($encontrar)>1 ) {
-            $result=mysql_query("SELECT * from  ".$encontrar." limit 0 ");            
+            $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
             if( ! $result ) {
                  echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
                  exit();

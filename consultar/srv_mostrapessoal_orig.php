@@ -80,7 +80,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
    $table_temporaria = $_SESSION["table_temporaria"];
    ///  Removendo tabela temporaria
    $sql_temp = "DROP TABLE IF EXISTS  $table_temporaria   ";
-   $result_usuarios=mysql_query($sql_temp);
+   $result_usuarios=mysqli_query($sql_temp);
    if( ! $result_usuarios ) {
         //// die('ERRO: '.mysql_error());  
         $msg_erro .= "&nbsp;DROP TABLE IF EXISTS {$_SESSION["table_temporaria"]}:&nbsp;db/mysql&nbsp;";
@@ -168,7 +168,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
         $sqlcmd .=" order by nome asc";
    }
    /// Executando  procedimento
-   $result_usuarios=mysql_query($sqlcmd);   
+   $result_usuarios=mysqli_query($sqlcmd);   
    ////                
    if( ! $result_usuarios ) {
         /// die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
@@ -185,7 +185,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
    mysql_set_charset('utf8');
    ///  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  $table_temporaria  ";
-   $result_outro = mysql_query($query2);                                    
+   $result_outro = mysqli_query($query2);                                    
    if( ! $result_outro ) {
          ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
         $msg_erro .= "&nbsp;Selecionando as pessoas:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
@@ -237,7 +237,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
     ///
     ///  Mostrar dados da Pessoa selecionada    
    $sqlcmd = "SELECT * FROM  $bd_2.pessoa  WHERE codigousp=$dados ";
-   $result_outro = mysql_query($sqlcmd);                                    
+   $result_outro = mysqli_query($sqlcmd);                                    
    if( ! $result_outro ) {
        ///  die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
       $msg_erro .= "&nbsp;Selecionando dados da pessoa:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
@@ -279,7 +279,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
      <?php
         ///  Selecionando a Categoria
          $sqlcat = "SELECT descricao as cat FROM $bd_2.categoria WHERE codigo=\"$categoria\" ";
-         $result_cat = mysql_query($sqlcat);
+         $result_cat = mysqli_query($sqlcat);
          $nregs=mysql_num_rows($result_cat);
          $cat="";
          ///  Caso encontrou categoria

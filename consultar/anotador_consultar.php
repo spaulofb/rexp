@@ -62,11 +62,19 @@ $_SESSION["m_horiz"] = $array_projeto;
 $usuario_conectado = $_SESSION["usuario_conectado"];
 //
 //   Caminho da pagina local
-$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
+$pagina_local = $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
+$_SESSION["pagina_local"] = $pagina_local;
 //
 //  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-    $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+     //
+     $ra="Registro de Anotação";
+     if( function_exists('utf8_decode') ) {
+         $_SESSION["titulo_cabecalho"]=utf8_decode("$ra");
+     } else {
+         $_SESSION["titulo_cabecalho"] = mb_convert_encoding($ra, 'ISO-8859-1', 'UTF-8');
+      }
+      //
 } 
 // $_SESSION['time_exec']=180000;
 //
@@ -312,9 +320,9 @@ function enviando_dados(source,val,string_array) {
     var poststr = "source="+encodeURIComponent(source)+"&val="+encodeURIComponent(val);
     poststr += "&m_array="+escape(string_array)+"&navegador="+browser; 
 
-/**  
- *   alert("LINHA/312  = poststr = "+poststr);
- */
+
+   alert("LINHA/312  = poststr = "+poststr);
+
 
 
      //
@@ -334,11 +342,6 @@ function enviando_dados(source,val,string_array) {
          exoc("label_msg_erro",1,err.message);  
          //
     }
-    //
-
-
-
-
     //
     //  Serve tanto para o arquivo projeto, anotacao e outros - Cadastrar
     //   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
@@ -625,22 +628,25 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
          //  $elemento=5; $elemento2=6;
          //  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
   //     include("php_include/ajax/includes/conectar.php");            
-           $sem_projeto=utf8_decode("Esse {$_SESSION["usuario_pa_nome"]} n&atilde;o tem Projeto para adicionar Anotador.");
+          //
+           $sem_projeto="Esse {$_SESSION["usuario_pa_nome"]} n&atilde;o tem Projeto para adicionar Anotador.";
+           if ( function_exists('mb_convert_encoding') ) {
+               $sem_projeto = mb_convert_encoding($sem_projeto, 'ISO-8859-1', 'UTF-8');
+           } elseif ( function_exists('utf8_decode') ) {
+               // fallback para PHP < 8.2 (legado)
+              $sem_projeto = @utf8_decode($sem_projeto);  // @ suprime deprecation
+           }
            //
            $nerro=0;
            # IMPORTANTE: Aqui esta o segredo
            //
-           //  mysql_query("SET NAMES 'utf8'");
-           //  mysql_query('SET character_set_connection=utf8');
-           //  mysql_query('SET character_set_client=utf8');
-           //  mysql_query('SET character_set_results=utf8');
+           //  $conex->query("SET NAMES 'utf8'");
+           //  $conex->query('SET character_set_connection=utf8');
+           //  $conex->query('SET character_set_client=utf8');
+           //  $conex->query('SET character_set_results=utf8');
            //
            /**   IMPORTANTE: para evitar problemas de acentuacao   */ 
            mysqli_set_charset($_SESSION["conex"], "utf8mb4");
-           //
-
-           exit();
-
            //
            //
            /**  Exemplo do resultado  do  Permissao de Acesso - criando array - arquivo array_menu.php
@@ -657,21 +663,24 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
            ***/
            if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                 //
-                 $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo, "
-                      ." b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
-                      ." b.autor=".$usuario_conectado." order by b.titulo "; 
+                //  Select/Mysqli
+                $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo, ";
+                $sqlcmd .= " b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and ";
+                $sqlcmd .= " b.autor=".$usuario_conectado." order by b.titulo "; 
                  ///     
-                 $result_projeto = mysql_query($sqlcmd);               
+                 $result_projeto = $conex->query($sqlcmd);               
                  ///
                  if( ! $result_projeto ) {
                      /*  $msg_erro .="Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ";
                          echo   $msg_erro.mysql_error().$msg_final;  */
                       ///  Parte do Class                
-                      echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ".mysql_error());
+                      $txterr="Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysqli:&nbsp;";
+                      echo $funcoes->mostra_msg_erro("$txterr".mysqli_error($_SESSION["conex"]));
                       $nerro=1;     
                  }
+                 
                  ///  Numero de projetos desse Autor           
-                 $m_linhas = $n_projetos=mysql_num_rows($result_projeto);
+                 $m_linhas = $n_projetos=mysqli_num_rows($result_projeto);
                  ///  Verificando se NAO tem Projeto
                  if( intval($n_projetos)<1 ) {
                       /*  $msg_erro .=$sem_projeto.$msg_final;
@@ -715,7 +724,8 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                  <select name="projeto" id="projeto" class="Busca_letrai" title="Identifica&ccedil;&atilde;o do Projeto" 
                   onchange="javascript: enviando_dados('projeto',this.id,this.value)" >
                    <?php
-                       ///  Verificando registro
+                       //
+                       //  Verificando registro
                        if( intval($m_linhas)<1 ) {
                             $autor="== Nenhum encontrado ==";
                        } else {
@@ -723,7 +733,8 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                             <option value="" >Selecione o Projeto que corresponde ao Anotador&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
                             <?php
                                ///
-                               while( $linha=mysql_fetch_assoc($result_projeto) ) {
+                               while( $linha=mysqli_fetch_assoc($result_projeto) ) {
+                                      //
                                       $_SESSION["cip"]=$linha['cip'];
                                       $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
                                       $autor_nome = $linha['nome'];  
@@ -776,12 +787,18 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                            ?>
                            </select>
                           <?php 
-                           if( isset($result_projeto) ) mysql_free_result($result_projeto); 
-                            ///   
+                           /**
+                            *   Desativar variavel 
+                            */
+                           if( isset($result_projeto) )  {
+                                 //  mysql_free_result($result_projeto); 
+                                 unset($result_projeto);   
+                           }  
+                           //   
                        }
-                       ///
+                       //
            }
-           ///
+           //
            ?>  
            <!-- Final da Num_USP/Nome Responsavel  -->     
          <span  id="resultado_anotador" style="margin-top: 0px;  top: 0px;  display:none; width: 100%; text-align: center; overflow:hidden;" ></span>            

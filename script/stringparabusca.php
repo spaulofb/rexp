@@ -1,4 +1,5 @@
 <?php
+//
 //  Funcao para busca com acentos
 function stringParaBusca($str) {
 	//Transformando tudo em minúsculas
@@ -171,5 +172,7 @@ function stringParaBusca2($str) {
 
 	return $texto;
 	
-}	
+} 
+
+//	
 ?>
