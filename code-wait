@@ -1,10 +1,12 @@
 #!/bin/bash
 # Aguarda o VS Code estar pronto antes de abrir
-code "$@" &
+#   code "$@" &
+code ./ &  
 sleep 2
 # Tenta novamente se não abriu
 if ! pgrep -f "code.*window" > /dev/null; then
-    code "$@"
+     #   code "$@"  
+     code ./  &   
 fi  
 
 
