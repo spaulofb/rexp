@@ -363,7 +363,7 @@ if( $source_upper=="PARTICIPANTE" ) {
      $resultado_usuario=$conex->query($proc);                       
      /// Caso houve ERRO no SELECT
      if( ! $resultado_usuario ) {
-         /**  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysql_error().$msg_final;  
+         /**  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysqli_error($_SESSION["conex"]).$msg_final;  
          *    echo $msg_erro;   
          */
           $terr="&nbsp;Select tabela usuario&nbsp;-&nbsp;db/mysqli:&nbsp;";
@@ -396,7 +396,7 @@ if( $source_upper=="PARTICIPANTE" ) {
          $rsql=$conex->query($proc);                       
          /// Caso houve ERRO no SELECT
          if( ! $rsql ) {
-             /**  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysql_error().$msg_final;  
+             /**  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysqli_error($_SESSION["conex"]).$msg_final;  
              *    echo $msg_erro;   
              */
               $terr="&nbsp;Select tabela pa&nbsp;-&nbsp;db/mysqli:&nbsp;";
@@ -573,7 +573,7 @@ if( $source_upper=="CONJUNTO" )  {
          //
          if( ! $result ) {
               //
-              //  die('ERRO: Select - falha: '.mysql_error());
+              //  die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
               $terr="&nbsp;Select - falha&nbsp;-&nbsp;db/mysqli:&nbsp;";
               echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
               exit();
@@ -771,7 +771,7 @@ if( $val_upper=="PARTICIPANTE" ) {
       $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd); 
       if( ! $resultado_pessoa ) {
            //
-           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
+           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
            $terr="&nbsp;SELECT usu&aacute;rio/paticipante&nbsp;-&nbsp;db/mysqli:&nbsp;";
            echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
            exit();
@@ -830,7 +830,7 @@ if( $val_upper=="PARTICIPANTE" ) {
       /// Caso houve erro
       if( ! $resultado_pessoa ) {
            //
-           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());  
+           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));  
            $terr="&nbsp;SELECT pessoa&nbsp;-&nbsp;db/mysqli:&nbsp;";
            echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
            exit();
@@ -851,7 +851,7 @@ if( $val_upper=="PARTICIPANTE" ) {
       /// Caso houve erro
       if( ! $resultado_usuario ) {
            //
-           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
+           // die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
            $terr="&nbsp;SELECT usuario&nbsp;-&nbsp;db/mysqli:&nbsp;";
            echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
            exit();
@@ -952,7 +952,7 @@ if( $val_upper=="PARTICIPANTE" ) {
          $resultado_pessoa = $conex->query("$sqlcmd"); 
          if( ! $resultado_pessoa ) {
               //
-              /**  die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());  */
+              /**  die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));  */
               $terr="&nbsp;SELECT nome do usu&aacute;rio&nbsp;-&nbsp;db/mysqli:&nbsp;";
               echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
               exit();

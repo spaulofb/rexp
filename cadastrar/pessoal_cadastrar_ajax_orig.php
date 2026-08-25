@@ -835,7 +835,7 @@ if(strtoupper($pricpotbant)=="BLOCO" ) {
              //
              /**
              *    $terr='ERRO: Select - falha:&nbsp;db/mysqli:&nbsp;';
-             *    die("$terr".mysql_error());  
+             *    die("$terr".mysqli_error($_SESSION["conex"]));  
              */
               $terr='Select remove_accents - falha:&nbsp;db/mysqli:&nbsp;';
               echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"])); 
@@ -1062,7 +1062,7 @@ if( $source_upper=="NOVO_CHEFE" ) {
          $resultadobd=mysqli_select_db($conex,"$bd_1");
          if( ! $resultadobd  ) {
               //
-              // or die(mysql_error());
+              // or die(mysqli_error($_SESSION["conex"]));
              $msg_erro .="&nbsp;Select db falha: db/mysql ";
              $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;  
              echo $msg_erro;  
@@ -1079,7 +1079,7 @@ if( $source_upper=="NOVO_CHEFE" ) {
          // Verifica se houve erro
          if( ! $result ) {
              //
-             // die('ERRO: Select tabela pessoa - falha: '.mysql_error());  
+             // die('ERRO: Select tabela pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
              $msg_erro .="&nbsp;Select tabela chefe: db/mysqli ";
              $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;  
              echo $msg_erro;  
@@ -1412,7 +1412,7 @@ if( $val_upper=="PESSOAL" ) {
      $resultadobd=mysqli_select_db($conex,"$bd_1");
      if( ! $resultadobd  ) {
          //
-         // or die(mysql_error());
+         // or die(mysqli_error($_SESSION["conex"]));
          $msg_erro .="&nbsp;Select db falha: db/mysql ";  
          $msg_erro .=mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
@@ -1458,7 +1458,7 @@ if( $val_upper=="PESSOAL" ) {
              $numelems=count($temparray);
              if( intval($numelems)<2 ) {
                  //
-                 // or die(mysql_error());
+                 // or die(mysqli_error($_SESSION["conex"]));
                  $msg_erro .="&nbsp;Nome do novo chefe inválido. $novo_chefe ";  
                  echo $msg_erro;  
                  exit();

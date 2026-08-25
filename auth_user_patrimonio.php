@@ -144,13 +144,13 @@ function nova($recebe) {
     //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
     //   - Use mysql_select_db() ou mysqli_query()
     $sqlcmd = "INSERT INTO $dbname.sessao (datahorai,usuario,ipacesso,codacesso) values('$datetime',$codigousp,$ipint,'$codimgsys') ";
-     $success=mysqli_query($sqlcmd); 
+     $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
     //  Complete the transaction 
     if ( $success ) { 
          //  Inserindo dados na Tabela Sessao do usuario cadastrado
          mysqli_query('commit'); 
     } else {
-         $msg_erro .="&nbsp;INSERT INTO TABELA SESSAO - Falha db/mysql: ".mysql_error().$msg_final;
+         $msg_erro .="&nbsp;INSERT INTO TABELA SESSAO - Falha db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
          mysqli_query('rollback'); 
     }
     mysqli_query('end'); 
@@ -169,11 +169,11 @@ function nova($recebe) {
          //                       
          $sqlret2 = mysqli_query($sqlcmd2);
          if( ! $sqlret2 ) {
-             $msg_erro .="PROBLEMAS NO SELECT TABELA SESSAO  - FALHA DB/MYSQL: ".mysql_error().$msg_final;      
+             $msg_erro .="PROBLEMAS NO SELECT TABELA SESSAO  - FALHA DB/MYSQL: ".mysqli_error($_SESSION["conex"]).$msg_final;      
              echo $msg_erro;         
              exit();         
          }
-         $num_regs=mysql_num_rows($sqlret2);
+         $num_regs=mysqli_num_rows($sqlret2);
          if( $num_regs>=1  ) {
               $_SESSION["codigo_sessao"] = mysql_result($sqlret2,0,"codigo");
               $_SESSION['datahorai'] = mysql_result($sqlret2,0,"datahorai");
@@ -382,9 +382,9 @@ function login( $login, $senha, $codimgusr ) {
             ." WHERE  ( a.codigousp=b.codigousp ) and  (".$_SESSION['user_cond'].")  ");
     //    
     if( ! $ver_usuario ) {
-         return "Erro: Usuário/E_mail - db/mysql:&nbsp; ".mysql_error();
+         return "Erro: Usuário/E_mail - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
     }       
-    $n_regs=mysql_num_rows($ver_usuario);
+    $n_regs=mysqli_num_rows($ver_usuario);
     if( $n_regs<1 ) return "Erro: Usuário/E_mail  inválido.";
     if( isset($ver_usuario) ) mysql_free_result($ver_usuario);
     //  $senha=sha1($senha);
@@ -402,8 +402,8 @@ function login( $login, $senha, $codimgusr ) {
               ." WHERE  ( clean_spaces(a.codigousp)=clean_spaces(b.codigousp) ) and  "
               ." ( clean_spaces(a.senha)=clean_spaces('$senha')  )  ");     
      //
-     if( ! $q ) return "Erro: Senha  - db/mysql:&nbsp; ".mysql_error();                
-     $qry=mysql_num_rows($q);
+     if( ! $q ) return "Erro: Senha  - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);                
+     $qry=mysqli_num_rows($q);
     /*  Apos a verificacao, retornamos 0 ou 1 a funcao login_js em 
         Javascript, que irá tratar a resposta ao usuário               */
      if( intval($qry)>0 ) {
@@ -462,9 +462,9 @@ function login( $login, $senha, $codimgusr ) {
         **/
          if( ! $ipok ) {
               $sqlcmd = "SELECT * from sessao where ipacesso=$ipint";
-              $result = mysqli_query($sqlcmd);     
-              $nregs = mysql_num_rows($result);
-              $tabcpos = mysql_fetch_array($result);
+              $result = mysqli_query($_SESSION["conex"],$sqlcmd);     
+              $nregs = mysqli_num_rows($result);
+              $tabcpos = mysqli_fetch_array($result);
               if( $nregs>0 ) $ipok=1;
          }
         /**
@@ -472,11 +472,11 @@ function login( $login, $senha, $codimgusr ) {
         **/
          if( ! $ipok) {
              $sqlcmd = "SELECT * FROM pessoal WHERE codigousp=".$_SESSION['codigousp'];
-             $result = mysqli_query($sqlcmd);
-             $nregs = mysql_num_rows($result);
+             $result = mysqli_query($_SESSION["conex"],$sqlcmd);
+             $nregs = mysqli_num_rows($result);
              if( ! $result ) $nregs=0;
              if( intval($nregs)<1 ) {
-                  $returncod ='ERRO: Falha no Select pessoal: '.mysql_error().'.';
+                  $returncod ='ERRO: Falha no Select pessoal: '.mysqli_error($_SESSION["conex"]).'.';
                   return $returncod;
              }  
              $_SESSION['e_mail'] = trim(mysql_result($result,0,"e_mail"));
@@ -552,7 +552,7 @@ function maillib($login,$codigo_img) {
     $codacesso = "*".str_replace(" ","*",(string) rand(0,9999)).chr(rand(97,122));
     $codigousp = $_SESSION['codigousp'] ;
     $sqlcmd = "SELECT e_mail from pessoal where codigousp=$codigousp ";
-    $sqlret = mysqli_query($sqlcmd) or die("ERRO/CONSULTA pessoal; ".mysql_error());      
+    $sqlret = mysqli_query($_SESSION["conex"],$sqlcmd) or die("ERRO/CONSULTA pessoal; ".mysqli_error($_SESSION["conex"]));      
     $e_mail = mysql_result($sqlret,0,"e_mail");
     //
     $_SESSION['codigo_img'] = $codigo_img;

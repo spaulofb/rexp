@@ -245,7 +245,7 @@ if( $sourceup=="SELECIONAR" )  {
           //       
           if( ! $res_temp2  ) {
                 mysql_free_result($result);
-                die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
+                die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
           }
           if ( $res_temp2 ) {
                 mysql_free_result($res_temp1); mysql_free_result($res_temp2);
@@ -256,9 +256,9 @@ if( $sourceup=="SELECIONAR" )  {
     }   
     if( ! $result_outro ) {
          mysql_free_result($result_outro);
-         die('ERRO: Select  - falha: '.mysql_error());  
+         die('ERRO: Select  - falha: '.mysqli_error($_SESSION["conex"]));  
     }
-    $m_linhas = mysql_num_rows($result_outro);     
+    $m_linhas = mysqli_num_rows($result_outro);     
     if( $m_linhas==1 )  {
            /*    PARTE NOVA VERIFICAR COM CERTEZA - 20081031   */
            //  Depois de selecionado encontrou apenas um
@@ -366,10 +366,10 @@ if( $sourceup=="CONJUNTO" ) {
 		//
 		if( strtoupper($table_atual)=="BEM"  )   $table_atual=$_SESSION["select_cpo"]; 
   	    if( ! $result ) {
-		       die('ERRO: Select - falha: '.mysql_error());
+		       die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
 		   	   exit();
 		}
-        $m_linhas = mysql_num_rows($result);
+        $m_linhas = mysqli_num_rows($result);
 		//
 		$_SESSION["table_atual"]=$table_atual;
 		$cp_table_atual=$table_atual; $cp_cpo_where=$cpo_where;
@@ -397,7 +397,7 @@ if( $sourceup=="CONJUNTO" ) {
                  //          
           	     //  acrescentando opcoes
 	             echo "<option value='' >&nbsp;Selecionar&nbsp;</option>";
-                 while( $linha=mysql_fetch_array($result) ) {   //  WHILE  DA TAG SELECT    
+                 while( $linha=mysqli_fetch_array($result) ) {   //  WHILE  DA TAG SELECT    
     				      //  Desativando selected - opcao que fica selecionada
 						  if( $linha['sigla'] ) {
 			    			     $value = urlencode($linha['sigla']);
@@ -418,7 +418,7 @@ if( $sourceup=="CONJUNTO" ) {
 	                      echo  "<option $inst_selected   value=".$value."  title='$se_sigla $traco $se_nome'  >&nbsp;";
                		      echo  $nome."&nbsp;</option>" ;
    	              }  
-                  /**  Final - while( $linha=mysql_fetch_array($result) ) { */
+                  /**  Final - while( $linha=mysqli_fetch_array($result) ) { */
                   // 
 	       	  ?>
 	          </select>
@@ -472,9 +472,9 @@ if( preg_match($pattern, $sourceup) ) {
    $result=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
    if( ! $result ) {
           mysql_free_result($result);
-          die('ERRO: Select pessoal.pessoa - falha: '.mysql_error());  
+          die('ERRO: Select pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
    }
-   $m_linhas = mysql_num_rows($result);
+   $m_linhas = mysqli_num_rows($result);
    if ( $m_linhas<1 ) {
        echo "Nenhum encontrado";
        exit();      
@@ -582,20 +582,20 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
 			//
 		   if( ! $result_ano ) {
                 mysql_free_result($result_ano);
-                die('ERRO: Select projeto ano - falha: '.mysql_error());  
+                die('ERRO: Select projeto ano - falha: '.mysqli_error($_SESSION["conex"]));  
            }	   
 		   //  Registros encontrados no Select
-           $m_linhas = mysql_num_rows($result_ano);
+           $m_linhas = mysqli_num_rows($result_ano);
      	?>
         <select name="ano" id="ano" class="td_select"   title="Selecionar ano inicial do Projeto"    onchange="enviar_dados_con('<?php echo $source;?>','ano',this.value)"  >                   
          <?php
             //  Ano inicial do Projeto
-           $m_linhas = mysql_num_rows($result_ano);
+           $m_linhas = mysqli_num_rows($result_ano);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result_ano)) {       
+               while($linha=mysqli_fetch_array($result_ano)) {       
 			          /*  Antes com CIP 
                       echo "<option  value=".htmlentities($linha['cip'])." style='width: 15px; text-align: rigth;'  >"
 			        ."&nbsp;".$linha['cip']."&nbsp;</option>" ;  */
@@ -644,9 +644,9 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
 			//
 		   if( ! $result2 ) {
                 mysql_free_result($result2);
-                die('ERRO: Select projeto - falha: '.mysql_error());  
+                die('ERRO: Select projeto - falha: '.mysqli_error($_SESSION["conex"]));  
            }
-		     $m_linhas = mysql_num_rows($result2);
+		     $m_linhas = mysqli_num_rows($result2);
 	       	?>
             <select name="projeto" id="projeto" class="td_select"   title="Selecionar Nr. Projeto" 
 	     	onchange="enviar_dados_con('<?php echo $source;?>','projeto',this.value)"  >                   
@@ -655,7 +655,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result2)) {       
+               while($linha=mysqli_fetch_array($result2)) {       
 			          /*  Antes com CIP 
                       echo "<option  value=".htmlentities($linha['cip'])." style='width: 15px; text-align: rigth;'  >"
 					        ."&nbsp;".$linha['cip']."&nbsp;</option>" ;  */
@@ -697,7 +697,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
     		    $result=mysqli_query("SELECT  * FROM  projeto  where cip=".$m_array[0]);
                 if( ! $result ) {
                      mysql_free_result($result);
-                     die('ERRO: Select $source - falha: '.mysql_error());  
+                     die('ERRO: Select $source - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
          }  elseif(  strtoupper($source)=="ANOTACAO"  ) { 
                 $result_anota=mysqli_query("SELECT  a.cia,a.numero,a.projeto,a.autor,a.data,b.numprojeto FROM "
@@ -707,11 +707,11 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
                 //
                 if( ! $result_anota ) {
                      mysql_free_result($result_anota);
-                     die('ERRO: Select rexp.projeto e anotacao - falha: '.mysql_error());  
+                     die('ERRO: Select rexp.projeto e anotacao - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
                 //  $x_anot=mysql_result($result_anota,0,anotacao);
                 //   $x_anot=mysql_result($result_anota,0,numero);
-                $x_anotacao=mysql_num_rows($result_anota);       
+                $x_anotacao=mysqli_num_rows($result_anota);       
                 if( $x_anotacao<1 ) {
                      $msg_erro .= "&nbsp;Esse Projeto Nr. ".$m_array[1]." n&atilde;o tem "
                        ." Anota&ccedil;&otilde;es  ".$msg_final;
@@ -819,7 +819,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
 	$result=mysqli_query("SELECT  cip,autor,numprojeto FROM projeto WHERE "
 	        ."  numprojeto=".$expnum." and  autor='$m_autor' and datainicio='$m_datainicio'  ");
-	$m_regs=mysql_num_rows($result);
+	$m_regs=mysqli_num_rows($result);
     if( $m_regs>=1 ) {
            mysql_free_result($result);
           $msg_erro .= "&nbsp;Experimento com a mesma "
@@ -828,11 +828,11 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 		  exit();
     } elseif( ! $result ) {
          mysql_free_result($result);
-         die('ERRO: Select projeto - falha: '.mysql_error());  
+         die('ERRO: Select projeto - falha: '.mysqli_error($_SESSION["conex"]));  
 	} else {
           	$result=mysqli_query("SELECT  ciexp,autor,projeto FROM experimento WHERE "
 	               ."  projeto=".$expnum." and  autor='$m_autor'  ");
-        	$m_regs=mysql_num_rows($result);
+        	$m_regs=mysqli_num_rows($result);
 	        if( $m_regs>=1 ) {
                   mysql_free_result($result);
                   $msg_erro .= "&nbsp;J? existe Experimento com o mesmo Projeto Nr. $projeto e"
@@ -841,7 +841,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 		          exit();
              } elseif( ! $result ) {
                   mysql_free_result($result);
-                 die('ERRO: Select experimento - falha: '.mysql_error());  
+                 die('ERRO: Select experimento - falha: '.mysqli_error($_SESSION["conex"]));  
          	} 
             //  Continuacao Tabela experimento - BD REXP
             /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
@@ -870,8 +870,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
            if ( $success ) { 
 			      mysqli_query('commit'); 
            } else { 
-			        //  mysql_error() - para saber o tipo do erro
-       	            $msg_erro .="&nbsp;Experimento n&atilde;o foi cadastrado.".mysql_error().$msg_final;
+			        //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+       	            $msg_erro .="&nbsp;Experimento n&atilde;o foi cadastrado.".mysqli_error($_SESSION["conex"]).$msg_final;
 			        mysqli_query('rollback'); 
 		            echo $msg_erro;	     
             }
@@ -898,7 +898,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 					                ." o arquivo em formato PDF.</p>".$msg_final;
                      echo  $msg_ok."falta_arquivo_pdf".$_SESSION["numprojeto"]."&".$m_autor;
 				  } else {
-        	         $msg_erro .="&nbsp;".strtoupper($key)." n&atilde;o foi cadastrado.".mysql_error().$msg_final;
+        	         $msg_erro .="&nbsp;".strtoupper($key)." n&atilde;o foi cadastrado.".mysqli_error($_SESSION["conex"]).$msg_final;
                      echo  $msg_erro;				     
 				  }
             } 
@@ -927,9 +927,9 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	$result_usu=mysqli_query("SELECT   codigousp,nome  FROM  pessoa where codigousp='".$arr_nome_val[codigousp]."'  ") ;
 	if( ! $result_usu ) {
           mysql_free_result($result_usu);	      
-		  die("Falha erro no Select".mysql_error());
+		  die("Falha erro no Select".mysqli_error($_SESSION["conex"]));
 	}
-    $m_regs=mysql_num_rows($result_usu);
+    $m_regs=mysqli_num_rows($result_usu);
     mysql_free_result($result_usu);
     if(  $m_regs>=1 ) {
            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val[codigousp]." j&aacute; est&aacute; cadastrado.".$msg_final;
@@ -977,12 +977,12 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
         //  Select nao precisa do upper para verificar nome
 		/*
 		$result_pessoa=mysqli_query("SELECT  nome,codigousp FROM pessoa WHERE replace(trim(nome),'  ',' ')=replace('$pessoa_nome','  ',' ')  ");
-	    $m_regs=mysql_num_rows($result_pessoa);
+	    $m_regs=mysqli_num_rows($result_pessoa);
         if( $m_regs>=1 ) {
               $msg_erro .= "&nbsp;Essa Pessoa:&nbsp;".$arr_nome_val[nome]." j&aacute; est&aacute; cadastrada.".$msg_final;
               echo $msg_erro;
           } elseif( ! $result_pessoa ) {
-             die('Sem resultado - Select - falha: '.mysql_error());  
+             die('Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));  
 		  } else {
           */
 		  
@@ -1041,7 +1041,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
 	//  Verificando se nao existe Usuario com esse login  na Tabela usuario
     $result_usu = mysqli_query("SELECT   login  FROM  usuario where trim(login)='".$arr_nome_val[login]."'  ") ;
-    $m_regs = mysql_num_rows($result_usu);
+    $m_regs = mysqli_num_rows($result_usu);
 	mysql_free_result($result_usu);
 	if(  $m_regs>=1 ) {
          $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." j&aacute; cadastrado.".$msg_final;
@@ -1050,7 +1050,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
      	   $m_regs=0;
 	       //  Vericando se o Codigo/USP ja esta cadastrado  na Tabela usuario
 	      $result_usu=mysqli_query("SELECT  login,codigousp FROM usuario where codigousp='".$arr_nome_val[codigousp]."' ");
-		  $m_regs=mysql_num_rows($result_usu);
+		  $m_regs=mysqli_num_rows($result_usu);
 	      mysql_free_result($result_usu);
 	      if(  $m_regs>=1 ) {
 	            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val[codigousp]." j&aacute; est&aacute; cadastrado.".$msg_final;

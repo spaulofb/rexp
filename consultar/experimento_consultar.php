@@ -215,7 +215,7 @@ $_SESSION["cols"]=4;
           }
           $count_arr_cnc = count($arr_cnc["codigousp"])-1;
             //  Cod/Num_USP/Autor
-           $m_linhas = mysql_num_rows($result);
+           $m_linhas = mysqli_num_rows($result);
            if ( $m_linhas<1 ) {
                    $autor="== Nenhum encontrado ==";
            } else {
@@ -253,12 +253,12 @@ $_SESSION["cols"]=4;
         <select name="projeto_exp" id="projeto_exp" class="td_select"  title="Selecionar CIP/Projeto" >                   
          <?php
             //  Cod/Num_USP/Autor
-           $m_linhas = mysql_num_rows($result2);
+           $m_linhas = mysqli_num_rows($result2);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result2)) {       
+               while($linha=mysqli_fetch_array($result2)) {       
                       echo "<option  value=".htmlentities($linha['cip'])." style='width: 15px; text-align: rigth;'  >"
 					        ."&nbsp;".$linha['cip']."&nbsp;</option>" ;
 			   }
@@ -336,12 +336,12 @@ $_SESSION["cols"]=4;
         <select name="testemunha1" id="testemunha1" class="td_select"  >                   
          <?php
             //  Código da Testemunha (1) da realiza??o 
-           $m_linhas = mysql_num_rows($result2);
+           $m_linhas = mysqli_num_rows($result2);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result2)) {       
+               while($linha=mysqli_fetch_array($result2)) {       
                       echo "<option  value=".htmlentities($linha['codigousp'])." >&nbsp;";
                       echo  $linha['codigousp']."&nbsp;-&nbsp;";
                       echo  ucfirst(htmlentities($linha['nome']));
@@ -366,12 +366,12 @@ $_SESSION["cols"]=4;
 		?>
         <select name="testemunha2" id="testemunha2" class="td_select"  >                   
          <?php
-           $m_linhas = mysql_num_rows($result);
+           $m_linhas = mysqli_num_rows($result);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result)) {       
+               while($linha=mysqli_fetch_array($result)) {       
                       echo "<option  value=".htmlentities($linha['codigousp'])." >&nbsp;";
                       echo  $linha['codigousp']."&nbsp;-&nbsp;";
                       echo  ucfirst(htmlentities($linha['nome']));
@@ -400,12 +400,12 @@ $_SESSION["cols"]=4;
 		?>
         <select name="ambiente" id="ambiente" class="td_select"  >                   
         <?php
-           $m_linhas = mysql_num_rows($result);
+           $m_linhas = mysqli_num_rows($result);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result)) {       
+               while($linha=mysqli_fetch_array($result)) {       
                       echo "<option  value=".htmlentities($linha['codigo'])." >&nbsp;";
                       echo  $linha['codigo']."&nbsp;-&nbsp;";
                       echo  htmlentities($linha['descricao'])."&nbsp;&nbsp;</option>" ;
@@ -428,12 +428,12 @@ $_SESSION["cols"]=4;
 		?>
         <select name="material"  id="material" class="td_select"  >                   
         <?php
-           $m_linhas = mysql_num_rows($result2);
+           $m_linhas = mysqli_num_rows($result2);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result2)) {       
+               while($linha=mysqli_fetch_array($result2)) {       
                       echo "<option  value=".htmlentities($linha['codigo'])." >&nbsp;";
                       echo  $linha['codigo']."&nbsp;-&nbsp;";
                       echo  htmlentities($linha['descricao'])."&nbsp;&nbsp;</option>" ;
@@ -456,12 +456,12 @@ $_SESSION["cols"]=4;
 		?>
         <select name="metodo"  id="metodo" class="td_select"  >                   
         <?php
-           $m_linhas = mysql_num_rows($result);
+           $m_linhas = mysqli_num_rows($result);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result)) {       
+               while($linha=mysqli_fetch_array($result)) {       
                       echo "<option  value=".htmlentities($linha['codigo'])." >&nbsp;";
                       echo  $linha['codigo']."&nbsp;-&nbsp;";
                       echo  htmlentities($linha['descricao'])."&nbsp;&nbsp;</option>" ;
@@ -488,12 +488,12 @@ $_SESSION["cols"]=4;
 		?>
         <select name="resultado"  id="resultado" class="td_select"  >                   
         <?php
-           $m_linhas = mysql_num_rows($result2);
+           $m_linhas = mysqli_num_rows($result2);
            if ( $m_linhas<1 ) {
                    echo "<option value='' >== Nenhum encontrado ==</option>";
            } else {
                echo "<option value='' >== Selecionar ==</option>";
-               while($linha=mysql_fetch_array($result2)) {       
+               while($linha=mysqli_fetch_array($result2)) {       
                       echo "<option  value=".htmlentities($linha['codigo'])." >&nbsp;";
                       echo  $linha['codigo']."&nbsp;-&nbsp;";
                       echo  htmlentities($linha['descricao'])."&nbsp;&nbsp;</option>" ;
@@ -547,7 +547,7 @@ $_SESSION["cols"]=4;
 				             onchange="enviar_dados_cad('CONJUNTO',this.value,this.name+'|'+'<?php echo $_SESSION["VARS_AMBIENTE"];?>');"  style="padding: 1px;" title="Institui&ccedil;&atilde;o"  >			
 			   <?php
   				  //  INSTITUICAO
-                 $m_linhas = mysql_num_rows($result);
+                 $m_linhas = mysqli_num_rows($result);
                  if ( $m_linhas<1 ) {
                         echo "<option value='' >== Nenhum encontrado ==</option>";
                  } else {

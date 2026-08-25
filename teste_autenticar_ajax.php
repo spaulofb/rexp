@@ -233,11 +233,11 @@ if( intval($_SESSION["total"])==1 ) {
         ///   
         $result_pa=mysqli_query($cmdsql);
         if( ! $result_pa  ) {
-            $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
+            $msg_erro .= "SELECT participante/pessoa: ".mysqli_error($_SESSION["conex"]).$msg_final;
             echo $msg_erro; 
             exit();  
         }
-        $regs = mysql_num_rows($result_pa);
+        $regs = mysqli_num_rows($result_pa);
         if( intval($regs)>1 ) {
               ///   $num_pas = count($array_usuarios);         
               $num_pas= (int) count($array_pa);  
@@ -252,7 +252,7 @@ if( intval($_SESSION["total"])==1 ) {
             <select  name="permit_pa"  id="permit_pa" class="td_select"  onchange="javascript: pa_selecionado('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
             <option value="" >Selecione</option>
             <?php
-             while( $linha=mysql_fetch_array($result_pa)) {       
+             while( $linha=mysqli_fetch_array($result_pa)) {       
                     ///  htmlentities - o melhor para transferir na Tag Select
                     $codigo_pa= (int) $linha["pa"];  
                     ///  foreach( $array_usuarios as $chave => $valor )  { 

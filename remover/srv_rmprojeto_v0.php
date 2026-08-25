@@ -101,11 +101,11 @@ if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
         $sql_temp = "DROP TABLE IF EXISTS  $table_remover_projeto ";  
         $drop_result = mysqli_query($sql_temp); 
         if( ! $drop_result  ) {
-            /// die('ERRO: Falha consultando a tabela '.$_SESSION["table_remover_projeto"].' - '.mysql_error());         
-            /*  $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover_projeto"]} - db/mysql:&nbsp; ".mysql_error();
+            /// die('ERRO: Falha consultando a tabela '.$_SESSION["table_remover_projeto"].' - '.mysqli_error($_SESSION["conex"]));         
+            /*  $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover_projeto"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
             echo $msg_erro.$msg_final;  */
             
-            echo $funcoes->mostra_msg_erro("Removendo a Tabela $table_remover_projeto - db/mysql:&nbsp; ".mysql_error());            
+            echo $funcoes->mostra_msg_erro("Removendo a Tabela $table_remover_projeto - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));            
             exit();       
         }
         $_SESSION["selecionados"]=""; $where_cond="";
@@ -172,28 +172,28 @@ if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
         }
         ////
         ///  Execuntando o mysql_query
-        $result_consult_projeto = mysqli_query($sqlcmd);
+        $result_consult_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $result_consult_projeto ) {
-            // die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error());
+            // die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"]));
             /* $msg_erro .= "&nbsp;Criando a Tabela  {$_SESSION["table_remover_projeto"]} - db/mysql:&nbsp; ";
-            echo  $msg_erro.mysql_error().$msg_final; */
-             echo $funcoes->mostra_msg_erro("Criando a Tabela $table_remover_projeto&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());                        
+            echo  $msg_erro.mysqli_error($_SESSION["conex"]).$msg_final; */
+             echo $funcoes->mostra_msg_erro("Criando a Tabela $table_remover_projeto&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                        
              exit();
         }       
         ////
         ///  Selecionando todos os registros da Tabela temporaria de consulta Anotacoes
         $query2 = "SELECT * from  ".$_SESSION["table_remover_projeto"]."  ";
-        $resultado_outro = mysqli_query($query2);                                    
+        $resultado_outro = mysqli_query($_SESSION["conex"],$query2);                                    
         if( ! $resultado_outro ) {
-             ////  die("ERRO: Selecionando os Projetos - mysql =  ".$cip.mysql_error());  
-            /*  $msg_erro .= "&nbsp;Selecionando os Projetos - db/mysql:&nbsp; ".mysql_error().$msg_final;
+             ////  die("ERRO: Selecionando os Projetos - mysql =  ".$cip.mysqli_error($_SESSION["conex"]));  
+            /*  $msg_erro .= "&nbsp;Selecionando os Projetos - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]).$msg_final;
               echo  $msg_erro;  */
-            echo $funcoes->mostra_msg_erro("Selecionando os Projetos - db/mysql:&nbsp;".mysql_error());            
+            echo $funcoes->mostra_msg_erro("Selecionando os Projetos - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
             exit();
         }         
         //
         ////  Total de registros
-        $n_regs_projeto = mysql_num_rows($resultado_outro);
+        $n_regs_projeto = mysqli_num_rows($resultado_outro);
         ///  Caso NAO encontrou Projeto        
         if( intval($n_regs_projeto)<1 ) {
              // $msg_erro .= "INICIA&nbsp;N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.FINAL".$msg_final;
@@ -209,7 +209,7 @@ if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
         $td_menu = $num_fields+1;   
          ///  Total de registros
         /*
-        $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+        $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
         if( $_SESSION["total_regs"]<1 ) {
             $msg_erro .= "&nbsp;Nenhuma Anota&ccedil;&atilde;o para esse Projeto:&nbsp;<br>$projeto_titulo".$msg_final;
             echo $msg_erro;
@@ -252,20 +252,20 @@ if( $opcao_maiusc=="REMOVER" )  {
     
     ///  $sqlcmd .= $where_cond." order by datainicio desc";
     $sqlcmd .= $where_cond." order by numprojeto desc"; 
-    $result_rmprojeto = mysqli_query($sqlcmd);
+    $result_rmprojeto = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_rmprojeto ) {
-        /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysql_error().$msg_final;  
+        /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
         echo $msg_erro;  */
-        echo $funcoes->mostra_msg_erro("Consultando as Tabelas projeto e pessoa  -&nbsp;db/mysql:&nbsp;".mysql_error());
+        echo $funcoes->mostra_msg_erro("Consultando as Tabelas projeto e pessoa  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
         exit();
     }
     ///  Nr. de Projetos       
-    $n_regs=mysql_num_rows($result_rmprojeto);
+    $n_regs=mysqli_num_rows($result_rmprojeto);
     /// Caso encontador o Projeto
     if( intval($n_regs)==1 ) {
            //  Definindo os nomes dos campos recebidos do MYSQL SELECT
            if( isset($array_nome) ) unset($array_nome);
-           $array_nome=mysql_fetch_array($result_rmprojeto);
+           $array_nome=mysqli_fetch_array($result_rmprojeto);
            foreach( $array_nome as $chave_cpo => $valor_cpo ) $$chave_cpo=$valor_cpo;
            ///                        
     } else {
@@ -277,11 +277,11 @@ if( $opcao_maiusc=="REMOVER" )  {
     if( $result_rmprojeto )  mysql_free_result($result_rmprojeto);    
     ///  Tabela objetivo - descricao
     $sqlcmd = "SELECT descricao from $bd_2.objetivo  WHERE codigo=$objetivo ";
-    $result_objetivo = mysqli_query($sqlcmd);
+    $result_objetivo = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_objetivo ) {
-        /*  $msg_erro .= "Falha consultando a tabela objetivo  - db/mysql: ".mysql_error().$msg_final;  
+        /*  $msg_erro .= "Falha consultando a tabela objetivo  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
         echo $msg_erro;  */
-        echo $funcoes->mostra_msg_erro("Consultando a Tabela objetivo - db/mysql:&nbsp;".mysql_error());        
+        echo $funcoes->mostra_msg_erro("Consultando a Tabela objetivo - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));        
         exit();
     }        
     $objetivo=mysql_result($result_objetivo,0,"descricao");
@@ -289,16 +289,16 @@ if( $opcao_maiusc=="REMOVER" )  {
     $conjunto=$_SESSION["conjunto"];
     ///  Tabela anotacao - total de anotacoes desse projeto
     $sqlcmd = "SELECT count(projeto) as n_anotacao from $bd_2.anotacao  WHERE projeto=$cip  ";
-    $result_anotacao = mysqli_query($sqlcmd);
+    $result_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_anotacao ) {
-        /*   $msg_erro .= "Falha consultando a tabela anotacao  - db/mysql: ".mysql_error().$msg_final; 
+        /*   $msg_erro .= "Falha consultando a tabela anotacao  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final; 
         echo $msg_erro;  */        
-        echo $funcoes->mostra_msg_erro("Consultando a Tabela anotacao - db/mysql:&nbsp;".mysql_error());
+        echo $funcoes->mostra_msg_erro("Consultando a Tabela anotacao - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
         exit();
     }  
     ///  Numero de Anotacoes desse Projeto
     $n_anotacao=0;
-    if( mysql_num_rows($result_anotacao)>0 ) $n_anotacao=mysql_result($result_anotacao,0,0);
+    if( mysqli_num_rows($result_anotacao)>0 ) $n_anotacao=mysql_result($result_anotacao,0,0);
     ///  Nome do autor do Projeto para ser removido          
     if( isset($orientador) ) $_SESSION["autor_projeto_nome"]=$orientador;
     ///
@@ -413,13 +413,13 @@ if( $opcao_maiusc=="REMOVER" )  {
                                ." WHERE  a.codigousp=b.coresponsavel and "
                                ." b.projetoautor=$autor_codigousp and  b.projnum=$numprojeto ";
                   ///
-                  $result_corespproj=mysqli_query($sqlcmd);
+                  $result_corespproj=mysqli_query($_SESSION["conex"],$sqlcmd);
                   if( ! $result_corespproj ) {
-                      echo $funcoes->mostra_msg_erro("Consultando as Tabelas pessoa e corespproj -&nbsp;db/mysql:&nbsp;".mysql_error());
+                      echo $funcoes->mostra_msg_erro("Consultando as Tabelas pessoa e corespproj -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                       exit();
                   } 
                   /// Nr. de Coresponsaveis
-                  $array_cores = mysql_num_rows($result_corespproj);
+                  $array_cores = mysqli_num_rows($result_corespproj);
                   for( $y=0;  $y<$array_cores; $y++ ) {
                        $zy=$y+1;
                      ?>
@@ -525,16 +525,16 @@ if( $opcao_maiusc=="REMOVER" )  {
                  ."(Select count(cip) as n_anot from $bd_2.anotador where cip=$cip  ) as n_anot  "     
                  ."  FROM $bd_1.pessoa a, $bd_2.projeto b  WHERE {$where_cond} "; 
     ///                 
-    $result_projeto = mysqli_query($sqlcmd);                   
+    $result_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);                   
     if( ! $result_projeto ) {
-         //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-         /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysql_error().$msg_final;  
+         //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+         /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;  */
-         echo $funcoes->mostra_msg_erro("Selecionando o Projeto para ser removido -&nbsp;db/mysql:&nbsp;".mysql_error());
+         echo $funcoes->mostra_msg_erro("Selecionando o Projeto para ser removido -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
          exit();                   
     }
     ///  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array - IMPORTANTE
-    $array_projeto_cpos=mysql_fetch_array($result_projeto);
+    $array_projeto_cpos=mysqli_fetch_array($result_projeto);
     foreach( $array_projeto_cpos as $chave_proj => $valor_proj ) {
              $$chave_proj=$valor_proj;
     }                  
@@ -549,9 +549,9 @@ if( $opcao_maiusc=="REMOVER" )  {
          /// Precisa iniciar zerando variavel @contador_regs
          $result_set=mysqli_query("set @contador_regs=0;");
          if( ! $result_set ) {
-              /* $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysql_error().$msg_final;            
+              /* $msg_erro .= "set @contador_regs=0; -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
               echo  $msg_erro;  */
-              echo $funcoes->mostra_msg_erro("set @contador_regs=0; -&nbsp;db/mysql:&nbsp;".mysql_error());
+              echo $funcoes->mostra_msg_erro("set @contador_regs=0; -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
               exit();
          }   
          ///  MySQL/Select      
@@ -562,15 +562,15 @@ if( $opcao_maiusc=="REMOVER" )  {
                    ." b.codigousp=a.coresponsavel order by b.nome ");
          ///          
          if( ! $result_coresp ) {
-               /* $msg_erro .= "Select tabelas corespproj e pessoa -  db/mysql:  ".mysql_error().$msg_final;            
+               /* $msg_erro .= "Select tabelas corespproj e pessoa -  db/mysql:  ".mysqli_error($_SESSION["conex"]).$msg_final;            
               echo  $msg_erro;  */              
-              echo $funcoes->mostra_msg_erro("Select Tabelas corespproj e pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());              
+              echo $funcoes->mostra_msg_erro("Select Tabelas corespproj e pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));              
               exit();
          }         
          $coresp_dados .="<div style='text-align:center;font-size: medium; overflow: auto;'>";
          $coresp_dados .="<p style='text-align:center;font-size:small;font-weight:bold;margin:0;' >"
                         ."<b>$tit_coresp:</b></p>";                              
-         $nregs_coresp = mysql_num_rows($result_coresp);
+         $nregs_coresp = mysqli_num_rows($result_coresp);
          for( $nc=0; $nc<$nregs_coresp; $nc++ ) {
               ///  $n=mysql_result($result_coresp,$nc,"n");
               $n=$nc+1;
@@ -589,17 +589,17 @@ if( $opcao_maiusc=="REMOVER" )  {
                  ." FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip  ";                
     ///             
-    $resultado_anotacao = mysqli_query($sqlcmd);
+    $resultado_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado_anotacao ) {
-          /* $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto." - db/mysql - ".mysql_error();
+          /* $msg_erro .= "Selecionando Anota&ccedil;&otilde;es do Projeto: ".$numprojeto." - db/mysql - ".mysqli_error($_SESSION["conex"]);
         echo $msg_erro.$msg_final;  */
-          echo $funcoes->mostra_msg_erro("Selecionando Anota&ccedil;&otilde;es do Projeto: {$numprojeto} -&nbsp;db/mysql:&nbsp;".mysql_error());
+          echo $funcoes->mostra_msg_erro("Selecionando Anota&ccedil;&otilde;es do Projeto: {$numprojeto} -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
           exit();
     }         
     ///    
     ///  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array
     if( isset($array_nome) ) unset($array_nome);
-    $num_anotacoes = mysql_num_rows($resultado_anotacao);
+    $num_anotacoes = mysqli_num_rows($resultado_anotacao);
     /// Caminho da pasta principal
     $incluir_arq="../";
     if( isset($_SESSION["incluir_arq"]) ) {
@@ -614,7 +614,7 @@ if( $opcao_maiusc=="REMOVER" )  {
     if( intval($num_anotacoes)>=1 ) {
          $anotacoes ="<div style='width: 100%; overflow: auto;'  >";
          /*  Mostra Anotacao por Anotacao - Desativado
-          while( $reg_anot=mysql_fetch_array($resultado_anotacao) ) {
+          while( $reg_anot=mysqli_fetch_array($resultado_anotacao) ) {
               // Anotacao do Projeto                            
               $anotacoes .="<p style='text-align:center;font-size: medium;'>"
                  ."<b>Anota&ccedil;&atilde;o</b>:&nbsp;".$reg_anot['numero_anotacao']."&nbsp;-&nbsp;"
@@ -730,20 +730,20 @@ if( $opcao_maiusc=="REMOVER" )  {
     ///  Removendo o anotador do Projeto  
     $sqlcmd = "DELETE from $bd_2.anotador  WHERE cip=$cip  ";
     ///                  
-    $res_anotador =  mysqli_query($sqlcmd);
+    $res_anotador =  mysqli_query($_SESSION["conex"],$sqlcmd);
     if( $res_anotador ) { 
          ///  Removendo as anotacoes do Projeto
          if( intval($n_anotacoes)>0 ) {
              /// Deletando Anotacoes desse Projeto
              $sqlcmd= "DELETE  from $bd_2.anotacao WHERE projeto=$cip "; 
              ///                  
-             $res_anotacao =mysqli_query($sqlcmd);      
+             $res_anotacao =mysqli_query($_SESSION["conex"],$sqlcmd);      
              if( ! $res_anotacao ) { 
-                 ///  mysql_error() - para saber o tipo do erro
+                 ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
                  /* $msg_erro .="&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  - db/mysql:&nbsp; "
-                               .mysql_error().$msg_final;
+                               .mysqli_error($_SESSION["conex"]).$msg_final;
                     echo $msg_erro;  */                    
-                 echo $funcoes->mostra_msg_erro("&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  -&nbsp;db/mysql:&nbsp;".mysql_error());
+                 echo $funcoes->mostra_msg_erro("&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                  $lnerro=1;
              }                
          }
@@ -751,22 +751,22 @@ if( $opcao_maiusc=="REMOVER" )  {
          if( intval($lnerro)<1 ) {
              $sqlcmd= "DELETE from $bd_2.projeto WHERE {$where_cond} "; 
              ///                  
-             $res_projeto =mysqli_query($sqlcmd);      
+             $res_projeto =mysqli_query($_SESSION["conex"],$sqlcmd);      
              if( ! $res_projeto ) { 
-                 ///  mysql_error() - para saber o tipo do erro
+                 ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
                  /* $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  - db/mysql:&nbsp; "
-                               .mysql_error().$msg_final;
+                               .mysqli_error($_SESSION["conex"]).$msg_final;
                     echo $msg_erro;  */                           
-                  echo $funcoes->mostra_msg_erro("&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  -&nbsp;db/mysql:&nbsp;".mysql_error());                    
+                  echo $funcoes->mostra_msg_erro("&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                    
                   $lnerro=1;
              }                               
          }    
          ///
     } else { 
-        ///  mysql_error() - para saber o tipo do erro
-        /* $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysql_error().$msg_final;
+        ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+        /* $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]).$msg_final;
               echo $msg_erro; */           
-         echo $funcoes->mostra_msg_erro("&nbsp;Removendo anotador do Projeto $numprojeto da Tabela anotador -&nbsp;db/mysql:&nbsp;".mysql_error());                    
+         echo $funcoes->mostra_msg_erro("&nbsp;Removendo anotador do Projeto $numprojeto da Tabela anotador -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                    
          $lnerro=1;        
     }       
     ///
@@ -823,10 +823,10 @@ if( $opcao_maiusc=="REMOVER" )  {
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_remover"]."    ";  
    $drop_result = mysqli_query($sql_temp); 
    if( ! $drop_result  ) {
-       // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysql_error());         
-        /* $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysql_error();
+       // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysqli_error($_SESSION["conex"]));         
+        /* $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
         echo $msg_erro.$msg_final;   */
-        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysql_error());
+        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
         exit();       
    }
    $_SESSION["selecionados"]="";
@@ -860,29 +860,29 @@ if( $opcao_maiusc=="REMOVER" )  {
     //  $sqlcmd .= $where_cond." order by datainicio desc";
     $sqlcmd .= $where_cond." order by numprojeto desc";
     //
-    $result_rmprojeto = mysqli_query($sqlcmd);
+    $result_rmprojeto = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_rmprojeto ) {
-         //  die('ERRO: Falha consultando a tabela projeto  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error().$orientador);  
-         /* $msg_erro .= "Consultando a tabela projeto  - op&ccedil;&atilde;o={$opcao} - ".mysql_error().$msg_final;
+         //  die('ERRO: Falha consultando a tabela projeto  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"]).$orientador);  
+         /* $msg_erro .= "Consultando a tabela projeto  - op&ccedil;&atilde;o={$opcao} - ".mysqli_error($_SESSION["conex"]).$msg_final;
          echo  $msg_erro;     */         
-         echo $funcoes->mostra_msg_erro("Criando a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysql_error());
+         echo $funcoes->mostra_msg_erro("Criando a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
          exit();           
     }       
     //  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  ".$_SESSION["table_remover"]."  ";
-   $result_outro = mysqli_query($query2);                                    
+   $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
    if( ! $result_outro ) {
-         //  die("ERRO: Selecionando o(s) Projeto(s)  - ".mysql_error());  
-         /* $msg_erro .= "Selecionando o(s) Projeto(s) - db/mysql".mysql_error().$msg_final;
+         //  die("ERRO: Selecionando o(s) Projeto(s)  - ".mysqli_error($_SESSION["conex"]));  
+         /* $msg_erro .= "Selecionando o(s) Projeto(s) - db/mysql".mysqli_error($_SESSION["conex"]).$msg_final;
          echo  $msg_erro;  */   
-         echo $funcoes->mostra_msg_erro("Criando a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysql_error());
+         echo $funcoes->mostra_msg_erro("Criando a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
          exit();           
    }        
    //  Pegando os nomes dos campos do primeiro Select
    $num_fields=mysql_num_fields($result_outro);  //  Obt?m o n?mero de campos do resultado
    $td_menu = $num_fields+1;   
    //  Total de registros
-   $_SESSION["total_regs"] = mysql_num_rows($result_outro);
+   $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
    if( $_SESSION["total_regs"]<1 ) {
         /* $msg_erro .= "&nbsp;Nenhum Projeto encontrado".$msg_final;
         echo $msg_erro;  */
@@ -891,7 +891,7 @@ if( $opcao_maiusc=="REMOVER" )  {
    }   
    /*
       Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array - IMPORTANTE
-   $array_nome=mysql_fetch_array($result_outro);
+   $array_nome=mysqli_fetch_array($result_outro);
    foreach( $array_nome as $key => $value ) {
               $$key=$value;
               

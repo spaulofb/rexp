@@ -3,12 +3,12 @@
 if( ! isset($testemunha_selec) ) $testemunha_selec="";
 //
 //  Tag Select para selecionar uma Testemunha
-$m_linhas = mysql_num_rows($testemunhas_result);
+$m_linhas = mysqli_num_rows($testemunhas_result);
 if( intval($m_linhas)<1 ) {
      echo "<option value='' >== Nenhum encontrado ==</option>";
 } else {
      echo "<option value='' >== Selecionar ==</option>";
-     while($linha=mysql_fetch_array($testemunhas_result)) {       
+     while($linha=mysqli_fetch_array($testemunhas_result)) {       
           ///
           if( $linha['codigousp']==$testemunha_selec  ) { 
                 $selected_testemunha="selected='selected'";

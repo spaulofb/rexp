@@ -119,7 +119,7 @@ if( intval($total_regs)<1 ) {
 	$query      = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
         //
-        //  die('ERRO: Sem resultado - Select - falha: '.mysql_error());  
+        //  die('ERRO: Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));  
          $msg_erro .= "&nbsp;Select - falha:&nbsp;db/mysqli:&nbsp;";
          $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
@@ -161,7 +161,7 @@ if( intval($total_regs)<1 ) {
      ///
      if( ! $result_max_length ) {
           //
-          // die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());    
+          // die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));    
           $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;";
           $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
           echo $msg_erro;  

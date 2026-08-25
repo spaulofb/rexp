@@ -211,12 +211,12 @@ if( ! isset($permit_pa)  ) {
     ///   
     $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
-         $msg_erro .="SELECT participante/pessoa:&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
+         $msg_erro .="SELECT participante/pessoa:&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro; 
          exit();
     } else {
          /// Numero de registros
-        $_SESSION["regs_pa"] = $regs_pa = mysql_num_rows($resultado_pa);
+        $_SESSION["regs_pa"] = $regs_pa = mysqli_num_rows($resultado_pa);
         ///     
         if( intval($regs_pa)<1 ) {
               $msg_erro .= utf8_decode("Esse usuário não tem permissão de acesso.").$msg_final;   
@@ -224,7 +224,7 @@ if( ! isset($permit_pa)  ) {
               exit();      
         }
         ///
-        while( $row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array($resultado_pa, MYSQL_ASSOC) ) {
                $descricao=$row["descricao"];
                $array_pa[$descricao]=$row["codigo"];
         }
@@ -251,12 +251,12 @@ if( $_SESSION["total"]==1 and ( ! isset($permit_pa) ) ) {
       ///   
       $result_pa=mysqli_query($cmdsql);
       if( ! $result_pa  ) {
-          $msg_erro .= "SELECT participante/pessoa:&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
+          $msg_erro .= "SELECT participante/pessoa:&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
           echo $msg_erro; 
           exit();  
       }
       ///  Numero de Participantes e  PA
-      $regs = mysql_num_rows($result_pa);
+      $regs = mysqli_num_rows($result_pa);
       ///
       ///  Numero de registros - PA  
       if( intval($regs)>1 ) {
@@ -272,7 +272,7 @@ if( $_SESSION["total"]==1 and ( ! isset($permit_pa) ) ) {
             <select  name="permit_pa"  id="permit_pa" class="td_select"  onchange="javascript: pa_selecionado('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
               <option value="" >Selecione</option>
               <?php
-               while( $linha=mysql_fetch_array($result_pa) ) {       
+               while( $linha=mysqli_fetch_array($result_pa) ) {       
                       ///
                      ///  htmlentities - o melhor para transferir na Tag Select
                      $codigo_pa= (int) $linha["pa"];  

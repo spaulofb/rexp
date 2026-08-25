@@ -27,9 +27,9 @@ $_SESSION["cols"]=4;
                                           ." a.autor=b.codigousp  order by b.nome "); 
            if( ! $result_pessoa ) {
                 mysql_free_result($result_pessoa);
-                die('ERRO: Select projeto e pessoal.pessoa - falha: '.mysql_error());  
+                die('ERRO: Select projeto e pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
            }
-           $m_linhas=mysql_num_rows($result_pessoa);
+           $m_linhas=mysqli_num_rows($result_pessoa);
             //  Cod/Num_USP/Autor   
            if ( $m_linhas<1 ) {
                  //   $autor="== Nenhum encontrado ==";
@@ -49,9 +49,9 @@ $_SESSION["cols"]=4;
                  //
                 if( ! $result_anot_dt ) {
                     mysql_free_result($result_anot_dt);
-                    die('ERRO: Select anotacao e campo data - falha: '.mysql_error());  
+                    die('ERRO: Select anotacao e campo data - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
-                $m_regs=mysql_num_rows($result_anot_dt);
+                $m_regs=mysqli_num_rows($result_anot_dt);
                 if( $m_regs>=1 ) { 
                      //  recebe o parâmetro e armazena em um array separado por 
                      $titulo =  mysql_result($result_anot_dt,0,"titulo");
@@ -112,7 +112,7 @@ $_SESSION["cols"]=4;
         //  Resultado dos campos codigos para nomes de outro BD - pessoal.pessoa
         if( ! $result_dois_nomes ) {
                     mysql_free_result($result_dois_nomes);
-                    die('ERRO: Select rexp.anotacao e pessoal.pessoa  - falha: '.mysql_error());  
+                    die('ERRO: Select rexp.anotacao e pessoal.pessoa  - falha: '.mysqli_error($_SESSION["conex"]));  
          }
          $testemunha1_nome = mysql_result($result_dois_nomes,0,"testemunha1_nome");
          $testemunha2_nome = mysql_result($result_dois_nomes,0,"testemunha2_nome");                  

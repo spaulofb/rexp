@@ -234,7 +234,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
               <select name="categoria" class="td_select" id="categoria"  title="Selecionar Categoria" required="required"  >
                   <?php
                       ///  Categoria
-                      $m_linhas = mysql_num_rows($result);
+                      $m_linhas = mysqli_num_rows($result);
                       if( intval($m_linhas)<1 ) {
                           echo "<option value='' >Nenhuma Categoria definida.</option>";
                       } else {
@@ -268,7 +268,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
               <select name="pa" class="td_select" id="pa"  title="Selecionar PA (privilegio de acesso)"   >            
                   <?php
                       //  PA
-                      $m_linhas = mysql_num_rows($result);
+                      $m_linhas = mysqli_num_rows($result);
                       if( $m_linhas<1 ) {
                           echo "<option value='' >Nenhum PA definido.</option>";
                       } else {
@@ -301,7 +301,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                 //  $result=mysql_db_query($db_array[$elemento],"SELECT sigla,nome FROM instituicao order by nome ");
                 $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if( ! $result ) {
-                    die('ERRO: Select - falha: '.mysql_error());
+                    die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
                     exit();
                 }
              ?>
@@ -310,7 +310,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
           onchange="enviar_dados_cad('CONJUNTO',this.value,this.name+'|'+'<?php echo $vars_ambiente;?>');"  style="padding: 1px;" title="Institui&ccedil;&atilde;o" required="required"  >            
                <?php
                     ///  INSTITUICAO
-                 $m_linhas = mysql_num_rows($result);
+                 $m_linhas = mysqli_num_rows($result);
                  if( intval($m_linhas)<1 ) {
                         echo "<option value='' >Nenhuma Institui&ccedil;&atilde;o encontrada.</option>";
                  } else {
@@ -400,10 +400,10 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                include("php_include/ajax/includes/conectar.php");                                    
         ///       $sqlcmd="SELECT distinct codigousp,nome FROM  $bd_1.pessoa  where categoria like 'DOC%' order by nome "; 
                $sqlcmd="SELECT distinct chefecodusp,nome FROM  $bd_1.chefe  order by nome "; 
-               $result = mysqli_query($sqlcmd);
+               $result = mysqli_query($_SESSION["conex"],$sqlcmd);
                /// Verifica se houve erro
                 if( ! $result ) {
-                           die('ERRO: Select tabela pessoa - falha: '.mysql_error());  
+                           die('ERRO: Select tabela pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
                 } else  {
                       /*   Chefe/Orientador da pessoa para cadastrar   */
                   ?>
@@ -412,7 +412,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                     onchange="javascript: enviar_dados_cad(this.name,this.value);"  >
                          <?php
                             ///  Chefe/Orientador
-                             $m_linhas = mysql_num_rows($result);
+                             $m_linhas = mysqli_num_rows($result);
                              if( intval($m_linhas)<1 ) {
                                   echo "<option value='' >Lista vazia. Contactar Administrador.</option>";
                              } else {

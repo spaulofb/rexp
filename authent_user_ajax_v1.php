@@ -293,7 +293,7 @@ if( ! isset($permit_pa)  ) {
     }
     //
     //   Alterado em 20250509
-    //  while( $row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC)) {
+    //  while( $row = mysqli_fetch_array($resultado_pa, MYSQL_ASSOC)) {
     while( $row = mysqli_fetch_array($resultado_pa)) {
            $descricao=$row["descricao"];
            $array_pa[$descricao]=$row["codigo"];
@@ -446,7 +446,7 @@ exit();
             <option value="" >Selecione</option>
             <?php
              ///   Alterado em 20191122
-             //// while( $linha=mysql_fetch_array($result_pa)) {       
+             //// while( $linha=mysqli_fetch_array($result_pa)) {       
              while( $linha=mysqli_fetch_array($result_pa)) {       
                     ///  htmlentities - o melhor para transferir na Tag Select
                     $codigo_pa= (int) $linha["pa"];  

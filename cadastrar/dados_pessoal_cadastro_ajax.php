@@ -87,7 +87,7 @@ $rsql = mysqli_query($_SESSION["conex"],"$txt");
 //  if( ! $rsql ) {
 if( mysqli_error($_SESSION["conex"]) ) {    
      //     
-     //  die('Select '.$tabela.' - falha: '.mysql_error());
+     //  die('Select '.$tabela.' - falha: '.mysqli_error($_SESSION["conex"]));
      $_SESSION["erro"] = "Select $tabela  - db/mysqli:&nbsp;".mysqli_error($conex);
      return;
      //

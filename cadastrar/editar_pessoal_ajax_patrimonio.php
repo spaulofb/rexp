@@ -844,7 +844,7 @@ if( is_array($data) ) {
         ***/         
         /// if( ! $result_pessoal ) {
         if( mysqli_error($_SESSION["conex"]) ) { 
-            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysql_error().$msg_final;  
+            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  
             ****/
              $txterr="Consultando a Tabela $tmp_edt_pessoal -";
@@ -876,7 +876,7 @@ if( is_array($data) ) {
         ////
         /// if( ! $res_pessoal ) {
         if( mysqli_error($_SESSION["conex"]) ) { 
-            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysql_error().$msg_final;  
+            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  
             ****/
              $txterr="Consultando a Tabela $tmp_edt_pessoal -";

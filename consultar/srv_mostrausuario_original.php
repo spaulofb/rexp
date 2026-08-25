@@ -67,7 +67,7 @@ if( strtoupper($opcao)!='LISTA' ) {
    $sql_temp = "DROP TABLE IF EXISTS  {$_SESSION["table_temporaria"]} ";
    $result_usuarios=mysqli_query($sql_temp);
    if( ! $result_usuarios ) {
-        die('ERRO: '.mysql_error());  
+        die('ERRO: '.mysqli_error($_SESSION["conex"]));  
    }   
    ///  Caso for uma letra somente
    $dados=trim($val);
@@ -155,20 +155,20 @@ if( strtoupper($opcao)!='LISTA' ) {
         $_SESSION["selecionados"] = "";        
    }
    ///  Executando o Create Table
-   $result_usuarios=mysqli_query($sqlcmd);      
+   $result_usuarios=mysqli_query($_SESSION["conex"],$sqlcmd);      
    ////                  
    if( ! $result_usuarios ) {
-         /// die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
-         $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
+         /// die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($_SESSION["conex"]));  
+         $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
          exit();          
    } 
    ///  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * FROM {$_SESSION["table_temporaria"]} ";
-   $result_outro = mysqli_query($query2);                                    
+   $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
    if( ! $result_outro ) {
-         /// die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
-         $msg_erro .= "&nbsp;Selecionando os Usu&aacute;rios:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
+         /// die('ERRO: Selecionando os Usu&aacute;rios: '.mysqli_error($_SESSION["conex"]));  
+         $msg_erro .= "&nbsp;Selecionando os Usu&aacute;rios:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
         echo $msg_erro;  
         exit();          
    }        
@@ -176,7 +176,7 @@ if( strtoupper($opcao)!='LISTA' ) {
    $num_fields=mysql_num_fields($result_outro);   /// Obt?m o n?mero de campos do resultado
    $td_menu = $num_fields+1;   
    ///  Total de registros
-   $_SESSION["total_regs"] = mysql_num_rows($result_outro);
+   $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
    $total_regs=$_SESSION["total_regs"];
    $_SESSION['total_regs']==1 ? $lista_usuario=" <b>1</b> usu&aacute;rio " : $lista_usuario="<b>$total_regs</b> usu&aacute;rios ";     
    /// $_SESSION["titulo"]= "<p class='titulo_consulta'  style='text-align: left; margin: 0px 0px 0px 4px; padding: 0px; '    >";

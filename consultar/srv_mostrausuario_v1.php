@@ -278,7 +278,7 @@ exit();
    //                  
    if( ! $result_usuarios ) {
          //
-         // die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
+         // die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($_SESSION["conex"]));  
          $msg_erro .= "&nbsp;Criando uma Tabela Temporaria:&nbsp;db/mysqli&nbsp;";
          $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
@@ -295,7 +295,7 @@ exit();
    $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
    if( ! $result_outro ) {
          //
-         // die('ERRO: Selecionando os Usu&aacute;rios: '.mysql_error());  
+         // die('ERRO: Selecionando os Usu&aacute;rios: '.mysqli_error($_SESSION["conex"]));  
          $msg_erro .= "&nbsp;Selecionando os Usu&aacute;rios:&nbsp;db/mysqli&nbsp;";
          $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  

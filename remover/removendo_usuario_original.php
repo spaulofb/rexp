@@ -18,16 +18,16 @@ mysqli_query("LOCK TABLES $bd_1.usuario  DELETE, $bd_2.participante DELETE,  $bd
 ///  Removendo o anotador do Projeto  
 $sqlcmd = "DELETE from $bd_2.anotador  WHERE codigo=$cod_usuario  ";
 //                  
-$res_anotador =  mysqli_query($sqlcmd);
+$res_anotador =  mysqli_query($_SESSION["conex"],$sqlcmd);
 if( $res_anotador ) { 
      /***
           Removendo participante
     */
     $sqlcmd= "DELETE from $bd_2.participante WHERE codigousp=$cod_usuario "; 
     ///                  
-    $res_anotacao =mysqli_query($sqlcmd);      
+    $res_anotacao =mysqli_query($_SESSION["conex"],$sqlcmd);      
     if( ! $res_anotacao ) { 
-           echo $funcoes->mostra_msg_erro("&nbsp;Removendo participante&nbsp;-db/mysql:&nbsp;".mysql_error());
+           echo $funcoes->mostra_msg_erro("&nbsp;Removendo participante&nbsp;-db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
             $lnerro=1;
      }                
      ///
@@ -35,23 +35,23 @@ if( $res_anotador ) {
      if( intval($lnerro)<1 ) {
           $sqlcmd= "DELETE from $bd_1.usuario WHERE codigousp=$cod_usuario "; 
           ///                  
-          $res_projeto =mysqli_query($sqlcmd);      
+          $res_projeto =mysqli_query($_SESSION["conex"],$sqlcmd);      
           if( ! $res_projeto ) { 
-                ///  mysql_error() - para saber o tipo do erro
+                ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
                 /*    $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor - db/mysql:&nbsp; "
-                      .mysql_error().$msg_final;
+                      .mysqli_error($_SESSION["conex"]).$msg_final;
                      echo $msg_erro;  
                 */                           
-                echo $funcoes->mostra_msg_erro("&nbsp;Removendo o usuário&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());                    
+                echo $funcoes->mostra_msg_erro("&nbsp;Removendo o usuário&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                    
                 $lnerro=1;
           }                               
      }    
      ////
 } else { 
-      //  mysql_error() - para saber o tipo do erro
-      /* $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysql_error().$msg_final;
+      //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+      /* $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]).$msg_final;
       echo $msg_erro; */           
-      echo $funcoes->mostra_msg_erro("&nbsp;Removendo anotador&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+      echo $funcoes->mostra_msg_erro("&nbsp;Removendo anotador&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
       $lnerro=1;        
 }       
 ///

@@ -289,7 +289,7 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$array_pa['orientador'] ) )
                     <option value='' >Selecione...</option>
                  <?php
                     //
-                    //  while( $linha=mysql_fetch_array($result) ) {       
+                    //  while( $linha=mysqli_fetch_array($result) ) {       
                     for( $nx=0; $nx<$m_linhas; $nx++ ) {
                          //
                          //  htmlentities - o melhor para transferir na Tag Select

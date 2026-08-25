@@ -159,15 +159,15 @@ $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
       ." WHERE a.codigousp=b.codigousp and a.pa=c.codigo and a.codigousp!=$usuario_conectado  " 
       ." group by 1";
 ///
-$result = mysqli_query($sqlcmd);
+$result = mysqli_query($_SESSION["conex"],$sqlcmd);
 if( ! $result ) {
-    ///    $msg_erro .= "Falha consultando as tabelas usuario, pessoa e pa - letra inicial: ".mysql_error().$msg_final;  
+    ///    $msg_erro .= "Falha consultando as tabelas usuario, pessoa e pa - letra inicial: ".mysqli_error($_SESSION["conex"]).$msg_final;  
     ///  echo $msg_erro;
-    echo $funcoes->mostra_msg_erro("Falha consultando as tabelas usuario, pessoa e pa - letra inicial -&nbsp;db/mysql:&nbsp;".mysql_error());
+    echo $funcoes->mostra_msg_erro("Falha consultando as tabelas usuario, pessoa e pa - letra inicial -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
     exit();
 }       
 ///  Numero de usuarios
-$lnletras = mysql_num_rows($result);                
+$lnletras = mysqli_num_rows($result);                
 ///
 //  Salvar letrais iniciais em um conjunto para facilitar a busca
 ?>
@@ -209,7 +209,7 @@ Mostrar:&nbsp;
 <!--  <option value="" >=== Selecionar Usu&aacute;rio pela Letra Inicial ===</option>  -->
 <option value="" >== Selecionar usu&aacute;rio pelo nome ==</option>
 <?php
-    while( $linha=mysql_fetch_array($result) ) {       
+    while( $linha=mysqli_fetch_array($result) ) {       
          ////  htmlentities - corrige poss?veis falhas de acentua??o de code page
           $letra= htmlentities($linha["letra1"]);  
           echo "<option  value=".urlencode($letra)."  title='Clicar para Busca' >".$letra."</option>" ;

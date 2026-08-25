@@ -232,12 +232,12 @@ include("includes/menu_horizontal.php");
     ////   
     $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
-        $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
+        $msg_erro .= "SELECT participante/pessoa: ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo $msg_erro;
         exit();  
     }
     ///  Numero de registros
-    $regs = mysql_num_rows($resultado_pa);
+    $regs = mysqli_num_rows($resultado_pa);
     ///  Verificando o numero de registros    
        ///  Verificando o numero de registros    
     if( intval($regs)>1 ) {
@@ -252,7 +252,7 @@ include("includes/menu_horizontal.php");
         <select name="permit_pa"  id="permit_pa"  class="td_select"  onchange="javascript:  dochange('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
         <option value="" >Selecione</option>
         <?php
-         while( $linha=mysql_fetch_array($resultado_pa) ) {       
+         while( $linha=mysqli_fetch_array($resultado_pa) ) {       
                 $codigo_pa= (int) $linha["pa"];
                foreach( $array_pa as $chave => $valor )  { 
                       $campo_nome = ucfirst($chave);
@@ -289,10 +289,10 @@ include("includes/menu_horizontal.php");
           ///   
           $res_pa_descr=mysqli_query($cmdsql);
           if( ! $res_pa_descr  ) {
-               die('ERRO: SELECT pa/permissao de acesso '.mysql_error());
+               die('ERRO: SELECT pa/permissao de acesso '.mysqli_error($_SESSION["conex"]));
                exit();  
            }
-           $regs = mysql_num_rows($res_pa_descr);
+           $regs = mysqli_num_rows($res_pa_descr);
            $descricao_pa = mysql_result($res_pa_descr,0,"descricao"); 
            $nome_do_usuario = mysql_result($res_pa_descr,0,"nome"); 
            /// Tabela abaixo do arquivo logar.php  - (Chefe, Orientador, Anotador e etc...)

@@ -192,11 +192,11 @@ $cols=4;
                                      $usuario_conectado." order by b.titulo "); 
            ///                  
            if( ! $result ) {
-                die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador -&nbsp;db/mysql:&nbsp;'.mysql_error());  
+                die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
            }
            //  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
             //  Identificação da Fonte de Recurso
-           $nprojetos = mysql_num_rows($result);
+           $nprojetos = mysqli_num_rows($result);
            ?>
            <!-- tag select para selecionar o Projeto -->
            <SELECT name="projeto"  id="projeto" class="td_select" title="Identificação do Projeto" 
@@ -244,11 +244,11 @@ $cols=4;
               $sqlcmd = "SELECT 'Outro_PA' as tipo_pa, a.nome, a.codigousp,a.categoria, a.e_mail"
                         ." FROM $bd_1.pessoa a order by a.nome";
               ///          
-              $result = mysqli_query($sqlcmd); 
+              $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
               if( !$result ) {
-                  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.&nbsp;db/mysql:&nbsp;".mysql_error());
+                  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
               }
-              $m_linhas = mysql_num_rows($result);
+              $m_linhas = mysqli_num_rows($result);
             ?>
             <!--  tag select para selecionar o Anotador para o Projeto selecionado -->
             <SELECT name="codigousp"  id="codigousp"  disabled="disabled"  
@@ -268,7 +268,7 @@ $cols=4;
                   $cpo_nome_descr=mysql_field_name($result,1);
                   $cpo_tipo_pa = mysql_field_name($result,0);
                   if( isset($separador) ) unset($separador);
-                  while( $linha=mysql_fetch_array($result) ) {       
+                  while( $linha=mysqli_fetch_array($result) ) {       
                       ///  htmlentities - o melhor para transferir na Tag Select
                       $sigla= htmlentities($linha[$codigo_sigla]);  
                       ///  $nome= htmlentities($linha[$cpo_nome_descr]);

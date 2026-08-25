@@ -134,10 +134,10 @@ if( isset($_POST['fileframe']) ) {
       $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
       $select_numprojeto = mysqli_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
       if( ! $select_numprojeto ) {
-            ///  die('ERRO: Select projeto campo numprojeto - falha: '.mysql_error());  
+            ///  die('ERRO: Select projeto campo numprojeto - falha: '.mysqli_error($_SESSION["conex"]));  
             
            ///  Partes Class - includes/autoload_class.php  e  funcoes.class.php  - IMPORTANTE
-           echo $funcoes->mostra_msg_erro("Select projeto campo cip - db/mysql:&nbsp;".mysql_error());
+           echo $funcoes->mostra_msg_erro("Select projeto campo cip - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
            exit();
       }
       //
@@ -274,7 +274,7 @@ if( isset($_POST['fileframe']) ) {
             //
             if( ! $success ) {
                 $_SESSION["msg_upload"]= $msg_txt_erro.'FALHA no armazenamento do arquivo: '.$_FILES['relatext']['name'].'<br>';
-                $_SESSION["msg_upload"].= mysql_error();
+                $_SESSION["msg_upload"].= mysqli_error($_SESSION["conex"]);
                    $_SESSION["msg_upload"].=$msg_txt_erro_final;        
             } else {
                  $_SESSION["msg_upload"] .= $msg_txt_erro."Anota??o $anotacao_numero do Projeto ".$_SESSION["numprojeto"]."  foi conclu&iacute;do.";
@@ -950,17 +950,17 @@ function jsUpload(upload_field) {
                 ." b.cip in (select distinct cip from rexp.anotador "
                 ." where codigo=".$usuario_conectado.")  order by b.titulo ";
         }
-        $result = mysqli_query($sqlcmd); 
+        $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
         //                  
         if( ! $result ) {
-             //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
+             //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
  
              //  Parte do Class                
-             echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error());
+             echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
             exit();                  
         }
         //  N?mero de Projetos Selecionados
-        $nprojetos = mysql_num_rows($result);
+        $nprojetos = mysqli_num_rows($result);
         if ( $nprojetos<1 ) {
               echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
         } else {

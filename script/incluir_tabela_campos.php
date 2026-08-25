@@ -48,7 +48,7 @@ if ( strlen(trim($_SESSION["m_nome_id"]))<1 ) {
 		 if( strlen($encontrar)>1 ) {
 	        $result=mysql_db_query($dbname,"select * from  ".$encontrar." limit 0 ");
     	    if (!$result) {
-	    	     echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+	    	     echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
 	         } else {
     	     	 $n_fields = mysql_num_fields($result);
 	    	 }	 

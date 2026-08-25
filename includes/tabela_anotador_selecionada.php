@@ -30,14 +30,15 @@ if( isset($_SESSION["incluir_arq"]) ) {
 if( intval($pagina)<1 ) {
     $pagina="1";
 }
-///  Maximo de registros por pagina
-///  $maximo = 16;
+//  Maximo de registros por pagina
+//  $maximo = 16;
 $maximo=10;
-
-/// Calculando o registro inicial
+//
+// Calculando o registro inicial
 $inicio = $pagina - 1;
 $inicio = $maximo * $inicio;
-///  Variaveis recebidos e criando absoletos
+//
+//  Variaveis recebidos e criando absoletos
 if( isset($_SESSION["num_rows"]) ) {
     /// if ( $_SESSION["num_rows"]>=1 ) {
     if( intval($_SESSION["num_rows"])>=1 ) {
@@ -45,8 +46,8 @@ if( isset($_SESSION["num_rows"]) ) {
          /// Conta os resultados no total da minha query
          ///  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
          ///  $query    = mysqli_query($strCount);
-         $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
-         $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+         $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
+         $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
          $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
          for( $z=1; $z<99999 ; $z++ ) {
              $valor_final[$z] = $z*$maximo;
@@ -58,15 +59,19 @@ if( isset($_SESSION["num_rows"]) ) {
              }
          }
     }
-}    
-///  \$row = array  e  \$total_regs = total_regs de registros encontrados
+}
+//    
+//  \$row = array  e  \$total_regs = total_regs de registros encontrados
 $row=$_SESSION["row"]; $total_regs = $_SESSION["total_regs"];
-if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado=$_SESSION["usuario_conectado"];
-
-/// Verifica se variavel total_regs menou ou igual a 0 (ZERO)
+if( isset($_SESSION["usuario_conectado"]) ) {
+     $usuario_conectado=$_SESSION["usuario_conectado"];
+} 
+//
+// Verifica se variavel total_regs menou ou igual a 0 (ZERO)
 if( intval($total_regs)<=0 ) {
     echo "<p  class='titulo_usp'  >Nenhum registro encontrado.</p>";
 } else {
+    //
     // if( !isset($_GET["seed"]) ) {
        //   $seed = rand();   // Caso ainda nao exista uma semente, cria a semente via PHP.
     // } else {
@@ -78,33 +83,43 @@ if( intval($total_regs)<=0 ) {
 	//  $strQuery   = "SELECT $campos_query from  $temp_usuario ORDER BY RAND($seed) LIMIT $inicio,$maximo";  
     //  Conex?o com o banco:
     ////  include('../inicia_conexao.php');
-    /// 
-    ///  Verificando SESSION ce banco de dados e tabela
-   if( ! isset($_SESSION["table_temp_anotador"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_anotacao não definida."));
-        exit();
+    // 
+    //  Verificando SESSION ce banco de dados e tabela
+    if( ! isset($_SESSION["table_temp_anotador"]) ) {
+         //
+         $origem="Falha SESSION table_consultar_anotacao não definida.";
+         $texto = function_exists('mb_convert_encoding') 
+            ? mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8')
+            : utf8_decode($origem); 
+         //
+         echo $funcoes->mostra_msg_erro("$texto");
+         exit();
+         //
     }
     $table_temporaria = $_SESSION["table_temp_anotador"];
-
+    //
     /// Definindo as variaveis
     $num_fields=0; $m_ordenar="nome"; $max_length="";
     ///
 	$strQuery="SELECT $campos_query FROM $table_temporaria LIMIT $inicio,$maximo";  
-	$query      = mysqli_query($strQuery);
+	$query      = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-         /// die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
+         /// die('ERRO: Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));   
          $msg_erro .= "&nbsp;Select - falha:&nbsp;db/mysql:&nbsp;";
-         $msg_erro .= mysql_error().$msg_final;
+         $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
          exit();          
     }
-    ///  Numero de registros
-    $num_rows = mysql_num_rows($query);
+    //
+    //  Nr registros
+    $num_rows = mysqli_num_rows($query);
     ///   Pegando os nomes dos campos  do primeiro Select
-    $num_fields=mysql_num_fields($query);  ///  Obtem o numero de campos do resultado
+    //  $num_fields=mysql_num_fields($query);  ///  Obtem o numero de campos do resultado
+    $num_fields = mysqli_num_fields($query);  ///  Obtem o numero de campos do resultado
     $td_menu = $num_fields+1;                 
-             
-    ///  Parte tentando pegar o tamanho maior da coluna (campo)
+    //        
+    //  Parte tentando pegar o tamanho maior da coluna (campo)
+    /** 
     $max_length="";
     for( $i = 0;$i<$num_fields; $i++) { //  Pega o nome dos campos
          $fields[] = mysql_field_name($query,$i);
@@ -113,23 +128,42 @@ if( intval($total_regs)<=0 ) {
          $max_length .= " MAX(LENGTH(TRIM($fields[$i]))) as campo$i ";
          if( $i<($num_fields-1) ) $max_length.= ", "; 
          if( $fields[$i]=="codautor" ) $ncodautor=$fields[$i];
-     }
-     ///   Selecionando o maximo espaco ocupado em cada campo da tabela
-     $temp_tabela=$_SESSION["table_temp_anotador"];
-     ///   Selecionando o maximo espaco ocupado em cada campo da tabela
-     $sqlcmd="SELECT ".$max_length." FROM $temp_tabela ";
-     $result_max_length = mysqli_query($sqlcmd);          
-     ///
-     if( ! $result_max_length ) {
-          ///   die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());                  
-          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysql_error();
-          echo $msg_erro.$msg_final;  
-          exit();          
-     }    
-     $num_rows = mysql_num_rows($query);
-     $num_rows = (int) strlen(trim($num_rows)); 
-     $campo_n=2;
-     /*  Como repetir uma string ou caractere 
+    }
+    */
+    //
+    $fields     = [];
+    $max_length = [];
+    $ncodautor  = '';
+    //
+    $i = 0;
+    foreach ($query->fetch_fields() as $field) {
+            $fields[] = $field->name;
+            $max_length[] = "MAX(LENGTH(TRIM(`{$field->name}`))) as campo{$i}";
+
+            if ($field->name == "codautor") $ncodautor = $field->name;
+            $i++;
+    }
+    $max_length = implode(', ', $max_length);
+    //
+    //   Selecionando o maximo espaco ocupado em cada campo da tabela
+    $temp_tabela=$_SESSION["table_temp_anotador"];
+    //
+    //   Selecionando o maximo espaco ocupado em cada campo da tabela
+    $sqlcmd="SELECT ".$max_length." FROM $temp_tabela ";
+    $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
+    ///
+    if( ! $result_max_length ) {
+        //
+        //   die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));                  
+        $terr="&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysqli&nbsp;";
+        $msg_erro .= "$terr".mysqli_error($_SESSION["conex"]);
+        echo $msg_erro.$msg_final;  
+        exit();          
+    }    
+    $num_rows = mysqli_num_rows($query);
+    $num_rows = (int) strlen(trim($num_rows)); 
+    $campo_n=2;
+    /*  Como repetir uma string ou caractere 
             um n?mero determinado de vezes      */
      $n_simbolo = "&nbsp;"; $n_simbolo=str_repeat($n_simbolo,$num_rows);
      if( intval($num_rows)<=1 ) $n_simbolo = "";
@@ -162,74 +196,81 @@ if( intval($total_regs)<=0 ) {
                 .ucfirst($field_name)."</th>";
     }
     echo "</tr>";
-    /// print the body of the table
-    if(  isset($_SESSION["conjunto"]) ) $conjunto=$_SESSION["conjunto"];
+    //
+    // print the body of the table
+    if(  isset($_SESSION["conjunto"]) ) {
+         $conjunto=$_SESSION["conjunto"];
+    } 
+    //
     $conta_linha=0; $sem_link=0;
-    while( $linha = mysql_fetch_row($query)) {
-        /// link        
-         ?>       
-       <tr align="left"  class="font_size"  >
+    while ($linha = mysqli_fetch_array($query, MYSQLI_BOTH)) {
+       /// link
+        ?>
+        <tr align="left" class="font_size">
         <?php
-        for( $column_num=0; $column_num<$num_fields; $column_num++) {
-            $text_align="left";  
-            $field_name_upper = strtoupper(trim($fields[$column_num]));             
-            if( in_array($field_name_upper,$campos_fora) ) continue;
-            ///  if( strtoupper($field_name)=='RELATEXT' ) {
-            if( $column_num<1 ) $selecionado=$linha[$column_num];
-            ///  if( $field_name_upper=='TITULO' ) {
-            if( stripos($field_name_upper,'TITULO_ANOT')>-1  ) {
-                ///  $valor=htmlentities(trim(mysql_result($query,$conta_linha,"relatext")));                   
-                $valor=htmlentities(trim(mysql_result($query,$conta_linha,"Arquivo")));                                   
-                /// $valor = substr($valor,strpos($valor,"_")+1,strlen(trim($valor)));
-                ///  $valor="<img src='../imagens/enviar.gif' alt='Enviar Arquivo'  style='text-align: center; vertical-align:text-bottom;'  >";
-                $m_relatext=$linha[$column_num];  $sem_link=1;
-                $titulo=$linha[$column_num];
-                ?>                        
-                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"  style="text-align: left; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;">
-                <?php
-                  $cmdhtml = "<a href='#' onclick='javascript: $m_function(\"DESCARREGAR\",\"$valor\",\"$usuario_conectado#anotacao\");return true;' id='relattext'  class='linkum'   "
-                        ."  title='Clicar'  style='text-align: center; line-height:normal;' >";  
-                  $cmdhtml .=$titulo."</a>";
-                  $cmdhtml .="</td>";
-                  echo $cmdhtml;
-            } else if( $field_name_upper=='DETALHES' ) {
-                  $valor=$linha[$column_num]; $text_align="center";
-                  $detalhes="<img src='../imagens/enviar.gif' alt='Mostrar detalhes dessa Anota??o'  style='text-align: center; vertical-align:text-bottom;'  >";  
-                ?>                        
-                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"  style="text-align: <?php echo $text_align;?>; white-space: nowrap; font-weight: bold; padding: .3em; border: 1px solid #000000; ">
-                <?php
-                  $cmdhtml2 = "<a href='#' onclick='javascript: $m_function(\"DETALHES\",\"$valor\",\"$usuario_conectado#anotacao\");return true;'  "
-                        ."  id='detalhes'  class='linkum'   "
-                        ."  title='Clicar'  style='text-align: center; vertical-align: middle; ' >";  
-                  $cmdhtml2 .=$detalhes."</a>";
-                  $cmdhtml2 .="</td>";
-                  echo $cmdhtml2;                  
-            } else {
-                $valor=$linha[$column_num];    
-                /// if( $field_name_upper=='NR' ) $text_align="right";
-                if( preg_match("/^NR$|^NA$/i",$field_name_upper) )  $text_align="right";
+        for ($column_num = 0; $column_num < $num_fields; $column_num++) {
+            $text_align = "left";
+            $field_name_upper = strtoupper(trim($fields[$column_num]));
+            if (in_array($field_name_upper, $campos_fora)) continue;
+
+            if ($column_num < 1) $selecionado = $linha[$column_num];
+
+            if (stripos($field_name_upper, 'TITULO_ANOT') !== false) {
+                // era: mysql_result($query, $conta_linha, "Arquivo")
+                $valor      = htmlentities(trim($linha['Arquivo']));
+                $m_relatext = $linha[$column_num];
+                $sem_link   = 1;
+                $titulo     = $linha[$column_num];
                 ?>
-                <td  style="text-align: <?php echo $text_align;?>; padding: .3em; white-space: nowrap; font-weight: bold; border: 1px solid #000000;"  >                
-                <?php                
-                $anotador_nome="";
-                if( $field_name_upper=="ANOTADOR" ) {
-                     $anotador_nome=$valor;
-                     $valor=$valor=mysql_result($query,$conta_linha,"anotadorcod");
-                     echo "<a href=\"#\" onclick=\"alert('".$anotador_nome."')\" >$valor</a>";
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);" onmouseout="javascript: mouse_out_menu(this);" style="text-align: left; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;">
+                <?php
+                $cmdhtml  = "<a href='#' onclick='javascript: $m_function(\"DESCARREGAR\",\"$valor\",\"$usuario_conectado#anotacao\");return true;' id='relattext' class='linkum' "
+                        . " title='Clicar' style='text-align: center; line-height:normal;' >";
+                $cmdhtml .= $titulo . "</a>";
+                $cmdhtml .= "</td>";
+                echo $cmdhtml;
+
+            } else if ($field_name_upper == 'DETALHES') {
+                $valor      = $linha[$column_num];
+                $text_align = "center";
+                $detalhes   = "<img src='../imagens/enviar.gif' alt='Mostrar detalhes dessa Anotação' style='text-align: center; vertical-align:text-bottom;' >";
+                ?>
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);" onmouseout="javascript: mouse_out_menu(this);" style="text-align: <?php echo $text_align; ?>; white-space: nowrap; font-weight: bold; padding: .3em; border: 1px solid #000000;">
+                <?php
+                $cmdhtml2  = "<a href='#' onclick='javascript: $m_function(\"DETALHES\",\"$valor\",\"$usuario_conectado#anotacao\");return true;' "
+                        . " id='detalhes' class='linkum' "
+                        . " title='Clicar' style='text-align: center; vertical-align: middle; ' >";
+                $cmdhtml2 .= $detalhes . "</a>";
+                $cmdhtml2 .= "</td>";
+                echo $cmdhtml2;
+
+            } else {
+                $valor = $linha[$column_num];
+                if (preg_match("/^NR$|^NA$/i", $field_name_upper)) $text_align = "right";
+                ?>
+                <td style="text-align: <?php echo $text_align; ?>; padding: .3em; white-space: nowrap; font-weight: bold; border: 1px solid #000000;">
+                <?php
+                $anotador_nome = "";
+                if ($field_name_upper == "ANOTADOR") {
+                    $anotador_nome = $valor;
+                    // era: mysql_result($query, $conta_linha, "anotadorcod")
+                    $valor = $linha['anotadorcod'];
+                    echo "<a href=\"#\" onclick=\"alert('" . $anotador_nome . "')\">$valor</a>";
                 } else {
                     echo $valor;
                 }
-                ?>                        
+                ?>
                 </td>
-                <?php                
+                <?php
             }
         }
         ?>
         </tr>
         <?php
-           $conta_linha++;
+        $conta_linha++;
     }
-   /// Calculando pagina anterior
+    //
+    /// Calculando pagina anterior
     $menos = $pagina - 1;
 
     /// Calculando pagina posterior
@@ -243,10 +284,11 @@ if( intval($total_regs)<=0 ) {
     $_SESSION["numero_de_pags"] = (int) ($total_regs/$maximo);
     $_SESSION["valor_com_pags"] = (int) ($_SESSION["numero_de_pags"]*$maximo);
     if( $_SESSION["valor_com_pags"]<$total_regs ) $_SESSION["numero_de_pags"]++;
-    ///  Maior que 1
+    // 
+    //  Maior que 1
     if( intval($pgs)>1 ) {
         $td_menu=$td_menu*2;
-        $pagina_atual = 'http://www-gen.fmrp.usp.br/rexp/consultar/tabela_selecionada.php';
+        $pagina_atual = 'https:/sol.fmrp.usp.br/rexp/consultar/tabela_selecionada.php';
         $font_size_family="font-size: small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;"; 
         echo "<tr style='width: 100%; text-align: center;  margin-bottom: 0px;  padding-bottom: 0px; '  >";
         echo   "<td class='table_td' colspan=".$td_menu." style='text-align: center; '  align='center' >";
@@ -306,7 +348,8 @@ if( intval($total_regs)<=0 ) {
         }
         echo "</td></tr></table>";
         echo "</td></tr>";
-    }  // Final - if \$pgs
+    }  
+    // Final - if \$pgs
     echo "</TABLE>"; 
     echo "</div>";
     ///

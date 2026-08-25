@@ -53,8 +53,8 @@ if( isset($_SESSION["num_rows"]) ) {
 	    // Conta os resultados no total da minha query
 	    //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
 	    //  $query    = mysqli_query($strCount);
-	    $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
-	    $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+	    $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
+	    $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
 	    $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
         for( $z=1; $z<99999 ; $z++ ) {
                $valor_final[$z] = $z*$maximo;
@@ -91,21 +91,21 @@ if( intval($total_regs)<=0 ) {
     $m_linhas=0; $num_fields=0; $m_ordenar="nome";    
     ///  
 	$strQuery="SELECT $campos_query from  ".$_SESSION["table_consultar_anotacao"]."  LIMIT $inicio,$maximo";  
-	$query      = mysqli_query($strQuery);
+	$query      = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-         ////  die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
-         $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
+         ////  die('ERRO: Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));   
+         $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  
          exit();          
     }
     ////  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array - IMPORTANTE
-    /*  $array_projeto_cpos=mysql_fetch_array($query);
+    /*  $array_projeto_cpos=mysqli_fetch_array($query);
        foreach( $array_projeto_cpos as $chave_proj => $valor_proj ) {
               echo " $chave_proj = $valor_proj  <br>";
        }                  
        exit();
     */
-    $m_linhas = mysql_num_rows($query);
+    $m_linhas = mysqli_num_rows($query);
     //   Pegando os nomes dos campos  do primeiro Select
     $num_fields=mysql_num_fields($query);  //  Obtem o n?mero de campos do resultado
     $td_menu = $num_fields+1;                
@@ -123,15 +123,15 @@ if( intval($total_regs)<=0 ) {
      $temp_tabela=$_SESSION["table_consultar_anotacao"];
      ////  $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_consultar_anotacao"]."   ";
      $sqlcmd="SELECT ".$max_length." FROM  $temp_tabela  ";     
-     $result_max_length = mysqli_query($sqlcmd);          
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      //
      if( ! $result_max_length ) {
-         ////  die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());                  
-          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysql_error();
+         ////  die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));                  
+          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $temp_tabela - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]);
           echo $msg_erro.$msg_final;  
           exit();          
      }        
-     $num_rows = mysql_num_rows($query);
+     $num_rows = mysqli_num_rows($query);
      $num_rows = (int) strlen(trim($num_rows)); 
      $campo_n=2;
      /*  Como repetir uma string ou caractere 

@@ -215,7 +215,7 @@ if( isset($_POST['fileframe']) ) {
 			              ." where ( numprojeto=$nprojexp  and  autor=$autor_cod ) ");
 			//
 			if( ! $success ) {
-                $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES[relatproj][name].' FALHA'.mysql_error();
+                $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES[relatproj][name].' FALHA'.mysqli_error($_SESSION["conex"]);
    			    $_SESSION["msg_upload"].=$msg_erro_final;		
 			} else {
                  mysql_free_result($success);
@@ -922,16 +922,16 @@ if ( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from  $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysqli_query($sqlcmd); 
+$result = mysqli_query($_SESSION["conex"],$sqlcmd); 
 ///                  
 if( ! $result ) {
-    ///   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql: ".mysql_error().$msg_final;
+    ///   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
     echo $msg_erro;
     exit();
 }
 ///  Numero de Projetos Selecionados
-$nprojetos = mysql_num_rows($result);
+$nprojetos = mysqli_num_rows($result);
 ///
 ?> 
 <!--  div style=display: flex;   -->

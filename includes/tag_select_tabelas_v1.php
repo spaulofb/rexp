@@ -27,7 +27,7 @@ return;
 
 
 //
-while($linha=mysql_fetch_array($result)) {       
+while($linha=mysqli_fetch_array($result)) {       
       ///  htmlentities - o melhor para transferir na Tag Select  
 	  ////  $nome=urlencode(trim($linha[$cpo_nome_descr]));  
        ///  $nome = htmlentities($linha[$cpo_nome_descr]);

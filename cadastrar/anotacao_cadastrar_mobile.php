@@ -98,7 +98,7 @@ if( isset($_POST['fileframe']) ) {
       //
       $select_numprojeto = mysqli_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
       if( ! $select_numprojeto ) {
-            die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());  
+            die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
             exit();
       }
       ///
@@ -251,7 +251,7 @@ if( isset($_POST['fileframe']) ) {
           ///
           if( ! $nupdate ) {
               $_SESSION["msg_upload"]= $msg_erro.'FALHA no armazenamento do arquivo: '.$_FILES['relatext']['name'].'<br/>';
-              $_SESSION["msg_upload"].= mysql_error();
+              $_SESSION["msg_upload"].= mysqli_error($_SESSION["conex"]);
               $_SESSION["msg_upload"].=$msg_erro_final;        
          } else {
               ///  Selecionando a Anotacao do Projeto 
@@ -261,11 +261,11 @@ if( isset($_POST['fileframe']) ) {
               if( ! $success ) {
                   /// Ocorreu ERRO/FALHA no Select da Anotacao do Projeto
                   $_SESSION["msg_upload"]= $msg_erro."Selecionando a Anotação $anotacao_numero do Projeto - FALHA:&nbsp;db/mysql:&nbsp;";
-                  $_SESSION["msg_upload"].=mysql_error().$msg_erro_final;
+                  $_SESSION["msg_upload"].=mysqli_error($_SESSION["conex"]).$msg_erro_final;
                   ///
               } else {
                   /// Número de registros 
-                  $nregs=mysql_num_rows($success);
+                  $nregs=mysqli_num_rows($success);
                   /// Verificando 
                   if( intval($nregs)>0 ) { 
                       ///  
@@ -500,10 +500,10 @@ function jsUpload(upload_field) {
                                  ."  WHERE  codigousp=$usuario_conectado  order by nome "); 
                ///
                if( ! $res_anotador ) {
-                     die('ERRO: Select pessoal.pessoa - falha: '.mysql_error());  
+                     die('ERRO: Select pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
                 ////  Cod/Num_USP/Autor/Anotador
-                $m_linhas = mysql_num_rows($res_anotador);
+                $m_linhas = mysqli_num_rows($res_anotador);
                 if( intval($m_linhas)<1 ) {
                     $autor="== Nenhum encontrado ==";
                 } else {
@@ -565,17 +565,17 @@ function jsUpload(upload_field) {
                    ///              
             }  
             ///
-            $result_pessoa=mysqli_query($sqlcmd);
+            $result_pessoa=mysqli_query($_SESSION["conex"],$sqlcmd);
             ///                  
             if( ! $result_pessoa ) {
                     $msg_erro .= "Selecionando os projetos autorizados para esse Anotador - falha no mysql/query:&nbsp;"
-                                  .mysql_error().$msg_final;
+                                  .mysqli_error($_SESSION["conex"]).$msg_final;
                     echo $msg_erro;
                     exit();
             }
             /// $count_arr_cnc = count($arr_cnc["fonterec"])-1;
             ///  Identificação da Fonte de Recurso
-            $m_linhas = mysql_num_rows($result_pessoa);
+            $m_linhas = mysqli_num_rows($result_pessoa);
        ?>
        <select name="projeto"  id="projeto"  required="required"  title="Identificação do Projeto" 
          onchange="javascript:  enviar_dados_cad('anotacao',this.id,this.value)" 
@@ -727,7 +727,7 @@ function jsUpload(upload_field) {
             //  $result=mysql_db_query($db_array[$elemento],"SELECT codigousp,nome,categoria FROM pessoa order by nome ");
             $result=mysqli_query("SELECT codigousp,nome,categoria FROM pessoa order by nome ");
             if( ! $result ) {
-                $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysql_error().$msg_final;
+                $msg_erro .= "SELECT Tabela pessoa -  db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
                 echo $msg_erro;
                 exit();  
             }

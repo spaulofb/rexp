@@ -414,7 +414,7 @@ exit();
           exit();
      }         
      //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array - IMPORTANTE
-     $array_nome=mysql_fetch_array($resultado_projeto);
+     $array_nome=mysqli_fetch_array($resultado_projeto);
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }                  
@@ -482,7 +482,7 @@ exit();
      if( intval($num_anotacoes)>=1  ) {
           $anotacoes ="<div style='width: 100%; overflow: auto;padding-top:2px;'  >";
          /*  Mostra Anotacao por Anotacao - Desativado
-          while( $reg_anot=mysql_fetch_array($resultado_anotacao) ) {
+          while( $reg_anot=mysqli_fetch_array($resultado_anotacao) ) {
               // Anotacao do Projeto                            
               $anotacoes .="<p style='text-align:center;font-size: medium;'>"
                  ."<b>Anota&ccedil;&atilde;o</b>:&nbsp;".$reg_anot['numero_anotacao']."&nbsp;-&nbsp;"

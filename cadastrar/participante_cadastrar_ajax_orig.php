@@ -309,11 +309,11 @@ if( $source_upper=="PARTICIPANTE" ) {
     $res_pessoa=mysqli_query("SELECT  e_mail FROM $bd_1.pessoa WHERE  codigousp=".$val);
     //                          
     if( ! $res_pessoa ) {
-         die('ERRO: Selecionando Participante - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());  
+         die('ERRO: Selecionando Participante - falha:&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
          exit();
     }
     ///  Numero de pessoas soliciatadas
-    $n_regs=mysql_num_rows($res_pessoa);
+    $n_regs=mysqli_num_rows($res_pessoa);
     if( intval($n_regs)<1  ) {
          ///  $msg_erro .="Nenhum encontrado";
          $msg_erro .="Nenhum encontrado".$msg_final; 
@@ -324,17 +324,17 @@ if( $source_upper=="PARTICIPANTE" ) {
          $sqlcmd="SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario WHERE codigousp=$val ";
          ///          
-         $resultado_usuario=mysqli_query($sqlcmd);                       
+         $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
          /// Caso houve ERRO no SELECT
          if( ! $resultado_usuario ) {
-             /*  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysql_error().$msg_final;  
+             /*  $msg_erro .="&nbsp;Select tabela usuario: db/mysql ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;   
              */
-              echo $funcoes->mostra_msg_erro("&nbsp;Select tabela usuario&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+              echo $funcoes->mostra_msg_erro("&nbsp;Select tabela usuario&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
               exit();
          }
          ////
-         $n_usu = mysql_num_rows($resultado_usuario);
+         $n_usu = mysqli_num_rows($resultado_usuario);
          $aprovado_usu=9;
          //// Caso NAO esteja cadastrado na Tabela usuario
          if( intval($n_usu)<1 ) {
@@ -433,12 +433,12 @@ if( $source_upper=="PARTICIPANTE" ) {
 		///
 		if( strtoupper($table_atual)=="BEM" ) $table_atual=$_SESSION["select_cpo"]; 
   	    if( ! $result ) {
- 	         ///  die('ERRO: Select - falha: '.mysql_error());
-             echo $funcoes->mostra_msg_erro("&nbsp;Select - falha&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+ 	         ///  die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
+             echo $funcoes->mostra_msg_erro("&nbsp;Select - falha&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
              exit();
 		}
         ///   Numero de registros 
-        $m_linhas = mysql_num_rows($result);
+        $m_linhas = mysqli_num_rows($result);
 		//
 		$_SESSION["table_atual"]=$table_atual;
 		$cp_table_atual=$table_atual; $cp_cpo_where=$cpo_where;
@@ -464,7 +464,7 @@ if( $source_upper=="PARTICIPANTE" ) {
 	    	 <?php
           	     //  acrescentando opcoes
 	             echo "<option value='' >&nbsp;Selecionar&nbsp;</option>";
-                 while( $linha=mysql_fetch_array($result) ) {   ///  WHILE  DA TAG SELECT    
+                 while( $linha=mysqli_fetch_array($result) ) {   ///  WHILE  DA TAG SELECT    
     				      ///  Desativando selected - opcao que fica selecionada
 						  if( $linha['sigla'] ) {
 			    			     $value = urlencode($linha['sigla']);
@@ -569,14 +569,14 @@ if( $source_upper=="PARTICIPANTE" ) {
                  ." $bd_1.pessoa a, $bd_1.usuario b, $bd_2.participante c where  "
                  ." $where  a.codigousp=b.codigousp and a.codigousp=c.codigousp and c.pa=".$pa;
       ///
-      $resultado_pessoa = mysqli_query($sqlcmd); 
+      $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd); 
       if( ! $resultado_pessoa ) {
-           /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
-           echo $funcoes->mostra_msg_erro("&nbsp;SELECT usu&aacute;rio/paticipante&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+           /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
+           echo $funcoes->mostra_msg_erro("&nbsp;SELECT usu&aacute;rio/paticipante&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
            exit();
       }
       ///  Numero de registros
-      $n_regs = mysql_num_rows($resultado_pessoa);
+      $n_regs = mysqli_num_rows($resultado_pessoa);
       ///
       $aprovado="";
       /// Caso Participante foi encontrado
@@ -607,11 +607,11 @@ if( $source_upper=="PARTICIPANTE" ) {
            mysqli_query('SET character_set_results=utf8');
           ///  MySql - Select encontrar pessoa cadastrada
           $sqlcmd = "SELECT nome as nome_pessoa from $bd_1.pessoa where codigousp=$codigousp ";
-          $resultado_pessoa = mysqli_query($sqlcmd);                       
+          $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd);                       
           /// Caso houve erro
           if( ! $resultado_pessoa ) {
-               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
-               echo $funcoes->mostra_msg_erro("&nbsp;SELECT pessoa&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
+               echo $funcoes->mostra_msg_erro("&nbsp;SELECT pessoa&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                exit();
           }
           ///  Nome do Novo Participante para ser incluido
@@ -623,15 +623,15 @@ if( $source_upper=="PARTICIPANTE" ) {
           $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario WHERE codigousp=$codigousp ";
 
-          $resultado_usuario=mysqli_query($sqlcmd);                       
+          $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
           /// Caso houve erro
           if( ! $resultado_usuario ) {
-               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
-               echo $funcoes->mostra_msg_erro("&nbsp;SELECT usuario&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
+               echo $funcoes->mostra_msg_erro("&nbsp;SELECT usuario&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                exit();
           }
           /// numero de registros
-          $n_usu = mysql_num_rows($resultado_usuario);
+          $n_usu = mysqli_num_rows($resultado_usuario);
           $aprovado_usu=9;
           ///  Caso encontrado 
           if( intval($n_usu)==1  ) {
@@ -642,7 +642,7 @@ if( $source_upper=="PARTICIPANTE" ) {
                     Definindo os nomes dos campos e valores recebidos do 
                        MYSQL SELECT - mysql_fetch_array - IMPORTANTE
                 ***/
-               $array_usuario=mysql_fetch_array($resultado_usuario);
+               $array_usuario=mysqli_fetch_array($resultado_usuario);
                foreach( $array_usuario as $chave_usuario => $valor_usuario ) {
                         $$chave_usuario=$valor_usuario;
                }       
@@ -652,7 +652,7 @@ if( $source_upper=="PARTICIPANTE" ) {
                    $executar=mysqli_query("SELECT descricao FROM $bd_2.pa  WHERE codigo=$pa_usu ");  
                    /// Caso houve erro
                    if( ! $executar ) {
-                       echo $funcoes->mostra_msg_erro("&nbsp;SELECT pa descrição&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+                       echo $funcoes->mostra_msg_erro("&nbsp;SELECT pa descrição&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                        ///
                        exit();
                    }
@@ -703,10 +703,10 @@ if( $source_upper=="PARTICIPANTE" ) {
          if( isset($m_array) ) $codigousp=$m_array;
          $sqlcmd = "SELECT nome FROM $bd_1.pessoa  WHERE codigousp=$codigousp ";
           ///
-          $resultado_pessoa = mysqli_query($sqlcmd); 
+          $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd); 
           if( ! $resultado_pessoa ) {
-               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
-               echo $funcoes->mostra_msg_erro("&nbsp;SELECT nome do usu&aacute;rio&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+               /// die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
+               echo $funcoes->mostra_msg_erro("&nbsp;SELECT nome do usu&aacute;rio&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                exit();
           }
           ///  Nome do Participante
@@ -742,7 +742,7 @@ if( $source_upper=="PARTICIPANTE" ) {
          if( intval($m_erro)==1  ) {
                  /// Mensagem de erro
                 $msg_erro .="Usu&aacute;rio:&nbsp;$nome n&atilde;o foi cadastrado como "
-                         .ucfirst($descr_pa).".<br>Falha:&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
+                         .ucfirst($descr_pa).".<br>Falha:&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
                 echo $msg_erro;               
          } else { 
                 ///  Inserindo novo participante          
@@ -755,7 +755,7 @@ if( $source_upper=="PARTICIPANTE" ) {
                        $commit="rollback";  
                        $m_erro=1;
                        $msg_erro .="Participante:&nbsp;$nome n&atilde;o foi cadastrado como "
-                                .ucfirst($descr_pa).".<br>Falha:&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
+                                .ucfirst($descr_pa).".<br>Falha:&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
                        echo $msg_erro;   
                        ///            
                 }  else {          

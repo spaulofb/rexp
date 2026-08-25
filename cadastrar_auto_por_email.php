@@ -576,7 +576,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               $result=mysqli_query("SELECT codigo,descricao FROM pessoal.categoria order by codigo ");
               ///          
               if( ! $result ) {
-                   $msg_erro  .= "Select Tabela categoria - db/mysql:&nbsp;".mysql_error().$msg_final;
+                   $msg_erro  .= "Select Tabela categoria - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
                    echo  $msg_erro;
                    exit();                                                        
               }              
@@ -586,7 +586,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               <select name="categoria" class="td_select"   id="categoria"  title="Selecionar Categoria"  onblur="javascript: campo_n_vazio(this.id,'label_msg_erro');"   >            
                   <?php
                       //  Categoria
-                      $m_linhas = mysql_num_rows($result);
+                      $m_linhas = mysqli_num_rows($result);
                       if ( $m_linhas<1 ) {
                           echo "<option value='' >Nenhuma Categoria definida.</option>";
                       } else {
@@ -616,7 +616,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               $result=mysqli_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
               if ( ! $result ) {
                    mysql_free_result($result);
-                   die("ERRO: Select Tabela pa - ".mysql_error());
+                   die("ERRO: Select Tabela pa - ".mysqli_error($_SESSION["conex"]));
               }              
           ?>
           <span class="td_informacao2"  >
@@ -624,7 +624,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               <select name="pa" class="td_select"   id="pa"  title="Selecionar PA (privilegio de acesso)"   >            
                   <?php
                       //  PA
-                      $m_linhas = mysql_num_rows($result);
+                      $m_linhas = mysqli_num_rows($result);
                       if ( $m_linhas<1 ) {
                           echo "<option value='' >Nenhum PA definido.</option>";
                       } else {
@@ -659,7 +659,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                 $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if ( ! $result ) {
                      mysql_free_result($result);
-                     $msg_erro  .= "Select Tabela instituicao - db/mysql: ".mysql_error().$msg_final;
+                     $msg_erro  .= "Select Tabela instituicao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
                      echo  $msg_erro;
                      exit();                    
                 }
@@ -669,7 +669,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                  <select name="instituicao" class="td_select" id="instituicao"  onchange="javascript: enviando_dados('CONJUNTO',this.value,this.name+'|'+'<?php echo $vars_ambiente;?>');"  onblur="javascript: campo_n_vazio(this.id,'label_msg_erro');"   style="padding: 1px;" title="Institui&ccedil;&atilde;o"  >			
 			   <?php
   				  //  INSTITUICAO
-                 $m_linhas = mysql_num_rows($result);
+                 $m_linhas = mysqli_num_rows($result);
                  if ( $m_linhas<1 ) {
                         echo "<option value='' >Nenhuma Institui&ccedil;&atilde;o encontrada.</option>";
                  } else {

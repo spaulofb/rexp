@@ -173,11 +173,11 @@ if( ! isset($permit_pa)  ) {
     ///   
     $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
-         $msg_erro .="SELECT participante/pessoa: ".mysql_error().$msg_final;
+         $msg_erro .="SELECT participante/pessoa: ".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro; 
          exit();
     } else {
-         while ($row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC)) {
+         while ($row = mysqli_fetch_array($resultado_pa, MYSQL_ASSOC)) {
                $descricao=$row["descricao"];
                $array_pa[$descricao]=$row["codigo"];
         }
@@ -218,11 +218,11 @@ if( $_SESSION["total"]==1 and ( ! isset($permit_pa) ) ) {
             //   
             $result_pa=mysqli_query($cmdsql);
             if( ! $result_pa  ) {
-                $msg_erro .= "SELECT participante/pessoa: ".mysql_error().$msg_final;
+                $msg_erro .= "SELECT participante/pessoa: ".mysqli_error($_SESSION["conex"]).$msg_final;
                 echo $msg_erro; 
                 exit();  
             }
-            $regs = mysql_num_rows($result_pa);
+            $regs = mysqli_num_rows($result_pa);
             if( $regs>1 ) {
                      //   $num_pas = count($array_usuarios);         
                     $num_pas= (int) count($array_pa);  
@@ -238,7 +238,7 @@ if( $_SESSION["total"]==1 and ( ! isset($permit_pa) ) ) {
                 <select  name="permit_pa"  id="permit_pa" class="td_select"  onchange="javascript: pa_selecionado('pa_selecionado',this.value);"  title="Selecionar Privil&eacute;gio de Acesso (PA)"  >            
                 <option value="" >Selecione</option>
                 <?php
-                 while($linha=mysql_fetch_array($result_pa)) {       
+                 while($linha=mysqli_fetch_array($result_pa)) {       
                         //  htmlentities - o melhor para transferir na Tag Select
                         $codigo_pa= (int) $linha["pa"];  
                         //  foreach( $array_usuarios as $chave => $valor )  { 

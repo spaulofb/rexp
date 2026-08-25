@@ -49,8 +49,8 @@ if( isset($_SESSION["num_rows"]) ) {
         // Conta os resultados no total da minha query
         //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
         //  $query    = mysqli_query($strCount);
-        $_SESSION["row"]  = mysql_fetch_array($resultado_outro);
-        $_SESSION["total_regs"] = mysql_num_rows($resultado_outro);
+        $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
+        $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
         $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
         for( $z=1; $z<99999 ; $z++ ) {
                $valor_final[$z] = $z*$maximo;
@@ -84,9 +84,9 @@ if( intval($total_regs)<=0 ) {
     ///  Tabela Temporaia
     $table_rm_usu = $_SESSION['table_rm_usu'];
     $strQuery="SELECT $campos_query from  $table_rm_usu  LIMIT $inicio,$maximo";  
-    $query = mysqli_query($strQuery);
+    $query = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-        $msg_erro .=utf8_decode("Sem resultado - Select na tabela tempor&aacute;ria $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysql_error().$msg_final;  
+        $msg_erro .=utf8_decode("Sem resultado - Select na tabela tempor&aacute;ria $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"]).$msg_final;  
         echo $msg_erro;
         exit();            
     }
@@ -105,14 +105,14 @@ if( intval($total_regs)<=0 ) {
      }
      ///   Selecionando o maximo espaco ocupado em cada campo da tabela
      $sqlcmd="SELECT ".$max_length." FROM   $table_rm_usu  ";
-     $result_max_length = mysqli_query($sqlcmd);          
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      ///
      if ( ! $result_max_length ) {
-          $msg_erro .=utf8_decode("Select maximo tamanho dos campos da tabela tempor&aacute;ria  $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysql_error().$msg_final;  
+          $msg_erro .=utf8_decode("Select maximo tamanho dos campos da tabela tempor&aacute;ria  $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"]).$msg_final;  
           echo $msg_erro;
          exit();                      
      }    
-     $num_rows = mysql_num_rows($query); 
+     $num_rows = mysqli_num_rows($query); 
      $num_rows = (int) strlen(trim($num_rows)); 
      $campo_n=2;
      /*  Como repetir uma string ou caractere 

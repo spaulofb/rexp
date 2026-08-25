@@ -184,11 +184,11 @@ $cols=4;
            //                  
            if( ! $result ) {
                 if( isset($result) ) mysql_free_result($result);
-                die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: '.mysql_error());  
+                die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: '.mysqli_error($_SESSION["conex"]));  
            }
            //  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
             //  Identificação da Fonte de Recurso
-           $nprojetos = mysql_num_rows($result);
+           $nprojetos = mysqli_num_rows($result);
            ?>
            <!-- tag select para selecionar o Projeto -->
            <SELECT name="projeto"  id="projeto" class="td_select" title="Identificação do Projeto" 

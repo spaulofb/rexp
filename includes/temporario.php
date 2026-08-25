@@ -1,4 +1,4 @@
-     $array_nome_val=mysql_fetch_array($result_outro);
+     $array_nome_val=mysqli_fetch_array($result_outro);
      ///  Caso tenha registros
      for( $i=0; $i<$n_fields ; $i++ )  {
           ///  Nome do campo da Tabela

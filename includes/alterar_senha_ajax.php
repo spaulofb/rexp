@@ -329,8 +329,8 @@ if( strtoupper($val)=="SENHA" ) {
         mysqli_query('commit'); 
         echo $msg_ok;                    
     } else { 
-        ///  mysql_error() - para saber o tipo do erro
-        $msg_erro .="&nbsp;Falha Alterar SENHA - ".mysql_error().$msg_final;
+        ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+        $msg_erro .="&nbsp;Falha Alterar SENHA - ".mysqli_error($_SESSION["conex"]).$msg_final;
         mysqli_query('rollback'); 
         echo $msg_erro; 
         $lnerro=1;        

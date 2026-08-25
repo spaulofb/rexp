@@ -35,8 +35,8 @@ if ( $_SESSION["num_rows"]>=1 ) {
 	// Conta os resultados no total da minha query
 	//  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
 	//  $query    = mysqli_query($strCount);
-	$_SESSION["row"]  = mysql_fetch_array($result_outro);
-	$_SESSION["total_regs"] = mysql_num_rows($result_outro);
+	$_SESSION["row"]  = mysqli_fetch_array($result_outro);
+	$_SESSION["total_regs"] = mysqli_num_rows($result_outro);
 	$_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
     for( $z=1; $z<99999 ; $z++ ) {
            $valor_final[$z] = $z*$maximo;
@@ -71,11 +71,11 @@ if( $total_regs<=0 ) {
     $m_linhas=0; $num_fields=0; $m_ordenar="nome";    
     
 	$strQuery="SELECT $campos_query from  ".$_SESSION["table_remover"]."  LIMIT $inicio,$maximo";  
-	$query      = mysqli_query($strQuery);
+	$query      = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-       die('ERRO: Sem resultado - Select - falha: '.mysql_error());   
+       die('ERRO: Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));   
     }
-    $m_linhas = mysql_num_rows($query);
+    $m_linhas = mysqli_num_rows($query);
     //   Pegando os nomes dos campos  do primeiro Select
     $num_fields=mysql_num_fields($query);  //  Obtem o n?mero de campos do resultado
     $td_menu = $num_fields+1;                
@@ -91,14 +91,14 @@ if( $total_regs<=0 ) {
      }
      //   Selecionando o maximo espaco ocupado em cada campo da tabela
      $sqlcmd="SELECT ".$max_length." FROM    ".$_SESSION["table_remover"]."   ";
-     $result_max_length = mysqli_query($sqlcmd);          
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      //
      if ( ! $result_max_length ) {
           mysql_free_result($result_max_length);
-          die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());                  
+          die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));                  
      }    
      
-     $num_rows = mysql_num_rows($query);
+     $num_rows = mysqli_num_rows($query);
      $num_rows = (int) strlen(trim($num_rows)); 
      $campo_n=2;
      /*  Como repetir uma string ou caractere 

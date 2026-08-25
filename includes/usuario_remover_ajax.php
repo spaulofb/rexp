@@ -107,13 +107,13 @@ if( $opcao_maiusc=="USUARIO" ) {
     $sqlcmd = "SELECT b.nome,b.e_mail,b.categoria "
             ."  FROM $bd_1.usuario a, $bd_1.pessoa b "
             ."  WHERE a.codigousp=b.codigousp and a.codigousp=".$val;
-    $result_usuario = mysqli_query($sqlcmd);
+    $result_usuario = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_usuario ) {
-          $msg_erro .= "Consultando Usu&aacute;rio das tabelas usuario e pessoa. Falha db/mysql: ".mysql_error().$msg_final;  
+          $msg_erro .= "Consultando Usu&aacute;rio das tabelas usuario e pessoa. Falha db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
           echo $msg_erro;
           exit();            
     }
-    $array_nome=mysql_fetch_array($result_usuario);
+    $array_nome=mysqli_fetch_array($result_usuario);
     foreach(  $array_nome as $key => $value ) {
          $$key=$value;
     }
@@ -192,13 +192,13 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
    $sqlcmd = "SELECT cip,numprojeto,autor FROM $bd_2.projeto  "
              ." WHERE autor=$m_usuario ";
    //          
-    $result_usuario_rm = mysqli_query($sqlcmd);
+    $result_usuario_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_usuario_rm ) {
-        $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysql_error().$msg_final;
+        $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo   $msg_erro;
         exit();
     }       
-    $n_regs=mysql_num_rows($result_usuario_rm);
+    $n_regs=mysqli_num_rows($result_usuario_rm);
     $n_campos = mysql_num_fields($result_usuario_rm);
     if( $n_regs>=1 ) {
         for( $x=0; $x<$n_regs; $x++ ) {
@@ -238,25 +238,25 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
                                 mysqli_query('commit'); 
                                 $lnerro=0;
                            } else {
-                               $msg_erro .="&nbsp;Falha Tabela projeto delete - ".mysql_error().$msg_final;
+                               $msg_erro .="&nbsp;Falha Tabela projeto delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                                $lnerro=1;                                                      
                            }     
                        } else {
-                            $msg_erro .="&nbsp;Falha Tabela corespproj delete - ".mysql_error().$msg_final;
+                            $msg_erro .="&nbsp;Falha Tabela corespproj delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                             $lnerro=1;                       
                        }
                    } else {
-                        $msg_erro .="&nbsp;Falha Tabela corespproj delete - ".mysql_error().$msg_final;
+                        $msg_erro .="&nbsp;Falha Tabela corespproj delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                         $lnerro=1;                          
                    }        
                } else { 
-                    //  mysql_error() - para saber o tipo do erro
-                    $msg_erro .="&nbsp;Falha Tabela anotador delete - ".mysql_error().$msg_final;
+                    //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                    $msg_erro .="&nbsp;Falha Tabela anotador delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                     $lnerro=1;
                }                
            } else { 
-              //  mysql_error() - para saber o tipo do erro
-              $msg_erro .="&nbsp;Falha Tabela anotacao delete - ".mysql_error().$msg_final;             
+              //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+              $msg_erro .="&nbsp;Falha Tabela anotacao delete - ".mysqli_error($_SESSION["conex"]).$msg_final;             
               $lnerro=1;        
            }       
            if( $lnerro==1 ) mysqli_query('rollback'); 
@@ -270,7 +270,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
            }
     }  // FINAL do IF ISSET projeto
  */
-    $array_nome=mysql_fetch_array($result_usuario_rm);
+    $array_nome=mysqli_fetch_array($result_usuario_rm);
     foreach(  $array_nome as $key => $value ) {
          $$key=$value;
     }
@@ -311,7 +311,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
                     ."   projeto=$m_projeto  and  numero=$m_anotacao ");
      if( ! $delcmd ) {
          mysql_free_result($delcmd);
-         $msg_erro .="Falha removendo uma anota&ccedil;&atilde;o da Tabela anotacao - db/mysql: ".mysql_error().$msg_final;  
+         $msg_erro .="Falha removendo uma anota&ccedil;&atilde;o da Tabela anotacao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;
          exit();                
      }     

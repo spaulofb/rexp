@@ -107,9 +107,9 @@ if( $opcao=="DESCARREGAR" )  {
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_remover"]."    ";  
    $drop_result = mysqli_query($sql_temp); 
    if( ! $drop_result  ) {
-        // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysql_error());  
+        // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysqli_error($_SESSION["conex"]));  
         // Parte do Class
-        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysql_error());
+        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
         exit();                      
    }
    $where_cond="";
@@ -146,25 +146,25 @@ if( $opcao=="DESCARREGAR" )  {
     
     $sqlcmd .= $where_cond." order by a.numero desc";
     //
-    $result_rmanotacao = mysqli_query($sqlcmd);
+    $result_rmanotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_rmanotacao ) {
-       //  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error().$orientador);
-        echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o - db/mysql:&nbsp; ".mysql_error());        
+       //  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"]).$orientador);
+        echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));        
         exit();        
     }       
     //  Selecionando todos os registros da Tabela temporaria
    $query2 = "SELECT * from  ".$_SESSION["table_remover"]."  ";
-   $result_outro = mysqli_query($query2);                                    
+   $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
    if( ! $result_outro ) {
-        // die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysql_error());  
-        echo $funcoes->mostra_msg_erro("Selecionando as Anota&ccedil;&otilde;es do Projeto  - db/mysql:&nbsp; ".mysql_error());
+        // die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysqli_error($_SESSION["conex"]));  
+        echo $funcoes->mostra_msg_erro("Selecionando as Anota&ccedil;&otilde;es do Projeto  - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
         exit();                 
    }        
    //  Pegando os nomes dos campos do primeiro Select
    $num_fields=mysql_num_fields($result_outro);  //  Obtém o número de campos do resultado
    $td_menu = $num_fields+1;   
    //  Total de registros
-   $_SESSION["total_regs"] = mysql_num_rows($result_outro);
+   $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
    if( $_SESSION["total_regs"]<1 ) {
        /* $msg_erro .= "&nbsp;Nenhuma Anota&ccedil;&atilde;o para esse Projeto ".$msg_final;        
         echo $msg_erro;  */

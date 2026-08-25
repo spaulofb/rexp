@@ -67,7 +67,7 @@ $_POST['parte2'] = $parte1;
 //  $http_host = $_SERVER["HTTP_HOST"];
 //  $http_host = str_replace('-','_',$http_host);
 //
-$site = $_SESSION['url_folder']."/authent_user.php";
+//  $site = $_SESSION['url_folder']."/authent_user.php";
 //
 // header("Location: $site");
 unset($_SESSION["m_horiz"]);

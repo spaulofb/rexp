@@ -122,7 +122,7 @@ function page_protect() {
 	     if( isset($_COOKIE['user_id']) && isset($_COOKIE['user_key']) ) {
 	           /* we double check cookie expiry time against stored in database */
 	         	$cookie_user_id  = filter($_COOKIE['user_id']);
-	            $rs_ctime = mysqli_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysql_error());
+	            $rs_ctime = mysqli_query("select `ckey`,`ctime` from `users` where `id` ='$cookie_user_id'") or die(mysqli_error($_SESSION["conex"]));
 	            list($ckey,$ctime) = mysql_fetch_row($rs_ctime);
 	            // coookie expiry
 	            if( (time()-$ctime) > 60*60*24*COOKIE_TIME_OUT) {
@@ -230,7 +230,7 @@ function logout() {
     session_start();
     if( isset($_SESSION['user_id']) || isset($_COOKIE['user_id']) ) {
           mysqli_query("update `users`  set `ckey`= '', `ctime`= '' 
-			where `id`='$_SESSION[user_id]' OR  `id` = '$_COOKIE[user_id]'") or die(mysql_error());
+			where `id`='$_SESSION[user_id]' OR  `id` = '$_COOKIE[user_id]'") or die(mysqli_error($_SESSION["conex"]));
     }			
     /************ Delete the sessions****************/
     unset($_SESSION['user_id']); unset($_SESSION['user_name']);

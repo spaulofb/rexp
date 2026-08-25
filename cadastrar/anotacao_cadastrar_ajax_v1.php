@@ -1017,7 +1017,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
     $sqlcmd = "Select codigo,(select nome from $bd_1.pessoa where codigousp=$lncodigousp ) as nome "
                ." FROM $bd_2.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
-    $resultado = mysqli_query($sqlcmd);
+    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
         ///  die('ERRO: Select tabelas anotador e pessoa - falha: '.mysqli_error());  
         $msg_erro .= "Select Tabelas anotador e pessoa - db/mysql:&nbsp;".mysqli_error().$msg_final;
@@ -1050,7 +1050,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
     $sqlcmd = "Select codigo,(select nome from $bd_1.pessoa where codigousp=$lncodigousp ) as nome "
                ." From $bd_2.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
-    $resultado = mysqli_query($sqlcmd);
+    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
           ///   die('ERRO: Select tabelas anotador e pessoa apos INSERT - falhou: '.mysqli_error());  
           $msg_erro .= "Select Tabelas anotador e pessoa apos INSERT - db/mysql:&nbsp;".mysqli_error().$msg_final;
@@ -1212,7 +1212,7 @@ if( strtoupper($val)=="PROJETO" ) {
                 //   - Use mysqli_select_db() ou mysqli_query()
                 mysqli_query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
                 $sqlcmd="INSERT into $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
-                $success=mysqli_query($sqlcmd); 
+                $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
                 //  Complete the transaction 
                 if ( $success ) { 
                       ///  Cadastrando na tabela corespproj os coresponsaveis
@@ -1258,7 +1258,7 @@ if( strtoupper($val)=="PROJETO" ) {
                          mysqli_free_result($result_proj);                       
                          $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                          $sqlcmd="INSERT into $bd_2.anotador (cip,codigo,pa,data) values($projeto_cip,$m_autor,$lnpa,'$data_atual')";
-                         $res_anotador=mysqli_query($sqlcmd); 
+                         $res_anotador=mysqli_query($_SESSION["conex"],$sqlcmd); 
                          if( $res_anotador )  {
                               $msg_ok .="<p class='titulo_usp'>&nbsp;Para concluir o Projeto enviar o arquivo em formato PDF.</p>".$msg_final;
                               echo  $msg_ok."falta_arquivo_pdf".$_SESSION["numprojeto"]."&".$m_autor;

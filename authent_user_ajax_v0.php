@@ -246,7 +246,7 @@ if( ! isset($permit_pa)  ) {
         $txt="SELECT descricao TABLE pa - db/mysqli&nbsp; Corrigir<br/>";
         ///
         $_SESSION["erro"] = "$txt".mysqli_error($_SESSION["conex"]);
-        $msg_erro .="{$_SESSION["erro"]} ".mysql_error().$msg_final;
+        $msg_erro .="{$_SESSION["erro"]} ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo "$msg_erro";
         ///
         exit();
@@ -254,7 +254,7 @@ if( ! isset($permit_pa)  ) {
     }
     ///
     ///   Alterado em 20191122
-    ///  while( $row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC)) {
+    ///  while( $row = mysqli_fetch_array($resultado_pa, MYSQL_ASSOC)) {
     while( $row = mysqli_fetch_array($resultado_pa)) {
            $descricao=$row["descricao"];
            $array_pa[$descricao]=$row["codigo"];
@@ -370,7 +370,7 @@ if( intval($_SESSION["total"])==1 and ( ! isset($permit_pa) ) ) {
             <option value="" >Selecione</option>
             <?php
              ///   Alterado em 20191122
-             //// while( $linha=mysql_fetch_array($result_pa)) {       
+             //// while( $linha=mysqli_fetch_array($result_pa)) {       
              while( $linha=mysqli_fetch_array($result_pa)) {       
                     ///  htmlentities - o melhor para transferir na Tag Select
                     $codigo_pa= (int) $linha["pa"];  

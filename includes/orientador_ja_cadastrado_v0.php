@@ -4,7 +4,7 @@ if( intval($n_regs)>=1 ) {
    //  Definindo os nomes dos campos recebidos do FORM
    //    foreach( $arr_nome_val as $chave => $valor )  { 
    /*
-   while ( $arr_nome_val = mysql_fetch_array($result_usu,MYSQL_ASSOC) ) { 
+   while ( $arr_nome_val = mysqli_fetch_array($result_usu,MYSQL_ASSOC) ) { 
         foreach( $arr_nome_val   as $chave => $valor )  { 
             $nome_campo = strtoupper($chave);
             if( in_array($nome_campo,$m_usuario_arr) ) {
@@ -72,14 +72,14 @@ if( intval($n_regs)>=1 ) {
    ///  MySql - SELECT
    $sqlcmd = "SELECT a.* FROM $bd_1.pessoa a WHERE  $where   ";
    //
-   $result_pessoa = mysqli_query($sqlcmd);               
+   $result_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd);               
    if( ! $result_pessoa ) {
-       $msg_erro .="&nbsp;SELECT Tabela Pessoa:&nbsp; - ".mysql_error().$msg_final;
+       $msg_erro .="&nbsp;SELECT Tabela Pessoa:&nbsp; - ".mysqli_error($_SESSION["conex"]).$msg_final;
        echo $msg_erro;
        exit();  
    }
    /// Numero de registros
-   $numero_regs = mysql_num_rows($result_pessoa);
+   $numero_regs = mysqli_num_rows($result_pessoa);
    ///  Caso não encontrou registro
    if( intval($numero_regs)<1 ) {
          /// Caso nao tenha Cadastro na Tabela Pessoa
@@ -116,7 +116,7 @@ if( intval($n_regs)>=1 ) {
         exit();
         ///
    } 
-   $pessoa_array = mysql_fetch_array($result_pessoa);
+   $pessoa_array = mysqli_fetch_array($result_pessoa);
    //  Definindo os nomes dos campos recebidos do FORM
    foreach( $pessoa_array as $key => $value ) {
            $$key = $value;
@@ -131,12 +131,12 @@ if( intval($n_regs)>=1 ) {
   /// MySql - Select
   $cmdsql = mysqli_query("select activation_code  from $bd_1.usuario where codigousp=".$codigousp);
    if( ! $cmdsql ) {
-       $msg_erro .="&nbsp;SELECT Tabela Usuario:&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error().$msg_final;
+       $msg_erro .="&nbsp;SELECT Tabela Usuario:&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
        echo $msg_erro;     
        exit();  
    }
    ///  NUmero de registros
-   $nregs= mysql_num_rows($cmdsql);
+   $nregs= mysqli_num_rows($cmdsql);
    /// Caso encontrado um ou mais registros   
    if( intval($nregs)>=1 ) $codigo_ativa= (int) mysql_result($cmdsql,0,"activation_code");
    ///   Colocar as datas do Cadastro do Usuario e a validade
@@ -176,7 +176,7 @@ if( intval($n_regs)>=1 ) {
        } else { 
            ///  Falha inserindo novo Orientador na Tabela usuario
            $commit = "rollback";
-           $msg_erro .="&nbsp;Falha Tabela usuario insert&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error().$msg_final;
+           $msg_erro .="&nbsp;Falha Tabela usuario insert&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
            $lnerro=1; $participante_erro=1;
        }                
        /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
@@ -233,7 +233,7 @@ if( intval($n_regs)>=1 ) {
            $msg_ok  .=$nome_insert_mysql."</b>.<br>Encaminhado para o <b>Aprovador</b>.";
            $msg_ok  .="<br>Caso aprovado, receberá e_mail com instruções.</span>".$msg_final;
        } elseif( strtoupper($commit)=="ROLLBACK" ) {
-           $msg_erro .="&nbsp;Falha Tabela participante insert&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error().$msg_final;
+           $msg_erro .="&nbsp;Falha Tabela participante insert&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
            echo $msg_erro;         
        }
           
@@ -247,12 +247,12 @@ if( intval($n_regs)>=1 ) {
                       ." upper(trim(codigo))='$categoria' ");
               ///        
               if( ! $res_categoria ) {
-                   $msg_erro .="&nbsp;Select categoria campo codigo$lnerro".mysql_error().$msg_final;
+                   $msg_erro .="&nbsp;Select categoria campo codigo$lnerro".mysqli_error($_SESSION["conex"]).$msg_final;
                    echo $msg_erro;         
                    exit();
               }  
               ///  Numero de registros
-              $num_linhas=mysql_num_rows($res_categoria);           
+              $num_linhas=mysqli_num_rows($res_categoria);           
               if( intval($num_linhas)<1 ) {
                    $descr_categ = "Outra";
               } else {

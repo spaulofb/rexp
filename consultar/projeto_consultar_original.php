@@ -507,16 +507,16 @@ if( $permit_pa<$permit_aprovador ) {
         ." b.cip in (select distinct cip FROM  $bd_2.anotador "
         ." WHERE codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result_cons_proj = mysqli_query($sqlcmd); 
+$result_cons_proj = mysqli_query($_SESSION["conex"],$sqlcmd); 
 ///                  
 if( ! $result_cons_proj ) {
- //   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}.&nbsp;db/mysql:&nbsp;".mysql_error().$msg_final;
+ //   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}.&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
     echo $msg_erro;
     exit();
 }
 ///  Numero de Projetos Selecionados
-$nprojetos = mysql_num_rows($result_cons_proj);
+$nprojetos = mysqli_num_rows($result_cons_proj);
 if( intval($nprojetos)<1 ) {
      ?>
      <script type="text/javascript">

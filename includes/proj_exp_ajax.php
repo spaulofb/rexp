@@ -84,20 +84,20 @@ if( ( $data_upper=="COAUTORES" ) or  ( $data_upper=="COLABS" ) ) {
     $result = mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
     /// Verificar erro
     if( ! $result ) {
-          ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-          /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysql_error().$msg_final;  
+          ///  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+          /*   $msg_erro .= "Selecionando o Projeto para ser removido - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
            echo $msg_erro;  */
-          echo $funcoes->mostra_msg_erro("Selecionando pessoa&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+          echo $funcoes->mostra_msg_erro("Selecionando pessoa&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
           exit();                   
     }
     ///  Numero de Coautores
-    $m_linhas = mysql_num_rows($result);
+    $m_linhas = mysqli_num_rows($result);
     if( intval($m_linhas)<1 ) {
          /// 
         echo $funcoes->mostra_msg_erro("Nenhum Coautor encontrado");
         exit();      
     }
-    ///   $array_rows = mysql_fetch_array($result);
+    ///   $array_rows = mysqli_fetch_array($result);
     ///  $array_linhas = count($array_rows);
     ///  $array_rows = mysql_fetch_assoc($result);
     ///  for ( $jk=0 ; $jk<$m_linhas ; $jk++) {

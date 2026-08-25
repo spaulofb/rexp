@@ -22,10 +22,10 @@ function GenPwd($length = 8) {
                               ." upper(trim(senha))=password('$m_pwd')  ");
   ///
   if( ! $verificar_senha  ) {
-       die("ERRO: Select verificar_senha&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+       die("ERRO: Select verificar_senha&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
   } 
   /// Numero de senhas 
-  $n_senhas=mysql_num_rows($verificar_senha);
+  $n_senhas=mysqli_num_rows($verificar_senha);
   if( intval($n_senhas)>=1 ) {
       if( isset($verificar_senha) )  mysql_free_result($verificar_senha);
       ///

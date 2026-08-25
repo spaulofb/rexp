@@ -13,7 +13,7 @@ if( intval($num_campos)==1 ) {
      $cpo_nome_descr=mysql_field_name($result,1);
 }
 ////
-while($linha=mysql_fetch_array($result)) {       
+while($linha=mysqli_fetch_array($result)) {       
       ///  htmlentities - o melhor para transferir na Tag Select  
 	  ////  $nome=urlencode(trim($linha[$cpo_nome_descr]));  
        ///  $nome = htmlentities($linha[$cpo_nome_descr]);

@@ -74,7 +74,7 @@ $txt="SELECT * FROM  {$bd_1}.$session_tabela limit 1";
 $result_tabela = mysqli_query($_SESSION["conex"],"$txt");
 ///  if( ! $result_tabela ) {
 if( mysqli_error($_SESSION["conex"]) ) {         
-   ///  die('Select '.$session_tabela.' - falha: '.mysql_error());
+   ///  die('Select '.$session_tabela.' - falha: '.mysqli_error($_SESSION["conex"]));
     $_SESSION["erro"] = "Select $session_tabela  - db/mysqli:&nbsp;".mysqli_error($conex);
     return;
 }

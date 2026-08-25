@@ -168,9 +168,9 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
       $sqlcmd = "SELECT anotacao as nanotacoes FROM  $bd_2.projeto  "
                  ." WHERE cip=$val  ";
       ///           
-      $result_consult_anotacao = mysqli_query($sqlcmd);
+      $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $result_consult_anotacao ) {
-            echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysql_error());            
+            echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
             exit();        
       }
       ///  Numero de Anotacoes 
@@ -189,7 +189,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
    if( ! $drop_result  ) {
         /// 
         /// Parte do Class
-        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} -&nbsp;db/mysql:&nbsp;".mysql_error());
+        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
         exit();                      
    }
    $_SESSION["selecionados"]="";
@@ -257,26 +257,26 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     }
     ///
     /// Executando mysql_query
-    $result_rmanotacao = mysqli_query($sqlcmd);
+    $result_rmanotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_rmanotacao ) {
-       ///  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysql_error().$orientador);
-        echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o -&nbsp;db/mysql:&nbsp;".mysql_error());            
+       ///  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"]).$orientador);
+        echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
         exit();        
     }       
     ///
     ///  Selecionando todos os registros da Tabela temporaria
     $query2 = "SELECT * from  ".$_SESSION["table_remover"]."  ";
-    $result_outro = mysqli_query($query2);                                    
+    $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
     if( ! $result_outro ) {
-         /// die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysql_error());  
-         echo $funcoes->mostra_msg_erro("Selecionando as anota&ccedil;&otilde;es do Projeto  -&nbsp;db/mysql:&nbsp;".mysql_error());     
+         /// die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysqli_error($_SESSION["conex"]));  
+         echo $funcoes->mostra_msg_erro("Selecionando as anota&ccedil;&otilde;es do Projeto  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));     
          exit();                 
     }        
     ///  Pegando os nomes dos campos do primeiro Select
     $num_fields=mysql_num_fields($result_outro);  ///  Obtem o numero de campos do resultado
     $td_menu = $num_fields+1;   
     ///  Total de registros
-    $_SESSION["total_regs"]=$total_regs = mysql_num_rows($result_outro);
+    $_SESSION["total_regs"]=$total_regs = mysqli_num_rows($result_outro);
 
 /***
   echo  "ERRO: srv_rmanotacao/280   -->>  \$total_regs = $total_regs -- \$opcao_maiusc = $opcao_maiusc --- \$val = $val <br> -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
@@ -325,15 +325,15 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                       ." FROM rexp.anotacao a, rexp.projeto b "
                       ." WHERE ( a.projeto=b.cip ) and a.projeto=$cip  and  a.numero=$nr_anotacao ";
          ///
-         $result_anotacao_rm = mysqli_query($sqlcmd);
+         $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
          ///
          if( ! $result_anotacao_rm ) {
              if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
-             echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysql:&nbsp;".mysql_error());                  
+             echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
          } else {
              ///
              ///  Clicar o Formulario da Anotacao para ser excluida     
-             $array_nome=mysql_fetch_array($result_anotacao_rm);
+             $array_nome=mysqli_fetch_array($result_anotacao_rm);
              foreach( $array_nome as $key => $value ) {
                       $$key=$value;
              }
@@ -365,11 +365,11 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                                     ." WHERE codigousp=$anotador order by nome "); 
               ///                                    
               if( ! $res_anotador ) {
-                 echo  $funcoes->mostra_msg_erro("Select Tabela  pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());                  
+                 echo  $funcoes->mostra_msg_erro("Select Tabela  pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
                   exit();                
               }
               ///  Cod/Num_USP/Autor/Anotador
-              $m_linhas = mysql_num_rows($res_anotador);
+              $m_linhas = mysqli_num_rows($res_anotador);
               if( intval($m_linhas)<1 ) {
                   $autor="== Nenhum encontrado ==";
               } else {
@@ -447,12 +447,12 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             $result1=mysqli_query($test1);
             ///  Codigo da Testemunha (1) da realizacao 
             if( ! $result1 )  {
-                echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());                  
+                echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
                 exit();                
             }
             ///  Se Testemunha (1) encontrado
             $test1_nome="";
-            $n_test1=mysql_num_rows($result1);
+            $n_test1=mysqli_num_rows($result1);
             if( $n_test1==1 ) $test1_nome = mysql_result($result1,0,'testemunha1_nome');
             
             ///  include("testemunhas.php"); 
@@ -473,13 +473,13 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           $result=mysqli_query($test2);
           ///  Codigo da Testemunha (2) da realizacao 
           if( ! $result )  {
-               echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());                  
+               echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
                exit();                
           }
           /// $testemunhas_result = $result;
           ///  Se Testemunha (1) encontrado
           $test2_nome="";
-          $n_test2=mysql_num_rows($result);
+          $n_test2=mysqli_num_rows($result);
           if( $n_test2==1 ) $test2_nome = mysql_result($result,0,'testemunha2_nome');
           
           ///  include("testemunhas.php"); 
@@ -554,13 +554,13 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                           ." FROM $bd_2.anotacao a, $bd_2.projeto b "
                           ." WHERE ( a.projeto=b.cip ) and a.cia=$cia ";
           ///
-          $result_anotacao_rm = mysqli_query($sqlcmd);
+          $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $result_anotacao_rm ) {
                if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
-               echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysql_error());                  
+               echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
           } else {
                ///  Clicar o Formulario da Anotacao para ser excluida     
-               $array_nome=mysql_fetch_array($result_anotacao_rm);
+               $array_nome=mysqli_fetch_array($result_anotacao_rm);
                foreach( $array_nome as $key => $value ) {
                          $$key=$value;
                }
@@ -617,11 +617,11 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          ///
          ///  Removendo o registro da anotacao
          $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
-         $res_reg =  mysqli_query($sqlcmd);
+         $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
          if( ! $res_reg  ) $lnerro=1;
          ///
          if( intval($lnerro)>=1 ) {
-              echo $funcoes->mostra_msg_erro("&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;".mysql_error());
+              echo $funcoes->mostra_msg_erro("&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
               $commit="rollback";
          }    
          ///                  
@@ -637,9 +637,9 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
              ///  Verifica se existe ANOTACOES para o PROJETO escolhido
               $sqlcmd = "SELECT anotacao FROM  $bd_2.projeto  WHERE cip=$m_projeto ";
               ///           
-              $result_consult_anotacao = mysqli_query($sqlcmd);
+              $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
               if( ! $result_consult_anotacao ) {
-                    echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysql_error());            
+                    echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
                     exit();        
               }
               ///  Numero de Anotacoes 
@@ -656,9 +656,9 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                     ///
                     ///  Removendo o registro da anotacao
                     $sqlcmd = "UPDATE $bd_2.$tabela SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
-                    $res_reg =  mysqli_query($sqlcmd);
+                    $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
                     if( ! $res_reg ) {
-                        echo $funcoes->mostra_msg_erro("&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysql:&nbsp;".mysql_error());
+                        echo $funcoes->mostra_msg_erro("&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                          $commit="rollback";
                     }    
                     ///                  

@@ -370,11 +370,11 @@ $sqlcmd = "SELECT upper(substr(b.nome,1,1)) as letra1,count(*) as n "
     ." FROM pessoal.usuario a, pessoal.pessoa b, rexp.pa c "
     ." where a.codigousp=b.codigousp and a.pa=c.codigo  group by 1";
 ///
-$result = mysqli_query($sqlcmd);
+$result = mysqli_query($_SESSION["conex"],$sqlcmd);
 if( ! $result ) {
-    die('ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;db/mysql:&nbsp;'.mysql_error());  
+    die('ERRO: Falha consultando as tabelas usuario, pessoa e pa - letra inicial:&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
 }       
-$lnletras = mysql_num_rows($result);                
+$lnletras = mysqli_num_rows($result);                
 ///
 //  Salvar letrais iniciais em um conjunto para facilitar a busca
 ?>
@@ -413,7 +413,7 @@ $lnletras = mysql_num_rows($result);
 <!--  <option value="" >Selecionar Usu&aacute;rio pela Letra Inicial</option>  -->
 <option value="" >Selecionar usu&aacute;rio pelo nome</option>
 <?php
-    while( $linha=mysql_fetch_array($result) ) {       
+    while( $linha=mysqli_fetch_array($result) ) {       
          ///  htmlentities - corrige possiveis falhas de acentuacao de code page
          $letra= htmlentities($linha["letra1"]);  
          $lncodigousp=$linha["codigousp"];  

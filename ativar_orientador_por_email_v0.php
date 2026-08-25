@@ -581,12 +581,12 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                                   WHERE upper(trim(sigla))='".$instituicao."'  ");
            ///
            if( ! $resultado ) {
-                echo $funcoes->mostra_msg_erro("Falha no select da Tabela instituicao&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error());
-                ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                echo $funcoes->mostra_msg_erro("Falha no select da Tabela instituicao&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                 exit();
            }
            ///  Numero de Registros 
-           $n_regs=mysql_num_rows($resultado);
+           $n_regs=mysqli_num_rows($resultado);
            $nome_instituicao="";
            $onmouse="";
            if( intval($n_regs)==1 ) {
@@ -617,12 +617,12 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                                           WHERE upper(trim(sigla))='".$unidade."'  ");
                    ///
                    if( ! $resultado ) {
-                        echo $funcoes->mostra_msg_erro("Falha no select da Tabela unidade&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error());
-                        ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                        echo $funcoes->mostra_msg_erro("Falha no select da Tabela unidade&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                        ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                         exit();
                    }
                    ///  Numero de Registros 
-                   $n_regs=mysql_num_rows($resultado);
+                   $n_regs=mysqli_num_rows($resultado);
                    $nome_unidade="";
                    $onmouse="";
                    if( intval($n_regs)==1 ) {
@@ -649,12 +649,12 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                                               WHERE upper(trim(sigla))='".$depto."'  ");
                        ///
                        if( ! $resultado ) {
-                            echo $funcoes->mostra_msg_erro("Falha no select da Tabela depto&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error());
-                            ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                            echo $funcoes->mostra_msg_erro("Falha no select da Tabela depto&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                            ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                             exit();
                        }
                        ///  Numero de Registros 
-                       $n_regs=mysql_num_rows($resultado);
+                       $n_regs=mysqli_num_rows($resultado);
                        $nome_depto="";
                        $onmouse="";
                        if( intval($n_regs)==1 ) {
@@ -682,12 +682,12 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                                               WHERE upper(trim(sigla))='".$setor."'  ");
                        ///
                        if( ! $resultado ) {
-                            echo $funcoes->mostra_msg_erro("Falha no select da Tabela setor&nbsp;-&nbsp;db/Mysql:&nbsp;".mysql_error());
-                           ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                            echo $funcoes->mostra_msg_erro("Falha no select da Tabela setor&nbsp;-&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                           ////  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                             exit();
                        }
                        ///  Numero de Registros 
-                       $n_regs=mysql_num_rows($resultado);
+                       $n_regs=mysqli_num_rows($resultado);
                        $nome_setor="";
                        $onmouse="";
                        if( intval($n_regs)==1 ) {

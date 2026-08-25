@@ -232,7 +232,7 @@ if( is_array($data) ) {
             ///          
             ///  Caso ocorrido erro no Select
             if( intval($erro_select)>0 ) {
-                /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysql_error().$msg_final;  
+                /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                      echo $msg_erro;  
                 ***/
                 $txterr="Consultando a Tabela $data[0] campo $nome_cpo_where - db/mysqli:&nbsp;";
@@ -364,7 +364,7 @@ if( is_string($data) ) {
         ///  if( ! $result1 ) {
         $merro=0; $_SESSION["valcodinst"]="";
         if( mysqli_error($_SESSION["conex"]) ) {    
-            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysql_error().$msg_final;  
+            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  ***/
              //// $txt="Consultando a Tabela $data[0] campo sigla - db/mysqli:&nbsp;";
              $txt="SELECT COLUMN_NAME TABLE unidade - db/mysqli:&nbsp;";
@@ -496,7 +496,7 @@ if( is_string($data) ) {
         ///  if( ! $result1 ) {
         $merro=0;
         if( mysqli_error($_SESSION["conex"]) ) {    
-            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysql_error().$msg_final;  
+            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  ***/
             //// $txt="Consultando a Tabela $data[0] campo sigla - db/mysqli:&nbsp;";
             $txterr="SELECT COLUMN_NAME TABLE depto - db/mysqli:&nbsp;";
@@ -713,7 +713,7 @@ if( is_string($data) ) {
         ///  if( ! $result1 ) {
         $merro=0;
         if( mysqli_error($_SESSION["conex"]) ) {    
-            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysql_error().$msg_final;  
+            /***  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysqli: ".mysqli_error($_SESSION["conex"]).$msg_final;  
             *     echo $msg_erro;  
             ***/
              //// $txt="Consultando a Tabela $data[0] campo sigla - db/mysqli:&nbsp;";

@@ -9,11 +9,11 @@ if(!isset($_SESSION)) {
 $result_tabela = mysqli_query("SELECT * FROM ".$_SESSION["tabela"]."   limit 1");
 if( ! $result_tabela ) {
     mysql_free_result($result_tabela);
-   die('Sem resultado - Select - falha: '.mysql_error());
+   die('Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));
    exit();
 }
 $fields = mysql_num_fields($result_tabela);
-$rows   = mysql_num_rows($result_tabela);
+$rows   = mysqli_num_rows($result_tabela);
 $table  = mysql_field_table($result_tabela, 0);
 /*  echo "Your '" . $table . "' table has " . $fields . " fields and " . $rows . " record(s)\n";
     echo "The table has the following fields:\n";

@@ -136,15 +136,15 @@ if( $source_maiusc=="SAIR" ) {
                         mysqli_query('commit'); 
                         echo $msg_ok;                    
                    } else { 
-                        ///  mysql_error() - para saber o tipo do erro
-                        $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysql_error().$msg_final;
+                        ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                        $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                         mysqli_query('rollback'); 
                         echo $msg_erro;         
                         $lnerro=1;
                    }                
                } else { 
-                  ///  mysql_error() - para saber o tipo do erro
-                  $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysql_error().$msg_final;
+                  ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                  $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysqli_error($_SESSION["conex"]).$msg_final;
                   mysqli_query('rollback'); 
                   echo $msg_erro; 
                   $lnerro=1;        
@@ -212,13 +212,13 @@ if( $source_maiusc=="SAIR" ) {
              //                       
              // Verificando se houve erro no Select Tabdla Usuario
              if( ! $rs_check ) {
-                  die("ERRO: Select pessoal.usuario e campos  - ".mysql_error());
+                  die("ERRO: Select pessoal.usuario e campos  - ".mysqli_error($_SESSION["conex"]));
              }  
              /// Numero de registros
-             $num = mysql_num_rows($rs_check);
+             $num = mysqli_num_rows($rs_check);
              ///
              ///  Definindo os nomes dos campos recebidos do MYSQL SELECT
-             $array_nome=mysql_fetch_array($rs_check);
+             $array_nome=mysqli_fetch_array($rs_check);
              foreach( $array_nome as $key => $value )  $$key=$value;
              ///  Coincidir com linha encontrada com 1 ou mais resultados -  Usuário autenticado
              $activation_code = $_SESSION['activation_code'];
@@ -256,13 +256,13 @@ if( $source_maiusc=="SAIR" ) {
                                   ." senha=password('$new_pwd') "
                                   ."  WHERE  trim(codigousp)=$codigousp   ";
                           ///
-                          $rs_activ = mysqli_query($sqlcmd);     
+                          $rs_activ = mysqli_query($_SESSION["conex"],$sqlcmd);     
                           /// Verificando se houve erro no update            
                           if( ! $rs_activ ) {
                               /*****
-                              $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysql_error();
+                              $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysqli_error($_SESSION["conex"]);
                               ***/   
-                              $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysql_error();
+                              $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysqli_error($_SESSION["conex"]);
                               mysqli_query('rollback'); 
                               $nerro=1;
                           } else {
@@ -276,10 +276,10 @@ if( $source_maiusc=="SAIR" ) {
                                 ." datacad='$datacad',datavalido='$datavalido', "
                                 ." codigo_ativa=$activation_code   "
                                 ." WHERE  trim(codigousp)=$codigousp and pa=$orientador_pa   ";
-                        $rs_activ = mysqli_query($sqlcmd);     
+                        $rs_activ = mysqli_query($_SESSION["conex"],$sqlcmd);     
                        /// Verificando se houve erro no update            
                         if( ! $rs_activ ) {
-                             $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysql_error();
+                             $m_erro = "N?o foi poss?vel efetivar o usuario/e_mail. ".mysqli_error($_SESSION["conex"]);
                              mysqli_query('rollback'); 
                              $nerro=1;
                         } else {

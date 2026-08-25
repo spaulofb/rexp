@@ -428,7 +428,7 @@ if( ( $source_upper=="CORESPONSAVEIS" ) or  ( $source_upper=="COLABS" ) ) {
     $result=mysqli_query($_SESSION["conex"],"$proc");
     ///
     if( ! $result ) {
-         //// die('ERRO: Select pessoa - falha: '.mysql_error());  
+         //// die('ERRO: Select pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
          $terr="Select tabela pessoa falha&nbsp;-&nbsp;db/mysqli:&nbsp;";
          echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex));
          exit();   
@@ -834,7 +834,7 @@ if( $val_upper=="PROJETO" ) {
         // Verificando se houve erro no Select Tabdla Usuario
         if( ! $result ) {
             /**
-            *   $msg_erro .= "Select tabela objetivo - falha: ".mysql_error().$msg_final;
+            *   $msg_erro .= "Select tabela objetivo - falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
             *   echo $msg_erro;
             */
             $proc="Select tabela objetivo falha&nbsp;-&nbsp;db/mysqli:&nbsp;";
@@ -1077,7 +1077,7 @@ if( $val_upper=="PROJETO" ) {
                            echo $msg_ok;
                            ///
                        } else {
-                           $msg_erro .="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado.".mysql_error().$msg_final;
+                           $msg_erro .="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado.".mysqli_error($_SESSION["conex"]).$msg_final;
                            echo $msg_erro;                                   
                            mysqli_query($_SESSION["conex"],'rollback');                             
                        }                   

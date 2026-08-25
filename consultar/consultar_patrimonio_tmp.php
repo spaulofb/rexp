@@ -429,7 +429,7 @@ if( ! isset($_SESSION["tabela_salva"]) ) $_SESSION["tabela_salva"]="";
        if( mysqli_error($_SESSION["conex"]) ) { 
            $txterr="Falha no select da Tabela $tabela - db/Mysqli:&nbsp;";
             echo $funcoes->mostra_msg_erro("$txterr".mysqli_error($conex)); 
-            //// echo "ERRO: Falha no select da Tabela ".$tabela.": ".mysql_error();
+            //// echo "ERRO: Falha no select da Tabela ".$tabela.": ".mysqli_error($_SESSION["conex"]);
             exit();
        }
        ///

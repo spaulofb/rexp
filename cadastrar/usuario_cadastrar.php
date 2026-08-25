@@ -164,7 +164,7 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
                    include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");			
    		           $result = mysqli_query("SELECT codigousp,nome,categoria FROM pessoa  order by nome "); 
                   //  CODIGO/Num_USP
-                  $m_linhas = mysql_num_rows($result);				
+                  $m_linhas = mysqli_num_rows($result);				
 				?>
                <select name="codigousp" class="td_select"   id="codigousp"  title="Selecionar C&oacute;digo"   >			
                  <?php
@@ -178,7 +178,7 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
 	    				 //  include("../includes/tag_select_tabelas.php");
 						$codigo_sigla=mysql_field_name($result,0);
 						$cpo_nome_descr=mysql_field_name($result,1);
-                        while($linha=mysql_fetch_array($result)) {       
+                        while($linha=mysqli_fetch_array($result)) {       
                             //  htmlentities - o melhor para transferir na Tag Select
                             $sigla= htmlentities($linha[$codigo_sigla]);  
                   	        $nome= htmlentities($linha[$cpo_nome_descr]);  
@@ -215,9 +215,9 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
                    //          
                    if ( ! $result ) {
                         mysql_free_result($result);
-                        die("ERRO: Inesperado no mysql/query pa=".mysql_error());
+                        die("ERRO: Inesperado no mysql/query pa=".mysqli_error($_SESSION["conex"]));
                    }
-                  $m_linhas = mysql_num_rows($result);                
+                  $m_linhas = mysqli_num_rows($result);                
                 ?>
                <select name="pa"  id="pa"  class="td_select"   title="Selecionar PA"   >            
                  <?php
@@ -229,7 +229,7 @@ if( ( $_SESSION["permit_pa"]>$_SESSION['array_usuarios']['superusuario']  and $_
                     <?php
                         $codigo_idt=mysql_field_name($result,0);
                         $descricao_idt=mysql_field_name($result,1);
-                        while($linha=mysql_fetch_array($result)) {       
+                        while($linha=mysqli_fetch_array($result)) {       
                             //  htmlentities - o melhor para transferir na Tag Select
                             $codigo_val= htmlentities($linha[$codigo_idt]);  
                             $descricao_val= htmlentities($linha[$descricao_idt]);  

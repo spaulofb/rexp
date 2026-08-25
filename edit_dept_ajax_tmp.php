@@ -130,11 +130,11 @@ if( $val_upper=="INICIANDO" ) {
            $result=mysqli_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar $where $order_by ");
            //
            if( ! $result ) {
-                echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());
-                //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
+                //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                 exit();
            }
-           $total_registros_encontrados = mysql_num_rows($result);
+           $total_registros_encontrados = mysqli_num_rows($result);
            if( $total_registros_encontrados<1 ) {
                echo $funcoes->mostra_msg_erro("==== Nenhum registro encontrado dessa Tabela: $encontrar ====");    
                exit();      
@@ -196,18 +196,18 @@ if( $val_upper=="INICIANDO" ) {
                                            ." order by sigla,nome ");
                       //
                       if( ! $result ) {
-                           echo $funcoes->mostra_msg_erro("Falha no Select tabela instituicao&nbsp;- db/Mysql:&nbsp; ".mysql_error());
+                           echo $funcoes->mostra_msg_erro("Falha no Select tabela instituicao&nbsp;- db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
                            exit();
                       }
                       //
-                      $m_linhas=mysql_num_rows($result);
+                      $m_linhas=mysqli_num_rows($result);
                       if ( $m_linhas<1 ) {
                           echo "<option value='' >==== Nenhum(a) encontrado(a) ====</option>";
                       } else {
                        ?>
                        <option value='<?php echo $sigla_instituicao;?>' >=== Sigla - Nome ===</option>
                        <?php
-                        while($linha=mysql_fetch_array($result)) {
+                        while($linha=mysqli_fetch_array($result)) {
                             $sigla_instituicao=$linha['sigla'];   
                            /*  IMPORTANTE - para os espacos e caracteres com acentos
                                 option deve ser feito desse modo  */ 
@@ -241,11 +241,11 @@ if( $val_upper=="INICIANDO" ) {
                                       ." order by sigla,nome ");
                   //                                      
                   if( ! $result ) {
-                       echo $funcoes->mostra_msg_erro("Falha no Select tabela unidade&nbsp;- db/Mysql:&nbsp; ".mysql_error());
+                       echo $funcoes->mostra_msg_erro("Falha no Select tabela unidade&nbsp;- db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
                        exit();
                   }
                   //  
-                  $m_linhas = mysql_num_rows($result);
+                  $m_linhas = mysqli_num_rows($result);
                   if( $m_linhas<1 ) {
                      echo "<option value='' >==== Nenhum encontrado ====</option>";
                   } else {
@@ -253,7 +253,7 @@ if( $val_upper=="INICIANDO" ) {
                    <option value='<?php echo $sigla_unidade;?>' >===   Sigla - Nome   ===</option>
                  <?php
                    if( isset($linha) ) unset($linha);
-                   while($linha=mysql_fetch_array($result)) {       
+                   while($linha=mysqli_fetch_array($result)) {       
                          $sigla_unidade=$linha['sigla'];   
                          $nome_unidade=trim($linha["nome"]);
                          /*  IMPORTANTE - para os espacos e caracteres com acentos
@@ -345,7 +345,7 @@ if( $val_upper=="INICIANDO" ) {
              <?php        
                 $campos_option=$array_campo_nome["instituicao"]."&nbsp;-&nbsp;".$array_campo_nome["unidade"]."&nbsp;-&nbsp;".$array_campo_nome["sigla"]."&nbsp;-&nbsp;".$array_campo_nome["nome"];
                 echo "<option value='0'>====   {$campos_option}   ====</option>\n";
-                // while( $linha=mysql_fetch_array($result) ) {    
+                // while( $linha=mysqli_fetch_array($result) ) {    
                 //  IMPORTANTE - variavel do  mysql_fetch_array   para saber os valores dos campos da Tabela
                 //  $count_while_result=count($while_result);
                 for( $nir=0; $nir<$total_registros_encontrados; $nir++  ) {
@@ -405,8 +405,8 @@ if( is_array($data) ) {
                         if( strlen($encontrar)>1 ) {
                              $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                              if( ! $result ) {
-                                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());    
-                                 //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
+                                 //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                                  exit();
                              } else  $n_fields = mysql_num_fields($result);
                         }
@@ -512,7 +512,7 @@ if( is_array($data) ) {
         //  $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION['table_temp_usu']."    ";
         $result_editar_depto=mysqli_query($sql_temp_editar);
         if( ! $result_editar_depto ) {
-            echo $funcoes->mostra_msg_erro("Falha no DROP tabela $m_tabela_temp - db/Mysql:&nbsp; ".mysql_error());    
+            echo $funcoes->mostra_msg_erro("Falha no DROP tabela $m_tabela_temp - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
             exit();
         }                
         if( isset($result_editar_depto) ) unset($result_editar_depto);
@@ -525,7 +525,7 @@ if( is_array($data) ) {
         $res_create_tab_editar_depto = mysqli_query($sqlcmd_editar);            
         if( ! $res_create_tab_editar_depto ) {
             echo $funcoes->mostra_msg_erro("Falha no CREATE tabela {$_SESSION["table_temp_editar_depto"]} -"
-                          ."&nbsp;db/Mysql:&nbsp; ".mysql_error());    
+                          ."&nbsp;db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
             exit();
         }       
         //
@@ -533,12 +533,12 @@ if( is_array($data) ) {
                  ." WHERE  clean_spaces(sigla)=clean_spaces('$sigla') ");
         //
         if( ! $result1 ) {
-            /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysql_error().$msg_final;  
+            /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  */
-            echo $funcoes->mostra_msg_erro("Consultando a Tabela $data[0] - db/mysql:&nbsp;".mysql_error());
+            echo $funcoes->mostra_msg_erro("Consultando a Tabela $data[0] - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
             exit();             
         }  
-        $m_regs=mysql_num_rows($result1);
+        $m_regs=mysqli_num_rows($result1);
         if( isset($result1) ) mysql_free_result($result1);
         if( $m_regs>=1 ) {
             echo $funcoes->mostra_msg_erro("&nbsp;Nessa Tabela $data[0] os campos $instituicao,$unidade&nbsp;"
@@ -578,9 +578,9 @@ if( is_array($data) ) {
         if( ! $success ) {
             $commit="rollback";
             /* $msg_erro .="Usu&aacute;rio:&nbsp;$nome n&atilde;o foi cadastrado como "
-                      .ucfirst($descr_pa).".<br>Falha: ".mysql_error().$msg_final;
+                      .ucfirst($descr_pa).".<br>Falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
             echo $msg_erro;       */
-            echo $funcoes->mostra_msg_erro("Alterando dados na Tabela $data[0] - db/mysql:&nbsp; ".mysql_error());
+            echo $funcoes->mostra_msg_erro("Alterando dados na Tabela $data[0] - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
         } elseif( $success ) {
             echo $funcoes->mostra_msg_ok("Cadastro alterado: <br>$valor_campo_1,$valor_campo_2");           
         }
@@ -615,7 +615,7 @@ if( is_string($data) ) {
         if( strlen($encontrar)>1 ) {
             $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
             if( ! $result ) {
-                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                  exit();
             } else  $n_fields = mysql_num_fields($result);
         } else {

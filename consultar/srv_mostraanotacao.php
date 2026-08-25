@@ -482,7 +482,7 @@ exit();
     }         
     //
     ///  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array
-     //  $array_nome=mysql_fetch_array($resultado_projeto);
+     //  $array_nome=mysqli_fetch_array($resultado_projeto);
      $array_nome = $resultado_projeto->fetch_array();
      //
      ///  Validando as variaveis enviandos pelos campos do SELECT/MySql

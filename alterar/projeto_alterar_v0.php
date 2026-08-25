@@ -273,10 +273,10 @@ if( isset($_POST['fileframe']) ) {
               $sqlcmd = "SELECT numprojeto as nprojexp,autor as autor_cod "
                       ."  FROM $bd_2.projeto  WHERE cip=$cip ";
               ///
-              $result_consult_projeto = mysqli_query($sqlcmd);
+              $result_consult_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);
               /***
               if( ! $result_consult_projeto ) {
-                   $msg_erro .= "Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o=".$opcao.' - '.mysql_error().$msg_final;  
+                   $msg_erro .= "Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o=".$opcao.' - '.mysqli_error($_SESSION["conex"]).$msg_final;  
                    echo $msg_erro;                
                    exit();
               }
@@ -284,15 +284,15 @@ if( isset($_POST['fileframe']) ) {
               ///
               if( ! $result_consult_projeto ) {
                     $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA: ';
-                    $_SESSION["msg_upload"].=mysql_error().$msg_erro_final;
+                    $_SESSION["msg_upload"].=mysqli_error($_SESSION["conex"]).$msg_erro_final;
               } else {
                   ///
-                  $n_regs=mysql_num_rows($result_consult_projeto);
+                  $n_regs=mysqli_num_rows($result_consult_projeto);
                   /// Caso encontador o Projeto
                   if( $n_regs==1 ) {
                       ///  Definindo os nomes dos campos recebidos do MYSQL SELECT
                       if( isset($array_nome) ) unset($array_nome);
-                      $array_nome=mysql_fetch_array($result_consult_projeto);
+                      $array_nome=mysqli_fetch_array($result_consult_projeto);
                       foreach( $array_nome as $chave_cpo => $valor_cpo ) {
                                 $$chave_cpo=$valor_cpo;
                       }
@@ -312,7 +312,7 @@ if( isset($_POST['fileframe']) ) {
                         if( ! $success ) {
                               ///  Ocorreu ERRO
                              $n_erro=1;  
-                             $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA'.mysql_error();
+                             $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA'.mysqli_error($_SESSION["conex"]);
                              $_SESSION["msg_upload"].=$msg_erro_final;
                              mysqli_query('rollback'); 
                         } else {
@@ -334,9 +334,9 @@ if( isset($_POST['fileframe']) ) {
                              $success=mysqli_query("SELECT nome from $bd_1.pessoa WHERE codigousp=$autor_cod  ");
                              /// Verificando se houve erro no Select Tabela pessoa
                              if( ! $success ) {
-                                  /*  $msg_erro .= "Select tabela objetivo - falha: ".mysql_error().$msg_final;
+                                  /*  $msg_erro .= "Select tabela objetivo - falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
                                       echo $msg_erro;  */
-                                  echo $funcoes->mostra_msg_erro("Select tabela pessoa -&nbsp;db/mysql:&nbsp;".mysql_error());
+                                  echo $funcoes->mostra_msg_erro("Select tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                              } else {
                                  ///  Variavel autor_nome com o nome do usuario/autor
                                  $autor_nome= trim(mysql_result($success,0,0)); 
@@ -1511,16 +1511,16 @@ if ( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from  $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysqli_query($sqlcmd); 
+$result = mysqli_query($_SESSION["conex"],$sqlcmd); 
 ///                  
 if( ! $result ) {
-   /*  $msg_erro .= "Selecionando os projetos autorizados para esse Usu&aacute;rio. db/mysql: ".mysql_error().$msg_final;
+   /*  $msg_erro .= "Selecionando os projetos autorizados para esse Usu&aacute;rio. db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
     echo $msg_erro; */    
-   echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} -&nbsp;db/mysql:&nbsp;".mysql_error());
+   echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
     exit();    
 }
 ///  N?mero de Projetos Selecionados
-$nprojetos = mysql_num_rows($result);
+$nprojetos = mysqli_num_rows($result);
 ///
 ?>
 <!--  Todos Projetos -->   

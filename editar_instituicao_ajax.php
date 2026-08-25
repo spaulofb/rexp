@@ -127,11 +127,11 @@ if( $val_upper=="INICIANDO" ) {
                  $result=mysqli_query("SELECT * FROM {$_SESSION["bd_1"]}.$encontrar  $where ");
            }
            if( ! $result ) {
-                echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());
-                //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
+                //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                 exit();
            }
-           $total_registros_encontrados = mysql_num_rows($result);
+           $total_registros_encontrados = mysqli_num_rows($result);
            if( $total_registros_encontrados<1 ) {
                echo $funcoes->mostra_msg_erro("==== Nenhum registro encontrado dessa Tabela: $encontrar ====");    
                exit();      
@@ -311,8 +311,8 @@ if( is_array($data) ) {
                         if( strlen($encontrar)>1 ) {
                              $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                              if( ! $result ) {
-                                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());    
-                                 //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                                 echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
+                                 //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                                  exit();
                              } else  $n_fields = mysql_num_fields($result);
                         }
@@ -410,7 +410,7 @@ if( is_array($data) ) {
         $sql_editar_institui = "DROP TEMPORARY TABLE IF EXISTS  {$_SESSION["t_temp_editar_instituic"]} ";
         $res_editar_institui=mysqli_query($sql_editar_institui);
         if( ! $res_editar_institui ) {
-            echo $funcoes->mostra_msg_erro("Falha no DROP tabela $tab_temp_institui - db/Mysql:&nbsp; ".mysql_error());
+            echo $funcoes->mostra_msg_erro("Falha no DROP tabela $tab_temp_institui - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
             exit();
         }                
         if( isset($res_editar_institui) ) unset($res_editar_institui);
@@ -421,7 +421,7 @@ if( is_array($data) ) {
         $create_temp_tab_institui = mysqli_query($sq_editar_institui);            
         if( ! $create_temp_tab_institui ) {
             echo $funcoes->mostra_msg_erro("Falha no CREATE tabela {$_SESSION["t_temp_editar_instituic"]} -"
-                          ."&nbsp;db/Mysql:&nbsp; ".mysql_error());    
+                          ."&nbsp;db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
             exit();
         }       
         //
@@ -429,12 +429,12 @@ if( is_array($data) ) {
                  ." WHERE  clean_spaces($nome_campo_1)=clean_spaces('$valor_campo_1') ");
         //
         if( ! $result_instituicao ) {
-            /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysql_error().$msg_final;  
+            /*  $msg_erro .= "Falha consultando as tabelas projeto e pessoa  - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                  echo $msg_erro;  */
-            echo $funcoes->mostra_msg_erro("Consultando a Tabela $data[0] - db/mysql:&nbsp;".mysql_error());
+            echo $funcoes->mostra_msg_erro("Consultando a Tabela $data[0] - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
             exit();             
         }  
-        $m_regs=mysql_num_rows($result_instituicao);
+        $m_regs=mysqli_num_rows($result_instituicao);
         // 
         if( isset($result_instituicao) ) mysql_free_result($result_instituicao);
         if( $m_regs>=1 ) {
@@ -476,7 +476,7 @@ if( is_array($data) ) {
         //
         if( ! $success ) {
             $commit="rollback";
-            echo $funcoes->mostra_msg_erro("Alterando dados na Tabela $encontrar - db/mysql:&nbsp; ".mysql_error());
+            echo $funcoes->mostra_msg_erro("Alterando dados na Tabela $encontrar - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
         } elseif( $success ) {
             echo $funcoes->mostra_msg_ok("Cadastro alterado: <br>$valor_campo_1,$valor_campo_2");           
         }
@@ -507,7 +507,7 @@ if( is_string($data) ) {
             if( strlen($encontrar)>1 ) {
                 $result=mysqli_query("SELECT * from  ".$encontrar." limit 0 ");            
                 if( ! $result ) {
-                     echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysql_error());                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysql_error();
+                     echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                      exit();
                 } else  $n_fields = mysql_num_fields($result);
             }

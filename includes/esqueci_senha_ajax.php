@@ -167,10 +167,10 @@ if( strtoupper($source)=="SAIR" ) {
              // Verificando se houve erro no Select
              if( ! $res_acesso ) {
                   mysql_free_result($res_acesso);
-                  //  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                  die("ERRO: Select users e campos  - ".mysql_error());
+                  //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                  die("ERRO: Select users e campos  - ".mysqli_error($_SESSION["conex"]));
              }  
-             $num = mysql_num_rows($res_acesso);
+             $num = mysqli_num_rows($res_acesso);
              //  Match row found with more than 1 results  - the user is authenticated. 
              //  Caso encontrado 1 ou mais resultados - usuario autentico 
              if ( $num>0 ) { 
@@ -204,7 +204,7 @@ if( strtoupper($source)=="SAIR" ) {
                     // Verificando se houve erro no Update            
                     if( ! $result_update ) {
                           mysql_free_result($result_update);
-                          die("ERRO: Update users e campos  - ".mysql_error());
+                          die("ERRO: Update users e campos  - ".mysqli_error($_SESSION["conex"]));
                     }
                     header("Location: ../myaccount.php");
             } 
@@ -287,8 +287,8 @@ if( strtoupper($source)=="SAIR" ) {
                           ."  upper(trim(user_name))='$login'");
                 //
                 if( ! $rs_duplicate  ) {
-                    ///  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                    die("ERRO: Select users e campo user_name  - ".mysql_error());
+                    ///  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                    die("ERRO: Select users e campo user_name  - ".mysqli_error($_SESSION["conex"]));
                 }  
                 list($total) = mysql_fetch_row($rs_duplicate);
                 if( isset($rs_duplicate) ) mysql_free_result($rs_duplicate);
@@ -302,8 +302,8 @@ if( strtoupper($source)=="SAIR" ) {
                     //
                     if( ! $rs_duplicate  ) {
                           mysql_free_result($rs_duplicate);
-                         //  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                         die("Falha Select users e campo user_email - ".mysql_error());
+                         //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                         die("Falha Select users e campo user_email - ".mysqli_error($_SESSION["conex"]));
                     }
                     list($total) = mysql_fetch_row($rs_duplicate);
                     if( isset($rs_duplicate) ) mysql_free_result($rs_duplicate);
@@ -326,8 +326,8 @@ if( strtoupper($source)=="SAIR" ) {
                //  Complete the transaction 
                //  Falha no insert
                if( ! $sql_insert  ) { 
-                    //  mysql_error() - para saber o tipo do erro
-                    $m_erro="&nbsp;Ocorreu uma falha no Insert users - &nbsp;".mysql_error();
+                    //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                    $m_erro="&nbsp;Ocorreu uma falha no Insert users - &nbsp;".mysqli_error($_SESSION["conex"]);
                     mysqli_query('rollback'); 
                }
                //  Sucesso no Insert
@@ -344,7 +344,7 @@ if( strtoupper($source)=="SAIR" ) {
                     $md5_id = md5($user_id);
                     $res_update = mysqli_query("update users set md5_id='$md5_id' where id='$user_id'");
                    //  Falha no Update
-                   if( ! $res_update )  $m_erro="&nbsp;Ocorreu uma falha no Update users - &nbsp;".mysql_error();
+                   if( ! $res_update )  $m_erro="&nbsp;Ocorreu uma falha no Update users - &nbsp;".mysqli_error($_SESSION["conex"]);
                    if( $res_update  and ( strlen(trim($m_erro))<1  ) ) {
                        //    echo "<h3>Obrigado</h3> Recebemos sua apresentacao.";
                        if( $user_registration )  {
@@ -481,12 +481,12 @@ if( strtoupper($source)=="SAIR" ) {
                        ." where a.codigousp=b.codigousp and  upper(trim(a.e_mail))=upper('$user_email')  ");
          //
          if( ! $rs_check  ) {
-               ///  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-               $msg_erro .= "ERRO: Select Tabela  pessoa  e campo e_mail  - ".mysql_error().$msg_final;
+               ///  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+               $msg_erro .= "ERRO: Select Tabela  pessoa  e campo e_mail  - ".mysqli_error($_SESSION["conex"]).$msg_final;
                echo  $msg_erro;
                exit();
          }  
-         $num = mysql_num_rows($rs_check);
+         $num = mysqli_num_rows($rs_check);
          ////  Caso esse email NAO seja encontrado
          if( intval($num)<1 ) { 
                $m_erro = "N&atilde;o existe conta cadastrada com<br> esse <b>e_mail</b>: ".$user_email;    
@@ -504,8 +504,8 @@ if( strtoupper($source)=="SAIR" ) {
              $sqlselect ="select descricao from $bd_2.pa where codigo=$lnpa ";
              $result_pa=mysqli_query($sqlselect);
              if( ! $result_pa ) {
-                 ////  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                  $msg_erro .= "ERRO: Select Tabela  pa  - ".mysql_error().$msg_final;
+                 ////  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                  $msg_erro .= "ERRO: Select Tabela  pa  - ".mysqli_error($_SESSION["conex"]).$msg_final;
                   echo  $msg_erro;
                   exit();
              }  
@@ -533,8 +533,8 @@ if( strtoupper($source)=="SAIR" ) {
            ////            
            if( ! $rs_activ ) {
                  $lnerro=1;
-                ///  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                $msg_erro .= "Atualizando senha  - ".mysql_error().$msg_final;
+                ///  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                $msg_erro .= "Atualizando senha  - ".mysqli_error($_SESSION["conex"]).$msg_final;
                 mysqli_query('rollback'); 
            } else {
                mysqli_query('commit'); 
@@ -694,10 +694,10 @@ if( strtoupper($source)=="SAIR" ) {
                // Verificando se houve erro no Select Tabdla Usuario
                if( ! $rs_check ) {
                      mysql_free_result($rs_check);
-                     //  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                     die("ERRO: Select pessoal.usuario e campos  - ".mysql_error());
+                     //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                     die("ERRO: Select pessoal.usuario e campos  - ".mysqli_error($_SESSION["conex"]));
                 }  
-                $num = mysql_num_rows($rs_check);
+                $num = mysqli_num_rows($rs_check);
                 $n_pa = mysql_result($rs_check,0,pa);
                 foreach( $array_usuarios as $key =>$valor ) {
                       if( $n_pa==$valor  ) {
@@ -718,8 +718,8 @@ if( strtoupper($source)=="SAIR" ) {
                                ." trim(codigousp)=$user  AND  activation_code=$activ ");
                     // Verificando se houve erro no update            
                     if( ! $rs_activ ) {
-                          ///  die('ERRO: CREATE TABLE  - falha: '.mysql_error());  
-                          die("ERRO: Não foi possível efetivar o usuario/login. ".mysql_error());
+                          ///  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
+                          die("ERRO: Não foi possível efetivar o usuario/login. ".mysqli_error($_SESSION["conex"]));
                     }
                     // Recolhe automaticamente: hostname or domain  like example.com) 
                     $host  = $_SERVER['HTTP_HOST'];  $host_upper = strtoupper($host);

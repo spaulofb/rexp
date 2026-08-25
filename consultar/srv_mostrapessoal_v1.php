@@ -404,7 +404,7 @@ exit();
    }  
    ///      
    ///  Definindo os nomes e dados dos campos recebidos 
-   $arr_nome_val=mysql_fetch_array($result_outro);
+   $arr_nome_val=mysqli_fetch_array($result_outro);
    foreach(  $arr_nome_val as $key => $value ) $$key = $value;
     ///
     ?>

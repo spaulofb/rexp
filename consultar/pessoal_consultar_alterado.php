@@ -236,11 +236,11 @@ include("php_include/ajax/includes/conectar.php");
 ///  Selecionar os usuarios pela primeira letra do nome
 $sqlcmd = "SELECT upper(substr(nome,1,1)) as letra1,count(*) as n "
     ." FROM pessoal.pessoa  group by 1";
-$result = mysqli_query($sqlcmd);
+$result = mysqli_query($_SESSION["conex"],$sqlcmd);
 if( ! $result ) {
-    die('ERRO: Falha consultando a tabela pessoa  - letra inicial: '.mysql_error());  
+    die('ERRO: Falha consultando a tabela pessoa  - letra inicial: '.mysqli_error($_SESSION["conex"]));  
 }       
-$lnletras = mysql_num_rows($result);                
+$lnletras = mysqli_num_rows($result);                
 //
 //  Salvar letrais iniciais em um conjunto para facilitar a busca
 ?>
@@ -282,7 +282,7 @@ $lnletras = mysql_num_rows($result);
 <option value="" >== Selecionar Pessoa pela letra inicial ==</option>
 <?php
        ///  Com um ou mais registros 
-       while( $linha=mysql_fetch_array($result) ) {       
+       while( $linha=mysqli_fetch_array($result) ) {       
              ///  htmlentities - corrige poss?veis falhas de acentuacao de code page
              $letra= htmlentities($linha["letra1"]);  
              echo "<option  value=".urlencode($letra)."  title='Clicar para Busca'  >".$letra."</option>" ;

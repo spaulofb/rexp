@@ -117,10 +117,10 @@ if( $source_maiusc=="SAIR" ) {
                  ."  FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                  ." b.cip=".$m_array." order by b.titulo "; 
     ///                 
-    $result_projeto = mysqli_query($sqlcmd);               
+    $result_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);               
     ///                  
     if( ! $result_projeto ) {
-          die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
+          die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
      }
      //   Vericando se o LOGIN/USUSAIO se ja esta cadastrado na Tabela usuario
     $m_usuario_arr = array('USUARIO','LOGIN','USER','USERID','USER_ID','M_LOGIN','M_USER');
@@ -128,7 +128,7 @@ if( $source_maiusc=="SAIR" ) {
     $array_email = array("EMAIL","E_MAIL","USER_EMAIL","EMAIL_USER");
     ///  Definindo os nomes dos campos recebidos do FORM
     ///    foreach( $arr_nome_val as $chave => $valor )  { 
-    while ( $arr_nome_val = mysql_fetch_array($result_projeto,MYSQL_ASSOC) ) { 
+    while ( $arr_nome_val = mysqli_fetch_array($result_projeto,MYSQL_ASSOC) ) { 
        foreach( $arr_nome_val as $chave => $valor )  { 
            $campo_nome = strtoupper($chave);
            if( in_array($campo_nome,$m_usuario_arr) ) {
@@ -217,20 +217,20 @@ if( $source_maiusc=="SAIR" ) {
                                ." FROM $bd_1.pessoa a, $bd_2.corespproj b where "
                                ."  a.codigousp=b.coresponsavel  and  b.projnum=$numprojeto and  b.projetoautor='$autor' ";
                     ///                                    
-                    $result_coresp = mysqli_query($sqlcmd);               
+                    $result_coresp = mysqli_query($_SESSION["conex"],$sqlcmd);               
                     ///                  
                     if( ! $result_coresp ) {
-                        die('ERRO: Selecionando os Co-Respons&aacute;veis: '.mysql_error());  
+                        die('ERRO: Selecionando os Co-Respons&aacute;veis: '.mysqli_error($_SESSION["conex"]));  
                     }                        
                     ///  mysql_free_result($result_coresp);
-                    $regs = mysql_num_rows($result_coresp);
+                    $regs = mysqli_num_rows($result_coresp);
                     ?>                  
                    <span class="td_informacao2" style="margin-left: .4em;"  >                    
                    <select class="td_select" style="vertical-align: middle; font-weight: bold; margin: 0px; padding: .3em;"  title="Co-Respons&aacute;veis"  >            
                   <?php
                      ///  
                      echo "<option value='' >Co-Respons&aacute;veis</option>";
-                     while( $linha=mysql_fetch_array($result_coresp) ) {   ///  WHILE  DA TAG SELECT    
+                     while( $linha=mysqli_fetch_array($result_coresp) ) {   ///  WHILE  DA TAG SELECT    
                             echo  "<option  title='Co-Respons&aacute;vel'  >";
                             echo  $linha['nome_coresp']."&nbsp;</option>" ;
                      }  
@@ -266,8 +266,8 @@ if( $source_maiusc=="SAIR" ) {
           $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotador   ";
           $result_anotadores=mysqli_query($sql_temp);
           if( ! $result_anotadores ) {
-               /// die('ERRO: '.mysql_error());  
-               echo $funcoes->mostra_msg_erro("DROP TABLE IF EXISTS $table_consultar_anotador - db/mysql:&nbsp;".mysql_error());            
+               /// die('ERRO: '.mysqli_error($_SESSION["conex"]));  
+               echo $funcoes->mostra_msg_erro("DROP TABLE IF EXISTS $table_consultar_anotador - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
                exit();
           }                                          
           ////
@@ -298,24 +298,24 @@ if( $source_maiusc=="SAIR" ) {
                  ." FROM $bd_2.anotacao a, $bd_1.pessoa b, $bd_2.projeto c "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and c.cip=$cip order by a.data desc ";
           ///       
-          $result_anotadores = mysqli_query($sqlcmd);                                    
+          $result_anotadores = mysqli_query($_SESSION["conex"],$sqlcmd);                                    
           ///                  
           if( ! $result_anotadores ) {
-                 ///  die('ERRO: Criando uma Tabela Temporaria: '.mysql_error());  
-               echo $funcoes->mostra_msg_erro("Criando uma Tabela Temporaria - db/mysql:&nbsp; ".mysql_error());            
+                 ///  die('ERRO: Criando uma Tabela Temporaria: '.mysqli_error($_SESSION["conex"]));  
+               echo $funcoes->mostra_msg_erro("Criando uma Tabela Temporaria - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));            
                exit();
           } 
           ///// SELECT ALL from many-to-many table where a match is found
           $query2 = "SELECT * from  ".$_SESSION["table_temp_anotador"]."  ";
-         $resultado_outro = mysqli_query($query2);                                    
+         $resultado_outro = mysqli_query($_SESSION["conex"],$query2);                                    
          if( ! $resultado_outro ) {
-              /* $msg_erro .= "Selecionando as Anota&ccedil;&otilde;es do Projeto  - Falha: ".mysql_error().$msg_final;
+              /* $msg_erro .= "Selecionando as Anota&ccedil;&otilde;es do Projeto  - Falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
                  echo $msg_erro;    */     
-              echo $funcoes->mostra_msg_erro("Selecionando as Anota&ccedil;&otilde;es do Projeto -&nbsp;db/mysql:&nbsp;".mysql_error());
+              echo $funcoes->mostra_msg_erro("Selecionando as Anota&ccedil;&otilde;es do Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
               exit();
          }         
          ////  Total de registros
-         $_SESSION["total_regs"] = $total_regs = mysql_num_rows($resultado_outro);
+         $_SESSION["total_regs"] = $total_regs = mysqli_num_rows($resultado_outro);
          if( intval($total_regs)<1 ) {
               /*  $msg_erro .= "&nbsp;Nenhuma Anota&ccedil;&atilde;o para esse Projeto.".$msg_final;
                 echo $msg_erro; */
@@ -369,14 +369,14 @@ if( $source_maiusc=="SAIR" ) {
      $sqlcmd  = "SELECT a.numprojeto, a.titulo as  titulo_projeto, b.nome as autor_projeto,  "
        ." concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as data_projeto "
                 ." FROM $bd_2.projeto a, $bd_1.pessoa b WHERE a.cip=$cip and a.autor=b.codigousp  ";
-     $resultado_projeto = mysqli_query($sqlcmd);
+     $resultado_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);
      if( ! $resultado_projeto ) {
-         //// die("ERRO: Selecionando Projeto: cip = ".$cip." - ".mysql_error());  
-          echo $funcoes->mostra_msg_erro("Selecionando Projeto: cip = ".$cip." - db/mysql:&nbsp;".mysql_error());
+         //// die("ERRO: Selecionando Projeto: cip = ".$cip." - ".mysqli_error($_SESSION["conex"]));  
+          echo $funcoes->mostra_msg_erro("Selecionando Projeto: cip = ".$cip." - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
           exit();
      }         
      //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array
-     $array_nome=mysql_fetch_array($resultado_projeto);
+     $array_nome=mysqli_fetch_array($resultado_projeto);
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
@@ -398,15 +398,15 @@ if( $source_maiusc=="SAIR" ) {
                  ." concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anotacao, "
                  ." a.relatext as Arquivo FROM $bd_2.anotacao a, $bd_1.pessoa b "
                  ." WHERE a.autor=b.codigousp and a.projeto=$cip and a.numero=$anotacao  ";                
-     $resultado_anotacao = mysqli_query($sqlcmd);
+     $resultado_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
      if( ! $resultado_anotacao ) {
-          $msg_erro .= "Selecionando Anota&ccedil;&atilde;o $anotacao do  Projeto: ".$numprojeto." -  db/mysql:&nbsp;".mysql_error().$msg_final;  
+          $msg_erro .= "Selecionando Anota&ccedil;&atilde;o $anotacao do  Projeto: ".$numprojeto." -  db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;  
           echo $msg_erro;
           exit();
      }         
      //  Definindo os nomes dos campos recebidos do MYSQL SELECT - mysql_fetch_array
      if( isset($array_nome) ) unset($array_nome);
-     $array_nome=mysql_fetch_array($resultado_anotacao);
+     $array_nome=mysqli_fetch_array($resultado_anotacao);
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
@@ -422,15 +422,15 @@ if( $source_maiusc=="SAIR" ) {
          ///  Selecionando as Testemunhas da Anotacao          
          $cmd_sql = "SELECT codigousp as cod_testemunha, nome as nome_testemunha "
                   ." FROM  $bd_1.pessoa where codigousp $in ";
-         $res_testemunhas = mysqli_query($cmd_sql);
+         $res_testemunhas = mysqli_query($_SESSION["conex"],$cmd_sql);
          if( ! $res_testemunhas ) {
-             $msg_erro .= "Selecionando testesmunhas da  Anota&ccedil;&atilde;o. mysql =  db/mysql:&nbsp;".mysql_error().$msg_final;  
+             $msg_erro .= "Selecionando testesmunhas da  Anota&ccedil;&atilde;o. mysql =  db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;  
              echo $msg_erro;
              exit();
          }        
          $testemunhas="";
          /////  Numero de registros
-         $num_regs = mysql_num_rows($res_testemunhas); 
+         $num_regs = mysqli_num_rows($res_testemunhas); 
          for( $ntest=0 ; $ntest<$num_regs ; $ntest++ ) {
               $nome_testemunha[$ntest]= mysql_result($res_testemunhas,$ntest,"nome_testemunha");
               $x_testemunha = (int) $ntest+1;
@@ -664,15 +664,15 @@ if( $source_maiusc=="SUBMETER" )  {
                         mysqli_query('commit'); 
                         echo $msg_ok;                    
                    } else { 
-                        //  mysql_error() - para saber o tipo do erro
-                        $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysql_error().$msg_final;
+                        //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                        $msg_erro .="&nbsp;Falha Tabela pessoa delete - ".mysqli_error($_SESSION["conex"]).$msg_final;
                         mysqli_query('rollback'); 
                         echo $msg_erro;         
                         $lnerro=1;
                    }                
                } else { 
-                  //  mysql_error() - para saber o tipo do erro
-                  $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysql_error().$msg_final;
+                  //  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
+                  $msg_erro .="&nbsp;Falha Cadastrar novo Orientador $nome - ".mysqli_error($_SESSION["conex"]).$msg_final;
                   mysqli_query('rollback'); 
                   echo $msg_erro; 
                   $lnerro=1;        
@@ -738,9 +738,9 @@ if( $source_maiusc=="SUBMETER" )  {
              // Verificando se houve erro no Select Tabdla Usuario
              if( ! $rs_check ) {
                 mysql_free_result($rs_check);
-                die("ERRO: Select pessoal.usuario e campos  - ".mysql_error());
+                die("ERRO: Select pessoal.usuario e campos  - ".mysqli_error($_SESSION["conex"]));
              }  
-             $num = mysql_num_rows($rs_check);
+             $num = mysqli_num_rows($rs_check);
              $n_pa = mysql_result($rs_check,0,pa);
              $nome = mysql_result($rs_check,0,nome);
              $cpo_aprovado = mysql_result($rs_check,0,aprovado);
@@ -766,11 +766,11 @@ if( $source_maiusc=="SUBMETER" )  {
                 $sqlcmd = "UPDATE  ".$_SESSION['tabela']." SET aprovado='1',"
                         ." activation_code=$activation_code,datacad='$datacad',datavalido='$datavalido',senha=password('$new_pwd') "
                         ."  WHERE  trim(codigousp)=$codigousp   ";
-                $rs_activ = mysqli_query($sqlcmd);     
+                $rs_activ = mysqli_query($_SESSION["conex"],$sqlcmd);     
                 // Verificando se houve erro no update            
                 if( ! $rs_activ ) {
                      mysql_free_result($rs_activ);
-                     $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysql_error();
+                     $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysqli_error($_SESSION["conex"]);
                      mysqli_query('rollback'); 
                 } else {
                      mysqli_query('commit'); 

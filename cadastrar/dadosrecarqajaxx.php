@@ -40,12 +40,12 @@ if( isset($_SESSION["campos_valor"]) )  unset($_SESSION["campos_valor"]);
 $session_tabela = $_SESSION["tabela"];
 $result_tabela = mysqli_query("SELECT * FROM ".$session_tabela." limit 1");
 if( ! $result_tabela ) {
-   die('Select '.$session_tabela.' - falha: '.mysql_error());
+   die('Select '.$session_tabela.' - falha: '.mysqli_error($_SESSION["conex"]));
    exit();
 }
 
 $fields = mysql_num_fields($result_tabela);
-$rows   = mysql_num_rows($result_tabela);
+$rows   = mysqli_num_rows($result_tabela);
 $table  = mysql_field_table($result_tabela, 0);
 /*  echo "Your '" . $table . "' table has " . $fields . " fields and " . $rows . " record(s)\n";
     echo "The table has the following fields:\n";

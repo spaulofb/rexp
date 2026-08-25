@@ -396,16 +396,16 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
                 ." b.cip in (select distinct cip FROM $bd_2.anotador "
                 ." where codigo=".$usuario_conectado.")  order by b.titulo ";
       }
-      $result = mysqli_query($sqlcmd); 
+      $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
       //                  
       if( ! $result ) {
-          // die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
+          // die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
           //  Parte do Class                
-          echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error());
+          echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
           exit();                  
       }
       //  Numero de Projetos Selecionados
-      $nprojetos = mysql_num_rows($result);
+      $nprojetos = mysqli_num_rows($result);
       if ( $nprojetos<1 ) {
           /* $opcao_msg="N&atilde;o existe Projeto vinculado a esse Usu&aacute;rio.";
               <option value='' >$opcao_msg</option> */

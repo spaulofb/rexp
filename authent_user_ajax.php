@@ -312,7 +312,7 @@ if( ! isset($permit_pa)  ) {
     }
     //
     //   Alterado em 20250509
-    //  while( $row = mysql_fetch_array($resultado_pa, MYSQL_ASSOC)) {
+    //  while( $row = mysqli_fetch_array($resultado_pa, MYSQL_ASSOC)) {
     while( $row = mysqli_fetch_array($resultado_pa)) {
            $descricao=$row["descricao"];
            $array_pa[$descricao]=$row["codigo"];

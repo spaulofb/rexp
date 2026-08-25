@@ -263,9 +263,9 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
     //                          
     if( ! $res_pessoa ) {
          mysql_free_result($res_pessoa);
-         die('ERRO: Selecionando Participante - falha: '.mysql_error());  
+         die('ERRO: Selecionando Participante - falha: '.mysqli_error($_SESSION["conex"]));  
     }
-    $n_regs=mysql_num_rows($res_pessoa);
+    $n_regs=mysqli_num_rows($res_pessoa);
     if( $n_regs<1  ) {
         $msg_erro .="Nenhum encontrado";
         echo $msg_erro; 
@@ -274,8 +274,8 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
        mysql_free_result($res_pessoa);
        $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
              ." FROM $bd_1.usuario where codigousp=$val ";
-       $resultado_usuario=mysqli_query($sqlcmd);                       
-       $n_usu = mysql_num_rows($resultado_usuario);
+       $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
+       $n_usu = mysqli_num_rows($resultado_usuario);
        $aprovado_usu=9;
        if( $n_usu<1  ) {
           $partes .="block"; 
@@ -359,10 +359,10 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
 		//
 		if( strtoupper($table_atual)=="BEM"  )   $table_atual=$_SESSION["select_cpo"]; 
   	    if( ! $result ) {
-		       die('ERRO: Select - falha: '.mysql_error());
+		       die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
 		   	   exit();
 		}
-        $m_linhas = mysql_num_rows($result);
+        $m_linhas = mysqli_num_rows($result);
 		//
 		$_SESSION["table_atual"]=$table_atual;
 		$cp_table_atual=$table_atual; $cp_cpo_where=$cpo_where;
@@ -388,7 +388,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
 	    	 <?php
           	     //  acrescentando opcoes
 	             echo "<option value='' >&nbsp;Selecionar&nbsp;</option>";
-                 while( $linha=mysql_fetch_array($result) ) {   //  WHILE  DA TAG SELECT    
+                 while( $linha=mysqli_fetch_array($result) ) {   //  WHILE  DA TAG SELECT    
     				      //  Desativando selected - opcao que fica selecionada
 						  if( $linha['sigla'] ) {
 			    			     $value = urlencode($linha['sigla']);
@@ -475,12 +475,12 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
                  ." $bd_1.pessoa a, $bd_1.usuario b, $bd_2.participante c where  "
                  ." $where  a.codigousp=b.codigousp and a.codigousp=c.codigousp and c.pa=".$pa;
       ///
-      $resultado_pessoa = mysqli_query($sqlcmd);               
+      $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd);               
       if( ! $resultado_pessoa ) {
-            die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysql_error());
+            die('ERRO: SELECT Usu&aacute;rio/Paticipante: '.mysqli_error($_SESSION["conex"]));
       }
       ///  Numero de registros
-      $n_regs = mysql_num_rows($resultado_pessoa);
+      $n_regs = mysqli_num_rows($resultado_pessoa);
       ///
       $aprovado="";
       if( $n_regs==1 ) {
@@ -501,7 +501,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           ///  Desativando variavel  
           if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
           $sqlcmd = "SELECT nome as nome_pessoa from $bd_1.pessoa where codigousp=$codigousp ";
-          $resultado_pessoa = mysqli_query($sqlcmd);                       
+          $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd);                       
           ///  Nome do Novo Participante para ser incluido
           $nome = mysql_result($resultado_pessoa,0,"nome_pessoa");
           $participante_cadast=0;
@@ -509,8 +509,8 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
           $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario where codigousp=$codigousp ";
-          $resultado_usuario=mysqli_query($sqlcmd);                       
-          $n_usu = mysql_num_rows($resultado_usuario);
+          $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
+          $n_usu = mysqli_num_rows($resultado_usuario);
           $aprovado_usu=9;
           ///  Caso encontrado 
           if( intval($n_usu)==1  ) {
@@ -558,7 +558,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
         }
         if( $m_erro==1  ) {
             $msg_erro .="Usu&aacute;rio:&nbsp;$nome n&atilde;o foi cadastrado como "
-                      .ucfirst($descr_pa).".<br>Falha: ".mysql_error().$msg_final;
+                      .ucfirst($descr_pa).".<br>Falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
             echo $msg_erro;               
         } else {           
             $success=mysqli_query("insert into  $bd_2.participante "
@@ -568,7 +568,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
             if( ! $success ) {
                 $commit="rollback";  $m_erro=1;
                 $msg_erro .="Participante:&nbsp;$nome n&atilde;o foi cadastrado como "
-                      .ucfirst($descr_pa).".<br>Falha: ".mysql_error().$msg_final;
+                      .ucfirst($descr_pa).".<br>Falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
                 echo $msg_erro;               
             }  else {          
                 $msg_ok .="<p class='titulo_usp'>Participante:&nbsp;"

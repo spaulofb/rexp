@@ -712,18 +712,18 @@ if ($permit_pa<=$permit_orientador) {
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysqli_query($sqlcmd); 
+$result = mysqli_query($_SESSION["conex"],$sqlcmd); 
 ///  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
-    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-    /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error();
+    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+    /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
     echo $msg_erro.$msg_final;  */            
     //  Parte do Class                
-    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error());
+    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
     exit();                  
 }
 ///  Numero de Projetos Selecionados
-$_SESSION["nprojetos"] = $nprojetos = mysql_num_rows($result);
+$_SESSION["nprojetos"] = $nprojetos = mysqli_num_rows($result);
 ///
 if( intval($_SESSION["nprojetos"])>0 ) {
     ///  SESSION do Projeto Selecionado para alterar ANotacao

@@ -347,14 +347,14 @@ if( $source_upper=="PROJETO" ) {
                  ." and b.codigo!=$projeto_autor_cod "
                  ." order by a.nome";
     ///                        
-    $result = mysqli_query($sqlcmd); 
+    $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
     if( !$result ) {
-         ///  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.".mysql_error());
-         echo $funcoes->mostra_msg_erro("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP&nbsp;-&nbsp;db/mysql:&nbsp;".mysql_error());
+         ///  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.".mysqli_error($_SESSION["conex"]));
+         echo $funcoes->mostra_msg_erro("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
          exit();       
     }
     /// Numero de Anotadores desse Projeto para sererem  desativado/excluido
-    $m_linhas = mysql_num_rows($result);
+    $m_linhas = mysqli_num_rows($result);
     ////   <!--  tag select para selecionar o Anotador para o Projeto selecionado -->
     ////  IMPORTANTE: para retornar como tag Select sempre incluir a tag <div> - 20180518
     ?>
@@ -376,7 +376,7 @@ if( $source_upper=="PROJETO" ) {
                $cpo_nome_descr=mysql_field_name($result,1);
                $cpo_tipo_pa = mysql_field_name($result,0);
                if( isset($separador) ) unset($separador);
-               while( $linha=mysql_fetch_array($result) ) {       
+               while( $linha=mysqli_fetch_array($result) ) {       
                       ///  htmlentities - o melhor para transferir na Tag Select
                       $sigla= htmlentities($linha[$codigo_sigla]);  
                       ///  $nome= htmlentities($linha[$cpo_nome_descr]);
@@ -424,14 +424,14 @@ if( $source_upper=="CODIGOUSP" ) {
     include("php_include/ajax/includes/conectar.php"); 
     //  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
-    $resultado = mysqli_query($sqlcmd);
+    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
-          $msg_erro .=' Falha na consulta da pessoa -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+          $msg_erro .=' Falha na consulta da pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;               
          exit();                                          
     }
     /// Verifica se encontrou o novo Anotador
-    $nregs = mysql_num_rows($resultado);
+    $nregs = mysqli_num_rows($resultado);
     if( intval($nregs)>0) {
         $anotador_e_mail=mysql_result($resultado,0,"e_mail");
         $ver_e_mail="(E_mail:$anotador_e_mail)";
@@ -522,14 +522,14 @@ if( strtoupper($val)=="ANOTADOR" ) {
        $sqlcmd = "SELECT  anotador_ci as usuario_ci FROM $bd_2.anotador  "
                    ." WHERE codigo=$lncodigousp and cip=$lnprojeto ";
        ///           
-       $resultado = mysqli_query($sqlcmd);
+       $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
        if( ! $resultado ) {
-           $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+           $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
            echo $msg_erro;               
            exit();                                          
        } 
       /// Numero de participantes
-      $nregs_participante=mysql_num_rows($resultado);
+      $nregs_participante=mysqli_num_rows($resultado);
       if( intval($nregs_participante)==1 ) {
            $usuario_ci=mysql_result($resultado,0,"usuario_ci");           
       } 
@@ -596,9 +596,9 @@ if( strtoupper($val)=="ANOTADOR" ) {
      ///
      /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
       $sqlcmd = "DELETE FROM $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto  ";
-      $resultado = mysqli_query($sqlcmd);
+      $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $resultado ) {
-          $msg_erro .='Delete tabela anotador -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+          $msg_erro .='Delete tabela anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
           mysqli_query('rollback'); 
           $n_erro=1;
           echo $msg_erro;               
@@ -618,13 +618,13 @@ if( strtoupper($val)=="ANOTADOR" ) {
       ///   Verifica se é necessário incluir registro do anotador na tabela usuário
      /***
    $sqlcmd = "SELECT aprovado from $bd_1.usuario where  codigousp=$lncodigousp ";
-   $resultado = mysqli_query($sqlcmd);
+   $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
    if( ! $resultado ) {
-        $msg_erro .=' Falha na consulta do anotador na tabela usuario: db/mysql= '.mysql_error().$msg_final;  
+        $msg_erro .=' Falha na consulta do anotador na tabela usuario: db/mysql= '.mysqli_error($_SESSION["conex"]).$msg_final;  
         echo $msg_erro;               
         exit();                                          
    } 
-   $nregs=mysql_num_rows($resultado);
+   $nregs=mysqli_num_rows($resultado);
    ***/
    
       ///  Caso NAO ocorreu erro
@@ -632,9 +632,9 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $sqlcmd = "SELECT aprovado from $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
       ///
-      $resultado = mysqli_query($sqlcmd);
+      $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $resultado ) {
-          $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+          $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
           echo $msg_erro;               
           exit();                                          
       } 
@@ -649,7 +649,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $n_erro=0;
      
       /// Numero de participante desse Anotador 
-      $nregs=mysql_num_rows($resultado);
+      $nregs=mysqli_num_rows($resultado);
       if( intval($nregs)>0 ) {
           ///
           ///  Iniciar uma transaction - ex. procedure    
@@ -663,10 +663,10 @@ if( strtoupper($val)=="ANOTADOR" ) {
           $sqlcmd = "DELETE FROM  $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
           ///        
-          $resultado = mysqli_query($sqlcmd);
+          $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
           /// Verificando se houve erro ou nao
           if( ! $resultado ) {
-                $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+                $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
                 $n_erro=1;
                 mysqli_query('rollback'); 
                 //***mysqli_query("UNLOCK  TABLES");
@@ -700,14 +700,14 @@ if( strtoupper($val)=="ANOTADOR" ) {
               ." FROM $bd_2.projeto as a, $bd_1.pessoa b "
               ." WHERE cip=$lnprojeto and a.autor=b.codigousp ";
      ///              
-     $resultado = mysqli_query($sqlcmd);
+     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
      if( ! $resultado ) {
-         $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysql_error().$msg_final;  
+         $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;               
          exit();                                          
      } 
     ///  Numero de registros
-     $nregs=mysql_num_rows($resultado);
+     $nregs=mysqli_num_rows($resultado);
      if( intval($nregs)<1 ) {
           $msg_erro .='Buscando dados do projeto e do orientador não encontrado.'.$msg_final;  
           echo $msg_erro;               

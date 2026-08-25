@@ -24,12 +24,12 @@
 			   <?php
 			      //  UNIDADE
                  $result=mysql_db_query($dbname,"SELECT sigla FROM unidade order by nome ");
-                 $m_linhas = mysql_num_rows($result);
+                 $m_linhas = mysqli_num_rows($result);
                  if ( $m_linhas<1 ) {
                         echo "<option value='' >&nbsp;Nenhum encontrado&nbsp;</option>";
                  } else {
                      echo "<option value='>&nbsp;Selecionar&nbsp;' >&nbsp;Selecionar&nbsp;</option>";
-               	     while($linha=mysql_fetch_array($result) ) {       
+               	     while($linha=mysqli_fetch_array($result) ) {       
  			             if( $linha['sigla']==$_SESSION['unidade'] ) { 
     					      $inst_selected = "selected='selected'";
 					     } else   $inst_selected = "";					  

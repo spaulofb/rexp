@@ -111,10 +111,10 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
              ." b.autor as autor_projeto, b.titulo as tit_projeto  FROM rexp.anotacao a, rexp.projeto b "
              ." Where ( a.projeto=b.cip ) and a.projeto=$m_projeto  and  a.numero=$m_anotacao ";
     //
-    $result_anotacao_rm = mysqli_query($sqlcmd);
+    $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_anotacao_rm ) {
         mysql_free_result($result_anotacao_rm);
-        $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysql_error().$msg_final;
+        $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo   $msg_erro;
         exit();
     }       
@@ -123,7 +123,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
    //   $m_testemunha2 = mysql_result($result_anotacao_rm,0,"testemunha2");
     //  Definindo os nomes dos campos das Tabelas selecionadas no Mysql - Select
     //      
-    $array_nome=mysql_fetch_array($result_anotacao_rm);
+    $array_nome=mysqli_fetch_array($result_anotacao_rm);
     foreach(  $array_nome as $key => $value ) {
          $$key=$value;
     }
@@ -155,12 +155,12 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
                                     ."   codigousp=$anotador order by nome "); 
             if( ! $res_anotador ) {
                 mysql_free_result($res_anotador);
-                $msg_erro .="Select Tabela  pessoa - db/mysql: ".mysql_error().$msg_final;  
+                $msg_erro .="Select Tabela  pessoa - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                 echo $msg_erro;
                 exit();                
             }
             //  Cod/Num_USP/Autor/Anotador
-            $m_linhas = mysql_num_rows($res_anotador);
+            $m_linhas = mysqli_num_rows($res_anotador);
             if ( $m_linhas<1 ) {
                 $autor="== Nenhum encontrado ==";
             } else {
@@ -338,7 +338,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="ANOTACAO" ) {
                     ."   projeto=$m_projeto  and  numero=$m_anotacao ");
      if( ! $delcmd ) {
          mysql_free_result($delcmd);
-         $msg_erro .="Falha removendo uma anota&ccedil;&atilde;o da Tabela anotacao - db/mysql: ".mysql_error().$msg_final;  
+         $msg_erro .="Falha removendo uma anota&ccedil;&atilde;o da Tabela anotacao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;
          exit();                
      }

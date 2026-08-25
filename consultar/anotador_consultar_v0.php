@@ -661,17 +661,17 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                       ." b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b  where a.codigousp=b.autor and "
                       ." b.autor=".$usuario_conectado." order by b.titulo "; 
                  ///     
-                 $result_projeto = mysqli_query($sqlcmd);               
+                 $result_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);               
                  ///
                  if( ! $result_projeto ) {
                      /*  $msg_erro .="Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ";
-                         echo   $msg_erro.mysql_error().$msg_final;  */
+                         echo   $msg_erro.mysqli_error($_SESSION["conex"]).$msg_final;  */
                       ///  Parte do Class                
-                      echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ".mysql_error());
+                      echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
                       $nerro=1;     
                  }
                  ///  Numero de projetos desse Autor           
-                 $m_linhas = $n_projetos=mysql_num_rows($result_projeto);
+                 $m_linhas = $n_projetos=mysqli_num_rows($result_projeto);
                  ///  Verificando se NAO tem Projeto
                  if( intval($n_projetos)<1 ) {
                       /*  $msg_erro .=$sem_projeto.$msg_final;
@@ -709,7 +709,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                    */
                 ///  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
                 ///  Identifica??o da Fonte de Recurso
-                ///  $m_linhas = mysql_num_rows($result_projeto);
+                ///  $m_linhas = mysqli_num_rows($result_projeto);
                 ///
                ?>
                  <select name="projeto" id="projeto" class="Busca_letrai" title="Identifica&ccedil;&atilde;o do Projeto" 

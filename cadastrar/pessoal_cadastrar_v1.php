@@ -425,7 +425,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                  //
                  /**
                  *   if( ! $result ) {
-                 *        die('ERRO: Select - falha: '.mysql_error());
+                 *        die('ERRO: Select - falha: '.mysqli_error($_SESSION["conex"]));
                  *        exit();
                  *    }
                  * 
@@ -580,7 +580,7 @@ if( $_SESSION["permit_pa"]<=$array_pa["orientador"]  ) {
                // Verifica se houve erro
                 if( ! $result ) {
                     //
-                    // die('ERRO: Select tabela chefe - falha: '.mysql_error());  
+                    // die('ERRO: Select tabela chefe - falha: '.mysqli_error($_SESSION["conex"]));  
                     $terr="Falha no Select tabela chefe&nbsp;- db/Mysqli:&nbsp;";    
                     echo $funcoes->mostra_msg_erro("$terr".mysqli_error($conex)); 
                     exit();

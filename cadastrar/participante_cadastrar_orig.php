@@ -202,11 +202,11 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
               ///  Mysql - Select listando pessoas
               $result = mysqli_query("SELECT codigousp,nome,categoria FROM  $bd_1.pessoa  order by nome "); 
                if( ! $result ) {
-                    die('ERRO: Select - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());
+                    die('ERRO: Select - falha:&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));
                     exit();
                }
               ///  CODIGO/Num_USP - numero de registros
-              $m_linhas = mysql_num_rows($result);    
+              $m_linhas = mysqli_num_rows($result);    
                ///  Caso Participante NAO encontrado
               if( intval($m_linhas)<1 ) {
                     echo "Nenhum Participante encontrado.";
@@ -223,7 +223,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                    ///  include("../includes/tag_select_tabelas.php");
                     $codigo_sigla=mysql_field_name($result,0);
                     $cpo_nome_descr=mysql_field_name($result,1);
-                    /// while( $linha=mysql_fetch_array($result) ) {       
+                    /// while( $linha=mysqli_fetch_array($result) ) {       
                     for( $nx=0; $nx<$m_linhas; $nx++ ) {
                          ///  htmlentities - o melhor para transferir na Tag Select
                          /// $sigla= htmlentities($linha[$codigo_sigla]);  
@@ -261,10 +261,10 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                              ."  codigo>".$_SESSION["permit_pa"]." order by codigo "); 
                    ///          
                    if( ! $result ) {
-                        die("ERRO: Inesperado no pa -&nbsp;db/mysql:&nbsp;".mysql_error());
+                        die("ERRO: Inesperado no pa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
                    }
                    /// Numero de registros
-                  $m_linhas = mysql_num_rows($result);                
+                  $m_linhas = mysqli_num_rows($result);                
                    ///
                 ?>
                <select name="pa"  id="pa"  class="td_select" title="Selecionar PA (Permiss&atilde;o de Acesso)" required="required"  >            
@@ -277,7 +277,7 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                     <?php
                         $codigo_idt=mysql_field_name($result,0);
                         $cpo_descricao_idt=mysql_field_name($result,1);
-                        while($linha=mysql_fetch_array($result)) {       
+                        while($linha=mysqli_fetch_array($result)) {       
                              ///  htmlentities - o melhor para transferir na Tag Select
                              $codigo_val= htmlentities($linha[$codigo_idt]);  
                              //// $descricao_val= htmlentities($linha[$descricao_idt]);  

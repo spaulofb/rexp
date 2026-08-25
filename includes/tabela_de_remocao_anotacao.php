@@ -65,8 +65,8 @@ if( isset($_SESSION["num_rows"]) ) {
 	    // Conta os resultados no total da minha query
 	    //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
 	    //  $query    = mysqli_query($strCount);
-	    $_SESSION["row"]  = mysql_fetch_array($result_outro);
-	    $_SESSION["total_regs"] = mysql_num_rows($result_outro);
+	    $_SESSION["row"]  = mysqli_fetch_array($result_outro);
+	    $_SESSION["total_regs"] = mysqli_num_rows($result_outro);
 	    $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
         for( $z=1; $z<99999 ; $z++ ) {
                $valor_final[$z] = $z*$maximo;
@@ -110,15 +110,15 @@ if( intval($total_regs)<=0 ) {
     $num_fields=0; $m_ordenar="nome";    
     ////  Mysql/Selecionando - 
 	$strQuery="SELECT $campos_query from  $table_remover  LIMIT $inicio,$maximo";  
-	$query  = mysqli_query($strQuery);
+	$query  = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-       ////  die('ERRO: Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;'.mysql_error());   
-        $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysql_error().$msg_final;
+       ////  die('ERRO: Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;'.mysqli_error($_SESSION["conex"]));   
+        $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
         echo $msg_erro;  
         exit();          
     }
     ///  Numero de registros
-    $num_rows = mysql_num_rows($query);
+    $num_rows = mysqli_num_rows($query);
     ///   Pegando os nomes dos campos  do primeiro Select
     $num_fields=mysql_num_fields($query);  ///  Obtem o numero de Campos do resultado
     $td_menu = $num_fields+1;                
@@ -136,12 +136,12 @@ if( intval($total_regs)<=0 ) {
      ///   Selecionando o maximo espaco ocupado em cada campo da tabela
      /// $sqlcmd="SELECT ".$max_length." FROM  ".$_SESSION["table_remover"]."   ";
      $sqlcmd="SELECT ".$max_length." FROM  $table_remover ";
-     $result_max_length = mysqli_query($sqlcmd);          
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      ///
      if( ! $result_max_length ) {
-         /**   die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha:&nbsp;db/mysql&nbsp;'.mysql_error());                  
+         /**   die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha:&nbsp;db/mysql&nbsp;'.mysqli_error($_SESSION["conex"]));                  
           **/
-          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $table_remover - falha:&nbsp;db/mysql&nbsp;".mysql_error();
+          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $table_remover - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]);
           echo $msg_erro.$msg_final;  
           exit();          
      }    

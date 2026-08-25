@@ -132,7 +132,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
         ///
         $select_numprojeto = mysqli_query("SELECT numprojeto,autor FROM $bd_2.projeto  WHERE cip=$cip ");
         if( ! $select_numprojeto ) {
-              die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysql_error());  
+              die('ERRO: Select projeto campo numprojeto - falha:&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
               exit();
         }
         ///
@@ -323,7 +323,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 		      if( ! $nupdate ) {
                   //
                   $_SESSION["msg_upload"]= $msg_erro.'FALHA no armazenamento do arquivo: '.$_FILES['relatext']['name'].'<br/>';
-				  $_SESSION["msg_upload"].= mysql_error();
+				  $_SESSION["msg_upload"].= mysqli_error($_SESSION["conex"]);
    			      $_SESSION["msg_upload"].=$msg_erro_final;		
                   //
 			  } else {
@@ -335,12 +335,12 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
                       //
                       // Ocorreu ERRO/FALHA no Select da Anotacao do Projeto
                       $_SESSION["msg_upload"]= $msg_erro."Selecionando a Anotação $anotacao_numero do Projeto - FALHA:&nbsp;db/mysql:&nbsp;";
-                      $_SESSION["msg_upload"].=mysql_error().$msg_erro_final;
+                      $_SESSION["msg_upload"].=mysqli_error($_SESSION["conex"]).$msg_erro_final;
                       ///
                   } else {
                       //
                       /// Número de registros 
-                      $nregs=mysql_num_rows($success);
+                      $nregs=mysqli_num_rows($success);
                       /// Verificando 
                       if( intval($nregs)>0 ) { 
                            ///  

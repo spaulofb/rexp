@@ -12,9 +12,9 @@ mysql_select_db($db_array[$elemento]);
 $result_nome=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
 if( ! $result_nome ) {
      mysql_free_result($result_nome);
-     die('ERRO: Select pessoa - falha: '.mysql_error());  
+     die('ERRO: Select pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
 }
-$m_linhas = mysql_num_rows($result_nome);
+$m_linhas = mysqli_num_rows($result_nome);
 if ( $m_linhas<1 ) {
        echo "Nenhum registro encontrado na tabela pessoa";
        exit();      
@@ -92,7 +92,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 		 //							  
          if( ! $result_obj ) {
              mysql_free_result($result_obj);
-             die('ERRO: Select objetivo - falha: '.mysql_error());  
+             die('ERRO: Select objetivo - falha: '.mysqli_error($_SESSION["conex"]));  
          }
 		 ?>
         <!-- Objetivo  -->
@@ -197,7 +197,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 					//
 					if( ! $result_tb_temp2 ) {
                          mysql_free_result($result_tb_temp2);
-                         die('ERRO: Create Table $temp_tabela - falha: '.mysql_error());  								
+                         die('ERRO: Create Table $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  								
 					}			   
                     mysql_free_result($result_tb_temp1);					
                     mysql_free_result($result_tb_temp2);
@@ -205,9 +205,9 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 					//
 					if( ! $query )	{
                          mysql_free_result($query);
-                         die('ERRO: Select $temp_tabela - falha: '.mysql_error());  				
+                         die('ERRO: Select $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  				
 					}		   
-                    $m_linhas = mysql_num_rows($query);
+                    $m_linhas = mysqli_num_rows($query);
                     // 	$titulo_atributos = $_SESSION['titulo_atributos'];
                   	//	Pegando os nomes dos campos  do primeiro Select
                     $num_fields=mysql_num_fields($query);  //  Obtem o número de campos do resultado
@@ -226,9 +226,9 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 					//
 					if ( ! $result_max_length ) {
                          mysql_free_result($result_max_length);
-                         die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysql_error());  				
+                         die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  				
 					}	
-					$num_rows = mysql_num_rows($query);
+					$num_rows = mysqli_num_rows($query);
                     $num_rows = (int) strlen(trim($num_rows)); 
                     $campo_n=2;
                    /*  Como repetir uma string ou caractere 
@@ -274,7 +274,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
                 // Iniciando os campos com dados
              	//  Numero do registro -  m_n
               	//  $m_n=$inicio;
-              	while($r = mysql_fetch_array($query)) {
+              	while($r = mysqli_fetch_array($query)) {
                		    $m_n++;
             		?>
           			<tr id="tr_itemOn" class="itemOn"  onmouseover="javascript: mouse_over_menu(this)" onmouseout="javascript: mouse_out_menu(this)"  style="overflow: scroll; "  >		

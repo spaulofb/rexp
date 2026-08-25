@@ -119,9 +119,9 @@ if( isset($_POST['fileframe']) ) {
                                            WHERE cip=$nprojexp  ");
       ///
       if( ! $select_numprojeto ) {
-            ///  die('ERRO: Select projeto campo numprojeto - falha: '.mysql_error());              
+            ///  die('ERRO: Select projeto campo numprojeto - falha: '.mysqli_error($_SESSION["conex"]));              
            ///  Partes Class - includes/autoload_class.php  e  funcoes.class.php  - IMPORTANTE
-           echo $funcoes->mostra_msg_erro("Select projeto campo cip -&nbsp;db/mysql:&nbsp;".mysql_error());
+           echo $funcoes->mostra_msg_erro("Select projeto campo cip -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
            exit();
       }
       ///
@@ -322,7 +322,7 @@ if( isset($_POST['fileframe']) ) {
            ///
            if( ! $success ) {
                 $_SESSION["msg_upload"]= $msg_txt_erro.'FALHA no armazenamento do arquivo: '.$_FILES['relatext']['name'].'<br>';
-                $_SESSION["msg_upload"].= mysql_error();
+                $_SESSION["msg_upload"].= mysqli_error($_SESSION["conex"]);
                 $_SESSION["msg_upload"].=$msg_txt_erro_final;        
             } else {
                  /// Arquivo de Anotacao alterado 
@@ -1251,18 +1251,18 @@ if( $permit_pa<=$permit_orientador ) {
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
-$result = mysqli_query($sqlcmd); 
+$result = mysqli_query($_SESSION["conex"],$sqlcmd); 
 ///  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
-    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysql_error());  
-    /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error();
+    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+    /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
     echo $msg_erro.$msg_final;  */            
     //  Parte do Class                
-    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysql_error());
+    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
     exit();                  
 }
 ///  Numero de Projetos Selecionados
-$_SESSION["nprojetos"] = $nprojetos = mysql_num_rows($result);
+$_SESSION["nprojetos"] = $nprojetos = mysqli_num_rows($result);
 ///
 if( intval($_SESSION["nprojetos"])>0 ) {
     ///  SESSION do Projeto Selecionado para alterar ANotacao

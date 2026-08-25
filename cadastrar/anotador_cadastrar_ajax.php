@@ -550,7 +550,7 @@ exit();
          $sqlcmd = "SELECT codigousp from $bd_1.pessoa WHERE
                replace(nome,' ','')='$nome_tmp' or e_mail='$e_mailinf' ; ";
         ///
-        $resultado = mysqli_query($sqlcmd);
+        $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $resultado ) {
             $msg_erro .='Falha na busca do anotador/nome na tabela pessoa -&nbsp;db/mysqli:&nbsp;'.mysqli_error($conex).$msg_final;  
             echo $msg_erro;               

@@ -672,7 +672,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                  ///
                  if( ! $result_projeto ) {
                      /*  $msg_erro .="Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql:&nbsp; ";
-                         echo   $msg_erro.mysql_error().$msg_final;  */
+                         echo   $msg_erro.mysqli_error($_SESSION["conex"]).$msg_final;  */
                       ///  Parte do Class                
                       $txterr="Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysqli:&nbsp;";
                       echo $funcoes->mostra_msg_erro("$txterr".mysqli_error($_SESSION["conex"]));
@@ -718,7 +718,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                    */
                 ///  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
                 ///  Identifica??o da Fonte de Recurso
-                ///  $m_linhas = mysql_num_rows($result_projeto);
+                ///  $m_linhas = mysqli_num_rows($result_projeto);
                 ///
                ?>
                  <select name="projeto" id="projeto" class="Busca_letrai" title="Identifica&ccedil;&atilde;o do Projeto" 
