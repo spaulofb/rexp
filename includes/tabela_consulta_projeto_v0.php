@@ -139,6 +139,7 @@ if( intval($total_regs)<=0 ) {
     //// $campos_fora = array("ARQUIVO","DATA","AUTOR");
     ///  $campos_fora = array("ARQUIVO","AUTOR","CODAUTOR","NR","CIP");
     $campos_fora = array("ARQUIVO","AUTOR","CODAUTOR","CIP");
+    $cabecalho_array = array("DATA","DETALHES");
     $align_right_array=array("CIP","NP","NR","NUMPROJETO");
     $lncodautor="";
     ////  echo "<div id='div_pagina' style='text-align:center;backgroun-color:#000;' >";
@@ -146,7 +147,7 @@ if( intval($total_regs)<=0 ) {
     ///  echo "<table style='width: auto; border: 0px solid #000000;text-align:center;'  >";
     echo "<div id='div_pagina' class='div_pagina' style='margin-left: 1px; width: 99%; height: 100%;' >";
     echo $_SESSION["titulo"];
-    echo "<table  class='div_pagina'  style='margin-left: 3px; border: 0px solid #000000;' cellpadding='1' cellspacing='2' >";
+    echo "<table  class='div_pagina'  style='margin-left: 3px;' cellpadding='1' cellspacing='2' >";
     echo "<tr>";
     for($column_num = 0; $column_num < $num_fields; $column_num++) {
           $field_name = $fields[$column_num]; $text_align="left";
@@ -157,10 +158,11 @@ if( intval($total_regs)<=0 ) {
          if( $field_name_upper=='CIP' ) $field_name="CIP";
          /// if( $field_name_upper=='NP' ) $field_name="CIP";
          if( $field_name_upper=='NP' ) $field_name="NP";
+         if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
          ///  if( $field_name_upper=='DETALHES' ) $text_align="center";         
          if( preg_match("/^Nr{1}$|^N$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
               echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
-                     ."$field_name</span></th>";          
+                     ."$field_name</th>";          
          } else {
              ///  Autor do Projeto pelo Codigo/USP
              $field_name=preg_replace("/codautor/i","Autor",$field_name);
@@ -182,7 +184,7 @@ if( intval($total_regs)<=0 ) {
     while( $linha = mysql_fetch_row($query)) {
          //// link        
          ?>       
-        <tr align="left" >
+        <tr align="left" class="font_size" >
         <?php
         $n_index=0;
         /// Coluna por Coluna da Tabela
@@ -199,9 +201,10 @@ if( intval($total_regs)<=0 ) {
                  $lncodautor=mysql_result($query,$conta_linha,"codautor");
             } 
             ///
-         ///   if( $field_name_upper=='TITULO' or $field_name_upper=='AUTOR' ) {
+            ///   if( $field_name_upper=='TITULO' or $field_name_upper=='AUTOR' ) {
             ////   if( $field_name_upper=='TITULO' or $field_name_upper=='DATA' ) {
-            if( $field_name_upper=='TITULO'  ) {
+            /// if( $field_name_upper=='TITULO'  ) {
+            if( preg_match("/ITULO|TÍTULO/i",$field_name_upper) ) {
                 ///  $valor=htmlentities(trim(mysql_result($query,$conta_linha,"relatproj")));
                 /// $valor=htmlentities(trim(mysql_result($query,$conta_linha,"Arquivo")));
                 $valor=trim(mysql_result($query,$conta_linha,"Arquivo"));
@@ -214,7 +217,7 @@ if( intval($total_regs)<=0 ) {
                   $cmdhtml = "<a href='#' onclick='javascript: consulta_mostraproj(\"DESCARREGAR\",\"$valor\",\"$usuario_conectado#projeto#$lncodautor\");return true;'  "
                         ."  id='relatproj'  class='linkum'  title='Clicar'  "
                         ."  style='text-align: center; vertical-align:top; line-height:normal;' >";  
-                  $cmdhtml .="<span style='font-size:larger; ' >";
+                  $cmdhtml .="<span>";
                   /* IMPORTANTE: Detectar codificacao  de caracteres  - 20171005   */
                    $codigo_caracter=mb_detect_encoding($titulo);
                    if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
@@ -248,7 +251,7 @@ if( intval($total_regs)<=0 ) {
                   //// echo $cmdhtml2;                  
             } else {
                 ///  Numero da sequencia dos registros
-                $text_align="right";
+           ////     $text_align="right";
                 $valor=$linha[$column_num];    
                 /***
                      if( $field_name_upper=='NUMPROJETO' )  $text_align="right";

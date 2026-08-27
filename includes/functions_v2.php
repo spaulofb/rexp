@@ -487,8 +487,51 @@ if( ! function_exists("TrocarAcento") ) {
     }
     ///  Final -  function  TrocarAcento
 } 
-///
-///  function_exists - verifica se a  function function NAO esta ativa
+/**  Final - if( ! function_exists("TrocarAcento") ) { */
+//
+// Substitui utf8_decode() deprecated do PHP 8.2+
+if (!function_exists('utf8_decode_seguro')) {
+    function utf8_decode_seguro($string) {
+        if (empty($string)) return $string;
+        return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+    }
+}
+
+// Substitui utf8_encode() deprecated do PHP 8.2+
+if (!function_exists('utf8_encode_seguro')) {
+    function utf8_encode_seguro($string) {
+        if (empty($string)) return $string;
+        return mb_convert_encoding($string, 'UTF-8', 'ISO-8859-1');
+    }
+}
+//
+if( !function_exists('utf8_para_latin1') ) {
+    function utf8_para_latin1(?string $texto): string
+    {
+        // 
+        $texto = trim((string) $texto);
+        //
+        //  Variavel vazia  
+        if( $texto==='' ) {
+            return '';
+        }
+        //
+        if( function_exists('mb_convert_encoding')) {
+            return mb_convert_encoding($texto, 'ISO-8859-1', 'UTF-8');
+        }
+
+        // último recurso: iconv troca acentos sem equivalente por "?"
+        if( function_exists('iconv') ) {
+            return (string) iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $texto);
+        }
+        //
+        return $texto;
+        //
+    }
+}
+//
+//
+//  function_exists - verifica se a  function function NAO esta ativa
 if( ! function_exists("ValidaData") ) {
     /// Verificando a Data 
      function ValidaData($dat){

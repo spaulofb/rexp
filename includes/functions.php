@@ -505,7 +505,32 @@ if (!function_exists('utf8_encode_seguro')) {
     }
 }
 //
+if( !function_exists('utf8_para_latin1') ) {
+    function utf8_para_latin1(?string $texto): string
+    {
+        // 
+        $texto = trim((string) $texto);
+        //
+        //  Variavel vazia  
+        if( $texto==='' ) {
+            return '';
+        }
+        //
+        if( function_exists('mb_convert_encoding')) {
+            return mb_convert_encoding($texto, 'ISO-8859-1', 'UTF-8');
+        }
 
+        // último recurso: iconv troca acentos sem equivalente por "?"
+        if( function_exists('iconv') ) {
+            return (string) iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $texto);
+        }
+        //
+        return $texto;
+        //
+    }
+}
+//
+//
 //  function_exists - verifica se a  function function NAO esta ativa
 if( ! function_exists("ValidaData") ) {
     /// Verificando a Data 

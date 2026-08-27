@@ -1,9 +1,17 @@
 <?php
 /**
 *      FUNTCION PHP
-*  v20250411
+*  v20250520
 */
-///  function_exists - verifica se a function NAO esta ativa
+//
+/**     Verificar a Mensagem de Erro  
+ *  Crucial ter as configurações de erro ativadas
+*/ 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+/**   function_exists - verifica se a function NAO esta ativa   */
 if( ! function_exists("get_ftp_mode") ) {
      function get_ftp_mode($file) {   
         $path_parts = pathinfo($file);
@@ -479,8 +487,26 @@ if( ! function_exists("TrocarAcento") ) {
     }
     ///  Final -  function  TrocarAcento
 } 
-///
-///  function_exists - verifica se a  function function NAO esta ativa
+/**  Final - if( ! function_exists("TrocarAcento") ) { */
+//
+// Substitui utf8_decode() deprecated do PHP 8.2+
+if (!function_exists('utf8_decode_seguro')) {
+    function utf8_decode_seguro($string) {
+        if (empty($string)) return $string;
+        return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+    }
+}
+
+// Substitui utf8_encode() deprecated do PHP 8.2+
+if (!function_exists('utf8_encode_seguro')) {
+    function utf8_encode_seguro($string) {
+        if (empty($string)) return $string;
+        return mb_convert_encoding($string, 'UTF-8', 'ISO-8859-1');
+    }
+}
+//
+
+//  function_exists - verifica se a  function function NAO esta ativa
 if( ! function_exists("ValidaData") ) {
     /// Verificando a Data 
      function ValidaData($dat){
@@ -527,7 +553,8 @@ if( ! function_exists("ValidaData") ) {
             ////
             return $res;
      }
-     ///  Final - verificando a data
+     //  Final - verificando a data  
+     //
 }
 ////
 ?>

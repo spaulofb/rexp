@@ -1,9 +1,17 @@
 <?php
 /**
 *      FUNTCION PHP
-*  v20250411
+*  v20250520
 */
-///  function_exists - verifica se a function NAO esta ativa
+//
+/**     Verificar a Mensagem de Erro  
+ *  Crucial ter as configurações de erro ativadas
+*/ 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+/**   function_exists - verifica se a function NAO esta ativa   */
 if( ! function_exists("get_ftp_mode") ) {
      function get_ftp_mode($file) {   
         $path_parts = pathinfo($file);
@@ -527,7 +535,8 @@ if( ! function_exists("ValidaData") ) {
             ////
             return $res;
      }
-     ///  Final - verificando a data
+     //  Final - verificando a data  
+     //
 }
 ////
 ?>

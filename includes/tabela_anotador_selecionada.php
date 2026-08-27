@@ -26,7 +26,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
     echo "ERRO: Sessão incluir_arq não está ativa.";
     exit();
 }
-///  Verifica se pagina menor que 1
+//  Verifica se pagina menor que 1
 if( intval($pagina)<1 ) {
     $pagina="1";
 }
