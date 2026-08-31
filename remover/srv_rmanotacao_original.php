@@ -185,7 +185,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     ///  Mostrar todas as anotacoes de um Projeto
    $table_remover = $_SESSION["table_remover"] = "$bd_2.temp_remover_anotacao";
    $sql_temp = "DROP TABLE IF EXISTS  $table_remover  ";  
-   $drop_result = mysqli_query($sql_temp); 
+   $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
    if( ! $drop_result  ) {
         /// 
         /// Parte do Class

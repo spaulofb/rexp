@@ -225,7 +225,7 @@ exit();
 
 
         $sql_temp = "DROP TABLE IF EXISTS   ".$table_consultar_projeto."    ";  
-        $drop_result = mysqli_query($sql_temp); 
+        $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
         if( ! $drop_result  ) {
             // die('ERRO: Falha consultando a tabela '.$table_consultar_projeto.' - '.mysqli_error($_SESSION["conex"]));         
             /*  $msg_erro .= "Removendo a Tabela {$table_consultar_projeto} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);

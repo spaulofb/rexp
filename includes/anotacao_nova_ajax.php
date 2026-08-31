@@ -179,7 +179,7 @@ if( $opcao_maiusc=="TODOS" )  {
         $table_consultar_anotacao = $_SESSION["table_consultar_anotacao"];
         ///  Removendo tabela temporaria caso exista
         $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotacao  ";  
-        $drop_result = mysqli_query($sql_temp); 
+        $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
         if( ! $drop_result  ) {
             ///  NAO USAR DIE  TEM  FALHA
             ///  die('ERRO: Falha consultando a tabela '.$_SESSION["table_consultar_anotacao"].' - '.mysqli_error($_SESSION["conex"]));         

@@ -1,5 +1,5 @@
 <?php 
-/**  
+/*  
     EDITANDO: LAFB/SPFB120119.0934
 
     REXP - REMOVER PROJETO   
@@ -21,23 +21,24 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-//   FINAL - Mensagens para enviar
-//
+///   FINAL - Mensagens para enviar
+
+///
 extract($_POST, EXTR_OVERWRITE); 
-//
-//  Verificando SESSION incluir_arq - 20180618
+///
+///  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
-    //  echo $msg_erro;
-    //  exit();
+    ///  echo $msg_erro;
+    ///  exit();
     $n_erro=1;
 } else {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-//
-//   CASO OCORREU ERRO GRAVE
+///
+///   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -48,24 +49,22 @@ if( intval($n_erro)>0 ) {
 *     INICIANDO CONEXAO - PRINCIPAL
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-//
-//  Variavel recebida do script/arquivo - inicia_conexao.php 
+
+///  Variavel recebida do script/arquivo - inicia_conexao.php 
 $_SESSION["m_horiz"] = $array_projeto;
-//
-//   Alterado em 20180611
-//  if( isset($_SESSION["permit_pa"]) ) $permit_orientador = (int) $_SESSION["permit_pa"];  
-//  if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado = $_SESSION["usuario_conectado"];
+///
+///   Alterado em 20180611
+/////  if( isset($_SESSION["permit_pa"]) ) $permit_orientador = (int) $_SESSION["permit_pa"];  
+////  if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado = $_SESSION["usuario_conectado"];
 //
 ///   Caminho da pagina local
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
-}  
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
 // $_SESSION['time_exec']=180000;
-//
-//  INCLUINDO CLASS - 
+
+///  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 $funcoes=new funcoes();
 $funcoes->usuario_pa_nome();
@@ -86,61 +85,59 @@ $estilocss = $_SESSION["estilocss"];
 ///
 ///  fileframe - tag iframe  type hidden
 if( isset($_POST['fileframe']) ) {
-     //
-    $_SESSION["div_form"]="none";
-    //  include("../includes/functions.php"); 
-    include("{$_SESSION["incluir_arq"]}includes/functions.php");  
-    //
-    //  NOME TEMPOR?RIO NO SERVIDOR
-    if( isset($_FILES['relatproj']['tmp_name']) ) {
-        //
-        $_SESSION["result"]='OK'; $erros="";
-        $_SESSION["display_arq"]='block';
-        /** Conjunto de arquivos - ver tamanho total dos arquivos ***/
-        $tam_total_arqs=0; $files_array= array(); 
-       $conta_arquivos = count($_FILES['relatproj']['tmp_name']);	
-    	  //  Verificando se existe diretorio
-        $msg_erro =  "<p "
+  $_SESSION["div_form"]="none";
+   ///  include("../includes/functions.php");
+  include("{$_SESSION["incluir_arq"]}includes/functions.php");  
+  
+  ///  NOME TEMPOR?RIO NO SERVIDOR
+  if( isset($_FILES['relatproj']['tmp_name']) ) {
+      $_SESSION["result"]='OK'; $erros="";
+      $_SESSION["display_arq"]='block';
+      /** Conjunto de arquivos - ver tamanho total dos arquivos ***/
+      $tam_total_arqs=0; $files_array= array(); 
+	  $conta_arquivos = count($_FILES['relatproj']['tmp_name']);	
+	  //  Verificando se existe diretorio
+      $msg_erro =  "<p "
 			   ." style='text-align: center; font-size: small; font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia; font-weight:bolder;' >";
-        $msg_erro_final = "</p>";
-        if( intval($conta_arquivos)<1 ) {
-             $_SESSION["msg_upload"] = $msg_erro."ERRO: Falta INDICAR o arquivo.".$msg_erro_final;
-	         $_SESSION["result"]='FALSE'; $erros="ERRO";
-        }
-    	//    Esse For abaixo para acrescentar diretorios caso nao tenha
-        //  if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION[dir]) ) {  //  Tem que ser maior que 8 bytes
-     	for( $n=1; $n<3 ; $n++ ) {
-            ///  if( $n==1 )	$_SESSION[dir] = "/var/www/html/rexp3/doctos_img/A".$_POST[autor_cod];
-            if( $n==1 )  $_SESSION[dir] = "/var/www/html".$_SESSION[pasta_raiz]."doctos_img/A".$_POST[autor_cod];
-            if( $n==2 )	$_SESSION[dir] .= "/projeto/";	   
-            if(  !file_exists($_SESSION[dir]) ) {  //  Verificando dir e sub-dir
-                    $r = mkdir($_SESSION[dir],0755);
-                    if ( $r===false ) {
-                        //  echo  $msg_erro;
-                        $_SESSION["msg_upload"] = $msg_erro."Erro ao tentar criar diret&oacute;rio".$msg_erro_final;
-                        //  die("Erro ao tentar criar diret&oacute;rio");
-                        $_SESSION["result"]='FALSE';  $erros='ERRO';
-                    } else  chmod($_SESSION[dir],0755);							        			
-            }
-     	}   
-        //
-        $tamanho_dir = shell_exec("/usr/bin/du  ".$_SESSION[dir]);  // tamanho em bytes do diretorio
-        $tamanho_dir = explode("/",$tamanho_dir);
-        if( intval($conta_arquivos)>1 ) {
-            for($i=0; $i < $conta_arquivos  ;$i++) $tam_total_arqs += $_FILES[relatproj][size][$i];   
-        } else $tam_total_arqs = $_FILES[relatproj][size];
-        ///
-        $total_dir_arq = $tamanho_dir[0]+$tam_total_arqs;
-        //
-        /*** o tamanho maximo no arquivo configurado no  php.ini ***/
-        /* $ini_max = str_replace('M', '', ini_get('upload_max_filesize'));
-            $upload_max = ($ini_max * 1024)*1000000;
-        */
-        /***  an array to hold messages   ***/
-    //  $messages=array(); 
-        $files_size= array(); $files_date= array();
+      $msg_erro_final = "</p>";
+     if( intval($conta_arquivos)<1 ) {
+         $_SESSION["msg_upload"] = $msg_erro."ERRO: Falta INDICAR o arquivo.".$msg_erro_final;
+	     $_SESSION["result"]='FALSE'; $erros="ERRO";
+     }
+	//    Esse For abaixo para acrescentar diretorios caso nao tenha
+    //  if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION[dir]) ) {  //  Tem que ser maior que 8 bytes
+	for( $n=1; $n<3 ; $n++ ) {
+       ///  if( $n==1 )	$_SESSION[dir] = "/var/www/html/rexp3/doctos_img/A".$_POST[autor_cod];
+       if( $n==1 )  $_SESSION[dir] = "/var/www/html".$_SESSION[pasta_raiz]."doctos_img/A".$_POST[autor_cod];
+       if( $n==2 )	$_SESSION[dir] .= "/projeto/";	   
+	   if(  !file_exists($_SESSION[dir]) ) {  //  Verificando dir e sub-dir
+            $r = mkdir($_SESSION[dir],0755);
+	        if ( $r===false ) {
+    			 //  echo  $msg_erro;
+				 $_SESSION["msg_upload"] = $msg_erro."Erro ao tentar criar diret&oacute;rio".$msg_erro_final;
+				 //  die("Erro ao tentar criar diret&oacute;rio");
+			 	 $_SESSION["result"]='FALSE';  $erros='ERRO';
+		    } else  chmod($_SESSION[dir],0755);							        			
+	   }
+	}   
+    //
+    $tamanho_dir = shell_exec("/usr/bin/du  ".$_SESSION[dir]);  // tamanho em bytes do diretorio
+    $tamanho_dir = explode("/",$tamanho_dir);
+    if( intval($conta_arquivos)>1 ) {
+          for($i=0; $i < $conta_arquivos  ;$i++) $tam_total_arqs += $_FILES[relatproj][size][$i];   
+     } else $tam_total_arqs = $_FILES[relatproj][size];
+     ///
+     $total_dir_arq = $tamanho_dir[0]+$tam_total_arqs;
+	//
+	/*** o tamanho maximo no arquivo configurado no  php.ini ***/
+    /* $ini_max = str_replace('M', '', ini_get('upload_max_filesize'));
+          $upload_max = ($ini_max * 1024)*1000000;
+    */
+    /***  an array to hold messages   ***/
+   //  $messages=array(); 
+	$files_size= array(); $files_date= array();
 	
-        /*** check if a file has been submitted ***/
+    /*** check if a file has been submitted ***/
 	
     if( $_SESSION["result"]=='OK' )  {
 		/***  tamanho maximo do arquivo admitido em bytes   ***/
@@ -198,104 +195,36 @@ if( isset($_POST['fileframe']) ) {
 		     	     $erros = 'ERRO';
                 }
 		}
-    } 
-    /**    FINAL - IF  \$_SESSION["result"]   */
-    //
-    $_SESSION["erros"] = trim($erros);
-    //
-	//  Incluindo o nome do arquivo na tabela  projeto
-    if( trim($erros)=='' ) {
-        //
-        //  OCORREU  ERRO NESSA JANELA DO JAVASCRIPT
-        //  OCORREU  echo "<p style='text-align: center;'>Aguarde um momento.</p>";
-        //
-	    $elemento=5;  $elemento2=6; 
-        //
-		/// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
-        //  include("php_include/ajax/includes/conectar.php");
-        require("{$incluir_arq}includes/conectar.php");  
-        //
-        //  $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
-        $db_select = mysqli_select_db($lnkcon, $db_array[$elemento]);
-        if (!$db_select) {
-            die("Erro ao selecionar o banco de dados: " . mysqli_error($lnkcon));
-        }
-        //
-		//  $local_arq0 = $_SESSION[dir].$filename;
-		$nprojexp = $_POST[nprojexp]; $autor_cod = $_POST[autor_cod];
-		$local_arq  = html_entity_decode(trim($filename));
-        //
-        /**  
-         *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-         */
-        // 
-        // Escapando os valores antes de montar a consulta
-        $local_arq_esc = mysqli_real_escape_string($lnkcon, $local_arq);
-        $nprojexp_esc  = (int) $nprojexp;
-        $autor_cod_esc = (int) $autor_cod;
-
-        // Atualiza o projeto
-        $sql_update = "
-            UPDATE `$bd_2`.`projeto`
-            SET `relatproj` = '$local_arq_esc'
-            WHERE `numprojeto` = $nprojexp_esc
-            AND `autor` = $autor_cod_esc
-        ";
-
-        $success = mysqli_query($lnkcon, $sql_update);
-
-        if (!$success) {
-            $_SESSION["msg_upload"] =
-                $msg_erro .
-                "Armazenamento " .
-                $_FILES['relatproj']['name'] .
-                " FALHA: " .
-                mysqli_error($lnkcon);
-
-            $_SESSION["msg_upload"] .= $msg_erro_final;
-
-        } else {
-
-            // Busca o nome da pessoa
-            $sql_select = "
-                SELECT `nome`
-                FROM `$bd_1`.`pessoa`
-                WHERE `codigousp` = $autor_cod_esc
-            ";
-
-            $result = mysqli_query($lnkcon, $sql_select);
-
-            if (!$result) {
-                $_SESSION["msg_upload"] =
-                    $msg_erro .
-                    "Erro ao buscar o autor: " .
-                    mysqli_error($lnkcon);
-
-                $_SESSION["msg_upload"] .= $msg_erro_final;
-
-            } else {
-                // Substitui mysql_result()
-                $linha = mysqli_fetch_row($result);
-                $nome_autor = $linha[0] ?? "Autor não encontrado";
-
-                $_SESSION["msg_upload"] =
-                    $msg_erro .
-                    "Projeto $nprojexp do autor " .
-                    htmlspecialchars($nome_autor, ENT_QUOTES, 'UTF-8') .
-                    " foi concluído.";
-
-                $_SESSION["msg_upload"] .= $msg_erro_final;
-
-                mysqli_free_result($result);
-            }
-            //
-        }
-        //
-
+     } ///  FINAL - IF  \$_SESSION["result"]
+	 //
+     $_SESSION["erros"] = trim($erros);
+	 //   Incluindo o nome do arquivo na tabela  projeto
+     if( trim($erros)=='' ) {
+           //  OCORREU  ERRO NESSA JANELA DO JAVASCRIPT
+          //  OCORREU  echo "<p style='text-align: center;'>Aguarde um momento.</p>";
+          //
+	      	$elemento=5;  $elemento2=6; 
+		    /// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
+            include("php_include/ajax/includes/conectar.php");
+			$db_select = mysql_select_db($db_array[$elemento],$lnkcon);
+			//  $local_arq0 = $_SESSION[dir].$filename;
+			$nprojexp = $_POST[nprojexp]; $autor_cod = $_POST[autor_cod];
+			$local_arq  = html_entity_decode(trim($filename));
+           //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+     	    $success = mysqli_query("UPDATE  $bd_2.projeto SET relatproj='$local_arq'  "
+			              ." where ( numprojeto=$nprojexp  and  autor=$autor_cod ) ");
+			//
+			if( ! $success ) {
+                $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES[relatproj][name].' FALHA'.mysqli_error($_SESSION["conex"]);
+   			    $_SESSION["msg_upload"].=$msg_erro_final;		
+			} else {
+                 mysql_free_result($success);
+                 $success=mysqli_query("SELECT nome from $bd_1.pessoa where codigousp=$autor_cod  ");
+                 $_SESSION["msg_upload"] .= $msg_erro."Projeto $nprojexp do autor ".mysql_result($success,0,0)." foi conclu&iacute;do.";
+				 $_SESSION["msg_upload"] .=$msg_erro_final;		    
+            }		  
 	}
-    //
-  } 
-  // isset(\$_FILES[relatproj][tmp_name])
+  } // isset(\$_FILES[relatproj][tmp_name])
 }  
 ///  FINAL do IF UPLOAD  
 ///
@@ -432,7 +361,7 @@ function remove_projeto(idselecproj, idopcao,string_array) {
     ///  Desativando ID  projeto_escolhido
     exoc("projeto_escolhido",0,"");                   
     
-  alert("projeto_remover/296  -- idselecproj = "+idselecproj+"   - idopcao = "+idopcao+"  --- string_array = "+string_array);    
+///  alert("projeto_remover/296  -- idselecproj = "+idselecproj+"   - idopcao = "+idopcao+"  --- string_array = "+string_array);    
 
     ///
     ///  Verificando variaveis
@@ -778,7 +707,6 @@ function remove_projeto(idselecproj, idopcao,string_array) {
                           document.getElementById('div_out').innerHTML=srv_ret;
                     }       
              }
-             //
           } else {
                   //  Ocultar id div_form 
                   ///  if( document.getElementById('div_form')) document.getElementById('div_form').style.display="none";
@@ -935,7 +863,7 @@ if( ! in_array($usuario_ip, $ips_permitidos) ) {
    echo "<p style='text-align: center; font-size: medium;' >P&aacute;gina em constru&ccedil;&atilde;o</p>";
    echo "<p style='text-align: center; font-size: x-small;' >";
    ?>
-   <a  href="https://sol.fmrp.usp.br/rexp/authent_user.php"  name="voltar" id="voltar"   class="botao3d"  style="font-size: 10px; height: 160px; cursor: pointer; "  title="Voltar"  acesskey="V"  alt="Voltar" >    
+   <a  href="http://sol.fmrp.usp.br/rexp/authent_user.php"  name="voltar" id="voltar"   class="botao3d"  style="font-size: 10px; height: 160px; cursor: pointer; "  title="Voltar"  acesskey="V"  alt="Voltar" >    
       Voltar&nbsp;<img src="imagens/enviar.gif" alt="Voltar"   style="vertical-align:text-bottom;"  >
    </a>
    <?php
@@ -972,26 +900,18 @@ if( ( $_SESSION["permit_pa"]<=$array_pa["super"]  or $_SESSION["permit_pa"]>$arr
 <?php
 ///  CODIGO/USP
 $elemento=5; $elemento2=6;
-//  include("php_include/ajax/includes/conectar.php");     
-require("{$incluir_arq}includes/conectar.php");  
+include("php_include/ajax/includes/conectar.php");     
 //
 //  Selecionar os projetos pelo campo desejado
 $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
-//
+///
 # Aqui está o segredo
-//  mysqli_query("SET NAMES 'utf8'");
-//  mysqli_query('SET character_set_connection=utf8');
-//  mysqli_query('SET character_set_client=utf8');
-//  mysqli_query('SET character_set_results=utf8');
-//
-# IMPORTANTE: Aqui esta o segredo
-mysqli_query($conex,"SET NAMES 'utf8' ");
-mysqli_query($conex,'SET character_set_connection=utf8');
-mysqli_query($conex,'SET character_set_client=utf8');
-mysqli_query($conex,'SET character_set_results=utf8');
-//
-
+mysqli_query("SET NAMES 'utf8'");
+mysqli_query('SET character_set_connection=utf8');
+mysqli_query('SET character_set_client=utf8');
+mysqli_query('SET character_set_results=utf8');
+///
 if ( $permit_pa<=$permit_orientador ) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
@@ -1006,14 +926,13 @@ $result = mysqli_query($_SESSION["conex"],$sqlcmd);
 ///                  
 if( ! $result ) {
     ///   die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
-    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysqli:";
-    $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
+    $msg_erro .= "Selecionando os projetos autorizados para esse {$_SESSION["usuario_pa_nome"]}. db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
     echo $msg_erro;
     exit();
 }
-//  Numero de Projetos Selecionados
+///  Numero de Projetos Selecionados
 $nprojetos = mysqli_num_rows($result);
-//
+///
 ?> 
 <!--  div style=display: flex;   -->
 <div style="display: flex; "  >
@@ -1043,76 +962,53 @@ $nprojetos = mysqli_num_rows($result);
 <p class="titulo_usp" >Selecionar:</p>
 </div>
 <div style="text-align: center;padding-top:0px; padding-bottom: 5px;" >
-<select  name="busca_proj" id="busca_proj"  class="Busca_letrai"  title="Selecione o Projeto" onchange="remove_projeto('busca_proj',this.value)"  >
+<select  name="busca_proj" id="busca_proj"  class="Busca_letrai"  title="Selecione o Projeto" onchange="javascript:  remove_projeto('busca_proj',this.value)"  >
     <!-- Identifica??o do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
 <?php    
 if( intval($nprojetos)<1 ) {
-     //
-     $opcao_msg="N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.";
-     echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
+      $opcao_msg="N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.";
+      echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
 } else {
-    //
-    echo "<option value='' style='cursor:pointer;' >Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]}</option>";
-    //
-    while ($linha = mysqli_fetch_assoc($result)) {
-        $_SESSION["cip"] = $linha['cip'];
-        $_SESSION["anotacao_numero"] = $linha['anotacao'] + 1;
-
-        $autor_nome = htmlspecialchars($linha['nome'] ?? '', ENT_QUOTES, 'UTF-8');
-        $fonterec = htmlspecialchars($linha['fonterec'] ?? '', ENT_QUOTES, 'UTF-8');
-        $fonteprojid = ucfirst(
-            htmlspecialchars($linha['fonteprojid'] ?? '', ENT_QUOTES, 'UTF-8')
-        );
-
-        // Partes do título do projeto
-        $partes_antes = 6;
-        $projeto_titulo_parte = '';
-
-        $palavras_titulo = explode(' ', trim($linha['titulo'] ?? ''));
-        $contador_palavras = count($palavras_titulo);
-
-        for ($i = 0; $i < $contador_palavras; $i++) {
-            $projeto_titulo_parte .= $palavras_titulo[$i] . ' ';
-
-            if ($i == $partes_antes && $contador_palavras > $partes_antes) {
-                $projeto_titulo_parte = trim($projeto_titulo_parte);
-
-                if (strlen($projeto_titulo_parte) > 40) {
-                    $projeto_titulo_parte .= '...';
-                }
-
-                break;
-            }
-        }
-
-        $titulo_projeto = '';
-
-        if (strlen(trim($fonterec)) >= 1) {
-            $titulo_projeto .= $fonterec . '/';
-        }
-
-        if (strlen(trim($fonteprojid)) >= 1) {
-            $titulo_projeto .= $fonteprojid . ': ';
-        }
-
-        $titulo_projeto .= trim($projeto_titulo_parte);
-
-        $cip = htmlspecialchars($linha['cip'] ?? '', ENT_QUOTES, 'UTF-8');
-        $titulo_html = htmlspecialchars($titulo_projeto, ENT_QUOTES, 'UTF-8');
-
-        echo "<option value=\"$cip\" title=\"Orientador do Projeto: $autor_nome\">"
-            . $titulo_html
-            . "&nbsp;&nbsp;</option>";
-    }
-    //
-    //  Desativar variavel      
-    if( isset($result) ) {
-         //  mysql_free_result($result); 
-         unset($result);  
-    }   
-    //
-} 
-//           
+   echo "<option value='' style='cursor:pointer;' >Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]}</option>";
+   ///
+   while( $linha=mysql_fetch_assoc($result) ) {
+          $_SESSION["cip"]=$linha['cip'];
+          $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
+          $autor_nome = $linha['nome'];  
+          $fonterec=htmlentities($linha['fonterec']);
+          $fonteprojid=ucfirst(htmlentities($linha['fonteprojid']));         
+          //  PARTES do Titulo do Projeto - dividindo em sete partes 
+          $partes_antes=6;          
+          $projeto_titulo_parte="";
+          $palavras_titulo = explode(" ",trim($linha['titulo']));
+          $contador_palavras=count($palavras_titulo);
+          for( $i=0; $i<$contador_palavras; $i++  ) {
+               $projeto_titulo_parte .="{$palavras_titulo[$i]} ";
+               if( $i==$partes_antes and $contador_palavras>$partes_antes  ) {
+                    $projeto_titulo_parte=trim($projeto_titulo_parte);
+                    $tamanho_campo=strlen($projeto_titulo_parte);
+                    if( $tamanho_campo>40  ) $projeto_titulo_parte.="...";
+              //      $projeto_titulo_parte .="<span style='font-weight: bold;font-size: large;' >...</span>";
+                    break;
+               }
+          }
+          $titulo_projeto="";
+          if( strlen(trim($fonterec))>=1  ) {
+               $titulo_projeto.= $fonterec."/";
+          }
+          if( strlen(trim($fonteprojid))>=1  ) {
+              $titulo_projeto.= $fonteprojid.": ";
+          }
+          //  $titulo_projeto .= $titulo;
+          $titulo_projeto .= trim($projeto_titulo_parte);
+          ///  Usando esse option para incluir espaco sobre linhas
+          ///  echo  "<option value='' disabled ></option>";                  
+          echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >"
+                .$titulo_projeto."&nbsp;&nbsp;</option>";   
+          ///      
+   }       
+   if( isset($result) ) mysql_free_result($result); 
+}            
 ?>                
 </select>
 </div>

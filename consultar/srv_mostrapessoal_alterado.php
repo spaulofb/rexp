@@ -56,7 +56,7 @@ if( strtoupper($opcao)!='LISTA' ) {
    ///
    $_SESSION["table_temporaria"] = $bd_2.".temp_consultar_pessoal";
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_temporaria"]."    ";
-   $result_usuarios=mysqli_query($sql_temp);
+   $result_usuarios=mysqli_query($_SESSION["conex"],$sql_temp);
    if( ! $result_usuarios ) {
         die('ERRO: '.mysqli_error($_SESSION["conex"]));  
    }   

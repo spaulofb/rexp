@@ -1,6 +1,6 @@
 <?php 
 //   Iniciando conexao - CONSULTAR ANOTADOR
-/*
+/**  
     EDITANDO: LAFB/SPFB110903.0934
 
     REXP - CONSULTAR ANOTADOR

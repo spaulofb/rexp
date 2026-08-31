@@ -223,7 +223,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
      /// Criando uma tabela Temporaria para consultar ANOTACOES de um Projeto 
      $table_consultar_anotacao = $_SESSION["table_consultar_anotacao"] = "$bd_2.temp_consultar_anotacao";
      $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotacao  ";  
-     $drop_result = mysqli_query($sql_temp); 
+     $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
      if( ! $drop_result  ) {
          ///  NAO USAR DIE  TEM  FALHA
          ///  die('ERRO: Falha consultando a tabela '.$_SESSION["table_consultar_anotacao"].' - '.mysqli_error($_SESSION["conex"]));         

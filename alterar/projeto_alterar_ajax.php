@@ -331,7 +331,7 @@ if( $source_upper=="TODOS"  ) {
        ///    
        $_SESSION["table_alterar_projeto"] = "$bd_2.temp_alterar_projeto";
        $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_alterar_projeto"]."    ";  
-       $drop_result = mysqli_query($sql_temp); 
+       $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
        if( ! $drop_result  ) {
            /// die('ERRO: Falha removendo a tabela '.$_SESSION["table_alterar_projeto"].' - '.mysqli_error($_SESSION["conex"]));         
             /* $msg_erro .= "Removendo a Tabela {$_SESSION["table_alterar_projeto"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);

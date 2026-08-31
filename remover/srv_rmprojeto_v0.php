@@ -99,7 +99,7 @@ if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
         $table_remover_projeto = $_SESSION["table_remover_projeto"];
         ///
         $sql_temp = "DROP TABLE IF EXISTS  $table_remover_projeto ";  
-        $drop_result = mysqli_query($sql_temp); 
+        $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
         if( ! $drop_result  ) {
             /// die('ERRO: Falha consultando a tabela '.$_SESSION["table_remover_projeto"].' - '.mysqli_error($_SESSION["conex"]));         
             /*  $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover_projeto"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
@@ -821,7 +821,7 @@ if( $opcao_maiusc=="REMOVER" )  {
    //    
    $_SESSION["table_remover"] = "$bd_2.temp_remover_projeto";
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_remover"]."    ";  
-   $drop_result = mysqli_query($sql_temp); 
+   $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
    if( ! $drop_result  ) {
        // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysqli_error($_SESSION["conex"]));         
         /* $msg_erro .= "Removendo a Tabela {$_SESSION["table_remover"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);

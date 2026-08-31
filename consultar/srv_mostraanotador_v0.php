@@ -264,7 +264,7 @@ if( $source_maiusc=="SAIR" ) {
           $table_consultar_anotador = $_SESSION["table_temp_anotador"] = "$bd_2.temp_consultar_anotador";
           //  $sql_temp = "DROP TEMPORARY TABLE IF EXISTS   ".$_SESSION["table_temp_anotador"]."    ";
           $sql_temp = "DROP TABLE IF EXISTS  $table_consultar_anotador   ";
-          $result_anotadores=mysqli_query($sql_temp);
+          $result_anotadores=mysqli_query($_SESSION["conex"],$sql_temp);
           if( ! $result_anotadores ) {
                /// die('ERRO: '.mysqli_error($_SESSION["conex"]));  
                echo $funcoes->mostra_msg_erro("DROP TABLE IF EXISTS $table_consultar_anotador - db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            

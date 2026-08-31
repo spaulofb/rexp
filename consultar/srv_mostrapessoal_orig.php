@@ -80,7 +80,7 @@ if( $opcao_maiusc=='ORDENAR' or $dados_maiusc=="BUSCA_LETRAI" ) {
    $table_temporaria = $_SESSION["table_temporaria"];
    ///  Removendo tabela temporaria
    $sql_temp = "DROP TABLE IF EXISTS  $table_temporaria   ";
-   $result_usuarios=mysqli_query($sql_temp);
+   $result_usuarios=mysqli_query($_SESSION["conex"],$sql_temp);
    if( ! $result_usuarios ) {
         //// die('ERRO: '.mysqli_error($_SESSION["conex"]));  
         $msg_erro .= "&nbsp;DROP TABLE IF EXISTS {$_SESSION["table_temporaria"]}:&nbsp;db/mysql&nbsp;";

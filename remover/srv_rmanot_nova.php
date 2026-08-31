@@ -105,7 +105,7 @@ if( $opcao=="DESCARREGAR" )  {
     //
    $_SESSION["table_remover"] = "$bd_2.temp_remover_anotacao";
    $sql_temp = "DROP TABLE IF EXISTS   ".$_SESSION["table_remover"]."    ";  
-   $drop_result = mysqli_query($sql_temp); 
+   $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
    if( ! $drop_result  ) {
         // die('ERRO: Falha removendo a tabela '.$_SESSION["table_remover"].' - '.mysqli_error($_SESSION["conex"]));  
         // Parte do Class
