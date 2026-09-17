@@ -335,7 +335,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
            exit();
      } 
      ////  Pegando os nomes dos campos do primeiro Select
-     $num_fields=mysql_num_fields($resultado_outro);  ///  Obtem o numero de campos do resultado
+     $num_fields=mysqli_num_fields($resultado_outro);  ///  Obtem o numero de campos do resultado
      $td_menu = $num_fields+1;   
      $projeto_titulo = mysql_result($resultado_outro,0,"projeto_titulo");
      $projeto_autor = mysql_result($resultado_outro,0,"projeto_autor");

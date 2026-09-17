@@ -273,7 +273,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          exit();                 
     }        
     ///  Pegando os nomes dos campos do primeiro Select
-    $num_fields=mysql_num_fields($result_outro);  ///  Obtem o numero de campos do resultado
+    $num_fields=mysqli_num_fields($result_outro);  ///  Obtem o numero de campos do resultado
     $td_menu = $num_fields+1;   
     ///  Total de registros
     $_SESSION["total_regs"]=$total_regs = mysqli_num_rows($result_outro);

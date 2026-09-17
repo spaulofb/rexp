@@ -490,7 +490,7 @@ if( ! function_exists("TrocarAcento") ) {
 /**  Final - if( ! function_exists("TrocarAcento") ) { */
 //
 // Substitui utf8_decode() deprecated do PHP 8.2+
-if (!function_exists('utf8_decode_seguro')) {
+if( !function_exists('utf8_decode_seguro') ) {
     function utf8_decode_seguro($string) {
         if (empty($string)) return $string;
         return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');

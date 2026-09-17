@@ -210,7 +210,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
                     $m_linhas = mysqli_num_rows($query);
                     // 	$titulo_atributos = $_SESSION['titulo_atributos'];
                   	//	Pegando os nomes dos campos  do primeiro Select
-                    $num_fields=mysql_num_fields($query);  //  Obtem o número de campos do resultado
+                    $num_fields=mysqli_num_fields($query);  //  Obtem o número de campos do resultado
                  	$td_menu = $num_fields+1;				
                     //  Parte tentando pegar o tamanho maior da coluna (campo)
                  	for($i = 0;$i<$num_fields; $i++) { //  Pega o nome dos campos

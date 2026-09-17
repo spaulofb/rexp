@@ -5,7 +5,7 @@ if( !isset($_SESSION)) {
 }
 ///    
 ///   Arquivo para a Tag Select das Tabelas: Instituicao, Unidade, Depto, pessoa, categoria
-$num_campos=mysql_num_fields($result);
+$num_campos=mysqli_num_fields($result);
 if( intval($num_campos)==1 ) {
    $cpo_nome_descr=mysql_field_name($result,0);        
 } elseif( intval($num_campos)>1 ) {

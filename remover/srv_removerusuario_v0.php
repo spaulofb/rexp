@@ -249,7 +249,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
        exit();            
    }        
    ////  Pegando os nomes dos campos do primeiro Select
-   $num_fields=mysql_num_fields($resultado_outro);  ///  Obtem o numero de campos do resultado
+   $num_fields=mysqli_num_fields($resultado_outro);  ///  Obtem o numero de campos do resultado
    $td_menu = $num_fields+1;   
    //  Total de registros
    $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
@@ -468,7 +468,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
      ///  FINAL -  removendo usuario SEM projeto
      ///
      //// Procurando campo CIP
-     $num_cpos = mysql_num_fields($result_projeto);
+     $num_cpos = mysqli_num_fields($result_projeto);
      if( intval($num_cpos)==0 ) {
          /// Nenhum campo encontrado
          echo $funcoes->mostra_msg_erro("Número de campos das tableas não encontrados.");         

@@ -4,16 +4,8 @@
 if(!isset($_SESSION)) {
    session_start();
 }
-//
-//
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-mysqli_set_charset($_SESSION["conex"], "utf8mb4");
-header('Content-Type: text/html; charset=utf-8');
-//
-//  Mensagens para enviar
+///
+////  Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -33,7 +25,7 @@ $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
 } else {
-    echo  "ERRO: Sessão incluir_arq não está ativa.";
+    echo  utf8_decode("ERRO: Sessão incluir_arq não está ativa.");
     exit();
 }
 ///
@@ -85,7 +77,7 @@ if( intval($total_regs)<=0 ) {
     //  Conexao com o banco:
     if( ! isset($_SESSION["table_remover_projeto"])  ) {
          //
-         $$xyz = "&nbsp;Sessão table_remover_projeto não definida - falha:&nbsp;db/mysqli&nbsp;";
+         $$xyz = utf8_decode_seguro("&nbsp;Sessão table_remover_projeto não definida - falha:&nbsp;db/mysqli&nbsp;");
          $msg_erro .= "$$xyz".$msg_final;
          echo $msg_erro;  
          exit();    
@@ -94,7 +86,6 @@ if( intval($total_regs)<=0 ) {
     /// Definindo as variaveis
     $num_fields=0; $m_ordenar="nome"; $max_length="";
      /// 
-    mysqli_set_charset($_SESSION["conex"], "utf8mb4");
 	$strQuery="SELECT $campos_query FROM  $temp_tabela  LIMIT $inicio,$maximo";  
 	$query = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
@@ -127,7 +118,6 @@ if( intval($total_regs)<=0 ) {
         //
    }
    //
-   mysqli_set_charset($_SESSION["conex"], "utf8mb4");
    $sqlcmd = "SELECT  $max_length FROM $temp_tabela ";
    $result_max_length = mysqli_query($_SESSION["conex"], $sqlcmd);
    //     
@@ -171,6 +161,17 @@ if( intval($total_regs)<=0 ) {
          echo "<caption>{$_SESSION["titulo"]}</caption>";
          echo "<tr>";
      ***/
+
+
+
+
+    echo "ERRO:  LINHA/168  -->> \$num_fields = $num_fields  <<--->> \$num_rows = $num_rows   "
+             ." <br> \$max_length = $max_length ";
+    exit();
+
+
+
+
     echo "<div id='div_pagina' class='div_pagina' style='margin-left: 1px; width: 99%; height: 100%;' >";
     echo $_SESSION["titulo"];
     echo "<table class='div_pagina' style='margin-left: 3px;' cellpadding='1' cellspacing='2' >";
@@ -201,157 +202,106 @@ if( intval($total_regs)<=0 ) {
                     $procedimento=" text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;";                        
                }   
                echo  "<th class=\"font_size_family\" style=\"$procedimento\" >";
-               echo  ucfirst($field_name)."</th>";             
+               echo  utf8_decode(ucfirst($field_name))."</th>";             
              ///       
           }
      }
      echo "</tr>";
-     //
-     // print the body of the table
+     /// print the body of the table
      $conjunto = $_SESSION["conjunto"];
-     $conta_linha = 0;
-     $sem_link = 0;
-     //
-     // ✅ Trocar mysql_fetch_row por mysqli_fetch_array com MYSQLI_BOTH
-     //    para poder acessar $linha[0] (numérico) e $linha["cip"] (nome)
-     while ($linha = mysqli_fetch_array($query, MYSQLI_BOTH)) {
-            //// link
-            ?>
-            <tr align="left" class="font_size">
-            <?php
-            $n_index = 0;
-            for ($column_num = 0; $column_num < $num_fields; $column_num++) {
-                $text_align = "left";
-                $field_name = trim($fields[$column_num]);
-                $field_name_upper = strtoupper($field_name);
-
-                if (in_array($field_name_upper, $campos_fora)) continue;
-
-                if ($column_num < 1) $selecionado = $linha[$column_num];
-                if ($field_name_upper == 'NR') $field_name = "Nr";
-                if ($field_name_upper == 'CIP') $field_name = "CIP";
-                if (intval($column_num) < 1) $selecionado = $linha[$column_num];
-
-                // ✅ Substituir mysql_result($query, $conta_linha, "codautor")
-                //    por $linha["codautor"] (linha atual do while)
-                if ($ncodautor == "codautor") {
-                    $lncodautor = $linha["codautor"];
-                }
-
-                if (preg_match("/ITULO|TÍTULO/i", $field_name_upper)) {
-
-                    // ✅ Substituir mysql_result($query, $conta_linha, "cip")
-                    $valor = htmlentities(trim($linha["cip"]));  
-                    //
-                    $m_relatproj = $linha[$column_num];
-                    $sem_link = 1;
-                    ///  $titulo = utf_decode($linha[$column_num]);
-                    $xtit = $linha[$column_num];
-                    //
-                    /**    IMPORTANTE: COrrigido    14/09/2026 */
-                    //  $titulo  = mb_convert_encoding($xtit, 'Windows-1252', 'UTF-8');
-                    $titulo = iconv('UTF-8', 'UTF-8//IGNORE', $xtit);
-                    // 
-                    //  Titulo do Projeto
-                    ?>
-                    <td id="tr_itemOn" class="itemOn"
-                        onmouseover="javascript: mouse_over_menu(this);"
-                        onmouseout="javascript: mouse_out_menu(this);"
-                        style="text-align: left; white-space: nowrap; padding: .3em;
-                            font-weight: bold; border: 1px solid #000000;">
-                    <?php
-                    $cmdhtml = "<a href='#' onclick='javascript: remove_projeto(\"REMOVER\",\"$valor\",\"$usuario_conectado#projeto\");return true;'  "
-                            . "  id='relatproj'  class='linkum'   title='Clicar'  "
-                            . "  style=' text-align: center; vertical-align:top; line-height:normal;' >";
-                    $cmdhtml .= "<span style='font-size:larger; ' >$titulo</span>";
-                    $cmdhtml .= "</a>";
-                    echo $cmdhtml;
-                    ?>
-                    </td>
-                    <?php
-
-                /// else if - preg_match procurando palavras na variavel $field_name_upper
-                } else if (preg_match('/^(CIP|DATA)$/i', trim($field_name_upper))) {
-
-                    $n_index = $n_index + 1;
-
-                    // ✅ Substituir mysql_result($query, $conta_linha, "cip")
-                    $array_valor[$n_index] = $valor_cip = htmlentities(trim($linha["cip"]));
-
-                    $text_align = "center";
-                    $imagem = "<img src='../imagens/enviar.gif' alt='Remover Projeto' title='Clicar'
-                            style='text-align: center; vertical-align:text-bottom;'>";
-                    ?>
-                    <td id="tr_itemOn" class="itemOn"
-                        onmouseover="javascript: mouse_over_menu(this);"
-                        onmouseout="javascript: mouse_out_menu(this);"
-                        style="text-align: <?php echo $text_align;?>; white-space: nowrap;
-                            padding: .3em; font-weight: bold; border: 1px solid #000000;">
-                    <?php
-                    if ($field_name_upper == 'CIP') {
-                        ?>
-                        <img src="../imagens/enviar.gif" alt="Remover Projeto" title='Clicar'
-                            style="text-align: center; vertical-align:text-bottom; cursor:pointer;"
-                            onclick="javascript: remove_projeto('REMOVER','<?php echo $valor_cip;?>',
-                                    '<?php echo "$usuario_conectado#projeto";?>');return true;">
-                        <?php
-                    } else {
-                        // ✅ Substituir mysql_result($query, $conta_linha, "$field_name")
-                        $valor_cpo = htmlentities(trim($linha["$field_name"]));
-
-                        $cmdhtml2 = "<a href='#' onclick='javascript: remove_projeto(\"REMOVER\",\"$valor_cip\",\"$usuario_conectado#projeto\");return true;'  "
-                                . "  id='detalhes'  class='linkum'   title='Clicar'  "
-                                . "  style=' text-align: center; vertical-align:top; line-height:normal;' >";
-                        $cmdhtml2 .= "$valor_cpo</a>";
-                        echo $cmdhtml2;
-                    }
-                    ?>
-                    </td>
-                    <?php
-
-                } else {
-                    ///  Número da sequência dos registros
-                    $valor = $linha[$column_num];
-                    if (in_array("$field_name_upper", $align_right_array)) $text_align = "right";
-                    ?>
-                    <td style="text-align: <?php echo $text_align;?>; background-color: #FFFFFF;
-                            padding: .3em; font-weight: bold; border: 1px solid #000000;">
-                    <?php echo $valor; ?></td>
-                    <?php
-                }
-                //
-            }
-            /**  Final do For  */
-            // 
-            ?>
-           </tr>
-         <?php
-         $conta_linha++;
-         //
-     }
-     /**   Final do WHILE   */  
-     //
-     /**    Verifica SESSION caminho link principal   */
-    if( ! isset($_SESSION["url_central"]) )  {
-        //
-         $terr = "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;";
-         $terr  .= mysqli_error($_SESSION["conex"]);
-        die("ERRO: $terr");   
-    }
-    $url_central = $_SESSION["url_central"];
-    //
-
-
-
-//    echo "ERRO:  LINHA/322  -->> \$url_central = $url_central  <br> -->>  \$pagina = $pagina  <<-- \$num_fields = $num_fields  <<--->> \$num_rows = $num_rows   "
-//             ." <br> \$max_length = $max_length ";
-//    exit();
-
-
-
-
-
-
+     $conta_linha=0; $sem_link=0;
+     while( $linha = mysql_fetch_row($query) ) {
+          //// link        
+         ?>       
+        <tr align="left" class="font_size" >
+        <?php
+        $n_index=0;
+        for( $column_num=0; $column_num<$num_fields; $column_num++) {
+            $text_align="left";  
+            $field_name = trim($fields[$column_num]);
+            $field_name_upper = strtoupper($field_name);             
+            if( in_array($field_name_upper,$campos_fora) ) continue;
+            ///  if( strtoupper($field_name)=='relatproj' ) {
+            if( $column_num<1 ) $selecionado=$linha[$column_num];
+            if( $field_name_upper=='NR' ) $field_name="Nr";
+            if( $field_name_upper=='CIP' ) $field_name="CIP";
+            ////   if( strtoupper($field_name)=='ARQUIVADO_COMO' ) {
+            if( intval($column_num)<1 ) $selecionado=$linha[$column_num];
+            ////   if( strtoupper($field_name)=='ARQUIVADO_COMO' ) {
+            if( $ncodautor=="codautor" ) {
+                 $lncodautor=mysql_result($query,$conta_linha,"codautor");
+            } 
+           ///  if( $field_name_upper=='TITULO' ) {
+            if( preg_match("/ITULO|TÍTULO/i",$field_name_upper) ) {
+                ///  $valor=htmlentities(trim(mysql_result($query,$conta_linha,"relatproj")));
+                /// $valor=htmlentities(trim(mysql_result($query,$conta_linha,"Arquivo")));                                   
+                $valor=htmlentities(trim(mysql_result($query,$conta_linha,"cip")));                                   
+                $m_relatproj=$linha[$column_num];  $sem_link=1;
+                $titulo=$linha[$column_num];
+                ////  Titulo do Projeto
+                ?>                        
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"  style="text-align: left; white-space: nowrap;  padding: .3em; font-weight: bold; border: 1px solid #000000;" >
+                <?php
+                  $cmdhtml = "<a href='#' onclick='javascript: remove_projeto(\"REMOVER\",\"$valor\",\"$usuario_conectado#projeto\");return true;'  "
+                        ."  id='relatproj'  class='linkum'   title='Clicar'  "
+                        ."  style=' text-align: center; vertical-align:top; line-height:normal;' >";  
+                  $cmdhtml .="<span style='font-size:larger; ' >$titulo</span>";
+                  $cmdhtml .="</a>";
+                  echo $cmdhtml;
+                ?>  
+                </td>
+              <?php    
+            /// else if - preg_match procurando palavras na variavel $field_name_upper
+            } else if( preg_match('/^(CIP|DATA)$/i', trim($field_name_upper)) ) {
+                  /// 
+                  /// Clicar para mostrar detalhes
+                  $n_index=$n_index+1;
+                  //// $array_valor[$n_index]=$valor=htmlentities(trim(mysql_result($query,$conta_linha,"Detalhes")));
+                  $array_valor[$n_index]=$valor_cip=htmlentities(trim(mysql_result($query,$conta_linha,"cip")));
+                  ////$array_valor[$n_index]=$valor=htmlentities(trim(mysql_result($query,$conta_linha,"$field_name")));
+                  $text_align="center";
+                  $imagem="<img src='../imagens/enviar.gif' alt='Remover Projeto'  title='Clicar' style='text-align: center; vertical-align:text-bottom;'  >";  
+                ?>                        
+                <td id="tr_itemOn" class="itemOn" onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"  style="text-align: <?php echo $text_align;?>; white-space: nowrap;  padding: .3em; font-weight: bold; border: 1px solid #000000;" >
+                <?php
+                  if( $field_name_upper=='CIP' ) {
+                      ?>
+                      <img  src="../imagens/enviar.gif"  alt="Remover Projeto"  title='Clicar'
+                  style="text-align: center; vertical-align:text-bottom; cursor:pointer; " 
+                  onclick="javascript: remove_projeto('REMOVER','<?php echo $valor_cip;?>','<?php echo "$usuario_conectado#projeto";?>');return true;"  >
+                      <?php
+                  } else {
+                     $valor_cpo=htmlentities(trim(mysql_result($query,$conta_linha,"$field_name")));
+                     $cmdhtml2 = "<a href='#' onclick='javascript: remove_projeto(\"REMOVER\",\"$valor_cip\",\"$usuario_conectado#projeto\");return true;'  "
+                        ."  id='detalhes'  class='linkum'   title='Clicar'  "
+                        ."  style=' text-align: center; vertical-align:top; line-height:normal;' >";  
+                     $cmdhtml2 .="$valor_cpo</a>";
+                     echo  $cmdhtml2;
+                  }  
+                ?>
+                </td>                     
+                <?php                
+                  ////                
+            } else {
+                ///  Numero da sequencia dos registros
+                $valor=$linha[$column_num];    
+                ///  $text_align="right";
+                /// Encontrar campo nesse array
+                if( in_array("$field_name_upper",$align_right_array) )  $text_align="right";
+                /// 
+                ?>           
+                <td style="text-align: <?php echo $text_align;?>; background-color: #FFFFFF;  padding: .3em; font-weight: bold; border: 1px solid #000000;" >                
+                <?php  echo $valor;?></td>
+                <?php                
+            }   
+        }  
+        //// Final do For
+        ?>
+        </tr>
+       <?php
+       $conta_linha++;
+    }  
+    ///  Final do WHILE
 
     /// Calculando pagina anterior
     $menos = $pagina - 1;
@@ -371,7 +321,7 @@ if( intval($total_regs)<=0 ) {
     ///  Maior que 1
     if( intval($pgs)>1 ) {
         $td_menu=$td_menu*2;
-        $pagina_atual =  "{$url_central}consultar/tabela_selecionada.php";
+        $pagina_atual = 'http://www-gen.fmrp.usp.br/rexp/consultar/tabela_selecionada.php';
         $font_size_family="font-size: small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;"; 
         echo "<tr style='width: 100%; text-align: center;  margin-bottom: 0px;  padding-bottom: 0px; '  >";
         echo   "<td class='table_td' colspan=".$td_menu." style='text-align: center; '  align='center' >";

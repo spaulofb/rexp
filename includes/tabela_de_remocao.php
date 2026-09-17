@@ -77,7 +77,7 @@ if( $total_regs<=0 ) {
     }
     $m_linhas = mysqli_num_rows($query);
     //   Pegando os nomes dos campos  do primeiro Select
-    $num_fields=mysql_num_fields($query);  //  Obtem o n?mero de campos do resultado
+    $num_fields=mysqli_num_fields($query);  //  Obtem o n?mero de campos do resultado
     $td_menu = $num_fields+1;                
     
     //  Parte tentando pegar o tamanho maior da coluna (campo)

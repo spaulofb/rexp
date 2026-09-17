@@ -39,7 +39,7 @@ if ( strlen(trim($_SESSION["m_nome_id"]))<1 ) {
 		   $m_style_disabled1=' background-color:#000; color: #FFF;';
 		   $m_style_disabled='';
 		}
-      $n_fields = mysql_num_fields($result);
+      $n_fields = mysqli_num_fields($result);
 	  for ( $i=0; $i<$n_fields ; $i++ ) {
 	     $m_value_c[$i] =  htmlentities(mysql_result($result,0,$i)); 
 	  }
@@ -50,7 +50,7 @@ if ( strlen(trim($_SESSION["m_nome_id"]))<1 ) {
     	    if (!$result) {
 	    	     echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
 	         } else {
-    	     	 $n_fields = mysql_num_fields($result);
+    	     	 $n_fields = mysqli_num_fields($result);
 	    	 }	 
 	     }
     }

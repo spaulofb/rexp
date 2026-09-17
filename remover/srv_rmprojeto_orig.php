@@ -204,7 +204,7 @@ if( $opcao_maiusc=="TODOS" or $opcao_maiusc=="BUSCA_PROJ" ) {
         ///
         $_SESSION["total_regs"] = $n_regs_projeto;       
         ///  Pegando os nomes dos campos do primeiro Select
-        $num_fields=mysql_num_fields($resultado_outro);  //  Obt?m o n?mero de campos do resultado
+        $num_fields=mysqli_num_fields($resultado_outro);  //  Obt?m o n?mero de campos do resultado
         ///  $projeto_titulo = mysql_result($resultado_outro,0,"Titulo");
         $td_menu = $num_fields+1;   
          ///  Total de registros
@@ -877,7 +877,7 @@ if( $opcao_maiusc=="REMOVER" )  {
          exit();           
    }        
    //  Pegando os nomes dos campos do primeiro Select
-   $num_fields=mysql_num_fields($result_outro);  //  Obt?m o n?mero de campos do resultado
+   $num_fields=mysqli_num_fields($result_outro);  //  Obt?m o n?mero de campos do resultado
    $td_menu = $num_fields+1;   
    //  Total de registros
    $_SESSION["total_regs"] = mysqli_num_rows($result_outro);

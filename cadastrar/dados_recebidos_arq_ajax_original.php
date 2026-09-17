@@ -23,7 +23,7 @@ if( ! $result_tabela ) {
     exit();
 }
 
-$fields = mysql_num_fields($result_tabela);
+$fields = mysqli_num_fields($result_tabela);
 $rows   = mysqli_num_rows($result_tabela);
 $table  = mysql_field_table($result_tabela, 0);
 /*  echo "Your '" . $table . "' table has " . $fields . " fields and " . $rows . " record(s)\n";

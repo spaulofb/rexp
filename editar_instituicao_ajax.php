@@ -137,7 +137,7 @@ if( $val_upper=="INICIANDO" ) {
                exit();      
            }  else {
                    //  numero de campos
-                  $n_fields = mysql_num_fields($result);
+                  $n_fields = mysqli_num_fields($result);
                   for( $i=0; $i<$n_fields ; $i++ )  {
                         $nome_cpo_id[$i] = trim(mysql_field_name($result,$i));   
                         $nome_do_cpo=$nome_cpo_id[$i];
@@ -314,7 +314,7 @@ if( is_array($data) ) {
                                  echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));    
                                  //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                                  exit();
-                             } else  $n_fields = mysql_num_fields($result);
+                             } else  $n_fields = mysqli_num_fields($result);
                         }
                      } elseif( ! isset($encontrar) ) {
                         echo $funcoes->mostra_msg_erro("Falha na vari?vel");    
@@ -509,7 +509,7 @@ if( is_string($data) ) {
                 if( ! $result ) {
                      echo $funcoes->mostra_msg_erro("Falha no select da Tabela $encontrar - db/Mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));                     //  echo "ERRO: Falha no select da Tabela ".$encontrar.": ".mysqli_error($_SESSION["conex"]);
                      exit();
-                } else  $n_fields = mysql_num_fields($result);
+                } else  $n_fields = mysqli_num_fields($result);
             }
         } elseif( ! isset($encontrar) ) {
              echo $funcoes->mostra_msg_erro("Falha na vari?vel");    

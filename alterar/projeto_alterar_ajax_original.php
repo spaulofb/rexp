@@ -436,7 +436,7 @@ if( $source_upper=="TODOS"  ) {
         ///
         ///  Pegando os nomes dos campos do primeiro Select
         ///  Obtem o n?mero de campos do resultado
-        $num_fields=mysql_num_fields($resultado_outro);  
+        $num_fields=mysqli_num_fields($resultado_outro);  
         ///  $projeto_titulo = mysql_result($resultado_outro,0,"Titulo");
         $td_menu = $num_fields+1;   
         ///  Total de registros

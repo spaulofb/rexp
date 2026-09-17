@@ -395,7 +395,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
      //
      /**   Pegando os nomes dos campos do primeiro Select   */  
      // Antigo (MySQL)
-     // $num_fields = mysql_num_fields($resultado_outro);   ///  Obtem o numero de campos do resultado
+     // $num_fields = mysqli_num_fields($resultado_outro);   ///  Obtem o numero de campos do resultado
 
      // Novo (MySQLi)
      $num_fields = mysqli_num_fields($resultado_outro);

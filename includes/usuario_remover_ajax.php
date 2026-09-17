@@ -199,7 +199,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="USUARIO" ) {
         exit();
     }       
     $n_regs=mysqli_num_rows($result_usuario_rm);
-    $n_campos = mysql_num_fields($result_usuario_rm);
+    $n_campos = mysqli_num_fields($result_usuario_rm);
     if( $n_regs>=1 ) {
         for( $x=0; $x<$n_regs; $x++ ) {
             for( $y=0; $y<$n_campos; $y++ ) {
