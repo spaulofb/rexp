@@ -852,7 +852,7 @@ Mostrar&nbsp;Anota&ccedil;&otilde;es&nbsp;</p>
 </select>
 <!--  Final - tag Select para ordenar  -->
 </div>   
-<p class="titulo_usp" >Lista de Anota&ccedil;&otilde;es de Projeto</p>
+<p class="titulo_usp" >Lista de Anota&ccedil;&otilde;es desse Projeto</p>
 <?php
 } else {
    echo  "<p  class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";

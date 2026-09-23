@@ -784,193 +784,202 @@ echo  "ERRO: srv_rmprojeto/548 -->> projeto: $numprojeto  --->>  \$objetivo = $o
     //
     //   INICIANDO - REMOVENDO  nas pastas os Arquivos do Projeto e Anotacoes        
     // $dir_proj_total="../doctos_img/A".$orientador."/projeto/P".$numprojeto."_*";
-    $dir_proj_total=$incluir_arq."doctos_img/A".$orientador."/projeto/P".$numprojeto."_*";
-
-
-
-  echo "ERRO:  linha/791  -->> FORA  REMOVER_PROJETO  ===>>  \$num_anotacoes = $num_anotacoes  <<--  <br>"
-        ."  --->>  \$coresponsaveis = $coresponsaveis  -->> \$dir_proj_total = $dir_proj_total <br>" 
-        ." 1) \$incluir_arq = $incluir_arq  --  \$num_anotacoes = $num_anotacoes  <br>  "
-        ." 2)   -->>  \$autor_projeto_cod = $autor_projeto_cod  <<-->>  ".count($array_projeto_cpos);
-    exit();
-
-
-
-
-
-    ///  $dir_autor="/var/www/html/rexp/doctos_img/A{$orientador}";
+    $dir_proj_total=$incluir_arq."doctos_img/A".$orientador."/projeto/P".$numprojeto."_*";  
+    //
+    //  $dir_autor="/var/www/html/rexp/doctos_img/A{$orientador}";
     $dir_autor=$incluir_arq."doctos_img/A{$orientador}";
     $output_anot = null; $retorno_anot = -1;
-    ///  $dir_anot="../doctos_img/A{$orientador}/anotacao/";
+    //
+    //  $dir_anot="../doctos_img/A{$orientador}/anotacao/";
     $dir_anot=$incluir_arq."doctos_img/A{$orientador}/anotacao/";
     //
-     /// $dir_anota_total="../doctos_img/A".$orientador."/anotacao/P".$numprojeto."A*";
+    // $dir_anota_total="../doctos_img/A".$orientador."/anotacao/P".$numprojeto."A*";
     $dir_anota_total=$incluir_arq."doctos_img/A".$orientador."/anotacao/P".$numprojeto."A*";
-    /// Endere?o do Diret?rio Local
+    //
+    // Endere?o do Diret?rio Local
     $diretorio = getcwd(); 
-    /// Abre o Diret?rio
-    $ponteiro  = opendir($dir_autor);
-    /// Monta os vetores com os itens encontrados na pasta
+    //
+    // Abre o Diretorio
+    $ponteiro  = opendir($dir_autor);  
+    //
+    // Monta os vetores com os itens encontrados na pasta
     while( $nome_itens = readdir($ponteiro)) $itens[] = $nome_itens;
-    /// Ordena o vetor de itens
+    //
+    // Ordena o vetor de itens
     sort($itens);
-    /// Percorre o vetor para fazer a separacao entre arquivos e pastas
-    $contador_itens = count($itens);
+    //
+    // Percorre o vetor para fazer a separacao entre arquivos e pastas
+    $sumitens = count($itens);
     $pastas= array(); $arquivos=array();
-    $dir_pontos = array('.','..'); 
-    for( $i=0; $i<$contador_itens; $i++ ) {
-          /// retira "./" e "../" para que retorne apenas pastas e arquivos
-          ///  if( $listar!="." && $listar!="..") { 
-          ///  if( $itens[$i]!="." && $itens[$i]!="..") { 
+    $dir_pontos = array('.','..');    
+    for( $i=0; $i<$sumitens; $i++ ) {
+          //
+          // retira "./" e "../" para que retorne apenas pastas e arquivos
+          //  if( $listar!="." && $listar!="..") { 
+          //  if( $itens[$i]!="." && $itens[$i]!="..") { 
           if( in_array(strtolower($itens[$i]),$dir_pontos) ) continue;
-          /// checa se o tipo de arquivo encontrado ? uma pasta                    
-          ///  $dir_autor_pasta=$dir_autor."/".$listar;
-          $dir_autor_pasta=$dir_autor."/".$itens[$i];
-          ///  if( is_dir($listar) ) { 
+          // checa se o tipo de arquivo encontrado ? uma pasta                    
+          //  $dir_autor_pasta=$dir_autor."/".$listar;
+          $dir_autor_pasta=$dir_autor."/".$itens[$i];  
+          //
+          //  if( is_dir($listar) ) { 
           if( is_dir($dir_autor_pasta) ) { 
-                /// caso VERDADEIRO adiciona o item ? vari?vel de pastas
-                /// $pastas[]=$itens[$i];    
-                /// abrindo um diretorio  = opendir(dir);
+               //
+               // caso VERDADEIRO adiciona o item ? vari?vel de pastas
+               // $pastas[]=$itens[$i];    
+               // abrindo um diretorio  = opendir(dir);
                $ponteiro  = opendir($dir_autor_pasta);
-               /// Monta os vetores com os itens encontrados na pasta
+               //
+               // Monta os vetores com os itens encontrados na pasta
                while( $nome_itens = readdir($ponteiro) ) {
-                    ///   $itens[] = $nome_itens;
-                    $arquivos[]=$dir_autor_pasta."/".$nome_itens;   
-               } 
+                      ///   $itens[] = $nome_itens;
+                      $arquivos[]=$dir_autor_pasta."/".$nome_itens;   
+               }   
+               //
           } 
+          /**  Final - if( is_dir($dir_autor_pasta) ) {    */
           ///
     }
-    ///
-    $remover_arquivo=array();
-    ///  Total de  dados no array
-    $contador_itens=count($arquivos);  $n_anotacoes=0;
-    for( $i=0; $i<$contador_itens; $i++ ) {
-           /// if( $arquivos[$i]!="." && $arquivos[$i]!="..") { 
-           if( in_array(strtolower($arquivos[$i]),$dir_pontos) ) continue;
-           ///  Verificando um arquivo PROJETO
-           $arq_projeto= "/\/P{$numprojeto}\_/";
-           $res_proj=preg_match($arq_projeto,$arquivos[$i]);
-           if( $res_proj )  $remover_arquivo[]=$arquivos[$i];
-           ///  Verificando os arquivos Anotacoes do PROJETO
-           $arqs_anot="/\/P{$numprojeto}A([0-9]{1,10})/";
-           $res_anot=preg_match($arqs_anot,$arquivos[$i]);
-           if( $res_anot ) {
-               $remover_arquivo[]=$arquivos[$i];
-               $n_anotacoes++;   
-           }
-           ///
-    }       
+    /**   Final - for( $i=0; $i<$sumitens; $i++ ) {  */
+    //
+    $remover_arquivo=array();  
+    //
+    //  Total de  dados no array
+    $contador_itens=count($arquivos); 
+    $n_anotacoes=0;
+    //
+
+/** 
+  echo "ERRO:  LINHA/817  -->> REMOVER_PROJETO  ===>>  \$num_anotacoes = $num_anotacoes  <<--  <br>"
+        ."  --->>  \$coresponsaveis = $coresponsaveis  -->> \$dir_proj_total = $dir_proj_total <br>" 
+        ." 1) \$incluir_arq = $incluir_arq  --  \$num_anotacoes = $num_anotacoes  <br>  \$dir_anot = $dir_anot  <<--  "
+        ." 2)   -->>  \$autor_projeto_cod = $autor_projeto_cod  <<-->>  ".count($array_projeto_cpos)
+        ." <br> 3) \$sumitens = $sumitens   --  \$contador_itens = $contador_itens  ";
+    exit();
+   */
+
+
+    for( $i=0; $i<$contador_itens; $i++ ) {   
+        //
+        // if( $arquivos[$i]!="." && $arquivos[$i]!="..") { 
+        if( in_array(strtolower($arquivos[$i]),$dir_pontos) ) continue;
+        //
+        //  Verificando um arquivo PROJETO
+        $arq_projeto= "/\/P{$numprojeto}\_/";
+        $res_proj=preg_match($arq_projeto,$arquivos[$i]);
+        //
+        if( $res_proj )  $remover_arquivo[]=$arquivos[$i];
+        //
+        //  Verificando os arquivos Anotacoes do PROJETO
+        $arqs_anot="/\/P{$numprojeto}A([0-9]{1,10})/";
+        $res_anot=preg_match($arqs_anot,$arquivos[$i]);
+        if( $res_anot ) {
+            $remover_arquivo[]=$arquivos[$i];
+            $n_anotacoes++;   
+        }
+        //
+    }    
+    //   
     /// Numero de arquivos para Remover
     $num_arqs = count($remover_arquivo);   
     if( intval($num_arqs)>0 ) {
         foreach( $remover_arquivo as $chave_array => $valor_array ) {
-             ///  Removendo um arquivo
-             if( file_exists($valor_array) )  unlink($valor_array);        
+            //
+            //  Removendo um arquivo
+            if( file_exists($valor_array) )  unlink($valor_array);        
         }       
     }
-    ///  FINAL da  remocao dos arquivos Projeto e as anotacoes   
+    ///  FINAL da remocao dos arquivos Projeto e as anotacoes   
     ///  Nome do Autor do Projeto   
     $autor_projeto_nome="";
     if( isset($_SESSION["autor_projeto_nome"]) )  $autor_projeto_nome=$_SESSION["autor_projeto_nome"];
-/*   
-    $msg_erro .= "srv_rmprojeto.php/275 -   \$cip = $cip -  \$numprojeto = $numprojeto -  <br>
-      \$n_anotacoes = $n_anotacoes  - \$where_cond = $where_cond -  <br> 
-      \$autor_projeto_nome = $autor_projeto_nome  ++  \$orientador =$orientador <br>
-      \$titulo_projeto = $titulo_projeto -  \$data_inicio_projeto = $data_inicio_projeto  ".$msg_final;  
-        echo $msg_erro; 
-        exit();       
-        */
+
     $lnerro=0;
-    ///  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
-    ///  Execute the queries          
-    ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-    mysqli_query("LOCK TABLES $bd_2.projeto DELETE, $bd_2.anotacao DELETE, $bd_2.anotador DELETE ");
-    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
+
+    /// ===== INÍCIO DA TRANSAÇÃO =====
+    /// CORREÇÃO: mysqli_begin_transaction() substitui mysqli_query('begin')
+    mysqli_begin_transaction($_SESSION["conex"]);
+
+    /// CORREÇÃO: LOCK TABLES com conexão e tipo WRITE (DELETE não é tipo de lock válido)
+    $res_lock = mysqli_query($_SESSION["conex"], "LOCK TABLES $bd_2.projeto WRITE, $bd_2.anotacao WRITE, $bd_2.anotador WRITE");
+    if( !$res_lock ) {
+        echo $funcoes->mostra_msg_erro("&nbsp;Erro ao bloquear tabelas -&nbsp;db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]));
+        mysqli_rollback($_SESSION["conex"]);
+        exit;
+    }
+
     ///  Removendo o anotador do Projeto  
-    $sqlcmd = "DELETE from $bd_2.anotador  WHERE cip=$cip  ";
+    $sqlcmd = "DELETE FROM $bd_2.anotador WHERE cip=$cip";
     ///                  
-    $res_anotador =  mysqli_query($_SESSION["conex"],$sqlcmd);
+    $res_anotador = mysqli_query($_SESSION["conex"], $sqlcmd);
     if( $res_anotador ) { 
-         ///  Removendo as anotacoes do Projeto
-         if( intval($n_anotacoes)>0 ) {
-             /// Deletando Anotacoes desse Projeto
-             $sqlcmd= "DELETE  from $bd_2.anotacao WHERE projeto=$cip "; 
-             ///                  
-             $res_anotacao =mysqli_query($_SESSION["conex"],$sqlcmd);      
-             if( ! $res_anotacao ) { 
-                 ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
-                 /* $msg_erro .="&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  - db/mysql:&nbsp; "
-                               .mysqli_error($_SESSION["conex"]).$msg_final;
-                    echo $msg_erro;  */                    
-                 echo $funcoes->mostra_msg_erro("&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
-                 $lnerro=1;
-             }                
-         }
-         ///  Removendo o Projeto
-         if( intval($lnerro)<1 ) {
-             $sqlcmd= "DELETE from $bd_2.projeto WHERE {$where_cond} "; 
-             ///                  
-             $res_projeto =mysqli_query($_SESSION["conex"],$sqlcmd);      
-             if( ! $res_projeto ) { 
-                 ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
-                 /* $msg_erro .="&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  - db/mysql:&nbsp; "
-                               .mysqli_error($_SESSION["conex"]).$msg_final;
-                    echo $msg_erro;  */                           
-                  echo $funcoes->mostra_msg_erro("&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                    
-                  $lnerro=1;
-             }                               
-         }    
-         ///
+        ///  Removendo as anotacoes do Projeto
+        if( intval($n_anotacoes)>0 ) {
+            /// Deletando Anotacoes desse Projeto
+            $sqlcmd = "DELETE FROM $bd_2.anotacao WHERE projeto=$cip"; 
+            ///                  
+            $res_anotacao = mysqli_query($_SESSION["conex"], $sqlcmd);      
+            if( !$res_anotacao ) { 
+                echo $funcoes->mostra_msg_erro("&nbsp;Removendo anota&ccedil;&atilde;o do Projeto da Tabela anotacao -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                $lnerro=1;
+            }                
+        }
+        ///  Removendo o Projeto
+        if( intval($lnerro)<1 ) {
+            $sqlcmd = "DELETE FROM $bd_2.projeto WHERE {$where_cond}"; 
+            ///                  
+            $res_projeto = mysqli_query($_SESSION["conex"], $sqlcmd);      
+            if( !$res_projeto ) { 
+                echo $funcoes->mostra_msg_erro("&nbsp;Removendo o Projeto $numprojeto do Autor $autor_projeto_nome -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                    
+                $lnerro=1;
+            }                               
+        }    
     } else { 
-        ///  mysqli_error($_SESSION["conex"]) - para saber o tipo do erro
-        /* $msg_erro .="&nbsp;Removendo anotador do Projeto da Tabela anotador - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]).$msg_final;
-              echo $msg_erro; */         
-         $terr="&nbsp;Removendo anotador do Projeto $numprojeto da Tabela anotador -&nbsp;db/mysqli:&nbsp;";       
-         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                    
-         $lnerro=1;        
+        $terr="&nbsp;Removendo anotador do Projeto $numprojeto da Tabela anotador -&nbsp;db/mysqli:&nbsp;";       
+        echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                    
+        $lnerro=1;        
     }       
+
     ///
     if( intval($lnerro)<1 ) {
-        ///  Finalizando 
-        mysqli_query('commit'); 
+        /// CORREÇÃO: mysqli_commit() substitui mysqli_query('commit')
+        mysqli_commit($_SESSION["conex"]);
     } else {
-        /// Cancelando
-        mysqli_query('rollback');  
-    }  
-    //
-   /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-    mysqli_query("UNLOCK  TABLES");
-    ///  Complete the transaction 
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');         
+        /// CORREÇÃO: mysqli_rollback() substitui mysqli_query('rollback')
+        mysqli_rollback($_SESSION["conex"]);
+    }
+
+    /// CORREÇÃO: UNLOCK TABLES com o parâmetro de conexão
+    mysqli_query($_SESSION["conex"], "UNLOCK TABLES");
+
+    /// ===== FIM DA TRANSAÇÃO =====
+
     ///  Caso Tabela acima foi aceita incluir dados na outra abaixo
     ///   MENSAGEM FINAL - Projeto e Anotacoes - Removido
     $confirmar0 ="<hr>";
     $confirmar0 .="<p style='text-align:center;font-size: medium;'>"
-                     ."<b>Projeto $numprojeto foi removido{$texto_anotacoes}.</b><br>"
-                     ."<b>Autor do Projeto</b>: $autor_projeto_nome</p>";
+                ."<b>Projeto $numprojeto foi removido{$texto_anotacoes}.</b><br>"
+                ."<b>Autor do Projeto</b>: $autor_projeto_nome</p>";
     $confirmar0 .="<div style='text-align:center;font-size: medium; overflow: auto;'>"
-                 ."<b>T&iacute;tulo do Projeto</b>:<br>"                
-                 ."$titulo_projeto </div>";
+                ."<b>T&iacute;tulo do Projeto</b>:<br>"                
+                ."$titulo_projeto </div>";
     $confirmar0 .="<p style='text-align:center;font-size:small;padding-top:1em;'>"
-                    ."<b>Data in&iacute;cio do Projeto</b>:&nbsp;$data_inicio_projeto </p>";
+                ."<b>Data in&iacute;cio do Projeto</b>:&nbsp;$data_inicio_projeto </p>";
     $confirmar0 .="<p style='text-align:center;font-size: small;  margin-top:4px;'>"
-                    ."<b>Arquivo do Projeto</b>:&nbsp;$Arquivo</p>";    
+                ."<b>Arquivo do Projeto</b>:&nbsp;$Arquivo</p>";    
     //
     $confirmar0 .=$coresp_dados."<br/>";
     $confirmar0 .=$anotacoes;                   
     $confirmar1 =$confirmar0."<br>";
     $confirmar1 .="<div style='width: 100%; text-align: center;'>";                                         
-    $confirmar1 .="<button class='botao3d_menu_vert' title='Clicar'  style='text-align:center; cursor: pointer;'  " 
-                  ." onclick='javascript: remove_projeto(\"reiniciar_pagina\");' >Retornar";                                  
+    $confirmar1 .="<button class='botao3d_menu_vert' title='Clicar' style='text-align:center; cursor: pointer;'"
+                ." onclick='javascript: remove_projeto(\"reiniciar_pagina\");' >Retornar";                                  
     $confirmar1 .="</button></div>";                                         
-    echo $confirmar1;               
-
+    echo $confirmar1;          
+    //     
     /*  FINAL - REMOVENDO UM PROJETO/ANOTACOES   */
-    exit();     
-    ///   
+    exit();
+    //   
 } elseif( $opcao_maiusc=="TODOS_ANTERIOR" ) {
     ////
    $permit_orientador = (int) $_SESSION["permit_pa"];  

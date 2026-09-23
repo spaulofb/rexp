@@ -16,16 +16,10 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-//
-//
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-//  IMPORTANTE:  Declarando em PHP - charset UTF-8
+///  IMPORTANTE:  Declarando em PHP - charset UTF-8
 header('Content-type: text/html; charset=utf-8');
-//
-// Mensagens para enviar
+
+//// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -33,12 +27,12 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-//   FINAL - Mensagens para enviar
+///   FINAL - Mensagens para enviar
 
 // include('inicia_conexao.php');
 extract($_POST, EXTR_OVERWRITE); 
-//
-//  Verificando SESSION incluir_arq - 20180618
+
+///  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
@@ -69,12 +63,10 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-      $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
-} 
-// $_SESSION['time_exec']=180000;
-//
-//  INCLUINDO CLASS - 
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+/// $_SESSION['time_exec']=180000;
+///
+///  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 $funcoes=new funcoes();
 $funcoes->usuario_pa_nome();
@@ -195,9 +187,8 @@ function acentuarAlerts(mensagem) {
 /*************  Final  -- function acentuarAlerts(mensagem)   ************/
 ///
 ///  Verifica se foi selecionado o Projeto
-function ativar(projeto_selec) {  
-     //
-    // Verificando parametro projeto_selec
+function ativar(projeto_selec) {
+    /// Verificando parametro projeto_selec
     if( typeof(projeto_selec)=='undefined' ) var projeto_selec="";
     projeto_selec = trim(projeto_selec);
     /**
@@ -303,16 +294,12 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
      var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
      var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
     
- alert(" arq anotacao_remover.php/296 --->>  idselecproj = "+idselecproj+" -  idopcao = "+idopcao
-            +"  --  opcao = "+opcao+" - string_array = "+string_array);
-
+/// alert(" arq anotacao_remover.php/296 --->>  idselecproj = "+idselecproj+" -  idopcao = "+idopcao+"  --  opcao = "+opcao+" - string_array = "+string_array);
  
-    //                  
-    // tag Select para desativar o campo Select ordenar
+    /// tag Select para desativar o campo Select ordenar
     var quantidade=idselecproj.search(/BUSCA_PROJ|busca_porcpo/i);
     if( quantidade!=-1 ) {
-         //
-         //  Caso idopcao estiver  nula
+         ///  Caso idopcao estiver  nula
          if( idopcao.length<1 ) {
               ///  Retornar na pagina - reset 
               location.href=pagina_local;
@@ -427,9 +414,9 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
           var lnip = srv_ret.search(/Nenhum|ERRO:/i);
           ///
 
-
+          /***
   alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
-
+  ***/       
 
          ///  Caso ocorreu erro
          if( parseInt(lnip)!=-1 ) {
@@ -654,8 +641,7 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
          usando metodo post, + as variaveis, valores e a funcao   */
      var conectando_dados = myConn.connect(srv_php, "POST", poststr, inclusao);   
      /*  uma coisa legal nesse script se o usuario não tiver suporte a JavaScript  
-          porisso eu coloquei return false no form o php enviar sozinho            */   
-     //
+          porisso eu coloquei return false no form o php enviar sozinho            */
 }
 /*********   Final -function remove_anotacao(idselecproj, idopcao,string_array)   **********/
 ///
@@ -679,17 +665,16 @@ include("{$_SESSION["incluir_arq"]}includes/menu_horizontal.php");
 <?php 
 ///     Alterado em 20170925  - MENU 
 require("{$_SESSION["incluir_arq"]}includes/domenu.php");
-//
-//     CONSULTAR  Anotacao
+
+////     CONSULTAR  Anotacao
 if( isset($_GET["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_GET["m_titulo"];    
 } elseif( isset($_POST["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_POST["m_titulo"];      
 }
-//
-//  Definindo TITULO da pagina
+///  Definindo TITULO da pagina
 $_SESSION["m_titulo"]="Anota&ccedil;&atilde;o";
-//        
+////        
 ?>
 <!--  Mensagem de ERRO e Titulo    -->
 <section class="merro_e_titulo" >
@@ -703,7 +688,6 @@ $_SESSION["m_titulo"]="Anota&ccedil;&atilde;o";
 //  INVES de superusuario e?  super
 //  if( ( $permit_pa>$array_pa['superusuario']  and $permit_pa<=$permit_anotador ) ) {    
 if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {    
-//
 ?>
 <div id="div_form" class="div_form" style="overflow:auto;" >
 <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
@@ -711,55 +695,37 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
 </p>
 </div>
 <?php 
-//
-// Selecionando o Projeto do Orientador/Usuario
+/// Selecionando o Projeto do Orientador/Usuario
 # Aqui está o segredo
-/*** 
 mysqli_query("SET NAMES 'utf8'");
 mysqli_query('SET character_set_connection=utf8');
 mysqli_query('SET character_set_client=utf8');
 mysqli_query('SET character_set_results=utf8');
-*/
-//
-//
-# IMPORTANTE: Aqui esta o segredo
-mysqli_query($conex,"SET NAMES 'utf8' ");
-mysqli_query($conex,'SET character_set_connection=utf8');
-mysqli_query($conex,'SET character_set_client=utf8');
-mysqli_query($conex,'SET character_set_results=utf8');
-//
-if( $permit_pa<=$permit_orientador ) {
-     //
-     //  Select/Mysqli
+///
+if ($permit_pa<=$permit_orientador) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." a.codigousp=".$usuario_conectado." order by b.titulo ";
 } else {
-     //
-     //  Select/Mysqli
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
 $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
-//
-//  Verificando se houve erro no Select/MySql                  
+///  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
-     //
-    /**    die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));    */ 
+    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
     /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
     echo $msg_erro.$msg_final;  */            
     //  Parte do Class                
-    $terr="Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysqli:&nbsp;";
-    echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
     exit();                  
 }
 ///  Numero de Projetos Selecionados
 $_SESSION["nprojetos"] = $nprojetos = mysqli_num_rows($result);
 ///
 if( intval($_SESSION["nprojetos"])>0 ) {
-     //
     ///  SESSION do Projeto Selecionado para alterar ANotacao
     if( isset($_SESSION["anotacao_cip_altexc"]) ) {
          $cip_anotacao_escolhida = $_SESSION["anotacao_cip_altexc"];
@@ -773,25 +739,23 @@ if( intval($_SESSION["nprojetos"])>0 ) {
                  </script>
               <?php
          }
-         //       
+         ///       
     }
-    //
+    ///
 }
-//
+///
 ?>
 <div class="div_select_busca"  >
 <select name="busca_proj" id="busca_proj" class="Busca_letrai" title="Selecione o Projeto para Busca de Anota&ccedil;&otilde;es"  onchange="javascript: remove_anotacao(this.id,this.value,'<?php echo $usuario_conectado;?>')"  >
     <!-- Identificacao do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
     <?php 
-        //
-        // Verifica se NAO tem projeto  ou 
+        /// Verifica se NAO tem projeto  ou 
         if( intval($nprojetos)<1 ) {
               echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
         } else {
               echo "<option value='' >Selecione o Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
-              //
-              while( $linha=mysqli_fetch_assoc($result) ) {
-                    //
+              ////
+              while( $linha=mysql_fetch_assoc($result) ) {
                     $_SESSION["cip"]= (int) $linha['cip'];
                     $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
                     $autor_nome = $linha['nome'];
@@ -854,29 +818,25 @@ if( intval($_SESSION["nprojetos"])>0 ) {
                         echo  $titulo_projeto."&nbsp;&nbsp;</option>";                                  
                     }
                     ***/
-                    //    
+                    ////    
               }
-              /**  FINAL - while( $linha=mysql_fetch_assoc($result) ) {   */
-              //
         }
-        //
         ?>
         </select>
 </div>
 <?php
-//
-//   Conectar - CODIGO/USP
-//  $elemento=5; $elemento2=6;
-//  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
+///   Conectar - CODIGO/USP
+///  $elemento=5; $elemento2=6;
+///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
 //
 //  Selecionar as anota??es de projeto pelo campo desejado
 $opcao_cpos = Array("ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 //
-//  Salvar letrais iniciais em um conjunto para facilitar a busca
-//  $m_anotacoes=utf8_decode("Anotações");
+///  Salvar letrais iniciais em um conjunto para facilitar a busca
+///  $m_anotacoes=utf8_decode("Anotações");
 $m_anotacoes="Anotações";
-//
+///
 ?>
 <div id="id_anotacao" style="display: none;text-align: center;" >
 <p class="titulo_usp" >
@@ -897,7 +857,6 @@ Mostrar&nbsp;Anota&ccedil;&otilde;es&nbsp;</p>
 } else {
    echo  "<p  class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";
 }
-//
 ?>
 <div  style="position:relative;  display:flex; ">
 <!-- id div_out  -->
