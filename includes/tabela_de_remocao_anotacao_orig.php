@@ -169,7 +169,7 @@ if( intval($total_regs)<=0 ) {
     $m_function=$_SESSION["m_function"];
     echo "<div id='div_pagina' class='div_pagina' style='margin-left: 1px;width: 99%;height: 100%;'>";
     echo $_SESSION["titulo"];
-    echo "<table class='div_pagina' style='margin-left: 3px; border: 0px solid #000000;' cellpadding='1' cellspacing='2' >";
+    echo "<table class='div_pagina' style='margin-left: 3px;' cellpadding='1' cellspacing='2' >";
     echo "<tr>";
     for($column_num = 0; $column_num < $num_fields; $column_num++) {
             $field_name = $fields[$column_num]; $text_align="left";
@@ -197,7 +197,7 @@ if( intval($total_regs)<=0 ) {
     while( $linha = mysql_fetch_row($query)) {
         /// link        
          ?>       
-        <tr align="left"  id="tr_itemOn" class="itemOn"  VALIGN="TOP" style="cursor: pointer; " onmouseover="javascript: mouse_over_menu(this);"  onmouseout="javascript: mouse_out_menu(this);"  >
+        <tr align="left"  class="font_size"  >
         <?php
         for( $column_num=0; $column_num<$num_fields; $column_num++) {
             $text_align="left";              

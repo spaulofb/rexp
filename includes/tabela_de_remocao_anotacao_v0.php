@@ -1,28 +1,19 @@
 <?php
-//
 //  Verificando se session_start - ativado ou desativado
 if(!isset($_SESSION)) {
    session_start();
 }
-//
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-//
-mysqli_set_charset($_SESSION["conex"], "utf8mb4");
-header('Content-Type: text/html; charset=utf-8');
-//
-//  Conexao com o banco:  Anotacoes de um Projeto - 20180221
+///  Conexao com o banco:  Anotacoes de um Projeto - 20180221
 /****  Verificando essa SESSAO importante 
 //       Caso NAO exista criar - alterado em 20171031
 ****/
 if( ! isset($_SESSION["url_central"]) ) {
-    echo  "ERRO: falha grave sessão url_central inexistente.";
+    echo  utf8_decode("ERRO: falha grave sessão url_central não existe.");
     exit();
 }
 $url_central = $_SESSION["url_central"];
-//
-//  Mensagens para enviar
+///
+////  Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -69,9 +60,7 @@ $inicio = $maximo * $inicio;
 
 ///  Variaveis recebidos e criando obsoletos
 if( isset($_SESSION["num_rows"]) ) {
-    //
-    if( $_SESSION["num_rows"]>=1 ) {
-        //
+    if ( $_SESSION["num_rows"]>=1 ) {
         unset($_SESSION["num_rows"]);
 	    // Conta os resultados no total da minha query
 	    //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
@@ -88,12 +77,9 @@ if( isset($_SESSION["num_rows"]) ) {
                          break;
                }
          }
-         //
     }
-    //
 }
-//
-//  \$row = array  e  \$total_regs = total_regs de registros encontrados
+///  \$row = array  e  \$total_regs = total_regs de registros encontrados
 $row=$_SESSION["row"]; $total_regs = $_SESSION["total_regs"];
 
 $usuario_conectado = $_SESSION["usuario_conectado"];
@@ -101,7 +87,6 @@ $usuario_conectado = $_SESSION["usuario_conectado"];
 if( intval($total_regs)<=0 ) {
     echo "<p  class='titulo_usp'  >Nenhum registro encontrado.</p>";
 } else {
-    //
     // if( !isset($_GET["seed"]) ) {
        //   $seed = rand();   // Caso ainda nao exista uma semente, cria a semente via PHP.
     // } else {
@@ -116,86 +101,62 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temp_editar  -  20171121
     ***/   
     if( ! isset($_SESSION["table_remover"]) ) {
-        echo $funcoes->mostra_msg_erro("Falha SESSION table_remover indefinida.");    
+        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_remover não definida."));    
         exit();
     }
-    //  Tabela Temporaria
+    ///  Tabela Temporaria
     $table_remover=$_SESSION["table_remover"];
-    //
+    ///
     $num_fields=0; $m_ordenar="nome";    
-    //
-    //  Mysql/Selecionando - 
+    ////  Mysql/Selecionando - 
 	$strQuery="SELECT $campos_query from  $table_remover  LIMIT $inicio,$maximo";  
 	$query  = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-        //  die('ERRO: Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;'.mysqli_error($_SESSION["conex"]));   
-        $terr="&nbsp;Sem resultado - Select - falha:&nbsp;db/mysqli&nbsp;";
-        $msg_erro .= "$terr".mysqli_error($_SESSION["conex"]).$msg_final;
+       ////  die('ERRO: Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;'.mysqli_error($_SESSION["conex"]));   
+        $msg_erro .= "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
         echo $msg_erro;  
         exit();          
     }
-    //  Nr. de registros
+    ///  Numero de registros
     $num_rows = mysqli_num_rows($query);
-    //
-    //   Pegando os nomes dos campos  do primeiro Select
+    ///   Pegando os nomes dos campos  do primeiro Select
     $num_fields=mysqli_num_fields($query);  ///  Obtem o numero de Campos do resultado
     $td_menu = $num_fields+1;                
-    //
+    
     //  Parte tentando pegar o tamanho maior da coluna (campo)
-    $max_length = "";
-    for ($i = 0; $i < $num_fields; $i++) {
-         //
-         // ✅ Substituição: mysql_field_name → mysqli_fetch_field_direct
-         $field_info = mysqli_fetch_field_direct($query, $i);
-         $fields[]   = $field_info->name;
-         //
-         //  Pegando o máximo do espaço ocupado de cada campo
+    $max_length="";
+    for( $i = 0;$i<$num_fields; $i++) { //  Pega o nome dos campos
+         $fields[] = mysql_field_name($query,$i);
+         //  Pegando o maximo do espaco ocupado de cada campo 
          //  vindo do primeiro Select - $query
-        $max_length .= " MAX(LENGTH(TRIM({$fields[$i]}))) as campo{$i} ";
-        if ($i < ($num_fields - 1)) $max_length .= ", ";
-        if ($fields[$i] == "codautor") $ncodautor = $fields[$i];
-        //
-    }
-    //
-    //   Selecionando o maximo espaco ocupado em cada campo da tabela
-    // $sqlcmd="SELECT ".$max_length." FROM  ".$_SESSION["table_remover"]."   ";
-    mysqli_set_charset($_SESSION["conex"], "utf8mb4");
-    $sqlcmd = "SELECT  $max_length FROM  $table_remover  ";
-    $result_max_length = mysqli_query($_SESSION["conex"], $sqlcmd);
-    //     
-    //
-    if( ! $result_max_length ) {
-          //  die('ERRO: Select maximo tamanho dos campos da tb  table_remove_projeto - falha: '.mysqli_error($_SESSION["conex"]));
-          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $table_remover - falha:&nbsp;db/mysql&nbsp;";
-          $msg_erro .= mysqli_error($_SESSION["conex"]).$msg_final;
-          echo $msg_erro;  
+         $max_length .= " MAX(LENGTH(TRIM($fields[$i]))) as campo$i ";
+         if( $i<($num_fields-1) ) $max_length.= ", "; 
+         if( $fields[$i]=="codautor" ) $ncodautor=$fields[$i];
+     }
+     ///   Selecionando o maximo espaco ocupado em cada campo da tabela
+     /// $sqlcmd="SELECT ".$max_length." FROM  ".$_SESSION["table_remover"]."   ";
+     $sqlcmd="SELECT ".$max_length." FROM  $table_remover ";
+     $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
+     ///
+     if( ! $result_max_length ) {
+         /**   die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha:&nbsp;db/mysql&nbsp;'.mysqli_error($_SESSION["conex"]));                  
+          **/
+          $msg_erro .= "&nbsp;Select maximo tamanho dos campos da tabela  $table_remover - falha:&nbsp;db/mysql&nbsp;".mysqli_error($_SESSION["conex"]);
+          echo $msg_erro.$msg_final;  
           exit();          
      }    
-     // Nr. de digitos desse elemento
+     /// Numero de digitos desse elemento
      $num_rows = (int) strlen(trim($num_rows)); 
      $campo_n=2;
-     //
-
-
-/**  
-  echo  "ERRO: tabela_de_remocao_anotacao/181  -->> \$num_rows = $num_rows --- \$val = $val <br>"
-       ." -->> \$arq_tab_rm_anotacao = $arq_tab_rm_anotacao  -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
-  exit();
- */
-
-
-
-
-    /*  Como repetir uma string ou caractere 
+     /*  Como repetir uma string ou caractere 
             um numero determinado de vezes      */
-    $n_simbolo = "&nbsp;"; 
-    $n_simbolo = str_repeat($n_simbolo,$num_rows);
-    if( intval($num_rows)<=1 ) $n_simbolo = "";
-    //  FINAL do tamanho do campo
-    //
+     $n_simbolo = "&nbsp;"; 
+     $n_simbolo = str_repeat($n_simbolo,$num_rows);
+     if( intval($num_rows)<=1 ) $n_simbolo = "";
+     //  FINAL do tamanho do campo
     
-    // Iniciando TABELA de dados
-    // opcionalmente, imprimir um cabe?alho em negrito na parte superior da tabela
+     // Iniciando TABELA de dados
+      // opcionalmente, imprimir um cabe?alho em negrito na parte superior da tabela
     /***
     $font_size_family="font-size: x-small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace; ";
     $font_size_family.=" padding: 3px; empty-cells: show; "; 
@@ -204,107 +165,82 @@ if( intval($total_regs)<=0 ) {
     ////  $cabecalho_array = array("DATA");
     $cabecalho_array = array("DATA","DETALHES");
     $align_right_array=array("CIA","NR","NUMPROJETO","NA");
-    //
-    //  $m_function="enviando_dados";    
+    ///  $m_function="enviando_dados";    
     $m_function=$_SESSION["m_function"];
     echo "<div id='div_pagina' class='div_pagina' style='margin-left: 1px;width: 99%;height: 100%;'>";
     echo $_SESSION["titulo"];
     echo "<table class='div_pagina' style='margin-left: 3px;' cellpadding='1' cellspacing='2' >";
     echo "<tr>";
-    for($column_num = 0; $column_num < $num_fields; $column_num++) {  
-           //
-           $field_name = $fields[$column_num]; $text_align="left";
-           $field_name_upper=strtoupper(trim($field_name));
-           //
-           //  if( $field_name_upper=='ARQUIVO' or $field_name_upper=='DATA' or $field_name_upper=='DETALHES' ) $text_align="center";
-           if( in_array($field_name_upper,$campos_fora) ) continue;
-           if( $field_name_upper=='NR' ) $field_name="Nr";
-           // if( $field_name_upper=='DETALHES' ) $text_align="center";
+    for($column_num = 0; $column_num < $num_fields; $column_num++) {
+            $field_name = $fields[$column_num]; $text_align="left";
+            $field_name_upper=strtoupper(trim($field_name));
+            ///  if( $field_name_upper=='ARQUIVO' or $field_name_upper=='DATA' or $field_name_upper=='DETALHES' ) $text_align="center";
+            if( in_array($field_name_upper,$campos_fora) ) continue;
+            if( $field_name_upper=='NR' ) $field_name="Nr";
+            /// if( $field_name_upper=='DETALHES' ) $text_align="center";
            if( $field_name_upper=='NA' or $field_name_upper=='CIA' ) $field_name="NA";
-           if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
-           $campo_nome=ucfirst($field_name);
-           if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
+            if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
+            $campo_nome=utf8_decode(ucfirst($field_name));
+            if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
                 echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
                     ."$campo_nome</th>";
-           } else {
+            } else {
                 echo "<th class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
                     ."$campo_nome</th>";
-           }    
-           //    
+            }    
+            ///    
     }
-    echo "</tr>";
-    //
-    // print the body of the table  
+    echo "</TR>";
+    // print the body of the table
     $conjunto = $_SESSION["conjunto"];
-    $conta_linha = 0; $sem_link = 0; $m_relatext = ""; 
-    //
-    // MYSQLI_BOTH -> permite acesso por índice numérico E por nome de coluna,
-    // substituindo o antigo mysql_result($query, $linha, "coluna")
-    while( $linha = mysqli_fetch_array($query, MYSQLI_BOTH) ) {
-        /// link
-        ?>
-        <tr align="left" class="font_size">
+    $conta_linha=0; $sem_link=0; $m_relatext="";
+    while( $linha = mysql_fetch_row($query)) {
+        /// link        
+         ?>       
+        <tr align="left"  class="font_size"  >
         <?php
-        for( $column_num = 0; $column_num < $num_fields; $column_num++ ) {
-            $text_align = "left";
-            $field_name_upper = strtoupper(trim($fields[$column_num]));
-            if( in_array($field_name_upper, $campos_fora) ) continue;
-
+        for( $column_num=0; $column_num<$num_fields; $column_num++) {
+            $text_align="left";              
+            $field_name_upper = strtoupper(trim($fields[$column_num]));  
+            if( in_array($field_name_upper,$campos_fora) ) continue;                       
+           /// if( $field_name_upper=='ARQUIVO' or $field_name_upper=='DATA' ) $text_align="center";
             ///  Campo inicio Zero (0)
-            /// substitui: mysql_result($query, $conta_linha, "cia")
-            $selecionado = trim($linha["cia"]);
-
-            if( strtoupper(trim($field_name)) == 'ARQUIVO' ) {
-                /// substitui: mysql_result($query, $conta_linha, "Arquivo")
-                $valor = htmlentities(trim($linha["Arquivo"]));
-                $valor = "<img src='../imagens/enviar.gif' alt='Enviar Arquivo' style='text-align: center; vertical-align:text-bottom;'>";
-                $m_relatext = $linha[$column_num]; $sem_link = 1;
+           /// if( $column_num<1 ) $selecionado=$linha[$column_num];
+             /// $selecionado=$linha[$column_num];
+              $selecionado=trim(mysql_result($query,$conta_linha,"cia"));
+            
+         ///   if( strtoupper($field_name)=='ARQUIVADO_COMO' ) {
+            if( strtoupper(trim($field_name))=='ARQUIVO' ) {
+                //  $valor=htmlentities(trim(mysql_result($query,$conta_linha,"relatext")));                   
+                $valor=htmlentities(trim(mysql_result($query,$conta_linha,"Arquivo")));                                   
+               // $valor = substr($valor,strpos($valor,"_")+1,strlen(trim($valor)));
+                $valor="<img src='../imagens/enviar.gif' alt='Enviar Arquivo'  style='text-align: center; vertical-align:text-bottom;'  >";
+                $m_relatext=$linha[$column_num];  $sem_link=1;
             } else {
-                $valor = $linha[$column_num]; $sem_link = 0;
+                $valor=$linha[$column_num]; $sem_link=0;                                          
             }
             ///
-            if( $field_name_upper == 'DATA' ) $text_align = "center";
+            if( $field_name_upper=='DATA' ) $text_align="center";
             /// Encontrar campo nesse array
-            if( in_array("$field_name_upper", $align_right_array) ) $text_align = "right";
-        ?>
-          <td style="text-align: <?php echo $text_align; ?>; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;">
-            <?php
-                /// Opcao para Selecionar uma Anotacao de um Projeto
-                echo "<a href=\"#\" onclick=\"javascript: $m_function('REMOVER','$m_relatext','$conjunto#@=$selecionado')\" "
-                   . " id=\"m_selecionado\" class=\"link_href\" title=\"Clicar para remover\">";
-                echo $valor;
-                echo "</a>";
-            ?>
+            if( in_array("$field_name_upper",$align_right_array) ) $text_align="right";
+           /// 
+         ?>    
+          <td style="text-align: <?php echo $text_align;?>; white-space: nowrap; padding: .3em; font-weight: bold; border: 1px solid #000000;" > 
+            <?php  
+                /// Opcao para Selecionar uma Anotacao de um Projeto             
+              echo  "<a href=\"#\" onclick=\"javascript: $m_function('REMOVER','$m_relatext','$conjunto#@=$selecionado')\"  " 
+                                      ." id=\"m_selecionado\" class=\"link_href\" title=\"Clicar para remover\" >";
+               echo $valor;
+               echo "</a>";
+             ?>                               
             </td>
           <?php
         }
-        ?>
+    ?>
       </tr>
-        <?php
+    <?php
         $conta_linha++;
     }
-    /**  Final -      while( $linha = mysqli_fetch_array($query, MYSQLI_BOTH) ) {   */
-    //
-     /**    Verifica SESSION caminho link principal   */
-    if( ! isset($_SESSION["url_central"]) )  {
-        //
-         $terr = "SESSION url_central inexistente - corrigir.";
-        die("ERRO: $terr");   
-    }
-    $url_central = $_SESSION["url_central"];
-    //
-
-
-
-
-/**  
-  echo  "ERRO: tabela_de_remocao_anotacao/291  -->> Depois WHILE  - \$num_rows = $num_rows --- \$val = $val <br>"
-       ." -->> \$arq_tab_rm_anotacao = $arq_tab_rm_anotacao  -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
-  exit();
- */
-
-
-
 
    // Calculando pagina anterior
     $menos = $pagina - 1;
@@ -322,9 +258,8 @@ if( intval($total_regs)<=0 ) {
     if( $_SESSION["valor_com_pags"]<$total_regs ) $_SESSION["numero_de_pags"]++;
     
     if( $pgs > 1 ) {
-        //     
         $td_menu=$td_menu*2;
-        $pagina_atual = '{$url_central}consultar/tabela_selecionada.php';
+        $pagina_atual = 'http://www-gen.fmrp.usp.br/rexp/consultar/tabela_selecionada.php';
         $font_size_family="font-size: small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;"; 
         echo "<tr style='width: 100%; text-align: center;  margin-bottom: 0px;  padding-bottom: 0px; '  >";
         echo   "<td class='table_td' colspan=".$td_menu." style='text-align: center; '  align='center' >";

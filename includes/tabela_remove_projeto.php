@@ -5,7 +5,6 @@ if(!isset($_SESSION)) {
    session_start();
 }
 //
-//
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -334,23 +333,18 @@ if( intval($total_regs)<=0 ) {
      /**    Verifica SESSION caminho link principal   */
     if( ! isset($_SESSION["url_central"]) )  {
         //
-         $terr = "&nbsp;Sem resultado - Select - falha:&nbsp;db/mysql&nbsp;";
-         $terr  .= mysqli_error($_SESSION["conex"]);
+         $terr = "SESSION url_central inexistente - corrigir.";
         die("ERRO: $terr");   
     }
     $url_central = $_SESSION["url_central"];
     //
 
 
-
-//    echo "ERRO:  LINHA/322  -->> \$url_central = $url_central  <br> -->>  \$pagina = $pagina  <<-- \$num_fields = $num_fields  <<--->> \$num_rows = $num_rows   "
-//             ." <br> \$max_length = $max_length ";
-//    exit();
-
-
-
-
-
+    /**   
+     *     echo "ERRO:  LINHA/322  -->> \$url_central = $url_central  <br> -->>  \$pagina = $pagina  <<-- \$num_fields = $num_fields  <<--->> \$num_rows = $num_rows   "
+     *             ." <br> \$max_length = $max_length ";
+     *     exit(); 
+     */
 
 
     /// Calculando pagina anterior
@@ -367,9 +361,10 @@ if( intval($total_regs)<=0 ) {
     $_SESSION["numero_de_pags"] = (int) ($total_regs/$maximo);
     $_SESSION["valor_com_pags"] = (int) ($_SESSION["numero_de_pags"]*$maximo);
     if( $_SESSION["valor_com_pags"]<$total_regs ) $_SESSION["numero_de_pags"]++;
-    
-    ///  Maior que 1
+    //
+    //  Maior que 1
     if( intval($pgs)>1 ) {
+        //
         $td_menu=$td_menu*2;
         $pagina_atual =  "{$url_central}consultar/tabela_selecionada.php";
         $font_size_family="font-size: small; font-family: Arial, Helvetica, Times, Courier, Georgia, monospace;"; 
@@ -378,14 +373,15 @@ if( intval($total_regs)<=0 ) {
         echo  '<table border="0"  cellpadding="1"  cellspacing="0"  align="center" style="margin-top: 0px; padding-top: 0px; " >';    
         echo "<tr  style='padding: 0px;' >";
         echo  "<td style='".$font_size_family."' >";
-        /// Mostragem de pagina
-        ///  Pagina inicial
-         if(  intval($total_regs)>0 &&  intval($menos)>0 ) {
+        // Mostragem de pagina
+        //  Pagina inicial
+        if(  intval($total_regs)>0 &&  intval($menos)>0 ) {
               $iniciando="0";
               echo "&nbsp;<a href='javascript: $m_function(\"Lista\",\"$iniciando\");'  "
                 ." class='texto_paginacao' style='cursor: pointer;' alt='Clicar' >in&iacute;cio</a>&nbsp;";
-         }  
-         ///  Pagina anterior
+        }
+        //  
+        //  Pagina anterior
         if( intval($menos)>0 ) {
              /// echo "<a href=\"?pagina=$menos&seed=$seed\" class='texto_paginacao'>anterior</a> ";
              /// echo "<a href=\"$pagina_atual?pagina=$menos\" class='texto_paginacao'>anterior</a>&nbsp;";
@@ -393,8 +389,8 @@ if( intval($total_regs)<=0 ) {
              echo  "<a href='javascript: $m_function(\"Lista\",\"$menos\");' "
                      ." class='texto_paginacao' title='Clicar' >anterior</a>&nbsp;";
         }
-        
-        /// Listando as paginas
+        //
+        // Listando as paginas
         $n_pags=8;
         if( $_SESSION["valor_com_pags"]==$pagina ) {
              $pag_id=$pagina-$n_pags;
@@ -402,7 +398,7 @@ if( intval($total_regs)<=0 ) {
         } else {
             $pag_id=$pagina;   
         }
-        ///
+        //
         for( $i=1; $i<=$n_pags; $i++) {
                 $pag_id++;
                 if( $pag_id<=$_SESSION["numero_de_pags"] ) {
@@ -415,15 +411,15 @@ if( intval($total_regs)<=0 ) {
                       }
                 }     
         }
-        ///
-        /// Proxima pagina
+        //
+        // Proxima pagina
         //  if($mais <= $pgs) {
         if( $mais<=$_SESSION["numero_de_pags"] || ( $inicio+$maximo)<$total_regs ) {
             $_SESSION["valor"]=$mais;
             echo  "<a href='javascript: $m_function(\"Lista\",\"$mais\");'   "
                   ." class='texto_paginacao'  title='Clicar'  >pr&oacute;xima</a>&nbsp;";
         }
-        ///
+        //
         //  Ultima pagina
         $ultima_pagina = (int) $_SESSION["pagina_final"];
         if( $ultima_pagina!=$pagina && ($inicio+$maximo)<$total_regs ) {
@@ -433,11 +429,13 @@ if( intval($total_regs)<=0 ) {
         }
         echo "</td></tr></table>";
         echo "</td></tr>";
+        //
     }  
-    /// Final - if \$pgs
+    /**  Final - if( intval($pgs)>1 ) {  */
     echo "</table>"; 
     echo "</div>";
-    ///    echo "</div>";
-    ///  <!--  FINAL da Tabela de dados  -->
+    //    echo "</div>";
+    //  <!--  FINAL da Tabela de dados  -->
 }
+//
 ?>
