@@ -1,4 +1,5 @@
 <?php
+//
 //  AJAX da opcao Remover  - Servidor PHP para remover Anotacao do PROJETO
 //  esse arquivo faz parte do anotacao_remover.php
 //
@@ -65,7 +66,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sess?o pasta_raiz n�o est? ativa.").$msg_final;  
+     $msg_erro .= "Sess?o pasta_raiz inexistente.".$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -115,6 +116,9 @@ $opcao_maiusc=strtoupper(trim($opcao));
 //
 //  Arquivo da tabela de remover anotacao - importante
 $arq_tab_rm_anotacao="{$incluir_arq}includes/tabela_de_remocao_anotacao.php"; 
+//
+// IMPORTANTE:  Formato Mysqli caracteres
+mysqli_set_charset($_SESSION["conex"], "utf8mb4");
 //
 //  SAIR do Programa
 if( $opcao_maiusc=="SAIR" ) {
@@ -364,7 +368,7 @@ exit();
      //
      //  Verificando Anotacoes
      if( intval($nr_anotacao)<1  ) {
-          echo  utf8_decode("ERRO: Anota��o inv�lida.");
+          echo  "ERRO: Anotação inválida.";
      } else {  
         //
         // IMPORTANTE:  Formato Mysqli caracteres
@@ -658,7 +662,7 @@ exit();
             echo $funcoes->mostra_msg_erro("Faltando a CIA (Código de Identificação da Anotação");
        } else {
           //
-          //  Seleciona a Anotacao para Remover  -- MySQL/Select
+          /**   Seleciona a Anotacao para Remover  -- MySQLI/Select   */  
           $sqlcmd = "SELECT a.cia, a.numero as nr, a.alteraant as altera_nr, a.autor as anotador, "
                           ."concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anot, "
                           ."a.testemunha1, a.testemunha2, "
@@ -688,15 +692,6 @@ exit();
                //
           }
           //
-
-       
-  echo "ERRO: srv_rmanotacao/698  -->>   \$cia = $cia  -->> \$array_nome = ".count($array_nome);
-  exit();
-
-
-
-
-          //
           //  Essa PARTE vem do arquivo  -  myArguments_remover.php
           $m_projeto=$_SESSION["projeto"]; $m_anotacao = $_SESSION["anotacao"]; 
           $anotador = $_SESSION["anotador_codigousp"];
@@ -714,8 +709,15 @@ exit();
           $remover_arq = $dir."/".$arquivado_como;
           $dh  = opendir($dir);
           $exempt = array('.','..'); $conta_arq=0;
-          ///
-          ///  Removendo o arquivo PDF
+          //
+
+    
+    echo "ERRO:  LINHA/712  -->>  Antes  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
+             exit();
+
+
+
+          //  Removendo o arquivo PDF
           while( false !== ($filename = readdir($dh))) {
                  //
                  if( in_array(strtolower($filename),$exempt) ) continue;
@@ -735,14 +737,15 @@ exit();
           /**  Final -  while( false !== ($filename = readdir($dh))) {  */  
           //
 
-       
-  echo "ERRO: srv_rmanotacao/733  -->>   \$cia = $cia  -->> \$array_nome = ".count($array_nome);
+/**  
+  echo "ERRO: srv_rmanotacao/733  -->> Removendo o arquivo  $remover_arq  - \$cia = $cia  -->> \$array_nome = ".count($array_nome);
   exit();
+ */       
 
-
-
-
-          ///  Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem
+          //   Conexao/MYSQLI
+          $conex=$_SESSION["conex"];
+          //
+          //  Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem
           if( intval($conta_arq)<1 ) {
               if( is_dir($dir) ) { 
                   rmdir($dir); 
@@ -750,17 +753,25 @@ exit();
                   echo $dir.' n&atilde;o existe';    
               }
           }
-          ///  FINAL removendo o arquivo PDF
-          ///
+          //  FINAL removendo o arquivo PDF
+          //
+
+
+
+    echo "ERRO:  LINHA/750  --  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
+             exit();
+
+
+
           ///  Start a transaction - ex. procedure 
          $lnerro=0;
          $tabela="anotacao";
          $commit="commit";   
-         mysqli_query('DELIMITER &&'); 
-         mysqli_query('begin'); 
+        // mysqli_query('DELIMITER &&'); 
+     //    mysqli_query('begin'); 
          //  Execute the queries          
          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-         mysqli_query("LOCK TABLES $bd_2.$tabela  DELETE ");
+     //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela  DELETE ");
          ///
          ///  Removendo o registro da anotacao
          $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
@@ -768,58 +779,71 @@ exit();
          if( ! $res_reg  ) $lnerro=1;
          ///
          if( intval($lnerro)>=1 ) {
-              echo $funcoes->mostra_msg_erro("&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+              $terr="&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;";
+              echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
               $commit="rollback";
          }    
          ///                  
-         mysqli_query($commit);
-         mysqli_query("UNLOCK  TABLES");
-         ///  Complete the transaction 
-         mysqli_query('end'); 
-         mysqli_query('DELIMITER');
-         ///  Removido
+         mysqli_query($_SESSION["conex"],$commit);
+    //     mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
+         //
+         //  Complete the transaction 
+   //      mysqli_query('end'); 
+      //   mysqli_query('DELIMITER');
+         //
+         /**  Verifica caso foi  Removido  */  
          if( intval($lnerro)<1 ) {
-              ////   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
-              ////   Diminuir o numero de Anotacoes no Projeto
-             ///  Verifica se existe ANOTACOES para o PROJETO escolhido
+              // 
+              //   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
+              //   Diminuir o numero de Anotacoes no Projeto
+              //  Verifica se existe ANOTACOES para o PROJETO escolhido
               $sqlcmd = "SELECT anotacao FROM  $bd_2.projeto  WHERE cip=$m_projeto ";
-              ///           
+              //           
               $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
               if( ! $result_consult_anotacao ) {
-                    echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
-                    exit();        
+                   $terr="Selecionando anotação na tabela Projeto -&nbsp;db/mysqli:&nbsp;";
+                   echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));            
+                   exit();        
               }
-              ///  Numero de Anotacoes 
-              $nanotacoes=mysql_result($result_consult_anotacao,0,0);  
+              //
+              //  Nr. de Anotacoes 
+              //   $nanotacoes=mysql_result($result_consult_anotacao,0,0);  
+              $linha = mysqli_fetch_array($result_consult_anotacao);
+              $nanotacoes = (int) $linha[0];
               if( intval($nanotacoes)>0 ) {
-                    $nanotacoes=$nanotacoes-1;
-                    $tabela="projeto";
-                    $commit="commit";   
-                    mysqli_query('DELIMITER &&'); 
-                    mysqli_query('begin'); 
-                    //  Execute the queries          
+                   //
+                   $nanotacoes=$nanotacoes-1;
+                   $tabela="projeto";
+                   $commit="commit";   
+                //   mysqli_query($conex,'DELIMITER &&'); 
+                //   mysqli_query($conex,'begin'); 
+                   //
+                   //  Execute the queries          
                     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-                    mysqli_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
+                //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela  UPDATE ");
                     ///
                     ///  Removendo o registro da anotacao
                     $sqlcmd = "UPDATE $bd_2.$tabela SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
                     $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
                     if( ! $res_reg ) {
-                        echo $funcoes->mostra_msg_erro("&nbsp;Diminuindo total de anota��es do Projeto. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                        $terr="&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysqli:&nbsp;";
+                        echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
                          $commit="rollback";
                     }    
                     ///                  
-                    mysqli_query($commit);
-                    mysqli_query("UNLOCK  TABLES");
-                    ///  Complete the transaction 
-                    mysqli_query('end'); 
-                    mysqli_query('DELIMITER');
+                    mysqli_query($_SESSION["conex"],$commit);
+                //    mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
+                    //
+                    //  Complete the transaction 
+               //     mysqli_query($_SESSION["conex"],'end'); 
+               //     mysqli_query($_SESSION["conex"],'DELIMITER');
                     ///
                     ///  Mensagem de aviso da remocao da Anotacao
-                    $txt =  'Anota��o: '.$tit_anotacao.' removida era parte do Projeto: '.$tit_projeto;
+                    $txt =  'Anotação: $tit_anotacao removida era parte do Projeto: '.$tit_projeto;
                     echo $txt;
-                    ///
+                    //
               }
+              /**  Final - if( intval($nanotacoes)>0 ) {  */
              ///
          }
          ///

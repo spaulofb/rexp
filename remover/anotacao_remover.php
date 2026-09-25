@@ -419,13 +419,14 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
     ///  Verifica qual Navegador sendo usado
     var m_isChrome=isChrome().toString();
     var m_isInternetExplorer=isInternetExplorer();
-
-    /// Define o procedimento para processamento dos resultados dp srv_php
+    //
+    // Define o procedimento para processamento dos resultados dp srv_php
     var inclusao = function (oXML) { 
-          ///  Recebendo o resultado do php/ajax
+          //
+          //  Recebendo o resultado do php/ajax
           var srv_ret = trim(oXML.responseText);
           var lnip = srv_ret.search(/Nenhum|ERRO:/i);
-          ///
+          //
 
 
   alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
@@ -513,6 +514,7 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                         alert("Usar Navegador Google Chrome ou Internet Explorer");
                         return
                    }
+                   //
                    if( pos!=-1 ) {
                         var pos = srv_ret.search(/APROVADO|NAOAPROVADO/);
                         if( pos!=-1 ) {                                            
@@ -526,13 +528,16 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                                      document.getElementById('div_form').innerHTML=showmodal;
                               }                                                                                           
                         }
+                        //
                     } else if( pos==-1 ) {
                         if( showmodal=="excluido" ) {        
                              /***  IMPORTANTE: essa function acentuarAlerts
                                      para acentuacao
                              ***/
                              var mensagem=acentuarAlerts("Anotação excluída. Verificar.");
+                             //
                              alert(mensagem);
+                             //
                              document.location.reload(true);  
                              ///
                         }
@@ -609,7 +614,8 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
     var poststr = new String("");
         /// if( idselecproj.toUpperCase()=="DESCARREGAR" || idselecproj.toUpperCase()=="DETALHES" ) {
     var encontrado=idselecproj.search(/DESCARREGAR|DETALHES|BUSCA_PROJ|ordenar/i);    
-     ///  Caso encontrou um dos tres nomes 
+    //
+    //  Caso encontrou um dos tres nomes 
     if( encontrado!=-1 ) {
            var browser="";
            if( typeof navegador=="function" ) {
@@ -632,7 +638,7 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                          ETAPA PARA REMOVER A ANOTACAO DE UM PROJETO NO ARQ. srv_rmanotacao.php 
                          utilizando a function para_confirm do arquivo functions.js
                      */    
-                     var remover = para_confirm("Remover tem certeza?");
+                     var remover = para_confirm("Remover Anotação tem certeza?");
                      if( remover ) {
                            //  Iniciando excclusao da Anotacao escolhida
                            var poststr = "idopcao="+encodeURIComponent(idopcao)+"&op_selcpoval="+encodeURIComponent(opcao)+"&cia="+encodeURIComponent(string_array);                     
