@@ -711,11 +711,10 @@ exit();
           $exempt = array('.','..'); $conta_arq=0;
           //
 
-    
-    echo "ERRO:  LINHA/712  -->>  Antes  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
-             exit();
 
-
+     echo "ERRO:  LINHA/712  -->>  Antes  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
+      exit();
+     
 
           //  Removendo o arquivo PDF
           while( false !== ($filename = readdir($dh))) {
@@ -738,8 +737,8 @@ exit();
           //
 
 /**  
-  echo "ERRO: srv_rmanotacao/733  -->> Removendo o arquivo  $remover_arq  - \$cia = $cia  -->> \$array_nome = ".count($array_nome);
-  exit();
+*   echo "ERRO: srv_rmanotacao/733  -->> Removendo o arquivo  $remover_arq  - \$cia = $cia  -->> \$array_nome = ".count($array_nome);
+ *  exit();
  */       
 
           //   Conexao/MYSQLI
@@ -757,35 +756,37 @@ exit();
           //
 
 
+/**   echo "ERRO:  LINHA/750  --  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
+ *               exit();
+     */
 
-    echo "ERRO:  LINHA/750  --  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
-             exit();
 
 
-
-          ///  Start a transaction - ex. procedure 
-         $lnerro=0;
-         $tabela="anotacao";
-         $commit="commit";   
-         //  Execute the queries          
-         //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          //  Start a transaction - ex. procedure 
+          $lnerro=0;
+          $tabela="anotacao";
+          $commit="commit";   
+          //
+          //  Execute the queries          
+          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
      //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela  DELETE ");
-         ///
-         ///  Removendo o registro da anotacao
-         $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
-         $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
-         if( ! $res_reg  ) $lnerro=1;
-         ///
-         if( intval($lnerro)>=1 ) {
+          //
+          //  Removendo o registro da anotacao
+          $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
+          $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
+          if( ! $res_reg  ) $lnerro=1;
+          //
+          if( intval($lnerro)>=1 ) {
+              //
               $terr="&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;";
               echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
               $commit="rollback";
-         }    
-         ///                  
-         mysqli_query($_SESSION["conex"],$commit);
-         //
-         //  Complete the transaction 
-         //
+          }    
+          //                  
+          mysqli_query($_SESSION["conex"],$commit);
+          //
+          //  Complete the transaction 
+          //
          /**  Verifica caso foi  Removido  */  
          if( intval($lnerro)<1 ) {
               // 
@@ -829,7 +830,7 @@ exit();
                     //  Complete the transaction 
                     ///
                     ///  Mensagem de aviso da remocao da Anotacao
-                    $txt =  'Anotação: $tit_anotacao removida era parte do Projeto: '.$tit_projeto;
+                    $txt =  "Anotação: $tit_anotacao removida era parte do Projeto: ".$tit_projeto;
                     echo $txt;
                     //
               }

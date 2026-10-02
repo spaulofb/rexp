@@ -303,8 +303,10 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
      var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
      var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
     
+     /**  
  alert(" arq anotacao_remover.php/296 --->>  idselecproj = "+idselecproj+" -  idopcao = "+idopcao
             +"  --  opcao = "+opcao+" - string_array = "+string_array);
+             */
 
  
     //                  
@@ -428,9 +430,9 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
           var lnip = srv_ret.search(/Nenhum|ERRO:/i);
           //
 
-
-  alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
-
+/**  
+*    alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
+ */
 
          ///  Caso ocorreu erro
          if( parseInt(lnip)!=-1 ) {
@@ -446,16 +448,22 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
               }
          }
          ///  Caso NAO encontrou nem:  Nenhum|ERRO:
-         if( lnip==-1 ) {
+         if( lnip==-1 ) {    
+             //
 
-///   alert("anotacao_remover.php/405   --->>   2)  --- opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);          
-              
+
+     /**
+     *      alert("anotacao_remover.php/405   --->>   2)  --- opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);          
+     */
+             
+             // 
              if( opcao=="DESCARREGAR" ) {
+                  //
                   var msgtxt=acentuarAlerts("\r\nCaso o Internet Explorer bloqueie o download, faça o seguinte:\r\n\r\n Opção - Via Ferramentas do Internet Explorer\r\n 1 - Abra o Opções do Internet Explorer e clique na aba Segurança.\r\n 2 - Clique no botão Nível Personalizado e dentro de Configurações de Segurança, localize o recurso Downloads \r\n3 - Em: Aviso automático para downloads de arquivo e selecione Habilitar");    
                   alert(msgtxt);
                   srv_ret = trim(srv_ret);
-                  var array_arq = srv_ret.split("%");
-                ////  self.location.href="../includes/baixar.php?pasta="+encodeURIComponent(array_arq[0])+"&file="+encodeURIComponent(array_arq[1]);
+                  var array_arq = srv_ret.split("%");  
+                  //
                   self.location.href=raiz_central+"includes/baixar.php?pasta="+encodeURIComponent(array_arq[0])+"&file="+encodeURIComponent(array_arq[1]);
                   ///
              }  else if( opcao=="BUSCA_PROJ" ) {
@@ -466,22 +474,22 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                       ///  Ativando ID div_out - enviando dados
                        exoc("div_out",1,srv_ret);           
                       ///          
-             } else if( idopcao=="TODOS" ) {
-                 
- ///   alert("anotacao_remover.php  --  LINHA/339   --->> opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);                           
-                   /***
-                   if( document.getElementById('div_form') ) {
-                        document.getElementById('div_form').style.display="block";
-                        document.getElementById('div_form').innerHTML=srv_ret;                                         
-                   }
-                   ***/
-                   /// Enviando dados para ID id_out - ativar
+             } else if( idopcao=="TODOS" ) {  
+                   //
+
+          /**
+          *     alert("anotacao_remover.php  --  LINHA/339   --->> opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);                           
+          */
+
+                  // 
+                  // Enviando dados para ID id_out - ativar
                   if( document.getElementById('div_out') ) {
                         document.getElementById('div_out').style.display="block";
                         document.getElementById('div_out').innerHTML=srv_ret;                                         
                    }
-                  //// exoc("div_out",1,srv_ret);   
+                   // exoc("div_out",1,srv_ret);   
                    return;
+                   //
              }  else if( opcao=="REMOVER" ) {     
                  ///
                    var  myArguments = string_array; 
@@ -543,9 +551,10 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                         }
                     }
                     /// 
-             }  else if( opcao.toUpperCase()=="ANOTACAO" &&  idopcao.toUpperCase()=="EXCLUINDO"  ) {            ///                
-                    //// Recebendo a mensagem do arquivo srv_rmanotacao.php - sobre excluir ANOTACAO
-                    ///  alert("Anotação removida.");
+             }  else if( opcao.toUpperCase()=="ANOTACAO" &&  idopcao.toUpperCase()=="EXCLUINDO"  ) {
+                    //                
+                    // Recebendo a mensagem do arquivo srv_rmanotacao.php - sobre excluir ANOTACAO
+                    //  alert("Anotação removida.");
                     /***  IMPORTANTE: essa function acentuarAlerts
                             para acentuacao
                     ***/
@@ -556,29 +565,38 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                     location.reload();
                     return;
              }  else {
+                    //
                     if( opcao=="CAMPOS_OBRIGATORIOS"  ) {
                          var pos = m_dados_recebidos.search(/Nenhum|ERRO:/i);
                          if( trim(m_dados_recebidos)!="" && pos==-1 ) {
                                var myArguments = m_dados_recebidos;
                                if( document.getElementById('id_body')  ) {
-                                    document.getElementById('id_body').setAttribute('style','background-color: #007FFF');
+                                    var did_body=document.getElementById('id_body');
+                                    did_body.setAttribute('style','background-color: #007FFF');
                                }    
+                               //
                                var showmodal=window.showModalDialog("myArguments.php",myArguments,"dialogWidth:600px;dialogHeight:500px;resizable:no;status:no;center:yes;help:no;");  
-                               if( showmodal != null) {                                                                           
-                                 //  alert("LINHA 151 - cadastrar_auto.php  =  "+m_dados_recebidos)
+                               if( showmodal != null) {          
+                                   //                                                                 
+                                   //  alert("LINHA 151 - cadastrar_auto.php  =  "+m_dados_recebidos)
                                    var pos = m_dados_recebidos.search(/APROVADO|NAOAPROVADO/);
                                    if( pos!=-1 ) {                                            
                                        var array_modal = showmodal.split("#");
                                        if( document.getElementById('div_form')  ) {
                                            document.getElementById('div_form').style.display="block";
                                            if( document.getElementById('id_body')  ) {
-                                                document.getElementById('id_body').setAttribute('style','background-color: #FFFFFF');
+                                                var xid_body=document.getElementById('id_body');
+                                                xid_body.setAttribute('style','background-color: #FFFFFF');
                                            }    
                                            //  document.getElementById('div_form').innerHTML=array_modal[0];
                                            document.getElementById('div_form').innerHTML=showmodal;
+                                           //
                                        }                                                                                           
-                                   }                                        
-                               }       
+                                   } 
+                                   /**  Fomaç - if( pos!=-1 ) {    */                                       
+                                   //
+                               }   
+                               //    
                          } else if(pos!=-1 ) {
                               document.getElementById('label_msg_erro').style.display="block";
                               document.getElementById('label_msg_erro').innerHTML=srv_ret;                                      
@@ -605,12 +623,15 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                 */
                 /// Mensagem de erro ID label_msg_erro - ativar
                 exoc("label_msg_erro",1,srv_ret);   
+                //
            }; 
            return;
-    };
-    ///   Define o servidor PHP para remover 
-    ///    do banco de dados - anotacao do projeto desejado
+    };  
+    //
+    //   Define o servidor PHP para remover 
+    //    do banco de dados - anotacao do projeto desejado
     var srv_php = "srv_rmanotacao.php";
+    //
     var poststr = new String("");
         /// if( idselecproj.toUpperCase()=="DESCARREGAR" || idselecproj.toUpperCase()=="DETALHES" ) {
     var encontrado=idselecproj.search(/DESCARREGAR|DETALHES|BUSCA_PROJ|ordenar/i);    
