@@ -116,7 +116,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             if ( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
             } else {
                  $$xyz = explode($div_array_por,$_POST[$xyz]);   
             }
@@ -307,7 +307,7 @@ if( $opcao_maiusc=="TODOS" )  {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     if( isset($resultado_projeto) )  mysql_free_result($resultado_projeto);     
+     if( isset($resultado_projeto) )  mysqli_free_result($resultado_projeto);     
       /*    
       a.numero as nr, a.alteraant as Altera, alteradapn as Alterada, "
                  ." a.titulo as T?tulo, b.nome as Autor, c.titulo as projeto_titulo,  "
@@ -342,7 +342,7 @@ if( $opcao_maiusc=="TODOS" )  {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     mysql_free_result($resultado_anotacao);
+     mysqli_free_result($resultado_anotacao);
      //  Selecionando os Nomes das Testemunhas da ANOTACAO
      if( strlen(trim($testemunha1))>=1 or strlen(trim($testemunha2))>=1  ) {
          if( strlen(trim($testemunha1))>=1 and strlen(trim($testemunha2))>=1 ) {

@@ -62,7 +62,7 @@ $utffilename="P2A1_LIVRO Programação  %de Dispositivos  $Móveis  Módulo_3_2_
 $arquivo=preg_replace('$','\$',$utffilename); 
 $dir_arq="{$pasta}{$arquivo}";
 ///  $resultado=@file_exists("{$pasta}".iconv('utf-8', 'cp1252', $arquivo));
-///  $resultado=@file_exists(utf8_encode("{$pasta}{$arquivo}"));
+///  $resultado=@file_exists(mb_convert_encoding("{$pasta}{$arquivo}"), 'UTF-8', 'ISO-8859-1');
 ////  $resultado=@file_exists("{$pasta}{$utffilename}");
 /////  $resultado=@file_exists("{$pasta}{$utffilename}");
 $resultado=@file_exists("$dir_arq");
@@ -70,7 +70,7 @@ $resultado=@file_exists("$dir_arq");
 if( ! $resultado ) {
 
 /// if( ! file_exists("{$pasta}{$arquivo}") ) {
-/// if( ! file_exists(utf8_decode("$dir_arq")) ) {
+/// if( ! file_exists(mb_convert_encoding("$dir_arq")) , 'ISO-8859-1', 'UTF-8') {
 ////  if( ! file_exists("$dir_arq") ) {             
      /* $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
      echo $msg_erro;  
@@ -117,7 +117,7 @@ if( in_array($arq,$file1) ) {
 
 ///
 
-if( ! file_exists(utf8_decode("$dir_arq")) ) {
+if( ! file_exists(mb_convert_encoding("$dir_arq")) , 'ISO-8859-1', 'UTF-8') {
       $msg_erro = "&nbsp;Esse Arquivo: ".$dir_arq."  n&atilde;o tem no Servidor";
          echo $msg_erro;  
 }  else {

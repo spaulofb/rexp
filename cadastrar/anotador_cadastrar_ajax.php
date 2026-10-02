@@ -248,7 +248,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);
        }  
@@ -261,7 +261,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 $e_mailinf = "  ";
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 //
 /** IMPORTANTE:   Conexao MYSQLI  */  
@@ -397,7 +397,7 @@ if( $source_upper=="CODIGOUSP" ) {
         //
         $anotador_nome=mysqli_result($resultado,0,"nome");
         $_SESSION["anotador_nome"]=trim($anotador_nome);
-        echo utf8_decode("$anotador_nome#$anotador_e_mail");
+        echo mb_convert_encoding("$anotador_nome#$anotador_e_mail", 'ISO-8859-1', 'UTF-8');
         //
     } 
     //   
@@ -484,7 +484,7 @@ exit();
     //  Usuario Orientador/Chefe
     if( ! isset($_SESSION["usuario_conectado"]) ) {
         //
-        $msg_erro .= utf8_decode("Session usuario_conectado não existe.").$msg_final;
+        $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
         echo $msg_erro;               
         exit();                                          
     }   
@@ -534,7 +534,7 @@ exit();
          */   
          ini_set('default_charset','utf8');
          //
-         $anotador_nome = $nome = utf8_encode(trim(preg_replace('/ +/',' ',$nome)));
+         $anotador_nome = $nome = mb_convert_encoding(trim(preg_replace('/ +/',' ',$nome)), 'UTF-8', 'ISO-8859-1');
          $_SESSION["anotador_nome"] = $anotador_nome;
          $nome_tmp = str_replace(' ','',$nome);
          //
@@ -560,7 +560,7 @@ exit();
         // Nr. de pessoas
         $nregs = mysqli_num_rows($resultado);
         if( intval($nregs)>0  ) {
-            if( isset($resultado) ) mysql_free_result($resultado);
+            if( isset($resultado) ) mysqli_free_result($resultado);
             $msg_erro .="NOME/E_mail em Duplicata (j&aacute; existe uma pessoa com esse nome ou e_mail). Corrija.".$msg_final;  
             echo $msg_erro;               
             exit();
@@ -573,12 +573,10 @@ exit();
         $n_erro=0;
         //
         //  Iniciar uma transaction - ex. procedure    
-        mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-        mysqli_query($_SESSION["conex"],'begin'); 
         /**
          *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          */
-         mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.pessoa INSERT");
+         true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
          //
         /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
         ///
@@ -593,9 +591,6 @@ exit();
         } else {
               mysqli_query($_SESSION["conex"],'commit');  
         }
-        mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-        mysqli_query($_SESSION["conex"],'end'); 
-        mysqli_query($_SESSION["conex"],'DELIMITER');
         ///  Ocorreu erro
         if( intval($n_erro)>0 ) {
             exit();
@@ -688,11 +683,9 @@ exit();
 
 
       //  Iniciar uma transaction - ex. procedure    
-      mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-      mysqli_query($_SESSION["conex"],'begin'); 
       //
       /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()  */
-      mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.pessoa UPDATE");
+      true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
       /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
       //
       //   VERIFICA se necessario ALTERAR o e_mail do anotador
@@ -717,12 +710,8 @@ exit();
           } else {
               mysqli_query($_SESSION["conex"],'commit');  
           }
-          /// mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
           //
       }
-      mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-      mysqli_query($_SESSION["conex"],'end'); 
-      mysqli_query($_SESSION["conex"],'DELIMITER');
       //
       //  Ocorreu erro
       if( intval($n_erro)>0 ) {
@@ -797,13 +786,11 @@ exit();
           /**
           *   Incluindo anotador na tabela usuario
           */
-          mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-          mysqli_query($_SESSION["conex"],'begin'); 
           //
           /**
           *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
           */
-          mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_1.usuario WRITE");
+          true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
           //
           $sqlcmd = "INSERT $bd_1.usuario ";
           $sqlcmd .="  values('$login',old_password('$senha'),'$datacad','$datavalido',$codigoprov,$pa,$aprovado,$activation_code )";
@@ -821,9 +808,6 @@ exit();
                /**  Executando  */
                mysqli_query($_SESSION["conex"],'commit');  
           }
-          mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-          mysqli_query($_SESSION["conex"],'end'); 
-          mysqli_query($_SESSION["conex"],'DELIMITER');
           //
           //  Ocorreu erro
           if( intval($n_erro)>0 ) {
@@ -831,7 +815,6 @@ exit();
                exit();
           }
           //          
-          //  mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
       }  
       /**  Final - Caso Anotador NAO consta na Tabela usuario  */
       //
@@ -867,9 +850,7 @@ exit();
           ///
           $n_erro=0;
           ///  Iniciar uma transaction - ex. procedure    
-          mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-          mysqli_query($_SESSION["conex"],'begin'); 
-          mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_2.participante INSERT ");
+          true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
           ////   
           $sqlcmd = "INSERT $bd_2.participante values($usuario_ci,$codigoprov,'$datacad','$datavalido',$pa,$codigo_ativa,$aprovado,$chefe )";
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -890,8 +871,6 @@ exit();
           }
           ///
           /// Concluir a transaction
-          mysqli_query($_SESSION["conex"],'end'); 
-          mysqli_query($_SESSION["conex"],'DELIMITER');            
           //
           //  Ocorreu erro
           if( intval($n_erro)>0 ) {
@@ -914,15 +893,13 @@ exit();
    /**          Incluindo Anotador     
    *        Iniciar uma transaction - ex. procedure    
    */
-   mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-   mysqli_query($_SESSION["conex"],'begin'); 
    //
    //  Execute the queries 
    mysqli_select_db($_SESSION["conex"],$db_array[$elemento]);
    /**
     *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
     */
-   mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_2.anotador INSERT ");
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
    //   
    $sqlcmd = "INSERT into $bd_2.anotador values($anotador_ci,$cip,$codigo,$pa,'$data')";
    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -942,8 +919,6 @@ exit();
    }
    //
    //  Concluir a transaction
-   mysqli_query($_SESSION["conex"],'end'); 
-   mysqli_query($_SESSION["conex"],'DELIMITER');            
    //
    //  Ocorreu erro
    if( intval($n_erro)>0 ) {
@@ -1074,7 +1049,7 @@ exit();
    *** Não responda a este EMAIL ****
    ";
    
-   //if ( mail($aprovador_email, stripslashes(utf8_encode($assunto)), $message,$headers1)  ) {
+   //if ( mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1)  , 'UTF-8', 'ISO-8859-1') {
    // SEMPRE TESTAR O COMANDO MAIL -  SE A MENSAGEM FOI ENVIADA  
    //  $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);  
    $emailsender="$orientador_email";

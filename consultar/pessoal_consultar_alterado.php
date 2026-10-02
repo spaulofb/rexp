@@ -290,7 +290,7 @@ $lnletras = mysqli_num_rows($result);
 ?>
 </select>
 <?php
-      if( isset($result) )  mysql_free_result($result); 
+      if( isset($result) )  mysqli_free_result($result); 
   }
 ?>   
 </div>

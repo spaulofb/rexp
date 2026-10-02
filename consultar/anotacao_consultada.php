@@ -26,7 +26,7 @@ $_SESSION["cols"]=4;
                                           ." where a.cip=".$cip_projeto."  and "
                                           ." a.autor=b.codigousp  order by b.nome "); 
            if( ! $result_pessoa ) {
-                mysql_free_result($result_pessoa);
+                mysqli_free_result($result_pessoa);
                 die('ERRO: Select projeto e pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
            }
            $m_linhas=mysqli_num_rows($result_pessoa);
@@ -42,13 +42,13 @@ $_SESSION["cols"]=4;
                 ?>
                 <span class='td_inicio1' style="border:none; background-color:#FFFFFF; color:#000000;" title='Nome do Orientador do Projeto' ><?php echo $orientador_nome;?>&nbsp;</span>
                 <?php         
-                 mysql_free_result($result_pessoa); 
+                 mysqli_free_result($result_pessoa); 
                  $result_anot_dt=mysqli_query("select data,titulo,relatext from anotacao "
                                                ." where numero=$numero_anotacao and "
                                                ." projeto=$cip_projeto ");
                  //
                 if( ! $result_anot_dt ) {
-                    mysql_free_result($result_anot_dt);
+                    mysqli_free_result($result_anot_dt);
                     die('ERRO: Select anotacao e campo data - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
                 $m_regs=mysqli_num_rows($result_anot_dt);
@@ -64,7 +64,7 @@ $_SESSION["cols"]=4;
                     //  armazena na variavel data os valores do vetor data e concatena 
                     $data_anotacao = $data_anotacao[2].'/'.$data_anotacao[1].'/'.$data_anotacao[0];             
                 }
-                mysql_free_result($result_anot_dt);
+                mysqli_free_result($result_anot_dt);
            }
            ?>  
            <!-- Final da Num_USP/Nome Responsavel  -->
@@ -111,7 +111,7 @@ $_SESSION["cols"]=4;
                    ." a.testemunha1=b.codigousp and a.testemunha2=c.codigousp ");
         //  Resultado dos campos codigos para nomes de outro BD - pessoal.pessoa
         if( ! $result_dois_nomes ) {
-                    mysql_free_result($result_dois_nomes);
+                    mysqli_free_result($result_dois_nomes);
                     die('ERRO: Select rexp.anotacao e pessoal.pessoa  - falha: '.mysqli_error($_SESSION["conex"]));  
          }
          $testemunha1_nome = mysql_result($result_dois_nomes,0,"testemunha1_nome");

@@ -44,8 +44,8 @@
 	              </select>
 	               </span>
 					<?php
-                    mysql_free_result($result_tb_temp1); 
-                    mysql_free_result($result); 
+                    mysqli_free_result($result_tb_temp1); 
+                    mysqli_free_result($result); 
                   }
  				  // Final da Unidade
 				  ?>				  

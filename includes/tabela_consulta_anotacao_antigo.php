@@ -172,7 +172,7 @@ if( intval($total_regs)<=0 ) {
            //// if( $field_name_upper=='NR' ) $field_name="Nr/Anotação";
             if( $field_name_upper=='NR' ) $field_name="Nr";
             if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
-            $campo_nome=utf8_decode(ucfirst($field_name));
+            $campo_nome=mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8');
             echo "<th align='left' "
                 ." style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000; $font_size_family ' >".$campo_nome."</th>";
     }

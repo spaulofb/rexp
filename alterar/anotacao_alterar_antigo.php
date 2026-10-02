@@ -69,7 +69,7 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 /// $_SESSION['time_exec']=180000;
 
 /*  UPLOAD: FILEFRAME section of the script
@@ -129,7 +129,7 @@ if( isset($_POST['fileframe']) ) {
       $numprojeto=$_SESSION["numprojeto"];
       $projeto_autor=mysql_result($select_numprojeto,0,"autor");
       /// 
-      if( isset($select_numprojeto) ) mysql_free_result($select_numprojeto);      
+      if( isset($select_numprojeto) ) mysqli_free_result($select_numprojeto);      
       $_SESSION["display_arq"]='block';
       /** Conjunto de arquivos - ver tamanho total dos arquivos ***/
       $tam_total_arqs=0; $files_array= array(); 
@@ -260,7 +260,7 @@ if( isset($_POST['fileframe']) ) {
               $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_".$_FILES['relatext']['name'];
               ***/
               $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_";
-              $filename .=utf8_decode($_FILES['relatext']["name"]); 
+              $filename .=mb_convert_encoding($_FILES['relatext']["name"], 'ISO-8859-1', 'UTF-8'); 
               $dir_filename=$_SESSION["dir"].$filename;
               $relatext_tmp_name=$_FILES['relatext']['tmp_name'];
               $arqnovook=$_SESSION["dir"].$filename;
@@ -308,9 +308,9 @@ if( isset($_POST['fileframe']) ) {
           mysqli_query('SET character_set_results=utf8'); 
           mysql_set_charset('utf8');
               
-          ///  $local_arq = utf8_decode($local_arq); 
+          ///  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
           ///  $local_arq  = html_entity_decode(trim($filename));
-          $local_arq = utf8_encode($filename); 
+          $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
           ///
            ///  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
            ///                 - Use mysql_select_db() ou mysqli_query()
@@ -1264,16 +1264,16 @@ $nprojetos = mysqli_num_rows($result);
                         ///  echo  "<option value='' disabled ></option>";                  
                         /*
                         echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >"
-                               .utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
+                               .mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";   
                         */
                         echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >";
                         /* IMPORTANTE: Detectar codificacao  de caracteres  - 20171005   */
                         $codigo_caracter=mb_detect_encoding($titulo_projeto);
                       ///  if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-                            //// echo utf8_decode(htmlentities($titulo_projeto))."&nbsp;&nbsp;</option>";
+                            //// echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
                            ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
                              ///   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-                             /// echo utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";
+                             /// echo mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
                               echo $titulo_projeto."&nbsp;&nbsp;</option>";
                              /***
                         } else {
@@ -1295,7 +1295,7 @@ $opcao_cpos = Array("ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 //
 ///  Salvar letrais iniciais em um conjunto para facilitar a busca
-/////  $m_anotacoes=utf8_decode("Anotações");
+/////  $m_anotacoes=mb_convert_encoding("Anotações", 'ISO-8859-1', 'UTF-8');
 $m_anotacoes="Anotações";
 ///
 ?>

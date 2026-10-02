@@ -61,7 +61,7 @@ $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["
 
 ///  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+     $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 }  
 // $_SESSION['time_exec']=180000;
 //
@@ -1111,7 +1111,7 @@ if( intval($nprojetos)<1 ) {
     //
     //  Desativar variavel      
     if( isset($result) ) {
-         //  mysql_free_result($result); 
+         //  mysqli_free_result($result); 
          unset($result);  
     }   
     //

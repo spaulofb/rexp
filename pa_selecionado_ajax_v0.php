@@ -64,12 +64,12 @@ $m_erro=0;
 //
 /// Verificando login
 if( ! isset($login_down) ) {
-    $msg_erro .= utf8_decode("Falha na variavel login_down - Corrigir").$msg_final;   
+    $msg_erro .= mb_convert_encoding("Falha na variavel login_down - Corrigir", 'ISO-8859-1', 'UTF-8').$msg_final;   
     $m_erro++;
 } else {
     //
     if( ! isset($senha_down) ) {
-        $msg_erro .= utf8_decode("Falha na variavel senha_down - Corrigir").$msg_final;   
+        $msg_erro .= mb_convert_encoding("Falha na variavel senha_down - Corrigir", 'ISO-8859-1', 'UTF-8').$msg_final;   
         $m_erro++;
     }
     /**  Final - if( ! isset($senha_down) ) {  */

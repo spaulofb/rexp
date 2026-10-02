@@ -81,7 +81,7 @@ if( intval($total_regs)<=0 ) {
     /// 
     ///  Verificando SESSION ce banco de dados e tabela
    if( ! isset($_SESSION["table_temp_anotador"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_anotacao não definida."));
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_consultar_anotacao não definida."), 'ISO-8859-1', 'UTF-8');
         exit();
     }
     $table_temporaria = $_SESSION["table_temp_anotador"];

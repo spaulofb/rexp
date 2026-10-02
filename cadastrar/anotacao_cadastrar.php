@@ -63,7 +63,7 @@ $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["
 //
 //  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");  
+     $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');  
 }  
 //  $_SESSION['time_exec']=180000;
 //
@@ -175,7 +175,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
         // 
         /**  Desativar variavel   */
         if( isset($select_numprojeto) ) {
-             //  mysql_free_result($select_numprojeto);      
+             //  mysqli_free_result($select_numprojeto);      
              unset($select_numprojeto);      
         } 
         //
@@ -340,12 +340,12 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
                 //
                 /**   Anteriores
 			          *       $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_".$_FILES['relatext']['name'];
-                *         $filename="P".$_SESSION["numprojeto"]."A".utf8_decode($anotacao_numero."_".$_FILES['relatext']['name']);                       
+                *         $filename="P".$_SESSION["numprojeto"]."A".mb_convert_encoding($anotacao_numero."_".$_FILES['relatext']['name'], 'ISO-8859-1', 'UTF-8');                       
                 **/
                 //  
                 $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_";
                 $flnnew= preg_replace('/\s+/', '_',trim($_FILES['relatext']["name"]));
-                //  $filename .=utf8_decode($_FILES['relatext']["name"]); 
+                //  $filename .=mb_convert_encoding($_FILES['relatext']["name"], 'ISO-8859-1', 'UTF-8'); 
                 $filename .=$flnnew; 
                 //
                 $dir_filename=$_SESSION["dir"].$filename;
@@ -356,6 +356,13 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
                 /**
                  *  if( @copy($_FILES['relatext']['tmp_name'],$_SESSION["dir"].$filename) ) {    
                  */
+
+                /**  
+echo "ERRO:  LINHA/360  -->>  \$xdir = $xdir  <<-->>  \$filename = $filename ";
+exit();
+ */
+
+
                 if( @move_uploaded_file($_FILES['relatext']['tmp_name'],$xdir."$filename") ) {    
                     //
                     /** give praise and thanks to the php gods  */
@@ -401,9 +408,9 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
              mysqli_query($_SESSION["conex"],'SET character_set_results=utf8'); 
              mysqli_set_charset($_SESSION["conex"],'utf8');
              //
-             //  $local_arq = utf8_decode($local_arq); 
+             //  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
              //  $local_arq=html_entity_decode(trim($filename));
-             $local_arq = utf8_encode($filename); 
+             $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
              //
              //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
              //                 - Use mysql_select_db() ou mysqli_query()
@@ -765,7 +772,7 @@ function jsUpload(upload_field) {
                     }
                     //
                     /// Final da Num_USP/Nome Autor/Anotador 
-                     ///  echo  utf8_decode($anotador_nome);
+                     ///  echo  mb_convert_encoding($anotador_nome, 'ISO-8859-1', 'UTF-8');
                      ///  echo  htmlentities($anotador_nome);   
                      ///  echo  htmlentities($anotador_nome,ENT_QUOTES,"UTF-8");
                      ////
@@ -942,7 +949,7 @@ function jsUpload(upload_field) {
                 //
                //  Desativar variavel
                if( isset($rsql) ) {
-                    //  mysql_free_result($rsql); 
+                    //  mysqli_free_result($rsql); 
                     unset($rsql);  
                }  
                /**  Final - if( isset($result_pessoa) ) {  */

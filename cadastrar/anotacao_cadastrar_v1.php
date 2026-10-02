@@ -63,7 +63,7 @@ $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["
 
 ///  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");  
+     $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');  
 }  
 //  $_SESSION['time_exec']=180000;
 //
@@ -141,7 +141,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
         $projeto_autor=mysqli_result($select_numprojeto,0,"autor");
         $numprojeto=$_SESSION["numprojeto"];
         /// 
-        if( isset($select_numprojeto) ) mysql_free_result($select_numprojeto);      
+        if( isset($select_numprojeto) ) mysqli_free_result($select_numprojeto);      
         $_SESSION["result"]='OK'; $erros="";
         $_SESSION["display_arq"]='block';
         /** Conjunto de arquivos - ver tamanho total dos arquivos ***/
@@ -262,11 +262,11 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
                    ///
                    /***   Anteriores
 			               $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_".$_FILES['relatext']['name'];
-                         $filename="P".$_SESSION["numprojeto"]."A".utf8_decode($anotacao_numero."_".$_FILES['relatext']['name']);                       
+                         $filename="P".$_SESSION["numprojeto"]."A".mb_convert_encoding($anotacao_numero."_".$_FILES['relatext']['name'], 'ISO-8859-1', 'UTF-8');                       
                    **/
                    ////  
                    $filename="P".$_SESSION["numprojeto"]."A".$anotacao_numero."_";
-                   $filename .=utf8_decode($_FILES['relatext']["name"]); 
+                   $filename .=mb_convert_encoding($_FILES['relatext']["name"], 'ISO-8859-1', 'UTF-8'); 
                    ///
                    $dir_filename=$_SESSION["dir"].$filename;
                    $relatext_tmp_name=$_FILES['relatext']['tmp_name'];
@@ -312,9 +312,9 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
               mysqli_query('SET character_set_results=utf8'); 
               mysql_set_charset('utf8');
               
-              ///  $local_arq = utf8_decode($local_arq); 
+              ///  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
               ///  $local_arq=html_entity_decode(trim($filename));
-              $local_arq = utf8_encode($filename); 
+              $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
               ///
               ///  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
               ///                 - Use mysql_select_db() ou mysqli_query()
@@ -675,7 +675,7 @@ function jsUpload(upload_field) {
                     }
                     //
                     /// Final da Num_USP/Nome Autor/Anotador 
-                     ///  echo  utf8_decode($anotador_nome);
+                     ///  echo  mb_convert_encoding($anotador_nome, 'ISO-8859-1', 'UTF-8');
                      ///  echo  htmlentities($anotador_nome);   
                      ///  echo  htmlentities($anotador_nome,ENT_QUOTES,"UTF-8");
                      ////
@@ -852,7 +852,7 @@ function jsUpload(upload_field) {
                 //
                //  Desativar variavel
                if( isset($rsql) ) {
-                    //  mysql_free_result($rsql); 
+                    //  mysqli_free_result($rsql); 
                     unset($rsql);  
                }  
                /**  Final - if( isset($result_pessoa) ) {  */

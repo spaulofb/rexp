@@ -14,8 +14,8 @@ if( !isset($_SESSION) ) {
 header("Content-type: text/html; charset=utf-8");
 
 ///
-$campo_nome = htmlentities(utf8_decode($campo_nome));
-$campo_value = htmlentities(utf8_decode($campo_value));
+$campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+$campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",$cpo_final"));      
 if( strtoupper(trim($cpo_final))=="ALTERAR"  )  {
     ///
@@ -80,7 +80,7 @@ for( $i=0; $i<$count_array_nomes; $i++ ) {
 $_SESSION["campos_nome"] = substr($campos_nome,0,strlen($campos_nome)-1);
 $_SESSION["campos_valor"] = substr($campos_valor,0,strlen($campos_valor)-1);
 //    
-//  $_SESSION[campos_total]=utf8_decode($_SESSION[campos_total]); //  Total deu 186 caracteres
+//  $_SESSION[campos_total]=mb_convert_encoding($_SESSION[campos_total], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 //  $_SESSION[campos_total]=urldecode($_SESSION[campos_total]);   //  Total deu 186 caracteres
 //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  //  179
@@ -89,7 +89,7 @@ $_SESSION["campos_valor"]=html_entity_decode(trim($_SESSION["campos_valor"]));  
 $cpo_nome=$_SESSION["campos_nome"];
 $cpo_valor= $_SESSION["campos_valor"];
 //
-if( isset($result_tabela) ) mysql_free_result($result_tabela);
+if( isset($result_tabela) ) mysqli_free_result($result_tabela);
 $_SESSION["i_codigousp"]= (int) $i_codigousp;
 
 $_SESSION["nomes_cpos"]= $campos_nome."+++++".$count_array_nomes."---".count($array_valores);

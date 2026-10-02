@@ -89,7 +89,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	         //  Atualizado em 20260429
 	   	    //   Para acertar a acentuacao - utf8_encode
               //
-              // De: $$xyz = utf8_decode(trim($_POST[$xyz]));
+              // De: $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');
               // Para:
               $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');
               //
@@ -103,7 +103,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 /**  Final - for( $i=0; $i<count($post_array); $i++ ) {  */
 //
 //   Para acertar a acentuacao - utf8_encode
-//  $source = utf8_decode($source); $val = utf8_decode($val);
+//  $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8');
 if( strtoupper($val)=="SAIR" ) $source=$val;
 //
 $_SESSION["source"]=trim($source);
@@ -248,7 +248,7 @@ if( $source_maiusc=="LOGAR" ) {
            //
            // Desativando variavel 
           if( isset($resultado_pa) ) {
-               //  mysql_free_result($resultado_pa);
+               //  mysqli_free_result($resultado_pa);
                unset($resultado_pa);
           } 
           //     

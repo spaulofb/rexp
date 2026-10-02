@@ -20,7 +20,6 @@ error_reporting(E_ALL);
 /**  Tamanho Maximo do Arquivo  no php.ini  */
 //  echo ini_get('upload_max_filesize');
 //
-//
 // IMPORTANTE: para acentuacao php
 header("Content-type: text/html; charset=utf-8");
 //
@@ -74,7 +73,7 @@ $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["
 //
 //  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]= utf8_decode("Registro de Anotação") ;  
+     $_SESSION["titulo_cabecalho"]= mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8') ;  
 } 
 ///
 ////  INCLUINDO CLASS - 
@@ -266,7 +265,7 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" ) {
                 /**
                 *          COPIA o arquivo para o diretorio especificado
                 *     IMPORTANTE: usar utf8_decode pra UPLOAD - 20250328
-                *  $filename="P".$_POST["nprojexp"]."_".utf8_decode(trim($_FILES["relatproj"]["name"]));
+                *  $filename="P".$_POST["nprojexp"]."_".mb_convert_encoding(trim($_FILES["relatproj"]["name"]), 'ISO-8859-1', 'UTF-8');
                */
                 $flnnew= preg_replace('/\s+/', '_',trim($_FILES["relatproj"]["name"]));
 		    	$filename="P".$_POST["nprojexp"]."_"."{$flnnew}";
@@ -353,8 +352,8 @@ echo "LINHA279 -->> REQUEST_METHOD  -->>  \$lcdir = $lcdir  <<-- "
             //  mysqli_query('SET character_set_results=utf8'); 
             //  mysql_set_charset('utf8');
             //
-            //  $local_arq = utf8_decode($local_arq); 
-            $local_arq = utf8_encode($filename); 
+            //  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
+            $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
             //
             //  UPDATE Projeto/Arquito
             $proc="UPDATE $bd_2.projeto SET relatproj='$local_arq' ";
@@ -689,7 +688,8 @@ if( isset($_SESSION["onsubmit_tabela"])  ) {
                 //
                 ///  Verificando se session_start - ativado ou desativado
                 $elemento=5; $elemento2=6;
-                include("php_include/ajax/includes/conectar.php");                                    
+                //  include("php_include/ajax/includes/conectar.php");     
+                require_once("{$incluir_arq}includes/conectar.php");                               
                 //
                 /**  COnexao MYSQLI  */
                 $conex = $_SESSION["conex"];

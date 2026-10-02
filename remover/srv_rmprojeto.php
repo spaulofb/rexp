@@ -59,7 +59,7 @@ $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
 } else {
-     $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -68,7 +68,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 //  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 //  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sessão pasta_raiz não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão pasta_raiz não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -327,7 +327,7 @@ if( $opcao_maiusc=="REMOVER" )  {
     //  Desativar variavel - 20260915  
     if( $result_rmprojeto ) {
            //
-           //  mysql_free_result($result_rmprojeto);    
+           //  mysqli_free_result($result_rmprojeto);    
            // ✅ Libera a memória do resultado do MySQL
           mysqli_free_result($result_rmprojeto);
           //
@@ -670,7 +670,7 @@ echo  "ERRO: srv_rmprojeto/548 -->> projeto: $numprojeto  --->>  \$objetivo = $o
     //
     //  Desativar variavel  
     if( isset($result_projeto) ) {
-         //   mysql_free_result($result_projeto);     
+         //   mysqli_free_result($result_projeto);     
           mysqli_free_result($result_projeto);     
     } 
     //
@@ -897,11 +897,10 @@ echo  "ERRO: srv_rmprojeto/548 -->> projeto: $numprojeto  --->>  \$objetivo = $o
     $lnerro=0;
 
     /// ===== INÍCIO DA TRANSAÇÃO =====
-    /// CORREÇÃO: mysqli_begin_transaction() substitui mysqli_query('begin')
     mysqli_begin_transaction($_SESSION["conex"]);
 
     /// CORREÇÃO: LOCK TABLES com conexão e tipo WRITE (DELETE não é tipo de lock válido)
-    $res_lock = mysqli_query($_SESSION["conex"], "LOCK TABLES $bd_2.projeto WRITE, $bd_2.anotacao WRITE, $bd_2.anotador WRITE");
+    $res_lock = true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
     if( !$res_lock ) {
         echo $funcoes->mostra_msg_erro("&nbsp;Erro ao bloquear tabelas -&nbsp;db/mysqli:&nbsp;".mysqli_error($_SESSION["conex"]));
         mysqli_rollback($_SESSION["conex"]);
@@ -950,7 +949,6 @@ echo  "ERRO: srv_rmprojeto/548 -->> projeto: $numprojeto  --->>  \$objetivo = $o
     }
 
     /// CORREÇÃO: UNLOCK TABLES com o parâmetro de conexão
-    mysqli_query($_SESSION["conex"], "UNLOCK TABLES");
 
     /// ===== FIM DA TRANSAÇÃO =====
 

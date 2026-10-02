@@ -228,13 +228,13 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
 	}
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -424,7 +424,7 @@ if( strtoupper(trim($source))=="CONJUNTO" )  {
 	          </select>
 	          </span>
 			  <?php
-                 mysql_free_result($result); 
+                 mysqli_free_result($result); 
     	         // Final do SELECT
                  if( strtoupper(trim($_SESSION["select_cpo"]))=="SALA" ) {
                        $cpo_final=0; $n_cpo=0; unset($m_array); unset($m_linhas); unset($source);
@@ -458,7 +458,7 @@ if(  ( $source_upper=="CORESPONSAVEIS" ) or  ( $source_upper=="COLABS" ) ) {
    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $result=mysqli_query("Select codigousp,nome,categoria from $bd_1.pessoa  order by nome ");
    if( ! $result ) {
-          mysql_free_result($result);
+          mysqli_free_result($result);
           die('ERRO: Select pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
    }
    $m_linhas = mysqli_num_rows($result);
@@ -673,26 +673,24 @@ if( strtoupper($val)=="ANOTACAO" ) {
     //   Essa SESSION  vindo da parte acima
 	$result_anot=mysqli_query("SELECT  anotacao FROM $bd_2.projeto  where cip=$projeto  ");
     if( ! $result_anot ) {
-          mysql_free_result($result_anot);
+          mysqli_free_result($result_anot);
           die('ERRO: Select rexp.projeto e campo anotacao - falha: '.mysqli_error($_SESSION["conex"]));  
      }
      //  CORRIGIDO  sabado - 20110709
      $_SESSION["anotacao"]=mysql_result($result_anot,0,"anotacao")+1;
      $anotacao=$_SESSION["anotacao"];
-     mysql_free_result($result_anot);
+     mysqli_free_result($result_anot);
      //   Campo numero na Tabela anotacao e  anotacao na TB projeto
 	 $_SESSION["campos_nome"].=",numero";
 	 $_SESSION["campos_valor"].=",".$anotacao;
      
      //
-    //  $_SESSION[campos_total]=utf8_decode($_SESSION[campos_total]); //  Total deu 186 caracteres
+    //  $_SESSION[campos_total]=mb_convert_encoding($_SESSION[campos_total], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
     //  $_SESSION[campos_total]=urldecode($_SESSION[campos_total]);   //  Total deu 186 caracteres
     //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
     //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  // Melhor  179
     //  INSERINDO DADOS NAS TABELAS ANOTACAO E PROJETO
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     mysql_select_db($db_array[$elemento]);
@@ -728,8 +726,6 @@ if( strtoupper($val)=="ANOTACAO" ) {
         mysqli_query('rollback'); 
         echo $msg_erro;         
     }
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');
    //  FINAL -  TABELA ANOTACAO  -  BD  REXP
 }
 //    Tabela do ORIENTADOR 
@@ -748,17 +744,14 @@ if( strtoupper($val)=="ORIENTADOR" ) {
     $_SESSION["tabela"]="orientador";
     include("dados_recebidos_arq_ajax.php");
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     mysql_select_db($db_array[$elemento]);
    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
    $res_coord = mysqli_query("INSERT into ".$session_tabela." (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysqli_query("UNLOCK  TABLES");
    //  Complete the transaction 
    if ( $res_coord ) { 
          $msg_ok .="<p class='titulo_usp'>&nbsp;Orientador cadastrado</p>".$msg_final;
@@ -770,8 +763,6 @@ if( strtoupper($val)=="ORIENTADOR" ) {
          mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');         
    exit();
 }
 //
@@ -790,11 +781,11 @@ if( $source_upper=="ANOTADOR" ) {
                                    ."   codigousp=".$m_array);
             //                          
             if( ! $res_pessoa ) {
-                mysql_free_result($res_pessoa);
+                mysqli_free_result($res_pessoa);
                 die('ERRO: Select pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
             }
             echo  'usuario,e_mail|'.mysql_result($res_pessoa,0,login)."|".mysql_result($res_pessoa,0,e_mail);
-            mysql_free_result($res_pessoa);
+            mysqli_free_result($res_pessoa);
         }
         exit();        
     }
@@ -819,7 +810,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
                ." from rexp.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
-          mysql_free_result($resultado);
+          mysqli_free_result($resultado);
           die('ERRO: Select tabelas anotador e pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
      } 
      $nregs=mysqli_num_rows($resultado);
@@ -831,18 +822,15 @@ if( strtoupper($val)=="ANOTADOR" ) {
      }  
      //
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     mysql_select_db($db_array[$elemento]);
    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
    $res_coord = mysqli_query("INSERT into ".$session_tabela." (cip,codigo,pa,data) "
             ."  values($lnprojeto,$lncodigousp,$pa_anotador,'$data_atual') "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysqli_query("UNLOCK  TABLES");
    //  Complete the transaction 
    if ( $res_coord ) { 
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
@@ -850,7 +838,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
                ." from rexp.anotador where codigo=$lncodigousp and cip=$lnprojeto ";
     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
-          mysql_free_result($resultado);
+          mysqli_free_result($resultado);
           die('ERRO: Select tabelas anotador e pessoa apos INSERT - falhou: '.mysqli_error($_SESSION["conex"]));  
      } 
      $nregs=mysqli_num_rows($resultado);
@@ -865,8 +853,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
          mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');         
    exit();
 }
 //    
@@ -875,8 +861,8 @@ if( strtoupper($val)=="PROJETO" ) {
          AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 e de depois usa o  - html_entity_decode 
     */
-	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -957,7 +943,7 @@ if( strtoupper($val)=="PROJETO" ) {
 	//				 
     // Verificando se houve erro no Select Tabdla Usuario
     if( ! $result ) {
-        mysql_free_result($result);
+        mysqli_free_result($result);
         die("ERRO: Select Tabela projeto  - ".mysqli_error($_SESSION["conex"]));
     }  
     $m_regs=mysqli_num_rows($result);
@@ -966,12 +952,12 @@ if( strtoupper($val)=="PROJETO" ) {
           echo $msg_erro;
 		  exit();
     } elseif( ! $result ) {
-          mysql_free_result($result);
+          mysqli_free_result($result);
           die('ERRO: Select projeto - falha: '.mysqli_error($_SESSION["conex"]));  
  	} else {
     	  //  Continuacao Tabela projeto - BD PESSOAL
           /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
-	      mysql_free_result($result);
+	      mysqli_free_result($result);
           //  Caso tenha coautores/coresponsaveis no Projeto
           include("n_cos.php");
 		  //  SESSION abaixo para ser usada no include
@@ -984,7 +970,7 @@ if( strtoupper($val)=="PROJETO" ) {
 		  $result_usu = mysqli_query("SELECT codigousp from  $bd_1.usuario where codigousp=$m_autor   ");
           // Verificando se houve erro no Select Tabdla Usuario
           if( ! $result_usu ) {
-                mysql_free_result($result_usu);
+                mysqli_free_result($result_usu);
                 die("ERRO: Select Tabela usuario   - ".mysqli_error($_SESSION["conex"]));
           }  
 		  $m_regs = mysqli_num_rows($result_usu); 
@@ -995,13 +981,11 @@ if( strtoupper($val)=="PROJETO" ) {
           } else {
                 $n_erro=0;
                 //  START a transaction - ex. procedure    
-                mysqli_query('DELIMITER &&'); 
-                mysqli_query('begin'); 
                 //  Execute the queries 
                 mysql_select_db($db_array[$elemento]);
                 //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
                 //   - Use mysql_select_db() ou mysqli_query()
-                mysqli_query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
+                true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
                 $sqlcmd="INSERT into $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
                 $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
                 //  Complete the transaction 
@@ -1026,9 +1010,6 @@ if( strtoupper($val)=="PROJETO" ) {
                     $n_erro=1;
                     mysqli_query('rollback'); 
                 }              
-                mysqli_query("UNLOCK  TABLES");
-                mysqli_query('end'); 
-                mysqli_query('DELIMITER');
                 //
                 if( $n_erro==1 ) {
                      $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi cadastrado. ERRO#1 = ".mysqli_error($_SESSION["conex"]).$msg_final;
@@ -1046,7 +1027,7 @@ if( strtoupper($val)=="PROJETO" ) {
                     $m_regs=mysqli_num_rows($result_proj);
                     if( $m_regs=1 ) {
                          $projeto_cip=mysql_result($result_proj,0,"cip");       
-                         mysql_free_result($result_proj);                       
+                         mysqli_free_result($result_proj);                       
                          $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                          $sqlcmd="INSERT into $bd_2.anotador (cip,codigo,pa,data) values($projeto_cip,$m_autor,$lnpa,'$data_atual')";
                          $res_anotador=mysqli_query($_SESSION["conex"],$sqlcmd); 
@@ -1075,8 +1056,8 @@ if( strtoupper($val)=="PROJETO" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1099,7 +1080,7 @@ if( strtoupper($val)=="PROJETO" ) {
     if ( $arr_nome_val['codigousp']==0) {
         $result=mysqli_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
         if( ! $result ) {
-            mysql_free_result($result);          
+            mysqli_free_result($result);          
             die("Falha erro no Select/Atribuir codigoUSP".mysqli_error($_SESSION["conex"]));
         }
         $m_regs=mysqli_num_rows($result);
@@ -1110,7 +1091,7 @@ if( strtoupper($val)=="PROJETO" ) {
             $codigo_prx = 0;
         }
         $codigo_prx += -1;
-        mysql_free_result($result);
+        mysqli_free_result($result);
         $arr_nome_val['codigousp'] = $codigo_prx;
         if( $i_codigousp<0 ) {
             die("ERRO: Falha inesperada criando um NOVO codigo USP.");
@@ -1123,7 +1104,7 @@ if( strtoupper($val)=="PROJETO" ) {
 		  die("Falha erro no Select".mysqli_error($_SESSION["conex"]));
 	}
     $m_regs=mysqli_num_rows($result_usu);
-    if( isset($result_usu) ) mysql_free_result($result_usu);
+    if( isset($result_usu) ) mysqli_free_result($result_usu);
     if(  $m_regs>=1 ) {
            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val['codigousp']." j&aacute; est&aacute; cadastrado.".$msg_final;
            echo $msg_erro;
@@ -1148,8 +1129,6 @@ if( strtoupper($val)=="PROJETO" ) {
            ///
            //  INSERINDO 
            //  Start a transaction - ex. procedure			   
-           mysqli_query('DELIMITER &&'); 
-           mysqli_query('begin'); 
            //
            $success=mysqli_query("insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") "); 
            //  Complete the transaction 
@@ -1162,8 +1141,6 @@ if( strtoupper($val)=="PROJETO" ) {
                $msg_erro .="&nbsp;".$arr_nome_val['nome']." n&atilde;o foi cadastrado.".$msg_final;
                echo $msg_erro;	     
            } 
-           mysqli_query('end'); 
-           mysqli_query('DELIMITER'); 
 		  }
 	//  Final - Tabela pessoa 
 }  elseif( strtoupper($val)=="USUARIO" ) {
@@ -1192,7 +1169,7 @@ if( strtoupper($val)=="PROJETO" ) {
          exit();
     }
     $m_regs = mysqli_num_rows($result_usu);
-	mysql_free_result($result_usu);
+	mysqli_free_result($result_usu);
 	if(  $m_regs>=1 ) {
          $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." j&aacute; cadastrado.".$msg_final;
          echo $msg_erro;
@@ -1215,8 +1192,6 @@ if( strtoupper($val)=="PROJETO" ) {
           }
     }
     //  START  a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
@@ -1241,13 +1216,11 @@ if( strtoupper($val)=="PROJETO" ) {
         $m_erro=1;      
         mysqli_query('rollback'); 
     }
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');
     // 
     if( $m_erro<1 ) {
         $res_email = mysqli_query("Select e_mail from pessoal.pessoa where codigousp=".$arr_nome_val['codigousp']." ");
         if( ! $res_email ) {
-            mysql_free_result($res_email);          
+            mysqli_free_result($res_email);          
             die("ERRO: Select pessoa campo e_mail falha: ".mysqli_error($_SESSION["conex"]));
         }  else {
             $usr_email=html_entity_decode(trim(mysql_result($res_email,0,'e_mail')));
@@ -1302,7 +1275,7 @@ if( strtoupper($val)=="PROJETO" ) {
             Esta é uma mensagem automática.<br> 
             *** Não responda a este EMAIL ****
             ";
-            mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+            mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
 
             //                          
             /*    $msg_ok .= "<p>Sua senha foi redefinida e uma nova senha foi enviada para seu endereço de e-mail.<br>"

@@ -91,7 +91,7 @@ if( intval($n_erro)>0 ) {
 $n_erro=0;
 ///  HOST mais a pasta principal do site - host_pasta
 if( ! isset($_SESSION["host_pasta"]) ) {
-     $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -187,7 +187,7 @@ $_SESSION["m_horiz"] = $array_voltar;
 $pagina_atual="http://".$_SESSION["http_host"].$_SESSION["pasta_raiz"]."cadastrar_auto_por_email.php";
 //
 //  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 ///
 /// $_SESSION['time_exec']=180000;
 ///  INCLUINDO CLASS - 
@@ -599,7 +599,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                   </select>
               </span>
               <?php
-                  mysql_free_result($result); 
+                  mysqli_free_result($result); 
               }
               // FINAL - Categoria
           ?>  
@@ -615,7 +615,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");                    
               $result=mysqli_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
               if ( ! $result ) {
-                   mysql_free_result($result);
+                   mysqli_free_result($result);
                    die("ERRO: Select Tabela pa - ".mysqli_error($_SESSION["conex"]));
               }              
           ?>
@@ -637,7 +637,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                   </select>
               </span>
               <?php
-                  mysql_free_result($result); 
+                  mysqli_free_result($result); 
               }
               // FINAL - PA
           ?>  
@@ -658,7 +658,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
 				//  $result=mysql_db_query($db_array[$elemento],"SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if ( ! $result ) {
-                     mysql_free_result($result);
+                     mysqli_free_result($result);
                      $msg_erro  .= "Select Tabela instituicao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
                      echo  $msg_erro;
                      exit();                    
@@ -683,7 +683,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
 	              </select>
 	               </span>
 					<?php
-                    mysql_free_result($result); 
+                    mysqli_free_result($result); 
                   }
  				  // Final da Unidade
 				  ?>

@@ -99,7 +99,7 @@ mysqli_select_db($_SESSION["bd_conectado"],$banco_de_dados) or die("ERRO/Conecta
 $erro_usu_sen=0;
 ///   Aceitou Usuario/Senha - verificando senha 
 ////  Desativando variavel
-if( isset($sqlresult) )  mysql_free_result($sqlresult);
+if( isset($sqlresult) )  mysqli_free_result($sqlresult);
 ///
 ///  CORRIGIDO HOJE - 20181003
 ///  session us_ipid senha do usuario em MD5

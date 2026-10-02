@@ -256,14 +256,14 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       ///  $$xyz=trim($_POST[$xyz]);
 		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);   
        }
 	}
 }
 ///   Para acertar a acentuacao - utf8_encode
-///   $source = utf8_decode($source); $val = utf8_decode($val); 
+///   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( ! isset($val) ) $val="";
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -346,7 +346,7 @@ if( $source_upper=="PARTICIPANTE" ) {
         ///  Enviando os dados - Array com #
         echo $partes;
         ///
-        if( isset($resultado_usuario) ) mysql_free_result($resultado_usuario);
+        if( isset($resultado_usuario) ) mysqli_free_result($resultado_usuario);
         ///
     } 
 } else if( $source_upper=="GERAR_SENHA" ) {  ///  Gerar Senha para o Participante
@@ -490,8 +490,8 @@ if( $source_upper=="PARTICIPANTE" ) {
 	          </span>
 			  <?php
                   ////  Desativando variaveis
-                 if( isset($result_tb_temp1) )  mysql_free_result($result_tb_temp1); 
-                 if( isset($result) )  mysql_free_result($result); 
+                 if( isset($result_tb_temp1) )  mysqli_free_result($result_tb_temp1); 
+                 if( isset($result) )  mysqli_free_result($result); 
     	         // Final do SELECT
 	    	 	 break;
 		  } else {
@@ -618,7 +618,7 @@ if( $source_upper=="PARTICIPANTE" ) {
           $nome = mysql_result($resultado_pessoa,0,"nome_pessoa");
           $participante_cadast=0;
            /// Caso variavel $resultado_pessoa ativa - desativando 
-          if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
+          if( isset($resultado_pessoa) ) mysqli_free_result($resultado_pessoa);
           /// MySql - Select
           $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario WHERE codigousp=$codigousp ";
@@ -661,8 +661,8 @@ if( $source_upper=="PARTICIPANTE" ) {
                      ///  Participante tem PA cadastrado na tabela usuario
                      /*
                      $msg_erro .="Participante:&nbsp;"
-                             .utf8_encode($nome)." j&aacute; cadastrado e aprovado<br>como "
-                             .utf8_encode(ucfirst($pa_descr_cadastrado)).".".$msg_final;
+                             .mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1')." j&aacute; cadastrado e aprovado<br>como "
+                             .mb_convert_encoding(ucfirst($pa_descr_cadastrado), 'UTF-8', 'ISO-8859-1').".".$msg_final;
                      */
                      $msg_new=$msg_ok;
                      $msg_new .="Participante: $nome já cadastrado e aprovado como "
@@ -676,7 +676,7 @@ if( $source_upper=="PARTICIPANTE" ) {
           } else {
               $usuario_inserir=1;  
           }         
-          /// if( isset($resultado_usuario) )  mysql_free_result($resultado_usuario);
+          /// if( isset($resultado_usuario) )  mysqli_free_result($resultado_usuario);
           if( isset($resultado_usuario) )  unset($resultado_usuario);
           ///
     } 
@@ -825,7 +825,7 @@ if( $source_upper=="PARTICIPANTE" ) {
             //  $headers1 .= "From: \"Registro Membro\" <auto-reply@$host>\r\n";                    
             // $headers1 .= "From: \"RGE/SISTAM\" <gemac@genbov.fmrp.usp.br>\r\n";                    
             $headers1 .= "From: \"RGE/SISTAM\" <{$_SESSION["gemac"]}>\r\n";  
-     ////            $a_link = utf8_decode("$a_link");
+     ////            $a_link = mb_convert_encoding("$a_link", 'ISO-8859-1', 'UTF-8');
 
             ///
             if( intval($usuario_inserir)==1 ) {
@@ -853,7 +853,7 @@ if( $source_upper=="PARTICIPANTE" ) {
                 *** Não responda a este EMAIL ****
                 ";                
             }
-            ///  mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+            ///  mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
             ///  Enviando mensagem para o participante
             $envio = mail($e_mail, stripslashes($assunto), $message, $headers1);
             ///  Enviando mensagem na tela 

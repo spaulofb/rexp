@@ -10,8 +10,8 @@ if( !isset($_SESSION) ) {
    session_start();
 }
 //
-$campo_nome = htmlentities(utf8_decode($campo_nome));
-$campo_value = htmlentities(utf8_decode($campo_value));
+$campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+$campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",$cpo_final"));      
 //  $campo_nome = substr($campo_nome,0,strlen($campo_nome)-1);      
 //  array_temp  -  com os nomes dos campos

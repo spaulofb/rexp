@@ -53,13 +53,13 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	    if( $pos1===false ) {
 	        ///  $$xyz=trim($_POST[$xyz]);
 		    ///   Para acertar a acentuacao - utf8_encode
-            $$xyz = utf8_decode(trim($_POST[$xyz])); 
+            $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	    } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
 	}
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $data = utf8_decode($data); $val = utf8_decode($val); 
+//   $data = mb_convert_encoding($data); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 
 ////  Serve tanto para o arquivo projeto  quanto para o experimento
@@ -155,7 +155,7 @@ if( ( $data_upper=="COAUTORES" ) or  ( $data_upper=="COLABS" ) ) {
                       ?>
                       </select>
                       <?php
-                          mysql_free_result($result); 
+                          mysqli_free_result($result); 
                       }
                       // Final da Num_USP/Coautor
                     ?>  

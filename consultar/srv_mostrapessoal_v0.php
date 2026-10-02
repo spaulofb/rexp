@@ -51,7 +51,7 @@ $msg_final="</span></span>";
 //  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
      //
-     ///  $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
+     ///  $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
@@ -70,7 +70,7 @@ $conex = $_SESSION["conex"];
 //  Verificando POST  grupous
 if( ! isset($_POST['grupous']) ) {
      //
-     /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  */
+     /**   $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  */
      $msg_erro .= "POST grupous não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();

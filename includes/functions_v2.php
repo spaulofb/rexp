@@ -410,7 +410,7 @@ if( ! function_exists("TirarAcento") ) {
              }
              $TirarAcento = $Texto;
         }
-        return utf8_encode($Texto);
+        return mb_convert_encoding($Texto, 'UTF-8', 'ISO-8859-1');
     }
     ///  Final -    Tirar acento da palavra
 }
@@ -489,7 +489,7 @@ if( ! function_exists("TrocarAcento") ) {
 } 
 /**  Final - if( ! function_exists("TrocarAcento") ) { */
 //
-// Substitui utf8_decode() deprecated do PHP 8.2+
+// Substitui mb_convert_encoding(, 'ISO-8859-1', 'UTF-8') deprecated do PHP 8.2+
 if (!function_exists('utf8_decode_seguro')) {
     function utf8_decode_seguro($string) {
         if (empty($string)) return $string;
@@ -497,7 +497,7 @@ if (!function_exists('utf8_decode_seguro')) {
     }
 }
 
-// Substitui utf8_encode() deprecated do PHP 8.2+
+// Substitui mb_convert_encoding(, 'UTF-8', 'ISO-8859-1') deprecated do PHP 8.2+
 if (!function_exists('utf8_encode_seguro')) {
     function utf8_encode_seguro($string) {
         if (empty($string)) return $string;

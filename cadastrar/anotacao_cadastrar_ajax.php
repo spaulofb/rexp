@@ -100,7 +100,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if( $pos1 === false ) {
 	       ///  $$xyz=trim($_POST[$xyz]);
 		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);   
        }
@@ -130,7 +130,7 @@ exit();
 
 
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 //
 if( strtoupper($val)=="SAIR" ) $source=$val;
 //
@@ -634,7 +634,7 @@ exit();
         /**   IMPORTANTE:  htmlentities e utf8_decode - transfere dados PHP para HTML   */
         $xz=htmlentities($_SESSION["projeto_autor_nome"],ENT_QUOTES,"UTF-8");  
         //
-        //  echo  utf8_decode($dados)."<label".$xz;
+        //  echo  mb_convert_encoding($dados, 'ISO-8859-1', 'UTF-8')."<label".$xz;
         echo  "$dados<label".$xz;
         //
     } elseif( $val_upper=="ALTERA_COMPLEMENTA" ) {
@@ -732,9 +732,10 @@ if( $val_upper=="ANOTACAO" ) {
      *    AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
      *	 e de depois usa o  - html_entity_decode 
      */
-     $campo_nome = htmlentities(utf8_decode($campo_nome));
+     //  $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+     $campo_nome = htmlspecialchars($campo_nome, ENT_QUOTES, 'UTF-8');
      /**  
-     *    $campo_value = htmlentities(utf8_decode($campo_value));
+     *    $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
      *   Procurar palavra enviar
      */
      $busca=stripos($campo_nome,",enviar");
@@ -863,7 +864,7 @@ exit();
 
 
 
-    //  $_SESSION[campos_total]=utf8_decode($_SESSION[campos_total]); //  Total deu 186 caracteres
+    //  $_SESSION[campos_total]=mb_convert_encoding($_SESSION[campos_total], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
     //  $_SESSION[campos_total]=urldecode($_SESSION[campos_total]);   //  Total deu 186 caracteres
     //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
     //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  // Melhor  179
@@ -900,19 +901,15 @@ exit();
     
     
     /**   START a transaction - ex. procedure  -  inserindo nova Anotacao no Projeto  */
-    mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-    mysqli_query($_SESSION["conex"],'begin'); 
     //
     //  Execute the queries 
     /**   $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") ");   */
     //
     //  mysqli_db_query - Esta funcao esta obsoleta, nao use esta funcao 
     //   - Use mysqli_select_db() ou mysqli_query()
-    mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_2.anotacao INSERT, $bd_2.projeto UPDATE ");
-    //
     /**
      *  $sqlcmd="INSERT INTO  $bd_2.anotacao(".$_SESSION["campos_nome"].")  values(".$_SESSION["campos_valor"].") ";
-     *   $sqlcmd="INSERT INTO  $bd_2.anotacao  (".$campos_nome.") values(".utf8_encode($campos_valor).") ";
+     *   $sqlcmd="INSERT INTO  $bd_2.anotacao  (".$campos_nome.") values(".mb_convert_encoding($campos_valor).", 'UTF-8', 'ISO-8859-1') ";
      */
     $sqlcmd="INSERT INTO  $bd_2.anotacao  (".$campos_nome.") values(".$campos_valor.") ";
     $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
@@ -944,7 +941,7 @@ exit();
             // $msg_ok .= $projeto."&".$projeto_autor."&".$anotacao;
             $msg_ok .= $projeto."&".$anotacao_autor."&".$anotacao;
             //
-            // echo  utf8_decode($msg_ok);
+            // echo  mb_convert_encoding($msg_ok, 'ISO-8859-1', 'UTF-8');
             echo $msg_ok;
             //
             $_SESSION["anotacao_numero"]=$anotacao;
@@ -976,9 +973,6 @@ exit();
         echo $msg_erro;         
         //
     }
-    mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-    mysqli_query($_SESSION["conex"],'end'); 
-    mysqli_query($_SESSION["conex"],'DELIMITER');
     //
     //  FINAL -  TABELA ANOTACAO  -  BD  REXP
     //
@@ -1007,17 +1001,14 @@ if( $val_upper=="ORIENTADOR" ) {
     $_SESSION["tabela"]="$bd_2.orientador";
     include("dados_recebidos_arq_ajax.php");
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     mysqli_select_db($db_array[$elemento]);
    //  mysqli_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysqli_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
    $res_coord = mysqli_query("INSERT into ".$session_tabela." (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysqli_query("UNLOCK  TABLES");
    //  Complete the transaction 
    if ( $res_coord ) { 
          $msg_ok .="<p class='titulo_usp'>&nbsp;Orientador cadastrado</p>".$msg_final;
@@ -1029,8 +1020,6 @@ if( $val_upper=="ORIENTADOR" ) {
          mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');         
    //
    exit();
    //
@@ -1114,18 +1103,15 @@ if( $val_upper=="ANOTADOR" ) {
      }  
      ///
     ///  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     ///  Execute the queries 
     ///  mysqli_select_db($db_array[$elemento]);
    ///  mysqli_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysqli_select_db() ou mysqli_query()
    $session_tabela = $_SESSION["tabela"];
-   mysqli_query("LOCK TABLES ".$session_tabela." WRITE  ");
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
    /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
    $res_coord = mysqli_query("INSERT into ".$session_tabela." (cip,codigo,pa,data) "
             ."  values($lnprojeto,$lncodigousp,$pa_anotador,'$data_atual') "); 
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysqli_query("UNLOCK  TABLES");
    ///  Complete the transaction 
    if ( $res_coord ) { 
     $lnprojeto = $arr_nome_val["projeto"]; $lncodigousp = $arr_nome_val["codigousp"];
@@ -1150,8 +1136,6 @@ if( $val_upper=="ANOTADOR" ) {
          mysqli_query('rollback'); 
          echo $msg_erro;         
    }
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');         
    exit();
 }  
 /**  Final - if( $val_upper=="ANOTADOR" ) {  */
@@ -1161,8 +1145,8 @@ if( $val_upper=="PROJETO" ) {
          AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 e de depois usa o  - html_entity_decode 
     */
-	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1286,13 +1270,11 @@ if( $val_upper=="PROJETO" ) {
           } else {
                 $n_erro=0;
                 ///  START a transaction - ex. procedure    
-                mysqli_query('DELIMITER &&'); 
-                mysqli_query('begin'); 
                 //  Execute the queries 
                 mysqli_select_db($db_array[$elemento]);
                 //  mysqli_db_query - Esta funcao esta obsoleta, nao use esta funcao 
                 //   - Use mysqli_select_db() ou mysqli_query()
-                mysqli_query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
+                true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
                 $sqlcmd="INSERT into $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
                 $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
                 //  Complete the transaction 
@@ -1317,9 +1299,6 @@ if( $val_upper=="PROJETO" ) {
                     $n_erro=1;
                     mysqli_query('rollback'); 
                 }              
-                mysqli_query("UNLOCK  TABLES");
-                mysqli_query('end'); 
-                mysqli_query('DELIMITER');
                 ///
                 if( $n_erro==1 ) {
                      $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi cadastrado. ERRO#1 = ".mysqli_error().$msg_final;
@@ -1372,8 +1351,8 @@ if( $val_upper=="PESSOAL" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1445,8 +1424,6 @@ if( $val_upper=="PESSOAL" ) {
         ///
         ///  INSERINDO 
         ///  Start a transaction - ex. procedure			   
-        mysqli_query('DELIMITER &&'); 
-        mysqli_query('begin'); 
         ///
         $success=mysqli_query("insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") "); 
         ///  Complete the transaction 
@@ -1459,8 +1436,6 @@ if( $val_upper=="PESSOAL" ) {
             $msg_erro .="&nbsp;".$arr_nome_val['nome']." n&atilde;o foi cadastrado.".$msg_final;
             echo $msg_erro;	     
         } 
-        mysqli_query('end'); 
-        mysqli_query('DELIMITER'); 
         //
 	}
 	//  Final - Tabela pessoa 
@@ -1518,8 +1493,6 @@ if( $val_upper=="USUARIO" ) {
           }
     }
     //  START  a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     //  mysqli_db_query - Esta funcao esta obsoleta, nao use esta funcao 
@@ -1544,8 +1517,6 @@ if( $val_upper=="USUARIO" ) {
         $m_erro=1;      
         mysqli_query('rollback'); 
     }
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');
     // 
     if( intval($m_erro)<1 ) {
         $res_email = mysqli_query("Select e_mail from $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']." ");
@@ -1605,7 +1576,7 @@ if( $val_upper=="USUARIO" ) {
             Esta é uma mensagem automática.<br> 
             *** não responda a este EMAIL ****
             ";
-            mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+            mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
 
             //                          
             /*    $msg_ok .= "<p>Sua senha foi redefinida e uma nova senha foi enviada para seu endere?o de e-mail.<br>"

@@ -9,7 +9,7 @@ if(!isset($_SESSION)) {
 //       Caso NAO exista criar - alterado em 20171031
 ****/
 if( ! isset($_SESSION["url_central"]) ) {
-    echo  utf8_decode("ERRO: falha grave sessão url_central não existe.");
+    echo  mb_convert_encoding("ERRO: falha grave sessão url_central não existe.", 'ISO-8859-1', 'UTF-8');
     exit();
 }
 $url_central = $_SESSION["url_central"];
@@ -106,7 +106,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temp_editar  -  20180530
     ***/   
     if( ! isset($_SESSION["table_consultar_anotacao"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_anotacao não definida."));    
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_consultar_anotacao não definida."), 'ISO-8859-1', 'UTF-8');    
         exit();
     }
     ///  Tabela Temporaria 

@@ -306,7 +306,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if( $pos1===false ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
             $$xyz = explode($div_array_por,$_POST[$xyz]);   
        }
@@ -317,7 +317,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 /**  Final - for( $i=0; $i<count($post_array); $i++ ) {  */
 //
 //   Para acertar a acentuacao - utf8_encode
-/**   $source = utf8_decode($source); $val = utf8_decode($val);   */
+/**   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8');   */
 if( strtoupper($val)=="SAIR" ) $source=$val;
 //
 $_SESSION["source"]=trim($source);
@@ -471,15 +471,15 @@ if( ( $source_upper=="CORESPONSAVEIS" ) or  ( $source_upper=="COLABS" ) ) {
 					             // $m_codigousp = htmlentities($arr["codigousp"][$jk]);
                                  $m_codigousp = htmlentities($arr["codigousp"][$jk]);
                                  $m_categoria=$arr["categoria"][$jk];
-				                 $m_categ = "Categ.: ".html_entity_decode(utf8_decode($m_categoria));	
+				                 $m_categ = "Categ.: ".html_entity_decode(mb_convert_encoding($m_categoria, 'ISO-8859-1', 'UTF-8'));	
                                  //
                                  //  $m_nome=ucfirst(htmlentities($arr["nome"][$jk]));		   		   
                                  //  $m_nome=ucfirst(html_entity_decode($arr["nome"][$jk]));  
                                  $m_nome=trim($arr["nome"][$jk]);
                                  /**  IMPORTANTE: comando para para converter acentos 
-                                 *        html_entity_decode(utf8_decode($m_nome))
+                                 *        html_entity_decode(mb_convert_encoding($m_nome, 'ISO-8859-1', 'UTF-8'))
                                  */
-                                 echo "<option  value=".$m_codigousp." >".html_entity_decode(utf8_decode($m_nome));
+                                 echo "<option  value=".$m_codigousp." >".html_entity_decode(mb_convert_encoding($m_nome, 'ISO-8859-1', 'UTF-8'));
                                  echo  "&nbsp;-&nbsp;".$m_categ."&nbsp;</option>" ;
                                  ///
                             }
@@ -518,13 +518,13 @@ if( $val_upper=="PROJETO" ) {
 
 //  $nocego="ERRO: linha582  ";
 
-     $campo_nome = htmlentities(utf8_decode($campo_nome));
+     $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
      //
 
  //   $nocego.=" 1)  \$campo_nome = $campo_nome <br> \$campo_value = $campo_value <br>";
 
      /**  
-      *    $campo_value = htmlentities(utf8_decode($campo_value));
+      *    $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
      *   Procurar palavra enviar
       */
      $busca=stripos($campo_nome,",enviar");
@@ -1002,7 +1002,7 @@ exit();
               mysqli_set_charset($conex,'utf8');
               //   
               $campos_nome=$_SESSION["campos_nome"];
-              ///  $campos_valor=utf8_decode($_SESSION["campos_valor"]);
+              ///  $campos_valor=mb_convert_encoding($_SESSION["campos_valor"], 'ISO-8859-1', 'UTF-8');
               /**  IMPORTANTE:  html_entity_decode para variavel PHP para MySql  */
               $campos_valor=html_entity_decode($_SESSION["campos_valor"], ENT_QUOTES, "UTF-8");
               //
@@ -1022,15 +1022,12 @@ exit();
               
               
               //  START a transaction - ex. procedure    
-              mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-              mysqli_query($_SESSION["conex"],'begin'); 
               //
               //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
               //   - Use mysql_select_db() ou mysqli_query()
-              $_SESSION["conex"]->query("LOCK TABLES $bd_2.projeto WRITE, $bd_2.corespproj WRITE ");
               //
               /**  IMPORTANTE: usar utf8_encode enviar dados do PHP para MySql  */
-           /**   $sqlcmd="INSERT into $bd_2.projeto  (".$campos_nome.") values(".utf8_encode($campos_valor).") ";  
+           /**   $sqlcmd="INSERT into $bd_2.projeto  (".$campos_nome.") values(".mb_convert_encoding($campos_valor).", 'UTF-8', 'ISO-8859-1') ";  
             *    $sqlcmd="INSERT into $bd_2.projeto  (\"$campos_nome\") values(\"$campos_valor\") "; 
            */
                $sqlcmd="INSERT into $bd_2.projeto  (".$cpo_nome.") values(".$cpo_valor.") ";
@@ -1092,9 +1089,6 @@ exit();
                  mysqli_query($_SESSION["conex"],'rollback'); 
               }
               //              
-              mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-              mysqli_query($_SESSION["conex"],'end'); 
-              mysqli_query($_SESSION["conex"],'DELIMITER');
               ///
               if( intval($n_erro)==1 ) {
                   $proc="&nbsp;Projeto <b>N&Atilde;O</b> foi cadastrado. ERRO#1 = ";
@@ -1134,8 +1128,6 @@ exit();
                        $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                        //
                        ///  START a transaction - ex. procedure    
-                       mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-                       mysqli_query($_SESSION["conex"],'begin'); 
                        //
                        //  Execute the queries 
                        mysqli_query($_SESSION["conex"],"LOCK TABLES $bd_2.anotador WRITE ");
@@ -1167,9 +1159,6 @@ exit();
                            //
                        }                   
                        //
-                       mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
-                       mysqli_query($_SESSION["conex"],'end'); 
-                       mysqli_query($_SESSION["conex"],'DELIMITER');
                        ///
                   } else {
                       //

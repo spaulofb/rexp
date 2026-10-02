@@ -8,7 +8,7 @@ if(!isset($_SESSION)) {
 //
 $result_tabela = mysqli_query("SELECT * FROM ".$_SESSION["tabela"]."   limit 1");
 if( ! $result_tabela ) {
-    mysql_free_result($result_tabela);
+    mysqli_free_result($result_tabela);
    die('Sem resultado - Select - falha: '.mysqli_error($_SESSION["conex"]));
    exit();
 }
@@ -55,11 +55,11 @@ for( $i=0; $i<$count_array_temp; $i++ ) {
 }
 $_SESSION["campos_total"] = substr($_SESSION["campos_total"],0,strlen($_SESSION["campos_total"])-1);
 //	
-//  $_SESSION["campos_total"]=utf8_decode($_SESSION["campos_total"]); //  Total deu 186 caracteres
+//  $_SESSION["campos_total"]=mb_convert_encoding($_SESSION["campos_total"], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 //  $_SESSION["campos_total"]=urldecode($_SESSION["campos_total"]);   //  Total deu 186 caracteres
 //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  //  179
 //
-mysql_free_result($result_tabela);
+mysqli_free_result($result_tabela);
 //
 ?>

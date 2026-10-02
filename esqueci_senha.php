@@ -35,7 +35,7 @@ $msg_final="</span></span>";
 
 ///  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
-     $msg_erro .= utf8_decode("Sess?o incluir_arq não est? ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sess?o incluir_arq não est? ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -49,7 +49,7 @@ $host_pasta="";
 if( isset($_SESSION["host_pasta"]) ) {
      $host_pasta=$_SESSION["host_pasta"];  
 } else {
-     $msg_erro .= utf8_decode("Sess?o host_pasta não est? ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sess?o host_pasta não est? ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -74,7 +74,7 @@ $_SESSION["m_horiz"] = $array_voltar;
 //   Definindo a Raiz do Projeto
 //  $_SESSION["pasta_raiz"]='/rexp/';
 //  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anota??o");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anota??o", 'ISO-8859-1', 'UTF-8');
 ///
 ////  INCLUINDO CLASS - 
 require_once("{$incluir_arq}includes/autoload_class.php");  

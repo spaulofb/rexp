@@ -201,7 +201,7 @@ if( ! isset($permit_pa)  ) {
          if( isset($email_erro) ) {
               if( strlen(trim($email_erro))>1  ) {
                    $m_erro=$m_erro+1;
-                   $msg_erro .= utf8_decode("Re-digite o campo Login/Email").$msg_final;   
+                   $msg_erro .= mb_convert_encoding("Re-digite o campo Login/Email", 'ISO-8859-1', 'UTF-8').$msg_final;   
                    unset($email_erro);
               }
         }
@@ -211,7 +211,7 @@ if( ! isset($permit_pa)  ) {
              if( strlen(trim($senha_erro))>1 ) {
                   $m_erro=$m_erro+1;
                   ///  $msg_erro .=$senha_erro.$msg_final;
-                  $msg_erro .= utf8_decode("Re-digite campo Senha").$msg_final;                
+                  $msg_erro .= mb_convert_encoding("Re-digite campo Senha", 'ISO-8859-1', 'UTF-8').$msg_final;                
                   unset($senha_erro);       
              }
         }  
@@ -219,7 +219,7 @@ if( ! isset($permit_pa)  ) {
         //
         //  Verifica se houve erro
         if( intval($m_erro)>1 ) {
-            $msg_erro .= utf8_decode("Re-digite campos: Login/Email e Senha").$msg_final;   
+            $msg_erro .= mb_convert_encoding("Re-digite campos: Login/Email e Senha", 'ISO-8859-1', 'UTF-8').$msg_final;   
         }  
         /**  Final - if( intval($m_erro)>1 ) {  */
         //
@@ -236,7 +236,7 @@ if( ! isset($permit_pa)  ) {
     ///  Verifica se a SESSION email_usuario foi enviada pelo arquivo verificando.php
     $num_erros=0;
     if( ! $_SESSION["email_usuario"] ) {
-         $msg_erro .= utf8_decode("SESSION email_usuario indefinida. Consulte administrador.").$msg_final;   
+         $msg_erro .= mb_convert_encoding("SESSION email_usuario indefinida. Consulte administrador.", 'ISO-8859-1', 'UTF-8').$msg_final;   
          $num_erros=1;
     }  
     /**   Final - if( ! $_SESSION["email_usuario"] ) {  */
@@ -244,7 +244,7 @@ if( ! isset($permit_pa)  ) {
     ///  Pesquisando o email do usuario
     $email=$_SESSION["email_usuario"];
     if( strpos($email,'@')===false ) {
-         $msg_erro .= utf8_decode("Esse usuário não contém email cadastrado. Consulte administrador.").$msg_final;   
+         $msg_erro .= mb_convert_encoding("Esse usuário não contém email cadastrado. Consulte administrador.", 'ISO-8859-1', 'UTF-8').$msg_final;   
          $num_erros=2;
     } 
     /**   Final - if( strpos($email,'@')===false ) { */

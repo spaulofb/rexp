@@ -30,7 +30,7 @@ for( $i=0; $i<$count_post_array; $i++ ) {
            //  $$xyz=trim($_POST[$xyz]);
            //   Para acertar a acentuacao - utf8_encode
            if( is_string($_POST[$xyz]) ) {
-               $$xyz = utf8_decode(trim($_POST[$xyz]));     
+               $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');     
            } else if( is_array($_POST[$xyz]) ) {               
                $$xyz = $_POST[$xyz];
            } else {
@@ -356,7 +356,7 @@ if( is_array($data) ) {
         //  Tabela grupo verificando se tem um ponto no final
         if( $data[0]=="grupo"  ) {
             if( isset($codigo) ) {
-                 $codigo = utf8_decode(trim($codigo));
+                 $codigo = mb_convert_encoding(trim($codigo), 'ISO-8859-1', 'UTF-8');
                  $length_cod = strlen($codigo);
                  if( $length_cod>=1 ) {
                      // IMPORTANTE - usando regex para buscar somente numeros e pontos
@@ -436,7 +436,7 @@ if( is_array($data) ) {
         }  
         $m_regs=mysqli_num_rows($result_instituicao);
         // 
-        if( isset($result_instituicao) ) mysql_free_result($result_instituicao);
+        if( isset($result_instituicao) ) mysqli_free_result($result_instituicao);
         if( $m_regs>=1 ) {
             $temp_cpo_nome=$_SESSION["temp_array"]["$nome_campo_1"];
             echo $funcoes->mostra_msg_erro("&nbsp;Nessa Tabela $encontrar o campo&nbsp;"
@@ -455,18 +455,16 @@ if( is_array($data) ) {
         
         //  
        // MELHOR MANEIRA DE ENVIAR DADOS DO PHP PARA MYSQL -  UTF8_DECODE  - //  IMPORTANTE 2013
-       //  $codigo = utf8_decode($codigo);
-       //  $descricao =utf8_decode($descricao);
+       //  $codigo = mb_convert_encoding($codigo, 'ISO-8859-1', 'UTF-8');
+       //  $descricao =mb_convert_encoding($descricao, 'ISO-8859-1', 'UTF-8');
        //
         //  START  a transaction - ex. procedure    
-        mysqli_query('DELIMITER &&'); 
         $commit="commit";
-        mysqli_query('begin'); 
         //  Execute the queries 
         //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
         //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
         //   - Use mysql_select_db() ou mysqli_query()
-        mysqli_query("LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE");
+        true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
         //  Alterando dados na Tabela instituicao
       /*  $success=mysqli_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
                               ." $nome_campo_2=clean_spaces('$valor_campo_2')  "
@@ -482,10 +480,7 @@ if( is_array($data) ) {
         }
         /*!40000 ALTER TABLE  ENABLE KEYS */;
         mysqli_query($commit);
-        mysqli_query("UNLOCK  TABLES");
         //  Complete the transaction 
-        mysqli_query('end'); 
-        mysqli_query('DELIMITER');
         //
         exit();
   }

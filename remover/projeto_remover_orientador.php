@@ -61,7 +61,7 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 // $_SESSION['time_exec']=180000;
 
 ///  INCLUINDO CLASS - 
@@ -218,7 +218,7 @@ if( isset($_POST['fileframe']) ) {
                 $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES[relatproj][name].' FALHA'.mysqli_error($_SESSION["conex"]);
    			    $_SESSION["msg_upload"].=$msg_erro_final;		
 			} else {
-                 mysql_free_result($success);
+                 mysqli_free_result($success);
                  $success=mysqli_query("SELECT nome from $bd_1.pessoa where codigousp=$autor_cod  ");
                  $_SESSION["msg_upload"] .= $msg_erro."Projeto $nprojexp do autor ".mysql_result($success,0,0)." foi conclu&iacute;do.";
 				 $_SESSION["msg_upload"] .=$msg_erro_final;		    
@@ -1003,7 +1003,7 @@ if( intval($nprojetos)<1 ) {
                 .$titulo_projeto."&nbsp;&nbsp;</option>";   
           ///      
    }       
-   if( isset($result) ) mysql_free_result($result); 
+   if( isset($result) ) mysqli_free_result($result); 
 }            
 ?>                
 </select>

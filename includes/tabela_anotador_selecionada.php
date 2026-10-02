@@ -90,7 +90,7 @@ if( intval($total_regs)<=0 ) {
          $origem="Falha SESSION table_consultar_anotacao não definida.";
          $texto = function_exists('mb_convert_encoding') 
             ? mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8')
-            : utf8_decode($origem); 
+            : mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8'); 
          //
          echo $funcoes->mostra_msg_erro("$texto");
          exit();

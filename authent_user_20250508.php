@@ -93,7 +93,7 @@ $host_pasta="";
 if( isset($_SESSION["host_pasta"]) ) {
      $host_pasta=$_SESSION["host_pasta"];  
 } else {
-     $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -138,7 +138,7 @@ if( isset($_SESSION["array_pa"]) ) {
 }
  
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 
 ///  MENU Horizontal - Voltar
 include("{$incluir_arq}includes/array_menu.php");

@@ -49,7 +49,7 @@ $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
 } else {
-     $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -58,7 +58,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sessão pasta_raiz não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão pasta_raiz não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -275,7 +275,7 @@ if( $opcao_maiusc=="REMOVER" )  {
         echo $funcoes->mostra_msg_erro("Projeto n&atilde;o encontrado");        
         exit();        
     }
-    if( $result_rmprojeto )  mysql_free_result($result_rmprojeto);    
+    if( $result_rmprojeto )  mysqli_free_result($result_rmprojeto);    
     ///  Tabela objetivo - descricao
     $sqlcmd = "SELECT descricao from $bd_2.objetivo  WHERE codigo=$objetivo ";
     $result_objetivo = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -536,7 +536,7 @@ if( $opcao_maiusc=="REMOVER" )  {
     foreach( $array_projeto_cpos as $chave_proj => $valor_proj ) {
              $$chave_proj=$valor_proj;
     }                  
-    if( isset($result_projeto) )  mysql_free_result($result_projeto);     
+    if( isset($result_projeto) )  mysqli_free_result($result_projeto);     
     $autor_projeto_cod="";
     if( isset($autor) ) $autor_projeto_cod=$autor;
     ///
@@ -719,8 +719,6 @@ if( $opcao_maiusc=="REMOVER" )  {
         */
     $lnerro=0;
     ///  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     ///  Execute the queries          
     ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
     mysqli_query("LOCK TABLES $bd_2.projeto DELETE, $bd_2.anotacao DELETE, $bd_2.anotador DELETE ");
@@ -776,10 +774,7 @@ if( $opcao_maiusc=="REMOVER" )  {
         mysqli_query('rollback');  
     }  
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-    mysqli_query("UNLOCK  TABLES");
     ///  Complete the transaction 
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');         
     ///  Caso Tabela acima foi aceita incluir dados na outra abaixo
     ///   MENSAGEM FINAL - Projeto e Anotacoes - Removido
     $confirmar0 ="<hr>";

@@ -188,6 +188,6 @@ $_SESSION["campos_valor"]=html_entity_decode(trim($_SESSION["campos_valor"]));  
 $cpo_nome=$_SESSION["campos_nome"];
 $cpo_valor= $_SESSION["campos_valor"];
 
-if( isset($rsqltb) ) mysql_free_result($rsqltb);
+if( isset($rsqltb) ) mysqli_free_result($rsqltb);
 ////
 ?>

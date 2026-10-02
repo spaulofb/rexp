@@ -63,7 +63,7 @@ if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado = $_SESSION["usua
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 /// $_SESSION['time_exec']=180000;
 
 ///  Mensagens
@@ -609,7 +609,7 @@ if( intval($nprojetos)<1 ) {
           $codigo_caracter=mb_detect_encoding($titulo_projeto);
           /// if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
                ////  echo  htmlentities($titulo_projeto)."&nbsp;&nbsp;</option>";   
-               ///  echo  utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
+               ///  echo  mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";   
                echo  $titulo_projeto."&nbsp;&nbsp;</option>";   
               /**
           } else {
@@ -618,7 +618,7 @@ if( intval($nprojetos)<1 ) {
           */
           ///           
    }       
-   if( isset($result_cons_proj) ) mysql_free_result($result_cons_proj); 
+   if( isset($result_cons_proj) ) mysqli_free_result($result_cons_proj); 
 }            
 ?>                
 </select>

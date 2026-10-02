@@ -44,7 +44,7 @@ if( intval($n_regs)>=1 ) {
         if( strtoupper($sexo)=="M" ) $texto = "NÃO foi Aprovado,<br> Consultar o Aprovador";
         if( strtoupper($sexo)=="F" ) $texto = "NÃO foi Aprovada,<br> Consultar o Aprovador";                                                  
         $confirmar0 ="<p style='text-align:center;font-size: medium; padding-top:1em;' >"
-                     ."<b>J&aacute; Cadastrado mas ainda&nbsp;".utf8_decode($texto)."</b>.</p>";
+                     ."<b>J&aacute; Cadastrado mas ainda&nbsp;".mb_convert_encoding($texto, 'ISO-8859-1', 'UTF-8')."</b>.</p>";
         $confirmar1 .=$confirmar0."<div style='width: 100%; text-align: center;'>";                                         
         /*
         $confirmar1 .="<button  style='text-align:center; cursor: pointer;'  " 
@@ -62,7 +62,7 @@ if( intval($n_regs)>=1 ) {
             //   ."<br><br>&nbsp;Usu&aacute;rio/Login: <b>$login</b> "
     $msg_ok .= "<br/>&nbsp;Usu&aacute;rio: <b>$e_mail</b></span>";
    // $msg_ok .= $confirmar1.$msg_final."#@=".$codigousp;                   
-    $msg_ok .=  "<br/>".utf8_encode($confirmar1).$msg_final;                   
+    $msg_ok .=  "<br/>".mb_convert_encoding($confirmar1, 'UTF-8', 'ISO-8859-1').$msg_final;                   
     echo  $msg_ok;               
     ////
 } else {
@@ -121,7 +121,7 @@ if( intval($n_regs)>=1 ) {
    foreach( $pessoa_array as $key => $value ) {
            $$key = $value;
    }   
-   if( isset($result_pessoa) ) mysql_free_result($result_pessoa);
+   if( isset($result_pessoa) ) mysqli_free_result($result_pessoa);
    ///  ramal definido como inteiro porisso caso vazio acrescentar ZERO
    if( isset($ramal) ) {
        if( strlen(trim($ramal))<1 ) $ramal=(int) 0;       
@@ -156,9 +156,7 @@ if( intval($n_regs)>=1 ) {
         list($login) = explode("@", $e_mail);
         
        ///  START a transaction - ex. procedure    
-       mysqli_query('DELIMITER &&'); 
        $commit = "commit";
-       mysqli_query('begin'); 
        ///  Execute the queries          
        ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
        mysqli_query("LOCK TABLES $bd_1.usuario WRITE  ");
@@ -181,10 +179,7 @@ if( intval($n_regs)>=1 ) {
        }                
        /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
        mysqli_query($commit);
-       mysqli_query("UNLOCK  TABLES");
        //  Complete the transaction 
-       mysqli_query('end'); 
-       mysqli_query('DELIMITER');         
        
        ///  Caso Tabela acima foi aceita incluir dados na outra abaixo
        if( isset($sqlcmd) ) unset($sqlcmd);
@@ -197,9 +192,7 @@ if( intval($n_regs)>=1 ) {
        ///  INSERINDO PARTICIPANTE
        ///
        ///  Start a transaction - ex. procedure    
-       mysqli_query('DELIMITER &&'); 
        $commit = "commit";
-       mysqli_query('begin'); 
        //  Execute the queries          
        //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
        mysqli_query("LOCK TABLES $bd_2.participante WRITE  ");
@@ -219,14 +212,11 @@ if( intval($n_regs)>=1 ) {
            $lnerro=1;
        }         
        mysqli_query($commit);
-       mysqli_query("UNLOCK  TABLES");
        ///  Complete the transaction 
-       mysqli_query('end'); 
-       mysqli_query('DELIMITER');    
        ///
        if( strtoupper($commit)=="COMMIT" ) {
            ///  IMPORTANTE:  acentuacao correto com htmlentities e utf8_decode
-            $nome_insert_mysql=utf8_encode($nome);
+            $nome_insert_mysql=mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1');
            ///  
            $msg_ok  .="<span style='text-align:center; color: #000000;'>";
            $msg_ok  .="<br>Orientador <b>";
@@ -257,9 +247,9 @@ if( intval($n_regs)>=1 ) {
                    $descr_categ = "Outra";
               } else {
                    $descr_categ = mysql_result($res_categoria,0,"descricao")."&nbsp;($categoria)"; 
-                   $descr_categ = utf8_encode($descr_categ);
+                   $descr_categ = mb_convert_encoding($descr_categ, 'UTF-8', 'ISO-8859-1');
               }
-              if( isset($res_categoria) ) mysql_free_result($res_categoria); 
+              if( isset($res_categoria) ) mysqli_free_result($res_categoria); 
               $activation_code=$codigo_ativa;
               ///  $aprovador_email="gemac@genbov.fmrp.usp.br";
               $aprovador_email="{$_SESSION["gemac"]}";
@@ -297,7 +287,7 @@ if( intval($n_regs)>=1 ) {
                ///  $headers1 .= "From: \"Registro Membro\" <auto-reply@$host>\r\n";                    
                ///  $headers1 .= "From: \"RGE/SISTAM\" <gemac@genbov.fmrp.usp.br>\r\n";    
                $headers1 .= "From: \"RGE/SISTAM\" <{$_SESSION["gemac"]}>\r\n";                    
-               $nome=utf8_encode($nome);
+               $nome=mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1');
            
                $message = "$corpo\n<br><br>
                Nome: $nome<br>
@@ -315,11 +305,11 @@ if( intval($n_regs)>=1 ) {
                *** Não responda a este EMAIL ****
              ";
               ///  Enivar por email
-              ///  $res_mail=mail($aprovador_email, stripslashes(utf8_encode($assunto)), utf8_encode($message),$headers1);
+              ///  $res_mail=mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), utf8_encode($message),$headers1, 'UTF-8', 'ISO-8859-1');
               ///$res_mail=mail($aprovador_email, $assunto, $message,$headers1);    
               sleep(2);
               ////             
-              $res_mail=mail($aprovador_email, stripslashes(utf8_decode($assunto)), utf8_decode($message),$headers1);
+              $res_mail=mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), utf8_decode($message),$headers1, 'ISO-8859-1', 'UTF-8');
               if( $res_mail ) {
                    $msg_ok .="<br>Email enviado com sucesso para o Aprovador!<br><br>";
                    echo $msg_ok;

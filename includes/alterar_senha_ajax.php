@@ -239,7 +239,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if( $pos1===false ) {
 	        ///  $$xyz=trim($_POST[$xyz]);
 		    ///   Para acertar a acentuacao - utf8_encode
-            $$xyz = utf8_decode(trim($_POST[$xyz])); 
+            $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
             $$xyz = explode($div_array_por,$_POST[$xyz]);  
        } 
@@ -247,7 +247,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -312,11 +312,9 @@ if( strtoupper($val)=="SENHA" ) {
     mysql_select_db($db_array[$elemento]);
     $_SESSION['tabela']=$bd_1.".usuario";
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries          
     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-    mysqli_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
+    true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
     /*!40000 UPDATE TABLE usuario DISABLE KEYS */;            
    // $res_usuario = "UPDATE ".$_SESSION['tabela']." SET  senha=password('$senha') WHERE trim(login)='$login'  "; 
    $res_usuario = "UPDATE ".$_SESSION['tabela']." SET  senha=password('$senha') WHERE codigousp=$usuario_conectado  "; 
@@ -336,10 +334,7 @@ if( strtoupper($val)=="SENHA" ) {
         $lnerro=1;        
     }           
     /*!40000 UPDATE TABLE usuario ENABLE KEYS */;
-    mysqli_query("UNLOCK  TABLES");
     //  Complete the transaction 
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');         
     //
     if( $lnerro<1 ) {
         $_SESSION["senha_down"]=$senha ;   

@@ -530,7 +530,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
 	       <td  class="td_inicio1" style="vertical-align: middle; text-align: left;padding-right: 7px;" colspan="2"  >
               <label for="nome" style="vertical-align:bottom; padding-bottom: 1px;cursor: pointer;" title="Nome"   >Nome:&nbsp;</label>
 			   <br /><br />
-			  <input type="text" name="nome"   id="nome"   size="85"  maxlength="64"  value="<?php echo utf8_encode($nome);?>" readonly="readonly" />
+			  <input type="text" name="nome"   id="nome"   size="85"  maxlength="64"  value="<?php echo mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1');?>" readonly="readonly" />
               <input type="hidden"  name="codigousp"  id="codigousp"  value="<?php echo $_SESSION['codigousp'];?>"  />
 			 </td>
           <!-- Final - Nome -->
@@ -566,7 +566,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
            <!--   Categoria  -->
           <span class="td_informacao2"  >
               <label for="categoria"  style="vertical-align: middle; cursor: pointer;" title="Categoria"    >Categoria:</label>
-              <input type="text" name="categoria"   id="categoria"  style="width: 260px;"  value="<?php echo utf8_encode($descr_categ);?>" readonly="readonly" />             
+              <input type="text" name="categoria"   id="categoria"  style="width: 260px;"  value="<?php echo mb_convert_encoding($descr_categ, 'UTF-8', 'ISO-8859-1');?>" readonly="readonly" />             
              </span>
               <!--  FINAL - Categoria  -->
               </td>
@@ -591,7 +591,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
            $onmouse="";
            if( intval($n_regs)==1 ) {
                $nome_instituicao=mysql_result($resultado,0,0);
-               $onmouse="  title='".utf8_encode($nome_instituicao)."'  ";
+               $onmouse="  title='".mb_convert_encoding($nome_instituicao, 'UTF-8', 'ISO-8859-1')."'  ";
            } 
            ///
        ?>
@@ -627,7 +627,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                    $onmouse="";
                    if( intval($n_regs)==1 ) {
                        $nome_unidade=mysql_result($resultado,0,0);
-                       $onmouse="  title='".utf8_encode($nome_unidade)."'  ";
+                       $onmouse="  title='".mb_convert_encoding($nome_unidade, 'UTF-8', 'ISO-8859-1')."'  ";
                    } 
                    ///
                ?>
@@ -659,7 +659,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                        $onmouse="";
                        if( intval($n_regs)==1 ) {
                            $nome_depto=mysql_result($resultado,0,0);
-                           $onmouse="  title='".utf8_encode($nome_depto)."'  ";
+                           $onmouse="  title='".mb_convert_encoding($nome_depto, 'UTF-8', 'ISO-8859-1')."'  ";
                        } 
                        ///
                     ?>
@@ -692,7 +692,7 @@ if( $_SESSION["permit_pa"]<=$array_pa['orientador']  ) {
                        $onmouse="";
                        if( intval($n_regs)==1 ) {
                            $nome_setor=mysql_result($resultado,0,0);
-                           $onmouse="  title='".utf8_encode($nome_setor)."'  ";
+                           $onmouse="  title='".mb_convert_encoding($nome_setor, 'UTF-8', 'ISO-8859-1')."'  ";
                        } 
                        ///
                      ?>

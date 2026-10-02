@@ -89,7 +89,7 @@ $host_pasta="";
 if( isset($_SESSION["host_pasta"]) ) {
      $host_pasta=$_SESSION["host_pasta"];  
 } else {
-     $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }

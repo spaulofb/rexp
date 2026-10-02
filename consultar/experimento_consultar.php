@@ -234,7 +234,7 @@ $_SESSION["cols"]=4;
 						   $autor_categoria=$arr_cnc["categoria"][$jk];
 					}
                }
-              mysql_free_result($result2); 
+              mysqli_free_result($result2); 
            }
            // Final da Num_USP/Nome Responsavel
            ?>  
@@ -265,7 +265,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result2); 
+               mysqli_free_result($result2); 
            }
            // Final do CIP/Projeto
            ?>  
@@ -350,7 +350,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result2); 
+               mysqli_free_result($result2); 
            }
            // FINAL - Código da Testemunha (1) da realiza??o 
            ?>  
@@ -380,7 +380,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result); 
+               mysqli_free_result($result); 
            }
            // FINAL - Código da Testemunha (2) da realiza??o 
            ?>  
@@ -413,7 +413,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result); 
+               mysqli_free_result($result); 
            }
            // FINAL - Ambiente
            ?>  
@@ -441,7 +441,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result2); 
+               mysqli_free_result($result2); 
            }
            // FINAL - Material
            ?>  
@@ -469,7 +469,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result); 
+               mysqli_free_result($result); 
            }
            // FINAL - Metodo
            ?>  
@@ -501,7 +501,7 @@ $_SESSION["cols"]=4;
           ?>
           </select>
           <?php
-               mysql_free_result($result2); 
+               mysqli_free_result($result2); 
            }
            // FINAL - Resultado
            ?>  
@@ -560,8 +560,8 @@ $_SESSION["cols"]=4;
 	              </select>
 	               </span>
 					<?php
-                    mysql_free_result($result_tb_temp1); 
-                    mysql_free_result($result); 
+                    mysqli_free_result($result_tb_temp1); 
+                    mysqli_free_result($result); 
                   }
  				  // Final da Unidade
 				  ?>

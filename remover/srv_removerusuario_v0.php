@@ -94,7 +94,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             if ( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
             } else {
                  $$xyz = explode($div_array_por,$_POST[$xyz]);    
             }
@@ -697,8 +697,6 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
      ///  Variavel de erro  
      $lnerro=0;
      ///  Start a transaction - ex. procedure    
-     mysqli_query('DELIMITER &&'); 
-     mysqli_query('begin'); 
      ///  Execute the queries          
      ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
      mysqli_query("LOCK TABLES $bd_2.anotacao DELETE, $bd_2.corespproj DELETE, $bd_2.projeto DELETE ");
@@ -763,16 +761,11 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
      }   
      ///
      /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-     mysqli_query("UNLOCK  TABLES");
      ///  Complete the transaction 
-     mysqli_query('end'); 
-     mysqli_query('DELIMITER');         
      ///  FINAL - remover projetos e anotacoes do autor/usuario
      ///               
      ///  REMOVER anotador
     ///  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
    ///  Execute the queries          
    ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    mysqli_query("LOCK TABLES  $bd_2.anotador DELETE ");
@@ -799,10 +792,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
    }   
    ///
    /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-   mysqli_query("UNLOCK  TABLES");
    ///  Complete the transaction 
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');         
    ///  
    ///   MENSAGEM FINAL - Projeto e Anotacoes - Removido
    ///  CASO ocorreu ERRO 
@@ -1052,8 +1042,6 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
       } 
       $lnerro=0;
       //  Start a transaction - ex. procedure    
-      mysqli_query('DELIMITER &&'); 
-      mysqli_query('begin'); 
       //  Execute the queries          
       ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
       mysqli_query("LOCK TABLES $bd_2.projeto  DELETE, $bd_2.anotacao DELETE,  $bd_2.anotador DELETE ");
@@ -1105,10 +1093,7 @@ if( preg_match("/^TODOS|^BUSCA_PROJ|^BUSCA_LETRAI/i",$opcao_maiusc) ) {
        } else   mysqli_query('rollback'); 
        //
        /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-       mysqli_query("UNLOCK  TABLES");
        //  Complete the transaction 
-       mysqli_query('end'); 
-       mysqli_query('DELIMITER');         
        //  Caso Tabela acima foi aceita incluir dados na outra abaixo
      //   MENSAGEM FINAL - Projeto e Anotacoes - Removido
      $confirmar0 ="<hr>";

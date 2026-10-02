@@ -51,8 +51,8 @@ for( $i=0; $i<$count_post_array; $i++ ) {
            //   Para acertar a acentuacao - utf8_encode
            if( is_string($_POST[$xyz]) ) {
                ///  Atualizado em 20200819
-               /// $$xyz = utf8_decode(trim($_POST[$xyz]));     
-                /// $$xyz = utf8_decode($_POST[$xyz]);     
+               /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');     
+                /// $$xyz = mb_convert_encoding($_POST[$xyz], 'ISO-8859-1', 'UTF-8');     
                 $$xyz = $_POST[$xyz];     
            } else if( is_array($_POST[$xyz]) ) {               
                $$xyz = $_POST[$xyz];
@@ -936,7 +936,7 @@ if( is_array($data) ) {
         ///  Tabela grupo verificando se tem um ponto no final
         if( $data[0]=="grupo"  ) {
             if( isset($codigo) ) {
-                 $codigo = utf8_decode(trim($codigo));
+                 $codigo = mb_convert_encoding(trim($codigo), 'ISO-8859-1', 'UTF-8');
                  $length_cod = strlen($codigo);
                  if( intval($length_cod)>=1 ) {
                      ///
@@ -1166,14 +1166,12 @@ if( is_array($data) ) {
         /***                                   
         *  - ///  IMPORTANTE 2013
         *     MELHOR MANEIRA DE ENVIAR DADOS DO PHP PARA MYSQL -  UTF8_DECODE  
-        *          $codigo = utf8_decode($codigo);
-        *          $descricao =utf8_decode($descricao);
+        *          $codigo = mb_convert_encoding($codigo, 'ISO-8859-1', 'UTF-8');
+        *          $descricao =mb_convert_encoding($descricao, 'ISO-8859-1', 'UTF-8');
         ***/
         /// 
         ///  START  a transaction - ex. procedure    
-        mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
         $commit="commit";
-        mysqli_query($_SESSION["conex"],'begin'); 
         ///
         ///  Execute the queries 
         /****
@@ -1181,7 +1179,7 @@ if( is_array($data) ) {
         *     mysqli_db_query - Esta funcao esta obsoleta, nao use esta funcao 
         *       - Use mysqli_select_db() ou mysqli_query()
         ****/
-        mysqli_query($_SESSION["conex"],"LOCK TABLES  {$bd_1}.$data[0] UPDATE ");
+        true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
         ///
         ///  Alterando dados na Tabela
         $success=mysqli_query($_SESSION["conex"],$success_antes);           
@@ -1197,10 +1195,7 @@ if( is_array($data) ) {
         }
         /*!40000 ALTER TABLE  ENABLE KEYS */;
         mysqli_query($_SESSION["conex"],$commit);
-        mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
         //  Complete the transaction 
-        mysqli_query($_SESSION["conex"],'end'); 
-        mysqli_query($_SESSION["conex"],'DELIMITER');
         ///
     }
     ///

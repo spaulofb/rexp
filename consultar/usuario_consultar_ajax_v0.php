@@ -34,7 +34,7 @@ $msg_final="</span></span>";
 
 ///  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {
-     $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -55,7 +55,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
  	    if( $pos1 === false ) {
 	         ///  $$xyz=trim($_POST[$xyz]);
 	         ///   Para acertar a acentuacao - utf8_encode
-             $$xyz = utf8_decode(trim($_POST[$xyz])); 
+             $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	     } else {
              $$xyz = explode($div_array_por,$_POST[$xyz]);  
          } 
@@ -63,7 +63,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -145,18 +145,18 @@ if( strtoupper($source)=="SAIR" ) {
 
           //       
           if( ! $res_temp2  ) {
-                mysql_free_result($result);
+                mysqli_free_result($result);
                 die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
           }
           if ( $res_temp2 ) {
-                mysql_free_result($res_temp1); mysql_free_result($res_temp2);
+                mysqli_free_result($res_temp1); mysqli_free_result($res_temp2);
           }
           $result_outro = mysqli_query("SELECT * from ".$_SESSION[$_SESSION['table_temp_usu']]);        
          //  CODIGO/Num_USP
          $titulo_pag="Usuário";
     }   
     if( ! $result_outro ) {
-         mysql_free_result($result_outro);
+         mysqli_free_result($result_outro);
          die('ERRO: Select  - falha: '.mysqli_error($_SESSION["conex"]));  
     }
     $m_linhas = mysqli_num_rows($result_outro);     
@@ -170,7 +170,7 @@ if( strtoupper($source)=="SAIR" ) {
           require_once("sala_reservadeuso.php");
           echo "</td></tr>";
           echo "</table>";    
-          mysql_free_result($result);
+          mysqli_free_result($result);
     } elseif( $m_linhas>1 )  {
           //  Tabela pessoal.usuario              
           if( strtoupper($val[2])=="USUARIO" ) {
@@ -315,8 +315,8 @@ if( strtoupper($source)=="SAIR" ) {
 	          </select>
 	          </span>
 			  <?php
-                 mysql_free_result($result_tb_temp1); 
-                 mysql_free_result($result); 
+                 mysqli_free_result($result_tb_temp1); 
+                 mysqli_free_result($result); 
     	         // Final do SELECT
 	    	 	 break;
 		  } else {
@@ -349,7 +349,7 @@ if(  ( strtoupper(trim($source))=="CORESPONSAVEIS" ) or  ( strtoupper(trim($sour
    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
    $result=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
    if( ! $result ) {
-          mysql_free_result($result);
+          mysqli_free_result($result);
           die('ERRO: Select pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
    }
    $m_linhas = mysqli_num_rows($result);
@@ -416,7 +416,7 @@ if(  ( strtoupper(trim($source))=="CORESPONSAVEIS" ) or  ( strtoupper(trim($sour
                       ?>
                       </select>
                       <?php
-                          mysql_free_result($result); 
+                          mysqli_free_result($result); 
                       }
                       // Final da Num_USP/Coautor
                     ?>  
@@ -459,7 +459,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
 			                       ." projeto where autor=".$m_array." group by 1 order by ano desc ");
 			//
 		   if( ! $result_ano ) {
-                mysql_free_result($result_ano);
+                mysqli_free_result($result_ano);
                 die('ERRO: Select projeto ano - falha: '.mysqli_error($_SESSION["conex"]));  
            }	   
 		   //  Registros encontrados no Select
@@ -491,7 +491,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
           ?>
           </select>
           <?php
-               mysql_free_result($result_ano); 
+               mysqli_free_result($result_ano); 
            }
            //  Final da tag  select Ano inicial do Projeto
           echo "</td>";
@@ -521,7 +521,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
 			                       ." projeto where $year_ano   autor=".$autor_proj." order by numprojeto DESC ");
 			//
 		   if( ! $result2 ) {
-                mysql_free_result($result2);
+                mysqli_free_result($result2);
                 die('ERRO: Select projeto - falha: '.mysqli_error($_SESSION["conex"]));  
            }
 		     $m_linhas = mysqli_num_rows($result2);
@@ -553,7 +553,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
           ?>
           </select>
           <?php
-               mysql_free_result($result2); 
+               mysqli_free_result($result2); 
            }
            // Final do CIP/Projeto
           echo  "</td>";
@@ -574,7 +574,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
           if( strtoupper($source)=="PROJETO" ) { 
     		    $result=mysqli_query("SELECT  * FROM  projeto  where cip=".$m_array[0]);
                 if( ! $result ) {
-                     mysql_free_result($result);
+                     mysqli_free_result($result);
                      die('ERRO: Select $source - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
          }  elseif(  strtoupper($source)=="ANOTACAO"  ) { 
@@ -584,7 +584,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
                                    ." order by a.numero DESC ");
                 //
                 if( ! $result_anota ) {
-                     mysql_free_result($result_anota);
+                     mysqli_free_result($result_anota);
                      die('ERRO: Select rexp.projeto e anotacao - falha: '.mysqli_error($_SESSION["conex"]));  
                 }
                 //  $x_anot=mysql_result($result_anota,0,anotacao);
@@ -617,7 +617,7 @@ if( strtoupper($source)=="PROJETO" or strtoupper($source)=="ANOTACAO"  ) {
                    ?>
                     </select>
                    <?php
-                     mysql_free_result($result_anota);
+                     mysqli_free_result($result_anota);
                 }
           }    
 		 //  Pagina mostrando os dados 
@@ -645,8 +645,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
          AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 e de depois usa o  - html_entity_decode 
     */
-	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -699,26 +699,26 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	        ."  numprojeto=".$expnum." and  autor='$m_autor' and datainicio='$m_datainicio'  ");
 	$m_regs=mysqli_num_rows($result);
     if( $m_regs>=1 ) {
-           mysql_free_result($result);
+           mysqli_free_result($result);
           $msg_erro .= "&nbsp;Experimento com a mesma "
 		            ." data inicial (".$arr_nome_val[datainicio].") do Projeto Nr. $projeto".$msg_final;
           echo $msg_erro;
 		  exit();
     } elseif( ! $result ) {
-         mysql_free_result($result);
+         mysqli_free_result($result);
          die('ERRO: Select projeto - falha: '.mysqli_error($_SESSION["conex"]));  
 	} else {
           	$result=mysqli_query("SELECT  ciexp,autor,projeto FROM experimento WHERE "
 	               ."  projeto=".$expnum." and  autor='$m_autor'  ");
         	$m_regs=mysqli_num_rows($result);
 	        if( $m_regs>=1 ) {
-                  mysql_free_result($result);
+                  mysqli_free_result($result);
                   $msg_erro .= "&nbsp;J? existe Experimento com o mesmo Projeto Nr. $projeto e"
 		               ." Autor (".$m_autor.")".$msg_final;
                   echo $msg_erro;
 		          exit();
              } elseif( ! $result ) {
-                  mysql_free_result($result);
+                  mysqli_free_result($result);
                  die('ERRO: Select experimento - falha: '.mysqli_error($_SESSION["conex"]));  
          	} 
             //  Continuacao Tabela experimento - BD REXP
@@ -729,7 +729,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     	     $_SESSION["tabela"]="experimento";
              include("dados_recebidos_arq_ajax.php");  
     	     //  Verificando o numero de coresponsaveis/coautores
-			//  $_SESSION["campos_total"]=utf8_decode($_SESSION["campos_total"]); //  Total deu 186 caracteres
+			//  $_SESSION["campos_total"]=mb_convert_encoding($_SESSION["campos_total"], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 		  //  $_SESSION["campos_total"]=urldecode($_SESSION["campos_total"]);   //  Total deu 186 caracteres
           //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 	      //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  // Melhor  179
@@ -789,8 +789,8 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -804,11 +804,11 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
 	$result_usu=mysqli_query("SELECT   codigousp,nome  FROM  pessoa where codigousp='".$arr_nome_val[codigousp]."'  ") ;
 	if( ! $result_usu ) {
-          mysql_free_result($result_usu);	      
+          mysqli_free_result($result_usu);	      
 		  die("Falha erro no Select".mysqli_error($_SESSION["conex"]));
 	}
     $m_regs=mysqli_num_rows($result_usu);
-    mysql_free_result($result_usu);
+    mysqli_free_result($result_usu);
     if(  $m_regs>=1 ) {
            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val[codigousp]." j&aacute; est&aacute; cadastrado.".$msg_final;
            echo $msg_erro;
@@ -869,7 +869,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	  		  $_SESSION["tabela"]="pessoa";
     		  include("dados_recebidos_arq_ajax.php");  
 			  //
-			  //  $_SESSION["campos_total"]=utf8_decode($_SESSION["campos_total"]); //  Total deu 186 caracteres
+			  //  $_SESSION["campos_total"]=mb_convert_encoding($_SESSION["campos_total"], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 			  //  $_SESSION["campos_total"]=urldecode($_SESSION["campos_total"]);   //  Total deu 186 caracteres
               //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 			  //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  // Melhor  179
@@ -895,15 +895,15 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
                mysqli_query('end'); 
    			   mysqli_query('DELIMITER'); 
 		  }
-          mysql_free_result($sucess);		  
+          mysqli_free_result($sucess);		  
 	//  Final - Tabela pessoa 
 }  elseif( strtoupper($val)=="USUARIO" ) {
      //  Tabela usuario - BD PESSOAL
     /*	 
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
     */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
   /*   $msg_erro .= "&nbsp;-- USUARIO -->**  LINHA 187   --> \$source = $source  - \$val = $val <->  <br> ";
 	 $msg_erro .= "<br>  \$campo_nome = $campo_nome ";
      $msg_erro .= "<br> \$campo_value = $campo_value ";
@@ -920,7 +920,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	//  Verificando se nao existe Usuario com esse login  na Tabela usuario
     $result_usu = mysqli_query("SELECT   login  FROM  usuario where trim(login)='".$arr_nome_val[login]."'  ") ;
     $m_regs = mysqli_num_rows($result_usu);
-	mysql_free_result($result_usu);
+	mysqli_free_result($result_usu);
 	if(  $m_regs>=1 ) {
          $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." j&aacute; cadastrado.".$msg_final;
          echo $msg_erro;
@@ -929,7 +929,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	       //  Vericando se o Codigo/USP ja esta cadastrado  na Tabela usuario
 	      $result_usu=mysqli_query("SELECT  login,codigousp FROM usuario where codigousp='".$arr_nome_val[codigousp]."' ");
 		  $m_regs=mysqli_num_rows($result_usu);
-	      mysql_free_result($result_usu);
+	      mysqli_free_result($result_usu);
 	      if(  $m_regs>=1 ) {
 	            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val[codigousp]." j&aacute; est&aacute; cadastrado.".$msg_final;
                 echo $msg_erro;
@@ -952,7 +952,7 @@ if( strtoupper($val)=="EXPERIMENTO" ) {
 	  		  $_SESSION["tabela"]="usuario";
 			 include("dados_recebidos_arq_ajax.php");
              //	
-			 //  $_SESSION["campos_total"]=utf8_decode($_SESSION["campos_total"]); //  Total deu 186 caracteres
+			 //  $_SESSION["campos_total"]=mb_convert_encoding($_SESSION["campos_total"], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 			 //  $_SESSION["campos_total"]=urldecode($_SESSION["campos_total"]);   //  Total deu 186 caracteres
              //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 			 //  $_SESSION["campos_total"]=html_entity_decode(trim($_SESSION["campos_total"]));  //  179

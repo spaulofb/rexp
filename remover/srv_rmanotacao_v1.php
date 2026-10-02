@@ -65,7 +65,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sess?o pasta_raiz n�o est? ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sess?o pasta_raiz n�o est? ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -147,7 +147,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             if ( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
             } else {
                 $$xyz = explode($div_array_por,$_POST[$xyz]);   
             }
@@ -350,7 +350,7 @@ exit();
      ///
      ///  Verificando Anotacoes
      if( intval($nr_anotacao)<1  ) {
-          echo  utf8_decode("ERRO: Anota��o inv�lida.");
+          echo  mb_convert_encoding("ERRO: Anota��o inv�lida.", 'ISO-8859-1', 'UTF-8');
      } else {
          ///  Seleciona a Anotacao para Remover
          $sqlcmd = "SELECT a.cia, a.numero as nr, a.alteraant as altera_nr, a.autor as anotador, "
@@ -364,7 +364,7 @@ exit();
          $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
          ///
          if( ! $result_anotacao_rm ) {
-             if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
+             if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
              echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
          } else {
              ///
@@ -412,7 +412,7 @@ exit();
                   $_SESSION["anotador_codigousp"]=mysql_result($res_anotador,0,"codigousp");
                   $anotador_nome=mysql_result($res_anotador,0,"nome");
                   $anotador_categoria=mysql_result($res_anotador,0,"categoria");                    
-                  if( isset($res_anotador))  mysql_free_result($res_anotador);
+                  if( isset($res_anotador))  mysqli_free_result($res_anotador);
               }
               /// Final da Num_USP/Nome Autor/Anotador
               ///  Nome do Anotador do Projeto
@@ -494,7 +494,7 @@ exit();
             ///  include("testemunhas.php"); 
             echo "<span style='color: #FFFFFF; padding-top:0; vertical-align:text-top; ' >$test1_nome</span>";           
             ///
-            if( isset($result1) ) mysql_free_result($result1); 
+            if( isset($result1) ) mysqli_free_result($result1); 
             /// FINAL - Codigo da Testemunha (1) da realizacao 
          ?>  
     </div>  
@@ -521,7 +521,7 @@ exit();
           ///  include("testemunhas.php"); 
           echo "<span style='color: #FFFFFF;' >$test2_nome</span>";
           ///
-          if( isset($result) )  mysql_free_result($result); 
+          if( isset($result) )  mysqli_free_result($result); 
           /// FINAL - Codigo da Testemunha (2) da realizacao 
       ?>  
     </div>    
@@ -578,7 +578,7 @@ exit();
       ///  Verificando o
       if( intval($cia)<1 ) {
            /// Faltando cia
-           echo $funcoes->mostra_msg_erro(utf8_decode("Faltando a CIA (C�digo de Identifica��o da Anota��o)"));
+           echo $funcoes->mostra_msg_erro(mb_convert_encoding("Faltando a CIA (C�digo de Identifica��o da Anota��o)"), 'ISO-8859-1', 'UTF-8');
      } else {
           ///
           ///  Seleciona a Anotacao para Remover  -- MySQL/Select
@@ -592,7 +592,7 @@ exit();
           ///
           $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $result_anotacao_rm ) {
-               if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
+               if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
                echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
           } else {
                ///  Clicar o Formulario da Anotacao para ser excluida     
@@ -645,8 +645,6 @@ exit();
          $lnerro=0;
          $tabela="anotacao";
          $commit="commit";   
-         mysqli_query('DELIMITER &&'); 
-         mysqli_query('begin'); 
          //  Execute the queries          
          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          mysqli_query("LOCK TABLES $bd_2.$tabela  DELETE ");
@@ -662,10 +660,7 @@ exit();
          }    
          ///                  
          mysqli_query($commit);
-         mysqli_query("UNLOCK  TABLES");
          ///  Complete the transaction 
-         mysqli_query('end'); 
-         mysqli_query('DELIMITER');
          ///  Removido
          if( intval($lnerro)<1 ) {
               ////   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
@@ -675,7 +670,7 @@ exit();
               ///           
               $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
               if( ! $result_consult_anotacao ) {
-                    echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
+                    echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
                     exit();        
               }
               ///  Numero de Anotacoes 
@@ -684,8 +679,6 @@ exit();
                     $nanotacoes=$nanotacoes-1;
                     $tabela="projeto";
                     $commit="commit";   
-                    mysqli_query('DELIMITER &&'); 
-                    mysqli_query('begin'); 
                     //  Execute the queries          
                     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
                     mysqli_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
@@ -699,10 +692,7 @@ exit();
                     }    
                     ///                  
                     mysqli_query($commit);
-                    mysqli_query("UNLOCK  TABLES");
                     ///  Complete the transaction 
-                    mysqli_query('end'); 
-                    mysqli_query('DELIMITER');
                     ///
                     ///  Mensagem de aviso da remocao da Anotacao
                     $txt =  'Anota��o: '.$tit_anotacao.' removida era parte do Projeto: '.$tit_projeto;

@@ -8,7 +8,7 @@ if(!isset($_SESSION)) {
 //       Caso NAO exista criar - alterado em 20171031
 ****/
 if( ! isset($_SESSION["url_central"]) ) {
-    echo  utf8_decode("ERRO: falha grave sessão url_central não existe.");
+    echo  mb_convert_encoding("ERRO: falha grave sessão url_central não existe.", 'ISO-8859-1', 'UTF-8');
     exit();
 }
 $url_central = $_SESSION["url_central"];
@@ -101,7 +101,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temp_editar  -  20171121
     ***/   
     if( ! isset($_SESSION["table_remover"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_remover não definida."));    
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_remover não definida.", 'ISO-8859-1', 'UTF-8'));    
         exit();
     }
     ///  Tabela Temporaria
@@ -180,7 +180,7 @@ if( intval($total_regs)<=0 ) {
             /// if( $field_name_upper=='DETALHES' ) $text_align="center";
            if( $field_name_upper=='NA' or $field_name_upper=='CIA' ) $field_name="NA";
             if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
-            $campo_nome=utf8_decode(ucfirst($field_name));
+            $campo_nome=mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8');
             if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
                 echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
                     ."$campo_nome</th>";

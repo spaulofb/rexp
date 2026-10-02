@@ -77,7 +77,7 @@ if( intval($total_regs)<=0 ) {
     ////
     if( ! isset($_SESSION['table_rm_usu']) ) {
           ///  IMPORTANTE: usar utf8_decode na acentuacao
-          $msg_erro .= utf8_decode("&nbsp;Sessão inválida.").$msg_final;
+          $msg_erro .= mb_convert_encoding("&nbsp;Sessão inválida.", 'ISO-8859-1', 'UTF-8').$msg_final;
           echo $msg_erro;  
           exit();          
     }
@@ -86,7 +86,7 @@ if( intval($total_regs)<=0 ) {
     $strQuery="SELECT $campos_query from  $table_rm_usu  LIMIT $inicio,$maximo";  
     $query = mysqli_query($_SESSION["conex"],$strQuery);
     if( ! $query ) {
-        $msg_erro .=utf8_decode("Sem resultado - Select na tabela tempor&aacute;ria $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"]).$msg_final;  
+        $msg_erro .=mb_convert_encoding("Sem resultado - Select na tabela tempor&aacute;ria $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"], 'ISO-8859-1', 'UTF-8').$msg_final;  
         echo $msg_erro;
         exit();            
     }
@@ -108,7 +108,7 @@ if( intval($total_regs)<=0 ) {
      $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      ///
      if ( ! $result_max_length ) {
-          $msg_erro .=utf8_decode("Select maximo tamanho dos campos da tabela tempor&aacute;ria  $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"]).$msg_final;  
+          $msg_erro .=mb_convert_encoding("Select maximo tamanho dos campos da tabela tempor&aacute;ria  $table_rm_usu -&nbsp;db/mysql:&nbsp;").mysqli_error($_SESSION["conex"], 'ISO-8859-1', 'UTF-8').$msg_final;  
           echo $msg_erro;
          exit();                      
      }    

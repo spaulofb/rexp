@@ -91,7 +91,7 @@ if( $total_regs<=0 ) {
      $result_max_length = mysqli_query($_SESSION["conex"],$sqlcmd);          
      //
      if ( ! $result_max_length ) {
-          mysql_free_result($result_max_length);
+          mysqli_free_result($result_max_length);
           die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));                  
      }    
      $num_rows = mysqli_num_rows($query);

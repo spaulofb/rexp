@@ -9,7 +9,7 @@ if(!isset($_SESSION)) {
 //       Caso NAO exista criar - alterado em 20171031
 ****/
 if( ! isset($_SESSION["url_central"]) ) {
-    echo  utf8_decode("ERRO: falha grave sessão url_central não existe.");
+    echo  mb_convert_encoding("ERRO: falha grave sessão url_central não existe.", 'ISO-8859-1', 'UTF-8');
     exit();
 }
 $url_central = $_SESSION["url_central"];
@@ -85,7 +85,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temporaria  - 20180822
     ***/   
     if( ! isset($_SESSION["table_temporaria"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_temporaria não definida."));    
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_temporaria não definida."), 'ISO-8859-1', 'UTF-8');    
         exit();
     }
     $table_temporaria = $_SESSION["table_temporaria"];
@@ -198,7 +198,7 @@ if( intval($total_regs)<=0 ) {
                   $mpagina = $_SESSION["pagina"];
                   $cmdhtml = "<a href='#' onclick='javascript: $m_function(\"MOSTRAR\",\"$codpessoa\",\"$mpagina\"); return true;'  class='linkum'   "
                         ."  title='Clicar'  style='color:#000000; text-align: center; vertical-align:top; line-height:normal;' >";  
-                  $cmdhtml .=utf8_decode($valor)."</a>";
+                  $cmdhtml .=mb_convert_encoding($valor, 'ISO-8859-1', 'UTF-8')."</a>";
                   echo $cmdhtml;
                 ?>
                 </td>

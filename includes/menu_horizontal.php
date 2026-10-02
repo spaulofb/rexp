@@ -60,7 +60,7 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
 		 if ( is_array($m_horiz[$opcoes_pri])==1 ) {
 		     //  Sub-menu 1
              //  Alterado em 20171004 - utf8_decode
-			 //  $sub_menu1 = utf8_decode($m_horiz[$opcoes_pri][0]) ;
+			 //  $sub_menu1 = mb_convert_encoding($m_horiz[$opcoes_pri][0], 'ISO-8859-1', 'UTF-8') ;
              $sub_menu1 = $m_horiz[$opcoes_pri][0] ;
 			 $sub_menu1_count = count($m_horiz[$opcoes_pri]);
 		     echo  "<li class='otimizacaositesbuscai' >"
@@ -83,7 +83,7 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
                           //
 			  		      //  Sub-menu 2
                           //  Alterado em 20171004 - utf8_decode
-                  		  //  $sub_menu2 = utf8_decode($m_horiz[$opcoes_pri][$opcoes_submenu][0]);
+                  		  //  $sub_menu2 = mb_convert_encoding($m_horiz[$opcoes_pri][$opcoes_submenu][0], 'ISO-8859-1', 'UTF-8');
                           $sub_menu2 = $m_horiz[$opcoes_pri][$opcoes_submenu][0];
 			               $sub_menu2_count = count($m_horiz[$opcoes_pri][$opcoes_submenu]);
 						   echo  "<li class='otimizacaositesbuscai' >";
@@ -108,7 +108,7 @@ if( ! isset($_SESSION["function"]) ) $_SESSION["function"]="dochange";
 		 } elseif (is_array($m_horiz[$opcoes_pri])<1 ) { 
               //
               //  Alterado em 20171004 - utf8_decode
- 		      //  $m_sub = utf8_decode($m_horiz[$opcoes_pri]); 
+ 		      //  $m_sub = mb_convert_encoding($m_horiz[$opcoes_pri], 'ISO-8859-1', 'UTF-8'); 
               $m_sub = $m_horiz[$opcoes_pri]; 
               $m_sub = strtr($m_sub, $map);
  		       echo  "<li class='otimizacaositesbuscai'  >";

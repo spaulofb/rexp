@@ -235,7 +235,7 @@ exit();
             ///  if( $field_name_upper=='CIA' ) $field_name="CIA";
             if( $field_name_upper=='NA' ) $field_name="NA";
             if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
-            $campo_nome=utf8_decode(ucfirst($field_name));
+            $campo_nome=mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8');
             if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
                 echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
                     ."$campo_nome</th>";

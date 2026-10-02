@@ -34,14 +34,14 @@ $array_temp = explode(",",$campo_nome);
     Contando o numero de campos de dados recebidos
 ****/
 $count_array_temp = sizeof($array_temp);
-/// $campo_value = utf8_decode($campo_value);  
+/// $campo_value = mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8');  
 $campo_value = "{$campo_value}";  
 ///
 ///  $campo_value =  $campo_value; 
 $array_value = explode(",",$campo_value);
 ///
 ///  for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=html_entity_decode(trim($array_value[$w]));
-///  for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=utf8_decode(trim($array_value[$w]));
+///  for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=mb_convert_encoding(trim($array_value[$w]), 'ISO-8859-1', 'UTF-8');
 for( $w=0; $w<$count_array_temp; $w++ ) {
       $array_t_value[] = trim($array_value[$w]);   
 }
@@ -179,7 +179,7 @@ for( $i=0; $i<$count_array_temp; $i++ ) {
       $ar_tmp=trim(strtoupper($array_temp[$i]));
       if( preg_match("/M_FORNECEDOR|situacaoatual|m_botao_atributo/i",$ar_tmp) ) continue;
       $campos = $array_temp[$i];
- /////     $cpo_val = utf8_decode($array_t_value[$i]);
+ /////     $cpo_val = mb_convert_encoding($array_t_value[$i], 'ISO-8859-1', 'UTF-8');
       $cpo_val = $array_t_value[$i];
 	  $campos = (string) $campos;
       ///
@@ -198,7 +198,7 @@ $_SESSION["erro"] .= "ERRO: LINHA/151 - \$name_type[$campos] = {$name_type[$camp
            ///   alterado em 20191017
 	       ///  if( $name_type[$campos]=='string' ) {
            if( in_array(strtoupper($name_type[$campos]),$tx_array) ) {    
-                 ///  $cpo_val=utf8_decode($cpo_val);
+                 ///  $cpo_val=mb_convert_encoding($cpo_val, 'ISO-8859-1', 'UTF-8');
                  ///  clean_spaces - procedure para limpar espacos duplicados
                  $campos_val= "clean_spaces(\"$cpo_val\") ";
                  /****
@@ -273,7 +273,7 @@ $_SESSION["campos_valor"] = substr($campos_valor,0,strlen($campos_valor)-1);
 $cpo_nome=$_SESSION["campos_nome"];
 ////
 /****     ATUALIZADO  EM   20210217     ****/
-///  $cpo_valor = utf8_encode($_SESSION["campos_valor"]);
+///  $cpo_valor = mb_convert_encoding($_SESSION["campos_valor"], 'UTF-8', 'ISO-8859-1');
 $cpo_valor = "{$_SESSION["campos_valor"]}";
 ///
 if (isset($result_tabela)) {

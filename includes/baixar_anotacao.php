@@ -80,7 +80,7 @@ if( ! isset($_SESSION["arquivo_anotacao"]) ) {
    ///
    ///  IMPORTANTE: utf8_decode para acentuacao e simbolos - 20180730
    ///  $file = "{$_GET["file"]}";
-   $file = utf8_decode("{$_SESSION["arquivo_anotacao"]}");
+   $file = mb_convert_encoding("{$_SESSION["arquivo_anotacao"]}", 'ISO-8859-1', 'UTF-8');
    /// $caminho_arquivo="{$pasta}{$_GET["file"]}";
    $caminho_arquivo="{$pasta}{$file}";
    ///

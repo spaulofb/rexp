@@ -55,7 +55,7 @@ if( intval($n_erro)<1 )  {
     //
     //  HOST mais a pasta principal do site - host_pasta
     if( ! isset($_SESSION["host_pasta"]) ) {
-         $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+         $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
          echo $msg_erro;
          exit();
     }  
@@ -158,7 +158,7 @@ $php_errormsg='';
 $pagina_local=$_SESSION["protocolo"]."://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 //
 //  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]= utf8_decode("Registro de Anotação") ;
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]= mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8') ;
 //
 // $_SESSION['time_exec']=180000;
 ///

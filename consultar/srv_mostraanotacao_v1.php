@@ -54,7 +54,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 //  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 //  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sessão pasta_raiz não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão pasta_raiz não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -141,7 +141,7 @@ exit();
             if( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                /// $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
                  $$xyz = trim($_POST[$xyz]); 
             } else {
                 $$xyz = explode($div_array_por,$_POST[$xyz]);  
@@ -192,17 +192,17 @@ exit();
     } 
     ////
     /// Arquivo da Anotacao do Projeto - 20180913
-    $val = utf8_decode(trim($val)); 
+    $val = mb_convert_encoding(trim($val), 'ISO-8859-1', 'UTF-8'); 
     $arquivo = trim($val);
    ///  $arquivo = trim($arq_anotacao);
     
-////  $dir_arq=utf8_decode("{$pasta}$arquivo"); 
+////  $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8'); 
     $dir_arq="{$pasta}{$arquivo}";
-    ///  $dir_arq=utf8_decode("{$pasta}$arquivo");
+    ///  $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8');
     
     ///  Funcionando 100%    
     ///  $resultado=@file_exists("{$pasta}".preg_replace('\\','',$arquivo));
-    ////  $resultado=@file_exists(utf8_decode("{$pasta}$arquivo"));
+    ////  $resultado=@file_exists(mb_convert_encoding("{$pasta}$arquivo"), 'ISO-8859-1', 'UTF-8');
     $resultado=file_exists("$dir_arq");
     if( ! $resultado ) {
          /* $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
@@ -212,7 +212,7 @@ exit();
     }  else {
         ///  SESSIONs para diretorio e arquivo - Anotacao do Projeto
         ///  echo $pasta."%".$arquivo;  
-        $_SESSION["arquivo_anotacao"]=utf8_encode($arquivo);
+        $_SESSION["arquivo_anotacao"]=mb_convert_encoding($arquivo, 'UTF-8', 'ISO-8859-1');
         $_SESSION["pasta_arq_anotacao"]=$pasta;
         ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_anotacao"]}%#sepa%#rar%#{$_SESSION["arquivo_anotacao"]}"; 
@@ -232,7 +232,7 @@ if( $opcao_maiusc=="BUSCA_PROJ" )  {
       $result_consult_anotacao = $conex->query($sqlcmd);
       if( ! $result_consult_anotacao ) {
             //
-            $merr="Selecionando ".utf8_decode("Anotação");
+            $merr="Selecionando ".mb_convert_encoding("Anotação", 'ISO-8859-1', 'UTF-8');
             $merr.=" na tabela  -&nbsp;db/mysqli:&nbsp;";
             echo $funcoes->mostra_msg_erro("$merr".mysqli_error($_SESSION["conex"]));            
             exit();        
@@ -479,7 +479,7 @@ exit();
      //
      /**  Desativa variavel  */
      if( isset($resultado_projeto) ) {
-           //  mysql_free_result($resultado_projeto);     
+           //  mysqli_free_result($resultado_projeto);     
            unset($resultado_projeto);     
      } 
      /**  Final - if( isset($resultado_projeto) ) {   */

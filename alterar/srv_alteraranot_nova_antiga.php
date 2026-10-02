@@ -93,7 +93,7 @@ if( $opcao_maiusc=="DESCARREGAR" or $opcao_maiusc=="SUBSTITUIR"  )  {
             if ( $pos1 === false ) {
                 //  $$xyz=trim($_POST[$xyz]);
                 //   Para acertar a acentuacao - utf8_encode
-                $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
             } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
         }
     }    
@@ -573,7 +573,7 @@ if( $opcao_maiusc=="TODOS" )  {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     mysql_free_result($resultado_projeto);     
+     mysqli_free_result($resultado_projeto);     
       /*    
       a.numero as nr, a.alteraant as Altera, alteradapn as Alterada, "
                  ." a.titulo as T?tulo, b.nome as Autor, c.titulo as projeto_titulo,  "
@@ -608,7 +608,7 @@ if( $opcao_maiusc=="TODOS" )  {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     mysql_free_result($resultado_anotacao);
+     mysqli_free_result($resultado_anotacao);
      //  Selecionando os Nomes das Testemunhas da ANOTACAO
      if( strlen(trim($testemunha1))>=1 or strlen(trim($testemunha2))>=1  ) {
          if( strlen(trim($testemunha1))>=1 and strlen(trim($testemunha2))>=1 ) {
@@ -711,9 +711,7 @@ if( $opcao_maiusc=="SUBMETER"  )  {
 */  
      $n_erro=0;
      //  START a transaction - ex. procedure    
-     mysqli_query('DELIMITER &&'); 
      $commit = "commit";
-     mysqli_query('begin'); 
      //  Execute the queries 
      //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
      //   - Use mysql_select_db() ou mysqli_query()
@@ -755,9 +753,6 @@ if( $opcao_maiusc=="SUBMETER"  )  {
            }      
      }  // Final do IF success                   
      mysqli_query($commit);
-     mysqli_query("UNLOCK  TABLES");
-     mysqli_query('end'); 
-     mysqli_query('DELIMITER');
      //  Correto para comparar tem que ser com  == 
     /*
            if( $n_erro==1 ) {

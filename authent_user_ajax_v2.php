@@ -244,7 +244,7 @@ if( ! isset($permit_pa)  ) {
     /**   Verifica se a SESSION email_usuario foi enviada pelo arquivo verificando.php  */ 
     $num_erros=0;
     if( ! $_SESSION["email_usuario"] ) {
-         $msg_erro .= utf8_decode("SESSION email_usuario indefinida. Consulte administrador.").$msg_final;   
+         $msg_erro .= mb_convert_encoding("SESSION email_usuario indefinida. Consulte administrador.", 'ISO-8859-1', 'UTF-8').$msg_final;   
          $num_erros=1;
     }  
     /**   Final - if( ! $_SESSION["email_usuario"] ) {  */
@@ -252,7 +252,7 @@ if( ! isset($permit_pa)  ) {
     ///  Pesquisando o email do usuario
     $email=$_SESSION["email_usuario"];
     if( strpos($email,'@')===false ) {
-         $msg_erro .= utf8_decode("Esse usuário não contém email cadastrado. Consulte administrador.").$msg_final;   
+         $msg_erro .= mb_convert_encoding("Esse usuário não contém email cadastrado. Consulte administrador.", 'ISO-8859-1', 'UTF-8').$msg_final;   
          $num_erros=2;
     } 
     /**   Final - if( strpos($email,'@')===false ) { */

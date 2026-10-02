@@ -71,7 +71,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temporaria  -  20180810
     ***/   
     if( ! isset($_SESSION["table_consultar_anotacao"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_anotacao não definida."));
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_consultar_anotacao não definida."), 'ISO-8859-1', 'UTF-8');
         exit();
     }
     $table_temporaria = $_SESSION["table_consultar_anotacao"];
@@ -162,7 +162,7 @@ if( intval($total_regs)<=0 ) {
             ///  if( $field_name_upper=='CIA' ) $field_name="CIA";
             if( $field_name_upper=='NA' ) $field_name="NA";
             if(  in_array($field_name_upper,$cabecalho_array) ) $text_align="center";
-            $campo_nome=utf8_decode(ucfirst($field_name));
+            $campo_nome=mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8');
             if( preg_match("/^Nr{1}$|^N$|^NA$|^Np{1}$|^NUM$|^CIP$/i",$field_name) ) {
                 echo "<th  class='font_size_family' style='text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;' >"
                     ."$campo_nome</th>";

@@ -35,7 +35,7 @@ for( $i=0; $i<$count_post_array; $i++ ) {
            ///  $$xyz=trim($_POST[$xyz]);
            ///   Para acertar a acentuacao - utf8_encode
            if( is_string($_POST[$xyz]) ) {
-                /// $$xyz = utf8_decode(trim($_POST[$xyz]));     
+                /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');     
                $$xyz = trim($_POST[$xyz]);     
            } else if( is_array($_POST[$xyz]) ) {               
                $$xyz = $_POST[$xyz];
@@ -1003,19 +1003,17 @@ if( is_array($data) ) {
           
         ///
         ///    MELHOR MANEIRA DE ENVIAR DADOS DO PHP PARA MYSQL -  UTF8_DECODE  - //  IMPORTANTE 2013
-        ///  $codigo = utf8_decode($codigo);
-        ///   $descricao =utf8_decode($descricao);
+        ///  $codigo = mb_convert_encoding($codigo, 'ISO-8859-1', 'UTF-8');
+        ///   $descricao =mb_convert_encoding($descricao, 'ISO-8859-1', 'UTF-8');
         ///
         ///  START  a transaction - ex. procedure    
-        mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
         $commit="commit";
-        mysqli_query($_SESSION["conex"],'begin'); 
         ///
         ///  Execute the queries 
         ///  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
         ///  mysqli_db_query - Esta funcao esta obsoleta, nao use esta funcao 
         ///   - Use mysqli_select_db() ou mysqli_query()
-        mysqli_query($_SESSION["conex"],"LOCK TABLES  {$_SESSION["bd_1"]}.$data[0] UPDATE");
+        true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
         ///
         ///  Alterando dados na Tabela pessoal
         /****  $success=mysqli_query("UPDATE $data[0] SET $nome_campo_1=clean_spaces('$valor_campo_1'), "
@@ -1038,10 +1036,7 @@ if( is_array($data) ) {
         }
         /*!40000 ALTER TABLE  ENABLE KEYS */;
         mysqli_query($_SESSION["conex"],$commit);
-        mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
         ///  Complete the transaction 
-        mysqli_query($_SESSION["conex"],'end'); 
-        mysqli_query($_SESSION["conex"],'DELIMITER');
         ///
         exit();
         ///

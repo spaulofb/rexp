@@ -599,7 +599,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                   </select>
               </span>
               <?php
-                  mysql_free_result($result); 
+                  mysqli_free_result($result); 
               }
               // FINAL - Categoria
           ?>  
@@ -615,7 +615,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
               include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");                    
               $result=mysqli_query("SELECT codigo,descricao FROM rexp.pa order by codigo ");
               if ( ! $result ) {
-                   mysql_free_result($result);
+                   mysqli_free_result($result);
                    die("ERRO: Select Tabela pa - ".mysqli_error($_SESSION["conex"]));
               }              
           ?>
@@ -637,7 +637,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
                   </select>
               </span>
               <?php
-                  mysql_free_result($result); 
+                  mysqli_free_result($result); 
               }
               // FINAL - PA
           ?>  
@@ -658,7 +658,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
 				//  $result=mysql_db_query($db_array[$elemento],"SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 $result=mysqli_query("SELECT sigla,nome FROM $bd_1.instituicao order by nome ");
                 if ( ! $result ) {
-                     mysql_free_result($result);
+                     mysqli_free_result($result);
                      $msg_erro  .= "Select Tabela instituicao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
                      echo  $msg_erro;
                      exit();                    
@@ -683,7 +683,7 @@ $vars_ambiente=$_SESSION["VARS_AMBIENTE"];
 	              </select>
 	               </span>
 					<?php
-                    mysql_free_result($result); 
+                    mysqli_free_result($result); 
                   }
  				  // Final da Unidade
 				  ?>

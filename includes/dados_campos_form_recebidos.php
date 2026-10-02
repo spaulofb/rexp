@@ -21,8 +21,8 @@ if( preg_match("/\bweb\b/i",$cpo_final) ) {
     $campo_nome = substr($campo_nome,0,strpos($campo_nome,",$cpo_final"));      
 }
 //
-//  $campo_nome = htmlentities(utf8_decode($campo_nome));
-//  $campo_value = htmlentities(utf8_decode($campo_value));
+//  $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+//  $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 
 
 //  $campo_nome = substr($campo_nome,0,strlen($campo_nome)-1);      
@@ -32,7 +32,7 @@ $array_temp = explode(",",$campo_nome);
 $count_array_temp = sizeof($array_temp); 
 $array_value = explode(",",$campo_value);
 // for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=html_entity_decode(trim($array_value[$w]));
-for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=utf8_decode(trim($array_value[$w]));
+for( $w=0; $w<$count_array_temp; $w++ ) $array_t_value[]=mb_convert_encoding(trim($array_value[$w]), 'ISO-8859-1', 'UTF-8');
 //  $array_t_value=utf8_decode_all($array_value);
 //  $array_t_value[]=html_entity_decode(trim($array_value[$w]));
 for( $i=0; $i<$count_array_temp; $i++ ) $arr_nome_val[$array_temp[$i]]=$array_t_value[$i];
@@ -100,7 +100,7 @@ for( $i=0; $i<$count_array_temp; $i++ ) {
 	  } else  {
 	       // Verificando o Tipo do Campo da Tabela
 	       if( $name_type[$campos]=='string' ) {
-              //  $cpo_val=utf8_decode($cpo_val);
+              //  $cpo_val=mb_convert_encoding($cpo_val, 'ISO-8859-1', 'UTF-8');
               //  clean_spaces - procedure para limpar espacos duplicados
               $campos_val= "clean_spaces('$cpo_val') ";
               //
@@ -143,7 +143,7 @@ for( $i=0; $i<$count_array_temp; $i++ ) {
 $_SESSION["campos_nome"] = substr($campos_nome,0,strlen($campos_nome)-1);
 $_SESSION["campos_valor"] = substr($campos_valor,0,strlen($campos_valor)-1);
 //	
-//  $_SESSION[campos_total]=utf8_decode($_SESSION[campos_total]); //  Total deu 186 caracteres
+//  $_SESSION[campos_total]=mb_convert_encoding($_SESSION[campos_total], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 //  $_SESSION[campos_total]=urldecode($_SESSION[campos_total]);   //  Total deu 186 caracteres
 //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  //  179
@@ -152,6 +152,6 @@ $_SESSION["campos_valor"]=html_entity_decode(trim($_SESSION["campos_valor"]));  
 $cpo_nome=$_SESSION["campos_nome"];
 $cpo_valor= $_SESSION["campos_valor"];
 //
-if( isset($result_tabela) ) mysql_free_result($result_tabela);
+if( isset($result_tabela) ) mysqli_free_result($result_tabela);
 //
 ?>

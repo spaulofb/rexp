@@ -244,7 +244,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
  	     if( $pos1 === false ) {
     	     //  $$xyz=trim($_POST[$xyz]);
 	    	 //   Para acertar a acentuacao - utf8_encode
-             $$xyz = utf8_decode(trim($_POST[$xyz])); 
+             $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
     	 } else {
              $$xyz = explode($div_array_por,$_POST[$xyz]);  
          }
@@ -255,7 +255,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 /**  Final - for( $i=0; $i<count($post_array); $i++ ) {  */
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( ! isset($val) ) $val="";
 if( strtoupper($val)=="SAIR" ) {
       $source=$val;  
@@ -1037,8 +1037,8 @@ if( $val_upper=="PESSOAL" ) {
      *    Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 	 *	 OU para MYSQL  tem que ser html_entity_decode
      */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1086,7 +1086,7 @@ if( $val_upper=="PESSOAL" ) {
                //  $novo_chefe=stringParaBusca2($array_t_value[$i]);
                $novo_chefe=trim($array_t_value[$i]);
                $novo_chefeHTML=trim($array_t_value[$i]);
-               //  $descricao =utf8_decode($novo_chefe);
+               //  $descricao =mb_convert_encoding($novo_chefe, 'ISO-8859-1', 'UTF-8');
                break;  
          }
          /**  Final - if( $arrtmpup=="NOVO_CHEFE" ) {  */
@@ -1431,8 +1431,6 @@ if( $val_upper=="PESSOAL" ) {
                  */
                  //  START a transaction - ex. procedure    
                  $commit="commit";
-                 mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
-                 mysqli_query($_SESSION["conex"],'begin'); 
                  //
                  //      Execute the queries 
                  //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
@@ -1457,10 +1455,7 @@ if( $val_upper=="PESSOAL" ) {
                  //              
                  /*!40000 ALTER TABLE  ENABLE KEYS */
                  mysqli_query($_SESSION["conex"],$commit);
-                 mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
                  //  Complete the transaction 
-                 mysqli_query($_SESSION["conex"],'end'); 
-                 mysqli_query($_SESSION["conex"],'DELIMITER');
                  //
                  //  SLEEP - tempo de espera em segundos
                  sleep(1);
@@ -1512,8 +1507,8 @@ if( $val_upper=="PESSOAL" ) {
          /**  Final - if( isset($novo_chefe) ) { */
          //
          //  SESSION abaixo para ser usada no INCLUDE - organiza dados com a Tabela
-         $campo_nome = htmlentities(utf8_decode($campo_nome));
-         $campo_value = htmlentities(utf8_decode($campo_value));
+         $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+         $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
          $array_temp = explode(",",$campo_nome);
          $array_t_value = explode(",",$campo_value);
          $cntarrtmp = sizeof($array_temp);
@@ -1530,8 +1525,8 @@ if( $val_upper=="PESSOAL" ) {
      /**  SESSION abaixo para ser usada no INCLUDE - organiza dados com a Tabela  */
          
      /**
-     $campo_nome = htmlentities(utf8_decode($campo_nome));
-     $campo_value = htmlentities(utf8_decode($campo_value));
+     $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+     $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
      $array_temp = explode(",",$campo_nome);
      $array_t_value = explode(",",$campo_value);
      $cntarrtmp = sizeof($array_temp);
@@ -1557,8 +1552,6 @@ if( $val_upper=="PESSOAL" ) {
          
      //   
      //  Start a transaction - ex. procedure               
-     mysqli_query($conex,'DELIMITER &&'); 
-     mysqli_query($conex,'begin'); 
      /**  mysqli_query($conex,"LOCK TABLES $bd_1.pessoa WRITE ");  */
      mysqli_query($conex,"LOCK TABLES $bd_1.pessoa INSERT "); 
      //
@@ -1601,17 +1594,12 @@ exit();
          //
      }
      // 
-     mysqli_query($conex,"UNLOCK  TABLES");
-     mysqli_query($conex,'end'); 
-     mysqli_query($conex,'DELIMITER'); 
      //
           /**
            if( intval($n_erro)<1 ) {       
                 ///   Incluir novo chefe na Tabela Pessoa
                 if( isset($novo_chefe) ) {
                        ///  Start a transaction - ex. procedure               
-                       mysqli_query('DELIMITER &&'); 
-                       mysqli_query('begin'); 
                        mysqli_query("LOCK TABLES $bd_1.pessoa WRITE ");
                        ///
                        $success=mysqli_query("update $bd_1.pessoa set chefe=$chefecodusp  WHERE codigousp=$codigousp "); 
@@ -1623,9 +1611,6 @@ exit();
                            $msg_erro .="&nbsp;Chefe n&atilde;o foi cadastrado.".$msg_final;
                            echo $msg_erro;         
                        } 
-                       mysqli_query("UNLOCK  TABLES");
-                       mysqli_query('end'); 
-                       mysqli_query('DELIMITER'); 
                        ///
                 }    
            } 

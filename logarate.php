@@ -196,7 +196,7 @@ include("includes/menu_horizontal.php");
         </table>
         <?php
           /// Desativando variavel 
-         if( isset($resultado_pa) )  mysql_free_result($resultado_pa);
+         if( isset($resultado_pa) )  mysqli_free_result($resultado_pa);
          ///   
          ///     
     } else if( intval($regs)==1 ) {

@@ -73,7 +73,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temporaria  -  20180810
     ***/   
     if( ! isset($_SESSION['table_consultar_projeto']) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_consultar_projeto não definida."));
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_consultar_projeto não definida."), 'ISO-8859-1', 'UTF-8');
         exit();
     }
     $table_temporaria = $_SESSION['table_consultar_projeto'];
@@ -174,7 +174,7 @@ if( intval($total_regs)<=0 ) {
                   $procedimento=" text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;";                        
              }    
              echo "<th class='font_size_family' style=\"$procedimento\" >";                 
-             echo   utf8_decode(ucfirst($field_name))."</th>";             
+             echo   mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8')."</th>";             
          }
     }
     echo "</tr>";

@@ -70,7 +70,7 @@ if( ! isset($_SESSION["titulo_cabecalho"]) ) {
      //
      $ra="Registro de Anotação";
      if( function_exists('utf8_decode') ) {
-         $_SESSION["titulo_cabecalho"]=utf8_decode("$ra");
+         $_SESSION["titulo_cabecalho"]=mb_convert_encoding("$ra", 'ISO-8859-1', 'UTF-8');
      } else {
          $_SESSION["titulo_cabecalho"] = mb_convert_encoding($ra, 'ISO-8859-1', 'UTF-8');
       }
@@ -634,7 +634,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                $sem_projeto = mb_convert_encoding($sem_projeto, 'ISO-8859-1', 'UTF-8');
            } elseif ( function_exists('utf8_decode') ) {
                // fallback para PHP < 8.2 (legado)
-              $sem_projeto = @utf8_decode($sem_projeto);  // @ suprime deprecation
+              $sem_projeto = @mb_convert_encoding($sem_projeto, 'ISO-8859-1', 'UTF-8');  // @ suprime deprecation
            }
            //
            $nerro=0;
@@ -774,7 +774,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                                       $codigo_caracter=mb_detect_encoding($titulo_projeto);
                                       /// if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
                                            ////  echo  htmlentities($titulo_projeto)."&nbsp;&nbsp;</option>";   
-                                          ///// echo  utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
+                                          ///// echo  mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";   
                                            echo  $titulo_projeto."&nbsp;&nbsp;</option>";   
                                           /**
                                       } else {
@@ -791,7 +791,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                             *   Desativar variavel 
                             */
                            if( isset($result_projeto) )  {
-                                 //  mysql_free_result($result_projeto); 
+                                 //  mysqli_free_result($result_projeto); 
                                  unset($result_projeto);   
                            }  
                            //   

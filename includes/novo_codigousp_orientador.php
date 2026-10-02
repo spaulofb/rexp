@@ -9,7 +9,7 @@ $codigousp = strlen(trim($codigousp))>0 ? $codigousp : 0;
 if ( $codigousp==0 ) {
         $result=mysqli_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
         if( ! $result ) {
-            mysql_free_result($result);          
+            mysqli_free_result($result);          
             $msg_erro .= "Falha erro no Select/Atribuir codigoUSP".mysqli_error($_SESSION["conex"]).$msg_final;
             echo $msg_erro;
             exit();
@@ -18,7 +18,7 @@ if ( $codigousp==0 ) {
         if( $m_regs>0 ) $codigo_prx = mysql_result($result,0,'codigo_ult');
         if ( ! isset($codigo_prx) )  $codigo_prx = 0;
         $codigo_prx += -1;
-        mysql_free_result($result);
+        mysqli_free_result($result);
         $codigousp = (int) $codigo_prx;
         $_SESSION["codigousp_novo"] = $codigousp;
         if( isset($i_codigo) ) {
@@ -32,13 +32,13 @@ if ( $codigousp==0 ) {
 } else {
     $result_usu=mysqli_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$codigousp) ;
     if( ! $result_usu ) {
-         mysql_free_result($result_usu);          
+         mysqli_free_result($result_usu);          
          $msg_erro .= "Falha no Select pessoa campo codigousp - ".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;     
          exit();
     }
     $m_regs=mysqli_num_rows($result_usu);
-    mysql_free_result($result_usu);
+    mysqli_free_result($result_usu);
      if( $m_regs>=1 ) {
          $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$codigousp." j&aacute; est&aacute; cadastrado.".$msg_final;
          echo $msg_erro;

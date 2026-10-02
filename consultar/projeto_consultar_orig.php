@@ -91,7 +91,7 @@ if( isset($_SESSION["usuario_conectado"]) ) {
 //
 //  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-     $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+     $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 } 
 // $_SESSION['time_exec']=180000;
 //
@@ -672,7 +672,7 @@ if( intval($nprojetos)<1 ) {
           $codigo_caracter=mb_detect_encoding($titulo_projeto);
           /// if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
                ////  echo  htmlentities($titulo_projeto)."&nbsp;&nbsp;</option>";   
-               ///  echo  utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
+               ///  echo  mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";   
                echo  $titulo_projeto."&nbsp;&nbsp;</option>";   
               /**
           } else {
@@ -685,7 +685,7 @@ if( intval($nprojetos)<1 ) {
    //     
    //  Desativar variavel $rst_cons_proj   
    if( isset($rst_cons_proj) )  {
-        //   mysql_free_result($rst_cons_proj); 
+        //   mysqli_free_result($rst_cons_proj); 
         unset($rst_cons_proj);   
    } 
    //

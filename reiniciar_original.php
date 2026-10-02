@@ -71,7 +71,7 @@ if( intval($n_erro)<1 )  {
     ///
     ///  HOST mais a pasta principal do site - host_pasta
     if( ! isset($_SESSION["host_pasta"]) ) {
-         $msg_erro .= utf8_decode("SESSION host_pasta desativada.").$msg_final;  
+         $msg_erro .= mb_convert_encoding("SESSION host_pasta desativada.", 'ISO-8859-1', 'UTF-8').$msg_final;  
          echo $msg_erro;
          exit();
     }
@@ -86,7 +86,7 @@ if( intval($n_erro)<1 )  {
         /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
         ///  Verificando SESSION  pasta_raiz
         if( ! isset($_SESSION["pasta_raiz"]) ) {
-             $msg_erro .= utf8_decode("SESSION pasta_raiz desativada.").$msg_final;  
+             $msg_erro .= mb_convert_encoding("SESSION pasta_raiz desativada.", 'ISO-8859-1', 'UTF-8').$msg_final;  
              echo $msg_erro;
              exit();
         }

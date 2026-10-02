@@ -66,7 +66,7 @@ $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["
 //
 //  Titulo do Cabecalho - Topo
 if( ! isset($_SESSION["titulo_cabecalho"]) ) {
-    $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+    $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 } 
 // $_SESSION['time_exec']=180000;
 //
@@ -625,7 +625,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
          //  $elemento=5; $elemento2=6;
          //  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");            
   //     include("php_include/ajax/includes/conectar.php");            
-           $sem_projeto=utf8_decode("Esse {$_SESSION["usuario_pa_nome"]} n&atilde;o tem Projeto para adicionar Anotador.");
+           $sem_projeto=mb_convert_encoding("Esse {$_SESSION["usuario_pa_nome"]} n&atilde;o tem Projeto para adicionar Anotador.", 'ISO-8859-1', 'UTF-8');
            //
            $nerro=0;
            # IMPORTANTE: Aqui esta o segredo
@@ -763,7 +763,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                                       $codigo_caracter=mb_detect_encoding($titulo_projeto);
                                       /// if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
                                            ////  echo  htmlentities($titulo_projeto)."&nbsp;&nbsp;</option>";   
-                                          ///// echo  utf8_decode($titulo_projeto)."&nbsp;&nbsp;</option>";   
+                                          ///// echo  mb_convert_encoding($titulo_projeto, 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";   
                                            echo  $titulo_projeto."&nbsp;&nbsp;</option>";   
                                           /**
                                       } else {
@@ -776,7 +776,7 @@ if( ( $permit_pa>$array_pa['super'] and $permit_pa<=$array_pa['orientador'] ) ) 
                            ?>
                            </select>
                           <?php 
-                           if( isset($result_projeto) ) mysql_free_result($result_projeto); 
+                           if( isset($result_projeto) ) mysqli_free_result($result_projeto); 
                             ///   
                        }
                        ///

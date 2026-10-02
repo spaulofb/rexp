@@ -25,7 +25,7 @@ $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
 } else {
-    echo  utf8_decode("ERRO: Sessão incluir_arq não está ativa.");
+    echo  mb_convert_encoding("ERRO: Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8');
     exit();
 }
 ///
@@ -202,7 +202,7 @@ if( intval($total_regs)<=0 ) {
                     $procedimento=" text-align: $text_align; background-color: #00FF00; border: 1px solid #000000;";                        
                }   
                echo  "<th class=\"font_size_family\" style=\"$procedimento\" >";
-               echo  utf8_decode(ucfirst($field_name))."</th>";             
+               echo  mb_convert_encoding(ucfirst($field_name), 'ISO-8859-1', 'UTF-8')."</th>";             
              ///       
           }
      }

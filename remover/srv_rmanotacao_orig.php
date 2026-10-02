@@ -134,7 +134,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             if ( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
             } else {
                 $$xyz = explode($div_array_por,$_POST[$xyz]);   
             }
@@ -170,7 +170,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
       ///           
       $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $result_consult_anotacao ) {
-            echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
+            echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
             exit();        
       }
       ///  Numero de Anotacoes 
@@ -328,7 +328,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
          ///
          if( ! $result_anotacao_rm ) {
-             if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
+             if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
              echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
          } else {
              ///
@@ -376,7 +376,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                   $_SESSION["anotador_codigousp"]=mysql_result($res_anotador,0,"codigousp");
                   $anotador_nome=mysql_result($res_anotador,0,"nome");
                   $anotador_categoria=mysql_result($res_anotador,0,"categoria");                    
-                  if( isset($res_anotador))  mysql_free_result($res_anotador);
+                  if( isset($res_anotador))  mysqli_free_result($res_anotador);
               }
               /// Final da Num_USP/Nome Autor/Anotador
               ///  Nome do Anotador do Projeto
@@ -458,7 +458,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             ///  include("testemunhas.php"); 
             echo "<span style='color: #FFFFFF; padding-top:0; vertical-align:text-top; ' >$test1_nome</span>";           
             ///
-            if( isset($result1) ) mysql_free_result($result1); 
+            if( isset($result1) ) mysqli_free_result($result1); 
             /// FINAL - Codigo da Testemunha (1) da realizacao 
          ?>  
     </div>  
@@ -485,7 +485,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           ///  include("testemunhas.php"); 
           echo "<span style='color: #FFFFFF;' >$test2_nome</span>";
           ///
-          if( isset($result) )  mysql_free_result($result); 
+          if( isset($result) )  mysqli_free_result($result); 
           /// FINAL - Codigo da Testemunha (2) da realizacao 
       ?>  
     </div>    
@@ -556,7 +556,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           ///
           $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $result_anotacao_rm ) {
-               if( isset($result_anotacao_rm) ) mysql_free_result($result_anotacao_rm);
+               if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
                echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
           } else {
                ///  Clicar o Formulario da Anotacao para ser excluida     
@@ -609,8 +609,6 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          $lnerro=0;
          $tabela="anotacao";
          $commit="commit";   
-         mysqli_query('DELIMITER &&'); 
-         mysqli_query('begin'); 
          //  Execute the queries          
          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          mysqli_query("LOCK TABLES $bd_2.$tabela  DELETE ");
@@ -626,10 +624,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          }    
          ///                  
          mysqli_query($commit);
-         mysqli_query("UNLOCK  TABLES");
          ///  Complete the transaction 
-         mysqli_query('end'); 
-         mysqli_query('DELIMITER');
          ///  Removido
          if( intval($lnerro)<1 ) {
               ////   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
@@ -639,7 +634,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
               ///           
               $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
               if( ! $result_consult_anotacao ) {
-                    echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
+                    echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
                     exit();        
               }
               ///  Numero de Anotacoes 
@@ -648,8 +643,6 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                     $nanotacoes=$nanotacoes-1;
                     $tabela="projeto";
                     $commit="commit";   
-                    mysqli_query('DELIMITER &&'); 
-                    mysqli_query('begin'); 
                     //  Execute the queries          
                     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
                     mysqli_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
@@ -663,10 +656,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
                     }    
                     ///                  
                     mysqli_query($commit);
-                    mysqli_query("UNLOCK  TABLES");
                     ///  Complete the transaction 
-                    mysqli_query('end'); 
-                    mysqli_query('DELIMITER');
                     ///
                     ///  Mensagem de aviso da remocao da Anotacao
                     $txt =  'Anotação: '.$tit_anotacao.' removida era parte do Projeto: '.$tit_projeto;

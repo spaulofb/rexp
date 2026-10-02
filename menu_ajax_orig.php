@@ -69,7 +69,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if( $pos1 === false ) {
 	       ///  $$xyz=trim($_POST[$xyz]);
 		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);  
        } 
@@ -77,7 +77,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//  $source = utf8_decode($source); $val = utf8_decode($val);
+//  $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8');
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -198,7 +198,7 @@ if( $source_maiusc=="LOGAR" ) {
         </table>
         <?php
           /// Desativando variavel 
-         if( isset($resultado_pa) )  mysql_free_result($resultado_pa);
+         if( isset($resultado_pa) )  mysqli_free_result($resultado_pa);
          ///     
     } else if( intval($regs)==1 ) {
          /*  Caso o total seja zero sair com exit() 

@@ -145,7 +145,7 @@ if( isset($_POST['fileframe']) ) {
       $projeto_autor=mysql_result($select_numprojeto,0,"autor");
       $numprojeto=$_SESSION["numprojeto"];
       /// 
-      if( isset($select_numprojeto) ) mysql_free_result($select_numprojeto);      
+      if( isset($select_numprojeto) ) mysqli_free_result($select_numprojeto);      
       $_SESSION["result"]='OK'; $erros="";
       $_SESSION["display_arq"]='block';
       /** Conjunto de arquivos - ver tamanho total dos arquivos ***/

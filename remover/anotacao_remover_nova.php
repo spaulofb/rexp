@@ -69,7 +69,7 @@ echo "<p>anotacao_remover_nova/67  -- \$permit_pa = $permit_pa  </p>";
 
 ///
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 /// $_SESSION['time_exec']=180000;
 ///
 ///  INCLUINDO CLASS - 
@@ -503,7 +503,7 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
               echo "<option  value=".$linha['cip']."   $selected_projeto title='Orientador do Projeto: $autor_nome' >"
                           .$titulo_projeto."&nbsp;&nbsp;</option>";   
          }
-         mysql_free_result($result); 
+         mysqli_free_result($result); 
       }
       ?>
       </select>

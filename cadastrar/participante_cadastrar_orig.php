@@ -61,7 +61,7 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 // $_SESSION['time_exec']=180000;
 ///
 ////  INCLUINDO CLASS - 
@@ -232,14 +232,14 @@ if( ( $_SESSION["permit_pa"]>$array_pa['super']  and $_SESSION["permit_pa"]<=$ar
                          /// $codusp=$linha[$codigo_sigla];
                           ///  IMPORTANTE:  criar sempre outra variavel - OK
                           /// $nome_participante=htmlentities($nome_descr);
-                          ///  $nome_participante=utf8_decode(mysql_result($result,$nx,$cpo_nome_descr));
+                          ///  $nome_participante=mb_convert_encoding(mysql_result($result,$nx,$cpo_nome_descr), 'ISO-8859-1', 'UTF-8');
                            $nome_participante=mysql_result($result,$nx,$cpo_nome_descr);
                            echo "<option  value='$sigla' title='Clicar'  >$nome_participante</option>" ;
                            /// echo  htmlentities($linha[$cpo_nome_descr],ENT_QUOTES,"UTF-8")."&nbsp;&nbsp;</option>" ;
                            /// echo  $linha[$cpo_nome_descr]."&nbsp;&nbsp;</option>" ;
                     }
                     /// Final - for
-                    if( isset($result) )  mysql_free_result($result); 
+                    if( isset($result) )  mysqli_free_result($result); 
                ?>
             </select>
         </span>

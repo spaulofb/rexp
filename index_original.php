@@ -315,7 +315,7 @@ include("{$_SESSION["incluir_arq"]}includes/menu_horizontal_index.php");
 <!-- Iniciar o Programa -->
 <!--  Final do Iniciar Programa -->
 <header class="header_title"  >
-    <p><?php echo htmlentities(utf8_decode("Sistemas Técnicos Administrativos - Registro de Anotações (SISTAM/REXP)"));?></p>
+    <p><?php echo htmlentities(mb_convert_encoding("Sistemas Técnicos Administrativos - Registro de Anotações (SISTAM/REXP)", 'ISO-8859-1', 'UTF-8'));?></p>
 </header>
 <section class="section_index"  >
 <!--  Iniciando Texto -->

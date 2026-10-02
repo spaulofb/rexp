@@ -243,13 +243,13 @@ for( $i=0; $i<count($post_array); $i++ ) {
            if ( $pos1 === false ) {
                //  $$xyz=trim($_POST[$xyz]);
                //   Para acertar a acentuacao - utf8_encode
-               $$xyz = utf8_decode(trim($_POST[$xyz])); 
+               $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
            } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
         }
 }    
 //
 ///   Para acertar a acentuacao - utf8_encode
-///   $source = utf8_decode($source); $val = utf8_decode($val); 
+///   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 $source=trim($source);
@@ -450,7 +450,7 @@ if( $opcao=="SAIR" ) {
 
     $resultado_pa=mysqli_query($cmdsql);
     if( ! $resultado_pa  ) {
-        mysql_free_result($resultado_pa);
+        mysqli_free_result($resultado_pa);
         die('ERRO: SELECT participante/pessoa: '.mysqli_error($_SESSION["conex"]));
         exit();  
     }                                 
@@ -621,7 +621,7 @@ if( $opcao=="SAIR" ) {
 	          </select>
 	          </span>
 			  <?php
-                 mysql_free_result($result); 
+                 mysqli_free_result($result); 
     	         // Final do SELECT
                  if( strtoupper(trim($_SESSION["select_cpo"]))=="SALA" ) {
                        $cpo_final=0; $n_cpo=0; unset($m_array); unset($m_linhas); unset($source);
@@ -759,7 +759,7 @@ if( strtoupper($val)=="ORIENTADOR_NOVO" ) {
            $dup=$lnregs;
            $msg_erro .= "J&aacute existem pessoas cadastradas com mesmo Nome OU E_Mail OU CPF";
      } 
-     if( isset($res_email) ) mysql_free_result($res_email);
+     if( isset($res_email) ) mysqli_free_result($res_email);
      /// Verificando se existe Duplicata
      if( intval($dup)>=1 ) {
            print $msg_erro;
@@ -877,7 +877,7 @@ if( strtoupper($val)=="ORIENTADOR_NOVO" ) {
             } else {
                 $descr_categ = mysql_result($res_categoria,0,"descricao")."&nbsp;($categoria)"; 
             }
-            if( isset($res_categoria) ) mysql_free_result($res_categoria);
+            if( isset($res_categoria) ) mysqli_free_result($res_categoria);
             ///  Aprovador para o Novo Orientador
             ///  $aprovador_email="gemac@genbov.fmrp.usp.br";
             $aprovador_email="{$_SESSION["gemac"]}";
@@ -929,7 +929,7 @@ if( strtoupper($val)=="ORIENTADOR_NOVO" ) {
            *** Não responda a este EMAIL ****
            ";
            
-           /// if ( mail($aprovador_email, stripslashes(utf8_encode($assunto)), $message,$headers1)  ) {
+           /// if ( mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1)  , 'UTF-8', 'ISO-8859-1') {
            if ( mail($aprovador_email, $assunto, $message,$headers1)  ) {
                 $msg_ok .="<br>Email enviado com sucesso para o Aprovador!";
            } else {
@@ -960,7 +960,7 @@ if( $opcao=="ANOTADOR" ) {
                     die('ERRO: Select pessoal.pessoa -&nbsp;db/Mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
                 }
                 echo  'usuario,e_mail|'.mysql_result($res_pessoa,0,login)."|".mysql_result($res_pessoa,0,e_mail);
-                if( isset($res_pessoa) ) mysql_free_result($res_pessoa);
+                if( isset($res_pessoa) ) mysqli_free_result($res_pessoa);
            }
            exit();        
     }
@@ -1044,8 +1044,8 @@ if( strtoupper($val)=="PROJETO" ) {
          AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 e de depois usa o  - html_entity_decode 
     */
-	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1133,12 +1133,12 @@ if( strtoupper($val)=="PROJETO" ) {
           echo $msg_erro;
 		  exit();
     } elseif( ! $result ) {
-          mysql_free_result($result);
+          mysqli_free_result($result);
           die('ERRO: Select projeto -&nbsp;db/Mysql:&nbsp;'.mysqli_error($_SESSION["conex"]));  
  	} else {
     	  //  Continuacao Tabela projeto - BD PESSOAL
           /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
-	      mysql_free_result($result);
+	      mysqli_free_result($result);
           //  Caso tenha coautores/coresponsaveis no Projeto
           include("n_cos.php");
 		  //  SESSION abaixo para ser usada no include
@@ -1174,21 +1174,21 @@ if( strtoupper($val)=="PROJETO" ) {
                            }
                      }
                     if( $result ) {
-                         mysql_free_result($result);                           
+                         mysqli_free_result($result);                           
                          mysqli_query('commit');                                  
                     } else { 
                         $n_erro=1;
-                        mysql_free_result($result);
+                        mysqli_free_result($result);
                         mysqli_query('rollback'); 
                     }
                 } else {
                     $n_erro=1;
-                    mysql_free_result($success);
+                    mysqli_free_result($success);
                     mysqli_query('rollback'); 
                 }              
                 mysqli_query('end'); 
                 mysqli_query('DELIMITER');
-                mysql_free_result($success);
+                mysqli_free_result($success);
                 if( $n_erro==1 ) {
                      $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi cadastrado -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
                      echo $msg_erro;               
@@ -1205,7 +1205,7 @@ if( strtoupper($val)=="PROJETO" ) {
                     $m_regs=mysqli_num_rows($result);
                     if( $m_regs=1 ) {
                         $projeto_cip=mysql_result($result_proj,0,"cip");       
-                         mysql_free_result($result_proj);                       
+                         mysqli_free_result($result_proj);                       
                          $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                          $sqlcmd="insert into rexp.anotador (cip,codigo,pa,data) values($projeto_cip,$m_autor,$lnpa,'$data_atual')";
                          $res_anotador=mysqli_query($_SESSION["conex"],$sqlcmd); 
@@ -1214,7 +1214,7 @@ if( strtoupper($val)=="PROJETO" ) {
                               echo  $msg_ok."falta_arquivo_pdf".$_SESSION["numprojeto"]."&".$m_autor;
                              // Efetiva a transa??o nos duas tabelas (anotacao e projeto)                                    
                          } else {
-                            mysql_free_result($res_anotador);
+                            mysqli_free_result($res_anotador);
                             $msg_erro .="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]).$msg_final;
                             echo $msg_erro;                                   
                             exit();
@@ -1235,8 +1235,8 @@ if( strtoupper($val)=="PROJETO" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(utf8_decode($campo_nome));
-	 $campo_value = htmlentities(utf8_decode($campo_value));
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1272,7 +1272,7 @@ if( strtoupper($val)=="PROJETO" ) {
             $codigo_prx=0;
         }
         $codigo_prx += -1;
-        if( isset($result) ) mysql_free_result($result);
+        if( isset($result) ) mysqli_free_result($result);
         $arr_nome_val['codigousp'] = $codigo_prx;
         if( intval($i_codigo)<0  ) {
             die("ERRO: Falha inesperada criando um NOVO codigo USP.");
@@ -1285,7 +1285,7 @@ if( strtoupper($val)=="PROJETO" ) {
 		  die("Falha erro no Select -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
 	}
     $m_regs=mysqli_num_rows($result_usu);
-    if( isset($result_usu) ) mysql_free_result($result_usu);
+    if( isset($result_usu) ) mysqli_free_result($result_usu);
     ///  Verificando se existi outro codigo na Tabela pessoa
     if( intval($m_regs)>=1 ) {
            $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val['codigousp']." j&aacute; est&aacute; cadastrado.".$msg_final;
@@ -1328,7 +1328,7 @@ if( strtoupper($val)=="PROJETO" ) {
            mysqli_query('end'); 
            mysqli_query('DELIMITER'); 
 	}
-    if( isset($sucess) ) mysql_free_result($sucess);		  
+    if( isset($sucess) ) mysqli_free_result($sucess);		  
 	////  Final - Tabela pessoa 
 }  elseif( strtoupper($val)=="USUARIO" ) {
      ///  Tabela usuario - BD PESSOAL  Tabela usuario
@@ -1369,7 +1369,7 @@ if( strtoupper($val)=="PROJETO" ) {
          exit();
     }
     $m_regs = mysqli_num_rows($result_usu);
-	if( isset($result_usu) ) mysql_free_result($result_usu);
+	if( isset($result_usu) ) mysqli_free_result($result_usu);
 	if( intval($m_regs)>=1 ) {
          $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." j&aacute; cadastrado.".$msg_final;
          echo $msg_erro;
@@ -1489,8 +1489,8 @@ if( strtoupper($val)=="PROJETO" ) {
             Esta é uma resposta automática.<br> 
             *** Não responder a este EMAIL ****
             ";
-           /// mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
-           if ( mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1)  ) {
+           /// mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
+           if ( mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1)  , 'UTF-8', 'ISO-8859-1') {
                 $msg_ok .="<p>Mensagem de Acesso enviada para o email:  $usr_email<br></p>";
            } else {
                 $msg_ok .="<br>Ocorreu um erro durante o envio da mensagem para o email:  $usr_email";

@@ -43,7 +43,7 @@ if( intval($n_erro)<1 )  {
     ///
     ///  HOST mais a pasta principal do site - host_pasta
     if( ! isset($_SESSION["host_pasta"]) ) {
-         $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+         $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
          echo $msg_erro;
          exit();
     }
@@ -101,7 +101,7 @@ if( ! isset($_SESSION["projeto_autor_nome"]) ) $_SESSION["projeto_autor_nome"]="
 $pagina_local=$_SESSION["protocolo"]."://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]= utf8_decode("Registro de Anotação") ;
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]= mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8') ;
 
 /*  UPLOAD: FILEFRAME section of the script
       verifica se o arquivo foi enviado      */
@@ -124,7 +124,7 @@ if( isset($_POST['fileframe']) ) {
       $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
       $select_numprojeto = mysqli_query("SELECT numprojeto,autor  from $bd_2.projeto  WHERE cip=$nprojexp  ");
       if( ! $select_numprojeto ) {
-            mysql_free_result($select_numprojeto);
+            mysqli_free_result($select_numprojeto);
             die('ERRO: Select projeto campo numprojeto - falha: '.mysqli_error($_SESSION["conex"]));  
             exit();
       }
@@ -133,7 +133,7 @@ if( isset($_POST['fileframe']) ) {
       $projeto_autor=mysql_result($select_numprojeto,0,"autor");
       $numprojeto=$_SESSION["numprojeto"];
       // 
-      mysql_free_result($select_numprojeto);      
+      mysqli_free_result($select_numprojeto);      
       $_SESSION["result"]='OK'; $erros="";
       $_SESSION["display_arq"]='block';
       /** Conjunto de arquivos - ver tamanho total dos arquivos ***/
@@ -467,7 +467,7 @@ function jsUpload(upload_field) {
             $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM pessoa where "
                              ."  codigousp=".$_SESSION["usuario_conectado"]." order by nome "); 
             if( ! $res_anotador ) {
-                mysql_free_result($res_anotador);
+                mysqli_free_result($res_anotador);
                 die('ERRO: Select pessoal.pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
             }
             //  Cod/Num_USP/Autor/Anotador
@@ -478,7 +478,7 @@ function jsUpload(upload_field) {
                 $_SESSION["anotador_codigousp"]=mysql_result($res_anotador,0,"codigousp");
                 $anotador_nome=mysql_result($res_anotador,0,"nome");
                 $anotador_categoria=mysql_result($res_anotador,0,"categoria");                    
-                mysql_free_result($res_anotador); 
+                mysqli_free_result($res_anotador); 
             }
             // Final da Num_USP/Nome Autor/Anotador
          ?>  
@@ -607,7 +607,7 @@ function jsUpload(upload_field) {
 			   ?>
 			   </select>
 			  <?php 
-              mysql_free_result($result_pessoa); 
+              mysqli_free_result($result_pessoa); 
            }
            ?>  
            <!-- Final da Num_USP/Nome Responsavel  -->
@@ -687,7 +687,7 @@ function jsUpload(upload_field) {
           ?>
           </select>
           <?php
-            mysql_free_result($result2); 
+            mysqli_free_result($result2); 
            // FINAL - Código da Testemunha (1) da realiza??o 
            ?>  
         </td>
@@ -715,7 +715,7 @@ function jsUpload(upload_field) {
           ?>
           </select>
           <?php
-             mysql_free_result($result); 
+             mysqli_free_result($result); 
              // FINAL - Código da Testemunha (2) da realiza??o 
            ?>  
 	      <input  type="hidden"  id="data"  name="data"  value="<?php echo $_SESSION["datetime"];?>" />

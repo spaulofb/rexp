@@ -46,9 +46,9 @@ if( ! isset($_SESSION["e_mail_user"]) ) {
 ***/    
 
 /***
-    $res_mail=$_SESSION["res_mail"]=mail($aprovador_email, stripslashes(utf8_decode($assunto)), utf8_decode($message),$headers1);
+    $res_mail=$_SESSION["res_mail"]=mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), utf8_decode($message),$headers1, 'ISO-8859-1', 'UTF-8');
 ***/    
-    $res_mail=$_SESSION["res_mail"]=mail($e_mail_user, stripslashes(utf8_decode($assunto)), utf8_decode($message),$headers1);
+    $res_mail=$_SESSION["res_mail"]=mail($e_mail_user, stripslashes(mb_convert_encoding($assunto)), utf8_decode($message),$headers1, 'ISO-8859-1', 'UTF-8');
     ///
     if( $res_mail ) {
         /**

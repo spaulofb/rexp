@@ -410,7 +410,7 @@ if( ! function_exists("TirarAcento") ) {
              }
              $TirarAcento = $Texto;
         }
-        return utf8_encode($Texto);
+        return mb_convert_encoding($Texto, 'UTF-8', 'ISO-8859-1');
     }
     ///  Final -    Tirar acento da palavra
 }

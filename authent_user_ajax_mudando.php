@@ -182,7 +182,7 @@ if( ! isset($permit_pa)  ) {
                $array_pa[$descricao]=$row["codigo"];
         }
         ///
-        if( isset($resultado_pa) )  mysql_free_result($resultado_pa);
+        if( isset($resultado_pa) )  mysqli_free_result($resultado_pa);
         $_SESSION["array_pa"]=$array_pa;
    }
    ///   
@@ -255,7 +255,7 @@ if( $_SESSION["total"]==1 and ( ! isset($permit_pa) ) ) {
                 </select>
                 </span>
                 <?php
-                 if( isset($result_pa) )  mysql_free_result($result_pa);
+                 if( isset($result_pa) )  mysqli_free_result($result_pa);
                 exit();
             } else if( $regs==1 ) {
                 $permit_pa="";

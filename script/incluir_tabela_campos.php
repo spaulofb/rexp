@@ -44,7 +44,7 @@ if ( strlen(trim($_SESSION["m_nome_id"]))<1 ) {
 	     $m_value_c[$i] =  htmlentities(mysql_result($result,0,$i)); 
 	  }
 	} else {
-         mysql_free_result($result); 
+         mysqli_free_result($result); 
 		 if( strlen($encontrar)>1 ) {
 	        $result=mysql_db_query($dbname,"select * from  ".$encontrar." limit 0 ");
     	    if (!$result) {

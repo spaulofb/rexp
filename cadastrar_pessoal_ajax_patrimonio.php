@@ -36,7 +36,7 @@ for( $i=0; $i<$count_post_array; $i++ ) {
              ///  $$xyz=trim($_POST[$xyz]);
              ///   Para acertar a acentuacao - utf8_encode
              if( is_string($_POST[$xyz]) ) {
-                 /// $$xyz = utf8_decode(trim($_POST[$xyz]));     
+                 /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8');     
                  $$xyz = trim($_POST[$xyz]);     
              } else if( is_array($_POST[$xyz]) ) {               
                  $$xyz = $_POST[$xyz];
@@ -121,12 +121,12 @@ if( is_array($data) ) {
                   $conta++;
                   $$key=$value;  
                   $nome_campo[$conta]=$key;
-                  $valor_campo[$conta]=utf8_decode($value);
+                  $valor_campo[$conta]=mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
                   /// $valor_campo[$conta]=$value;
                    
-                  $_SESSION[$key]=utf8_decode($value);
+                  $_SESSION[$key]=mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
                  ///   $_SESSION[$key]=$value;
-                   $array_seleciona[$key]=utf8_decode($value);
+                   $array_seleciona[$key]=mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
                  ////  $array_seleciona[$key]=$value;
                   ///
             }
@@ -170,7 +170,7 @@ if( is_array($data) ) {
                 $nome_cpo_where="nome"; 
                 ///
                 ///  Atualizado em 20200128  --  utf8_ecnode
-                $nome = trim(preg_replace('/ +/',' ',utf8_encode($nome)));
+                $nome = trim(preg_replace('/ +/',' ',mb_convert_encoding($nome)), 'UTF-8', 'ISO-8859-1');
                 ///
                 /***
                 *     MELHOR MANEIRA DE ENVIAR DADOS DO PHP PARA MYSQL -  UTF8_DECODE
@@ -209,7 +209,7 @@ if( is_array($data) ) {
                 ****/
                 $nome_cpo_where="e_mail";                
                 ///
-                $e_mail = trim(preg_replace('/ +/',' ',utf8_encode($e_mail)));
+                $e_mail = trim(preg_replace('/ +/',' ',mb_convert_encoding($e_mail)), 'UTF-8', 'ISO-8859-1');
                 ///
                 $mex="SELECT $nome_cpo_where FROM $bd_1.$data[0]  ";
                 $mex.=" WHERE acentos_upper($nome_cpo_where)=acentos_upper(\"$e_mail\")  ";
@@ -266,21 +266,19 @@ if( is_array($data) ) {
             /***
                   MELHOR MANEIRA DE ENVIAR DADOS DO PHP PARA MYSQL -  UTF8_DECODE 
                   - //  IMPORTANTE 2013
-                  if( isset($nome) ) $nome=utf8_decode($nome);          
+                  if( isset($nome) ) $nome=mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8');          
             ***/
             ///
             ///  Banco de Dados - BD/DB
             $bd_1 = $_SESSION["bd_1"];
             ///  START  a transaction - ex. procedure    
-            mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
             $commit="commit";
-            mysqli_query($_SESSION["conex"],'begin'); 
             ///  Execute the queries 
             ///  $success = mysqli_query($_SESSION["conex"],"insert into pessoa (".$campos.") values(".$campos_val.") "); 
             ///   mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
             ///   - Use mysql_select_db() ou mysqli_query($_SESSION["conex"],)
             ///
-            mysqli_query($_SESSION["conex"],"LOCK TABLES  $bd_1.$tabela INSERT ");
+            true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
             ///  Inserindo dados na Tabela
       /***      $success=mysqli_query($_SESSION["conex"],"INSERT INTO {$_SESSION["bd_1"]}.$data[0] values('$sigla','$unidade','$instituicao','$nome')");  
             ***/
@@ -297,10 +295,7 @@ if( is_array($data) ) {
             }
             /*!40000 ALTER TABLE  ENABLE KEYS */
             mysqli_query($_SESSION["conex"],$commit);
-            mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
             ///  Complete the transaction 
-            mysqli_query($_SESSION["conex"],'end'); 
-            mysqli_query($_SESSION["conex"],'DELIMITER');
             ///
         }    
         ///  Final - if( $data0_upper=="PESSOAL" and $data1upper=="M_TABELA_INCLUIDA" )

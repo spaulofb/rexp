@@ -33,7 +33,7 @@ $message = "<p style='text-align:justify;' >$corpo<br>
            *** Não responda a este EMAIL ****
          </p>";
 ////
-$res_mail=$_SESSION["res_mail"]=mail($aprovador_email, stripslashes(utf8_decode($assunto)), utf8_decode($message),$headers1);
+$res_mail=$_SESSION["res_mail"]=mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), utf8_decode($message),$headers1, 'ISO-8859-1', 'UTF-8');
 ///
 
 if( $res_mail ) {

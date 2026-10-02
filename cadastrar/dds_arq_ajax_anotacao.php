@@ -268,7 +268,7 @@ for( $i=0; $i<$count_array_temp; $i++ ) {
 $_SESSION["campos_nome"] = substr($campos_nome,0,strlen($campos_nome)-1);
 $_SESSION["campos_valor"] = substr($campos_valor,0,strlen($campos_valor)-1);
 //	
-//  $_SESSION[campos_total]=utf8_decode($_SESSION[campos_total]); //  Total deu 186 caracteres
+//  $_SESSION[campos_total]=mb_convert_encoding($_SESSION[campos_total], 'ISO-8859-1', 'UTF-8'); //  Total deu 186 caracteres
 //  $_SESSION[campos_total]=urldecode($_SESSION[campos_total]);   //  Total deu 186 caracteres
 //  MELHOR MANEIRA DE CONSERTAR ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
 //  $_SESSION[campos_total]=html_entity_decode(trim($_SESSION[campos_total]));  //  179

@@ -284,7 +284,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if( $pos1===false ) {
 	       ///  $$xyz=trim($_POST[$xyz]);
 		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
             $$xyz = explode($div_array_por,$_POST[$xyz]);  
        } 
@@ -293,7 +293,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 $e_mailinf = "  ";   /// Verificar ponto mais adequado para usar = pegar como parâmetro
 ///
 ///   Para acertar a acentuacao - utf8_encode
-///   $source = utf8_decode($source); $val = utf8_decode($val); 
+///   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
 $_SESSION["source"]=trim($source);
@@ -324,7 +324,7 @@ if( $source_upper=="PROJETO" ) {
     ///
     ///  Usuario Orientador/Chefe/Vice - conectado
     if( ! isset($_SESSION["usuario_conectado"]) ) {
-           $msg_erro .= utf8_decode("Session usuario_conectado não existe.").$msg_final;
+           $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
            echo $msg_erro;               
            exit();                                          
     }   
@@ -393,10 +393,10 @@ if( $source_upper=="PROJETO" ) {
                       $anotador_descr=$linha[$cpo_nome_descr];
                       $codigo_caracter=mb_detect_encoding($anotador_descr);
                       if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-                            //// echo utf8_decode(htmlentities($titulo_projeto))."&nbsp;&nbsp;</option>";
+                            //// echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
                             ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
                             ///   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-                            ////  echo "<option value=".$ln_codigousp." title='Clicar' >1)".utf8_encode($anotador_descr);
+                            ////  echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');
                             echo "<option value=".$ln_codigousp." title='Clicar' >".htmlentities($linha[$cpo_nome_descr],ENT_QUOTES,"UTF-8");
                         } else {
                             echo "<option value=".$ln_codigousp." title='Clicar' >".$anotador_descr;
@@ -408,7 +408,7 @@ if( $source_upper=="PROJETO" ) {
             ?>
             </select>
             <?php
-                 if( isset($result) ) mysql_free_result($result); 
+                 if( isset($result) ) mysqli_free_result($result); 
           }
           ///
     ///  <!-- Final - Anotador/Nome -->
@@ -456,10 +456,10 @@ if( $source_upper=="CODIGOUSP" ) {
         ////
         $codigo_caracter=mb_detect_encoding($anotador_nome);
         if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-              /// echo utf8_decode(htmlentities($titulo_projeto))."&nbsp;&nbsp;</option>";
+              /// echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
               ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
              ///   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-             ///  echo "<option value=".$ln_codigousp." title='Clicar' >1)".utf8_encode($anotador_descr);
+             ///  echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');
              /// $_SESSION["anotador_nome"]=$anotador_nome=htmlentities($anotador_nome,ENT_QUOTES,"UTF-8");
              $_SESSION["anotador_nome"]=$anotador_nome;
         }
@@ -498,11 +498,11 @@ if( strtoupper($val)=="ANOTADOR" ) {
        $lncodigousp = (int) $arr_nome_val["codigousp"];
        /// if( isset($arr_nome_val["nome"]) ) {
        if( isset($_SESSION["anotador_nome"]) ) {
-           ////  $anotador_nome = utf8_decode($_SESSION["anotador_nome"]);
+           ////  $anotador_nome = mb_convert_encoding($_SESSION["anotador_nome"], 'ISO-8859-1', 'UTF-8');
              $anotador_nome = trim($_SESSION["anotador_nome"]);
        } else {
            /// $nome = "";
-           /// $anotador_nome = utf8_decode($arr_nome_val["nome"]);
+           /// $anotador_nome = mb_convert_encoding($arr_nome_val["nome"], 'ISO-8859-1', 'UTF-8');
            $_SESSION["anotador_nome"] = $anotador_nome = trim($arr_nome_val["nome"]);
        }
        ////  Variavel do e_mail do Anotador a ser removido
@@ -535,7 +535,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $aprovado = 1;   
       ///  Usuario Orientador/Chefe
       if( ! isset($_SESSION["usuario_conectado"]) ) {
-           $msg_erro .= utf8_decode("Session usuario_conectado não existe.").$msg_final;
+           $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
            echo $msg_erro;               
            exit();                                          
       }   
@@ -555,7 +555,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
           +-------------+--------+
       **/
      if( ! isset($pa_anotador) ) {
-          $msg_erro .= utf8_decode("Variável pa_anotador não existe.").$msg_final;
+          $msg_erro .= mb_convert_encoding("Variável pa_anotador não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
           echo $msg_erro;               
           exit();                                          
      }
@@ -576,8 +576,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
       ///  Iniciar uma transaction - ex. procedure    
-      mysqli_query('DELIMITER &&'); 
-      mysqli_query('begin'); 
       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
       ///  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
       mysqli_query("LOCK TABLES $bd_1.anotador DELETE");    
@@ -594,10 +592,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
       } else {
           mysqli_query('commit');  
       }
-      /// mysqli_query("UNLOCK  TABLES");
-      mysqli_query("UNLOCK  TABLES");
-      mysqli_query('end'); 
-      mysqli_query('DELIMITER');
       ///  Ocorreu erro
       if( intval($n_erro)>0 ) {
           ///  Ocorreu ERRO para remover Anotador/Projeto na tabela anotador
@@ -642,8 +636,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
       if( intval($nregs)>0 ) {
           ///
           ///  Iniciar uma transaction - ex. procedure    
-          mysqli_query('DELIMITER &&'); 
-          mysqli_query('begin'); 
           ///  Execute the queries 
           mysql_select_db($db_array[$elemento]);
           ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
@@ -658,7 +650,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
                 $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
                 $n_erro=1;
                 mysqli_query('rollback'); 
-                //***mysqli_query("UNLOCK  TABLES");
                 echo $msg_erro;               
           } else {
                /// Executando
@@ -666,16 +657,12 @@ if( strtoupper($val)=="ANOTADOR" ) {
           }
           ///
           /// Concluir a transaction
-          //***mysqli_query("UNLOCK  TABLES");
           mysqli_query('commit'); 
-          mysqli_query('end'); 
-          mysqli_query('DELIMITER');            
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
                 exit();                                                 
           }
           ///
-          /// mysqli_query("UNLOCK  TABLES");
      }  
      ///
      ////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
@@ -748,7 +735,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
      *** Não responda a este EMAIL ****
      ";
    
-   /// if ( mail($aprovador_email, stripslashes(utf8_encode($assunto)), $message,$headers1)  ) {
+   /// if ( mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1)  , 'UTF-8', 'ISO-8859-1') {
    /// SEMPRE TESTAR O COMANDO MAIL -  SE A MENSAGEM FOI ENVIADA  
    ///  $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);  
      $emailsender="$orientador_email";

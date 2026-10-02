@@ -59,13 +59,13 @@ for( $i=0; $i<count($post_array); $i++ ) {
        if ( $pos1 === false ) {
            //  $$xyz=trim($_POST[$xyz]);
            //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
        } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
     }
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -222,7 +222,7 @@ if( $source_maiusc=="SAIR" ) {
                     if( ! $result_coresp ) {
                         die('ERRO: Selecionando os Co-Respons&aacute;veis: '.mysqli_error($_SESSION["conex"]));  
                     }                        
-                    ///  mysql_free_result($result_coresp);
+                    ///  mysqli_free_result($result_coresp);
                     $regs = mysqli_num_rows($result_coresp);
                     ?>                  
                    <span class="td_informacao2" style="margin-left: .4em;"  >                    
@@ -239,7 +239,7 @@ if( $source_maiusc=="SAIR" ) {
                   </select>
                   </span>
                <?php
-                    if( isset($result_coresp) ) mysql_free_result($result_coresp); 
+                    if( isset($result_coresp) ) mysqli_free_result($result_coresp); 
                 }          
             ?>
           </td>
@@ -380,7 +380,7 @@ if( $source_maiusc=="SAIR" ) {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     if( isset($resultado_projeto) ) mysql_free_result($resultado_projeto);     
+     if( isset($resultado_projeto) ) mysqli_free_result($resultado_projeto);     
       /*    
       a.numero as nr, a.alteraant as Altera, alteradapn as Alterada, "
                  ." a.titulo as T?tulo, b.nome as Autor, c.titulo as projeto_titulo,  "
@@ -507,7 +507,7 @@ if( $source_maiusc=="DESCARREGAR" )  {
             if( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                /// $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
                  $$xyz = trim($_POST[$xyz]); 
             } else {
                 $$xyz = explode($div_array_por,$_POST[$xyz]);  
@@ -569,7 +569,7 @@ if( $source_maiusc=="DESCARREGAR" )  {
     } 
     ////
     /// Arquivo da Anotacao do Projeto - 20180913
-    $val = utf8_decode(trim($val)); 
+    $val = mb_convert_encoding(trim($val), 'ISO-8859-1', 'UTF-8'); 
     $arquivo = trim($val);
    ///  $arquivo = trim($arq_anotacao);
     $dir_arq="{$pasta}{$arquivo}";
@@ -586,7 +586,7 @@ if( $source_maiusc=="DESCARREGAR" )  {
     } else {
         ///  SESSIONs para diretorio e arquivo - Anotacao do Projeto
         ///  echo $pasta."%".$arquivo;  
-        $_SESSION["arquivo_anotacao"]=utf8_encode($arquivo);
+        $_SESSION["arquivo_anotacao"]=mb_convert_encoding($arquivo, 'UTF-8', 'ISO-8859-1');
         $_SESSION["pasta_arq_anotacao"]=$pasta;
         ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_anotacao"]}%#sepa%#rar%#{$_SESSION["arquivo_anotacao"]}"; 
@@ -641,8 +641,6 @@ if( $source_maiusc=="SUBMETER" )  {
          if( strtoupper(trim($sn))=="NAO"  ) {
               $_SESSION['tabela']="pessoal.usuario";
               //  Start a transaction - ex. procedure    
-              mysqli_query('DELIMITER &&'); 
-              mysqli_query('begin'); 
               //  Execute the queries          
               //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
               mysqli_query("LOCK TABLES ".$_SESSION['tabela']." DELETE, pessoal.pessoa DELETE ");
@@ -652,7 +650,7 @@ if( $source_maiusc=="SUBMETER" )  {
                //                  
                $sqlcmd =  mysqli_query($res_usuario);
                if( $sqlcmd ) { 
-                   mysql_free_result($sqlcmd);
+                   mysqli_free_result($sqlcmd);
                    $_SESSION['tabela']="pessoal.pessoa";
                    $res_pessoa= "DELETE  from ".$_SESSION['tabela']." WHERE codigousp=$codigousp "; 
                    //                  
@@ -678,12 +676,9 @@ if( $source_maiusc=="SUBMETER" )  {
                   $lnerro=1;        
                }       
                /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-               mysqli_query("UNLOCK  TABLES");
                //  Complete the transaction 
-               mysqli_query('end'); 
-               mysqli_query('DELIMITER');         
                //  Caso Tabela acima foi aceita incluir dados na outra abaixo
-               mysql_free_result($sqlcmd);
+               mysqli_free_result($sqlcmd);
                //   Mandar mensagem para o novo Orientador - cancelado
                if( $lnerro<1 ) {
                    $novo_orientador=$e_mail;
@@ -737,7 +732,7 @@ if( $source_maiusc=="SUBMETER" )  {
              //                       
              // Verificando se houve erro no Select Tabdla Usuario
              if( ! $rs_check ) {
-                mysql_free_result($rs_check);
+                mysqli_free_result($rs_check);
                 die("ERRO: Select pessoal.usuario e campos  - ".mysqli_error($_SESSION["conex"]));
              }  
              $num = mysqli_num_rows($rs_check);
@@ -759,8 +754,6 @@ if( $source_maiusc=="SUBMETER" )  {
                 // defina o campo aprovou (approved) como 1 e tb activation_code para Ativar a Conta
                 $_SESSION['tabela']="pessoal.usuario";
                 //  Start a transaction - ex. procedure    
-                mysqli_query('DELIMITER &&'); 
-                mysqli_query('begin'); 
                 //  Execute the queries          
                 mysqli_query("LOCK TABLES ".$_SESSION['tabela']." UPDATE  ");
                 $sqlcmd = "UPDATE  ".$_SESSION['tabela']." SET aprovado='1',"
@@ -769,17 +762,14 @@ if( $source_maiusc=="SUBMETER" )  {
                 $rs_activ = mysqli_query($_SESSION["conex"],$sqlcmd);     
                 // Verificando se houve erro no update            
                 if( ! $rs_activ ) {
-                     mysql_free_result($rs_activ);
+                     mysqli_free_result($rs_activ);
                      $m_erro = "N?o foi poss?vel efetivar o usuario/login. ".mysqli_error($_SESSION["conex"]);
                      mysqli_query('rollback'); 
                 } else {
                      mysqli_query('commit'); 
                 }
-                mysqli_query("UNLOCK  TABLES");
                 //  Complete the transaction 
-                mysqli_query('end'); 
-                mysqli_query('DELIMITER');         
-                mysql_free_result($rs_activ);                            
+                mysqli_free_result($rs_activ);                            
                 //   Mandar mensagem para o novo Orientador - caso nao tenha erro
                 if( strlen(trim($m_erro))<1 ) {  // Enviar a mensagem por email
                      $orientador_email=$e_mail;
@@ -826,7 +816,7 @@ if( $source_maiusc=="SUBMETER" )  {
                      Esta é uma mensagem automática.<br> 
                      *** não responda a este EMAIL ****
                      ";
-                     //  mail($orientador_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+                     //  mail($orientador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
                      mail($orientador_email, $assunto, $message,$headers1);
                      //
                      $msg_ok .= "<span style='color: #000000; text-align: center; padding-left: 5px;font-size: medium; '>"

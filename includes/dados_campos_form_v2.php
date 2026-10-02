@@ -5,8 +5,8 @@ set_time_limit(0);
      AGORA o Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
       e de depois usa o  - html_entity_decode 
 */
-$campo_nome = htmlentities(utf8_decode($campo_nome));
-$campo_value = htmlentities(utf8_decode($campo_value));
+$campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+$campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));      
 
 ////  array_temp  -  com os nomes dos campos

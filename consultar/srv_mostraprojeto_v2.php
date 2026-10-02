@@ -51,7 +51,7 @@ $msg_final="</span></span>";
 //  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {  
       //
-      /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;      */
+      /**   $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;      */
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
@@ -76,7 +76,7 @@ if( isset($_SESSION["usuario_conectado"]) ) {
    //// $orientador = $_SESSION["usuario_conectado"];    
     $usuario_conectado = $_SESSION["usuario_conectado"];       
 } else {
-     $msg_erro .= utf8_decode("Sessão usuario_conectado não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão usuario_conectado não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -141,7 +141,7 @@ exit();
                if( $pos1 === false ) {
                     //  $$xyz=trim($_POST[$xyz]);
                     //   Para acertar a acentuacao - utf8_encode
-                    // $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                    // $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
                     $$xyz = trim($_POST[$xyz]); 
                } else {
                     $$xyz = explode($div_array_por,$_POST[$xyz]);   
@@ -180,8 +180,8 @@ exit();
     *     Acentuacao e espacos no arquivo PDF  --- ALterado em 20180613 
     *            utilizando  utf8_encode       
     */
-    // if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
-    $dir_arq=utf8_decode("{$pasta}$arquivo");
+    // if( ! file_exists("{$pasta}".mb_convert_encoding($arquivo)) , 'UTF-8', 'ISO-8859-1') {
+    $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8');
     //
     //  Funcionando 100%    
     //  if( ! file_exists("{$pasta}$arquivo") ) {
@@ -418,7 +418,7 @@ exit();
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }                  
-     if( isset($resultado_projeto) ) mysql_free_result($resultado_projeto);     
+     if( isset($resultado_projeto) ) mysqli_free_result($resultado_projeto);     
      ////
      $coresp_dados="";
      if( $coresponsaveis>=1 ) {

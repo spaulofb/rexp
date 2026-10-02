@@ -453,7 +453,7 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
               echo "<option  value=".$linha['cip']."   $selected_projeto title='Orientador do Projeto: $autor_nome' >"
                           .$titulo_projeto."&nbsp;&nbsp;</option>";   
          }
-         mysql_free_result($result); 
+         mysqli_free_result($result); 
       }
       ?>
       </select>

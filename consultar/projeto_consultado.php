@@ -11,7 +11,7 @@ mysql_select_db($db_array[$elemento]);
 //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
 $result_nome=mysqli_query("select codigousp,nome,categoria from pessoa  order by nome ");
 if( ! $result_nome ) {
-     mysql_free_result($result_nome);
+     mysqli_free_result($result_nome);
      die('ERRO: Select pessoa - falha: '.mysqli_error($_SESSION["conex"]));  
 }
 $m_linhas = mysqli_num_rows($result_nome);
@@ -91,14 +91,14 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 		                              ."  where codigo=".mysql_result($result,0,"objetivo")); 
 		 //							  
          if( ! $result_obj ) {
-             mysql_free_result($result_obj);
+             mysqli_free_result($result_obj);
              die('ERRO: Select objetivo - falha: '.mysqli_error($_SESSION["conex"]));  
          }
 		 ?>
         <!-- Objetivo  -->
      <span class='td_inicio1' style="border:none; color:#000000;" title='Objetivo' >&nbsp;<?php echo mysql_result($result_obj,0,"descricao");?>&nbsp;</span>
 	   <?php
-            mysql_free_result($result_obj); 
+            mysqli_free_result($result_obj); 
            // Final objetivo
            ?>  
         </td>
@@ -196,15 +196,15 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 								   ."   b.codigousp=a.coresponsavel  order by  b.nome ");
 					//
 					if( ! $result_tb_temp2 ) {
-                         mysql_free_result($result_tb_temp2);
+                         mysqli_free_result($result_tb_temp2);
                          die('ERRO: Create Table $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  								
 					}			   
-                    mysql_free_result($result_tb_temp1);					
-                    mysql_free_result($result_tb_temp2);
+                    mysqli_free_result($result_tb_temp1);					
+                    mysqli_free_result($result_tb_temp2);
              		$query=mysqli_query("SELECT * FROM  $temp_tabela order by  $m_ordenar ");
 					//
 					if( ! $query )	{
-                         mysql_free_result($query);
+                         mysqli_free_result($query);
                          die('ERRO: Select $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  				
 					}		   
                     $m_linhas = mysqli_num_rows($query);
@@ -225,7 +225,7 @@ $arq_relatorio_link = substr(mysql_result($result,0,"relatproj"),$posicao_enc+1,
 				                                     ." order  by  $m_ordenar  ");  		
 					//
 					if ( ! $result_max_length ) {
-                         mysql_free_result($result_max_length);
+                         mysqli_free_result($result_max_length);
                          die('ERRO: Select maximo tamanho dos campos da tb  $temp_tabela - falha: '.mysqli_error($_SESSION["conex"]));  				
 					}	
 					$num_rows = mysqli_num_rows($query);

@@ -89,7 +89,7 @@ if( intval($total_regs)<1 ) {
     if( ! isset($_SESSION["table_temporaria"]) ) {
         //
         $terr="Falha SESSION table_temporaria não definida.";
-        echo $funcoes->mostra_msg_erro(utf8_decode("$terr"));    
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("$terr", 'ISO-8859-1', 'UTF-8'));    
         exit();
     }
     //
@@ -260,7 +260,7 @@ exit();
               <?php  
                   //
                   // IMPORTANTE:  principal  utf8_decode 
-                  //  echo  utf8_decode($valor);    
+                  //  echo  mb_convert_encoding($valor, 'ISO-8859-1', 'UTF-8');    
                  echo  $valor;    
                  ///           
                ?>

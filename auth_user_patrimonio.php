@@ -136,8 +136,6 @@ function nova($recebe) {
      $datetime =mysql_result($result_dthora,0,0);
      //    $sqlcmd = "INSERT INTO $dbname.sessao (datahorai,usuario,ipacesso,codacesso) values(now(),$codigousp,$ipint,'$codimgsys') ";
     //  Start a transaction - ex. procedure    
-    mysqli_query('DELIMITER &&'); 
-    mysqli_query('begin'); 
     //  Execute the queries 
     //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
     mysql_select_db($dbname);
@@ -153,8 +151,6 @@ function nova($recebe) {
          $msg_erro .="&nbsp;INSERT INTO TABELA SESSAO - Falha db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
          mysqli_query('rollback'); 
     }
-    mysqli_query('end'); 
-    mysqli_query('DELIMITER');
    //  FINAL -  TABELA ANOTACAO  -  BD  REXP
    if( $success ) { 
          //
@@ -386,7 +382,7 @@ function login( $login, $senha, $codimgusr ) {
     }       
     $n_regs=mysqli_num_rows($ver_usuario);
     if( $n_regs<1 ) return "Erro: Usuário/E_mail  inválido.";
-    if( isset($ver_usuario) ) mysql_free_result($ver_usuario);
+    if( isset($ver_usuario) ) mysqli_free_result($ver_usuario);
     //  $senha=sha1($senha);
     $senha=hash('sha1', $senha);
     /*

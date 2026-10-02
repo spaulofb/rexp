@@ -217,7 +217,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       ///  $$xyz=trim($_POST[$xyz]);
 		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);   
        }
@@ -227,7 +227,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 /**  Final - for( $i=0; $i<count($post_array); $i++ ) {  */
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( ! isset($val) ) $val="";
 if( strtoupper($val)=="SAIR" ) $source=$val;
 //
@@ -887,8 +887,8 @@ if( $val_upper=="PARTICIPANTE" ) {
                //  Participante tem PA cadastrado na tabela usuario
                /**
                  $msg_erro .="Participante:&nbsp;"
-                         .utf8_encode($nome)." j&aacute; cadastrado e aprovado<br>como "
-                         .utf8_encode(ucfirst($pa_descr_cadastrado)).".".$msg_final;
+                         .mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1')." j&aacute; cadastrado e aprovado<br>como "
+                         .mb_convert_encoding(ucfirst($pa_descr_cadastrado), 'UTF-8', 'ISO-8859-1').".".$msg_final;
                */
                $msg_new=$msg_ok;
                $msg_new .="Participante: $nome já cadastrado e aprovado como ";
@@ -905,7 +905,7 @@ if( $val_upper=="PARTICIPANTE" ) {
           $usuario_inserir=1;  
       }         
       //
-      /// if( isset($rsqlusu) )  mysql_free_result($rsqlusu);
+      /// if( isset($rsqlusu) )  mysqli_free_result($rsqlusu);
       if( isset($rsqlusu) ) {
            unset($rsqlusu);  
       } 
@@ -946,9 +946,7 @@ if( $val_upper=="PARTICIPANTE" ) {
          if( ! isset($activ_code) ) $activ_code=0;
          //
          //  START  a transaction - ex. procedure    
-         mysqli_query($_SESSION["conex"],'DELIMITER &&'); 
          $commit="commit";
-         mysqli_query($_SESSION["conex"],'begin'); 
          //
          //  Execute the queries 
          //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
@@ -1027,10 +1025,7 @@ if( $val_upper=="PARTICIPANTE" ) {
          }                  
          /*!40000 ALTER TABLE  ENABLE KEYS */;
          mysqli_query($_SESSION["conex"],$commit);
-         mysqli_query($_SESSION["conex"],"UNLOCK  TABLES");
          ///  Complete the transaction 
-         mysqli_query($_SESSION["conex"],'end'); 
-         mysqli_query($_SESSION["conex"],'DELIMITER');
          /// 
     }
     /**  Final - if( intval($m_erro)<1 ) {  */
@@ -1075,7 +1070,7 @@ if( $val_upper=="PARTICIPANTE" ) {
             //  $headers1 .= "From: \"Registro Membro\" <auto-reply@$host>\r\n";                    
             // $headers1 .= "From: \"RGE/SISTAM\" <gemac@genbov.fmrp.usp.br>\r\n";                    
             $headers1 .= "From: \"RGE/SISTAM\" <{$_SESSION["gemac"]}>\r\n";  
-     ////            $a_link = utf8_decode("$a_link");
+     ////            $a_link = mb_convert_encoding("$a_link", 'ISO-8859-1', 'UTF-8');
 
             ///
             if( intval($usuario_inserir)==1 ) {
@@ -1105,7 +1100,7 @@ if( $val_upper=="PARTICIPANTE" ) {
             }
             //
             /**   EMAIL DESATIVADO  */
-            ///  mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+            ///  mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
             ///  Enviando mensagem para o participante
             $envio = mail($e_mail, stripslashes($assunto), $message, $headers1);
             ///  Enviando mensagem na tela 

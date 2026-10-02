@@ -14,7 +14,7 @@ if( ! isset($_SESSION)) {
 $n_erro=0;
 ///  HOST mais a pasta principal do site - host_pasta
 if( ! isset($_SESSION["host_pasta"]) ) {
-     $msg_erro .= utf8_decode("Sessão host_pasta não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão host_pasta não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }

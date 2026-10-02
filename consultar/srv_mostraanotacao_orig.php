@@ -48,7 +48,7 @@ if( isset($_SESSION["incluir_arq"]) ) {
 /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sessão pasta_raiz não está ativa.").$msg_final;  
+     $msg_erro .= mb_convert_encoding("Sessão pasta_raiz não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;  
      echo $msg_erro;
      exit();
 }
@@ -106,7 +106,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
             if( $pos1 === false ) {
                 ///  $$xyz=trim($_POST[$xyz]);
                 ///   Para acertar a acentuacao - utf8_encode
-                /// $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                /// $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
                  $$xyz = trim($_POST[$xyz]); 
             } else {
                 $$xyz = explode($div_array_por,$_POST[$xyz]);  
@@ -157,17 +157,17 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     } 
     ////
     /// Arquivo da Anotacao do Projeto - 20180913
-    $val = utf8_decode(trim($val)); 
+    $val = mb_convert_encoding(trim($val), 'ISO-8859-1', 'UTF-8'); 
     $arquivo = trim($val);
    ///  $arquivo = trim($arq_anotacao);
     
-////  $dir_arq=utf8_decode("{$pasta}$arquivo"); 
+////  $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8'); 
     $dir_arq="{$pasta}{$arquivo}";
-    ///  $dir_arq=utf8_decode("{$pasta}$arquivo");
+    ///  $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8');
     
     ///  Funcionando 100%    
     ///  $resultado=@file_exists("{$pasta}".preg_replace('\\','',$arquivo));
-    ////  $resultado=@file_exists(utf8_decode("{$pasta}$arquivo"));
+    ////  $resultado=@file_exists(mb_convert_encoding("{$pasta}$arquivo"), 'ISO-8859-1', 'UTF-8');
     $resultado=file_exists("$dir_arq");
     if( ! $resultado ) {
          /* $msg_erro .= "&nbsp;Esse Arquivo: ".$arquivo."  n&atilde;o tem no Servidor".$msg_final;
@@ -177,7 +177,7 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     }  else {
         ///  SESSIONs para diretorio e arquivo - Anotacao do Projeto
         ///  echo $pasta."%".$arquivo;  
-        $_SESSION["arquivo_anotacao"]=utf8_encode($arquivo);
+        $_SESSION["arquivo_anotacao"]=mb_convert_encoding($arquivo, 'UTF-8', 'ISO-8859-1');
         $_SESSION["pasta_arq_anotacao"]=$pasta;
         ////  echo $pasta."%#sepa%#rar%#{$arquivo}"; 
         echo  "{$_SESSION["pasta_arq_anotacao"]}%#sepa%#rar%#{$_SESSION["arquivo_anotacao"]}"; 
@@ -195,12 +195,12 @@ if( $opcao_maiusc=="BUSCA_PROJ" )  {
       ///           
       $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $result_consult_anotacao ) {
-            echo $funcoes->mostra_msg_erro("Selecionando ".utf8_decode("Anotação")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
+            echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("Anotação")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
             exit();        
       } 
       $nanotacoes=mysql_result($result_consult_anotacao,0,0);     
       if( intval($nanotacoes)<1 ) {
-            echo $funcoes->mostra_msg_erro("Nenhuma ".utf8_decode("Anotação")." desse Projeto.");            
+            echo $funcoes->mostra_msg_erro("Nenhuma ".mb_convert_encoding("Anotação")." desse Projeto.", 'ISO-8859-1', 'UTF-8');            
             exit();        
       } 
       ///
@@ -250,7 +250,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
          if( isset($val) ) {
               $cip=$val;             
           } else {
-              echo $funcoes->mostra_msg_erro(utf8_decode("Variável val não definida. Corrigir."));
+              echo $funcoes->mostra_msg_erro(mb_convert_encoding("Variável val não definida. Corrigir."), 'ISO-8859-1', 'UTF-8');
               exit();        
           }
      }
@@ -365,7 +365,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
           $cip=$array_proj_anot[0];
          $anotacao=$array_proj_anot[1];        
     } else {
-         echo $funcoes->mostra_msg_erro(utf8_decode("Array: array_proj_anot não definido."));            
+         echo $funcoes->mostra_msg_erro(mb_convert_encoding("Array: array_proj_anot não definido."), 'ISO-8859-1', 'UTF-8');            
          exit();
     }
     ///  Selecionando Projeto
@@ -387,7 +387,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
      foreach( $array_nome as $key => $value ) {
               $$key=$value;
      }             
-     if( isset($resultado_projeto) ) mysql_free_result($resultado_projeto);     
+     if( isset($resultado_projeto) ) mysqli_free_result($resultado_projeto);     
      /*    
       a.numero as nr, a.alteraant as Altera, alteradapn as Alterada, "
                  ." a.titulo as T?tulo, b.nome as Autor, c.titulo as projeto_titulo,  "
@@ -423,7 +423,7 @@ if( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) )  {
               $$key=$value;
      }             
      //// Desativando variavel
-     if( isset($resultado_anotacao) ) mysql_free_result($resultado_anotacao);   
+     if( isset($resultado_anotacao) ) mysqli_free_result($resultado_anotacao);   
      ////  Selecionando os Nomes das Testemunhas da ANOTACAO
      if( strlen(trim($testemunha1))>=1 or strlen(trim($testemunha2))>=1  ) {
          if( strlen(trim($testemunha1))>=1 and strlen(trim($testemunha2))>=1 ) {

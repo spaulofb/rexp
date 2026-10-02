@@ -101,7 +101,7 @@ if( intval($total_regs)<=0 ) {
            Verificando SESSION  table_temporaria  -  20180720
     ***/   
     if( ! isset($_SESSION["table_temporaria"]) ) {
-        echo $funcoes->mostra_msg_erro(utf8_decode("Falha SESSION table_temporaria não definida."));    
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_temporaria não definida."), 'ISO-8859-1', 'UTF-8');    
         exit();
     }
     /// Renomeando a Tabela como variavel
@@ -222,7 +222,7 @@ if( intval($total_regs)<=0 ) {
             <td class="font_size_family" style="text-align: <?php echo $text_align;?>;"   >
               <?php  
                  /// IMPORTANTE:  principal  utf8_decode 
-                 echo  utf8_decode($valor);    
+                 echo  mb_convert_encoding($valor, 'ISO-8859-1', 'UTF-8');    
                  ///           
                ?>
             </td>

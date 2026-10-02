@@ -175,7 +175,7 @@ if( strtoupper(trim($m_onload))=="SUBMIT"  ) {
              /// if( strlen(trim($usuario_erro))>1  ) {
               if( intval($usuario_erro)>0  ) {
                    $m_erro=$m_erro+1;
-                   $msg_erro .= utf8_decode("Re-digite o campo Usu&aacute;rio").$msg_final;   
+                   $msg_erro .= mb_convert_encoding("Re-digite o campo Usu&aacute;rio", 'ISO-8859-1', 'UTF-8').$msg_final;   
                    unset($usuario_erro);
               }
         }
@@ -185,13 +185,13 @@ if( strtoupper(trim($m_onload))=="SUBMIT"  ) {
               if( intval($senha_erro)>0  ) {
                   $m_erro=$m_erro+1;
                   ///  $msg_erro .=$senha_erro.$msg_final;
-                  $msg_erro .= utf8_decode("Re-digite campo Senha").$msg_final;                
+                  $msg_erro .= mb_convert_encoding("Re-digite campo Senha", 'ISO-8859-1', 'UTF-8').$msg_final;                
                   unset($senha_erro);       
              }
         }
         ////  Verifica se houve erro nos dois campos usuario e senha
         if( intval($m_erro)>1 ) {
-            $msg_erro .= utf8_decode("Re-digite campos: Usu&aacute;rio e Senha").$msg_final;   
+            $msg_erro .= mb_convert_encoding("Re-digite campos: Usu&aacute;rio e Senha", 'ISO-8859-1', 'UTF-8').$msg_final;   
         }
         echo  $msg_erro;
         exit();      
@@ -269,7 +269,7 @@ if( intval($_SESSION["total"])==1 ) {
             </select>
             </span>
             <?php
-             if( isset($result_pa) )  mysql_free_result($result_pa);
+             if( isset($result_pa) )  mysqli_free_result($result_pa);
             exit();
         } else if( intval($regs)==1 ) {
             $permit_pa="";

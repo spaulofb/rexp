@@ -69,7 +69,7 @@ for( $i=0; $i< $contador; $i++ ) {
        if ( $pos1===false ) {
            //  $$xyz=trim($_POST[$xyz]);
            //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
        } else  {
            $$xyz = explode($div_array_por,$_POST[$xyz]);
        }
@@ -77,7 +77,7 @@ for( $i=0; $i< $contador; $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( ! isset($val) ) $val="";
 if( strtoupper($val)=="SAIR" ) $source=$val;
@@ -113,7 +113,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
     //
     $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_anotacao_rm ) {
-        mysql_free_result($result_anotacao_rm);
+        mysqli_free_result($result_anotacao_rm);
         $msg_erro .="Falha consultando a tabela anota&ccedil;&atilde;o  - ".mysqli_error($_SESSION["conex"]).$msg_final;
         echo   $msg_erro;
         exit();
@@ -154,7 +154,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
             $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa where "
             ."   codigousp=$anotador order by nome "); 
             if( ! $res_anotador ) {
-                mysql_free_result($res_anotador);
+                mysqli_free_result($res_anotador);
                 $msg_erro .="Select Tabela  pessoa - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
                 echo $msg_erro;
                 exit();                
@@ -167,7 +167,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
                 $_SESSION["anotador_codigousp"]=mysql_result($res_anotador,0,"codigousp");
                 $anotador_nome=mysql_result($res_anotador,0,"nome");
                 $anotador_categoria=mysql_result($res_anotador,0,"categoria");                    
-                mysql_free_result($res_anotador); 
+                mysqli_free_result($res_anotador); 
             }
             // Final da Num_USP/Nome Autor/Anotador
            //  Nome do Anotador do Projeto
@@ -234,7 +234,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
             $testemunhas_result = $result2;
            //  include("testemunhas.php"); 
            echo "<span style='color: #000000; font-size: small;' >".mysql_result($result2,0,'testemunha1_nome')."</span>";           
-            mysql_free_result($result2); 
+            mysqli_free_result($result2); 
            // FINAL - Código da Testemunha (1) da realização 
          ?>  
         </td>
@@ -253,7 +253,7 @@ if( $opcao_maiusc=="ANOTACAO" and strtoupper(trim($val))!="EXCLUIR"  ) {
              $testemunhas_result = $result;
              //  include("testemunhas.php"); 
              echo "<span style='color: #000000; font-size: small;' >".mysql_result($result,0,'testemunha2_nome')."</span>";           
-             mysql_free_result($result); 
+             mysqli_free_result($result); 
              // FINAL - Código da Testemunha (2) da realização 
            ?>  
          </td>
@@ -338,7 +338,7 @@ if( $opcao_maiusc=="EXCLUIR" and  strtoupper(trim($val))=="ANOTACAO" ) {
      $delcmd = mysqli_query("DELETE FROM $bd_2.anotacao  WHERE autor=$anotador and "
                     ."   projeto=$m_projeto  and  numero=$m_anotacao ");
      if( ! $delcmd ) {
-         mysql_free_result($delcmd);
+         mysqli_free_result($delcmd);
          $msg_erro .="Falha removendo uma anota&ccedil;&atilde;o da Tabela anotacao - db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;
          exit();                

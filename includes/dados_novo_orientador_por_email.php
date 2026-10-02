@@ -45,7 +45,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
        if( $pos1 === false ) {
            ///  $$xyz=trim($_POST[$xyz]);
            ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
        } else {
            $$xyz = explode($div_array_por,$_POST[$xyz]);   
        }
@@ -53,7 +53,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -113,11 +113,9 @@ if( $source_maiusc=="SAIR" ) {
          ///   $orientador_pa = $_SESSION["array_usuarios"]["orientador"];                                       
          if( strtoupper(trim($sn))=="NAO"  ) {
               ///  Start a transaction - ex. procedure    
-              mysqli_query('DELIMITER &&'); 
-              mysqli_query('begin'); 
               ///  Execute the queries          
               //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-              mysqli_query("LOCK TABLES  $bd_1.usuario  DELETE, $bd_2.participante DELETE ");
+              true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
               /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
               //  DELETE  particpante 
               $res_usuario = "DELETE from $bd_2.participante  WHERE codigousp=$codigousp and pa=$orientador_pa ";
@@ -150,10 +148,7 @@ if( $source_maiusc=="SAIR" ) {
                   $lnerro=1;        
                }       
                /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-               mysqli_query("UNLOCK  TABLES");
                //  Complete the transaction 
-               mysqli_query('end'); 
-               mysqli_query('DELIMITER');         
                //  Caso Tabela acima foi aceita incluir dados na outra abaixo
                //   Mandar mensagem para o novo Orientador - cancelado
                if( $lnerro<1 ) {
@@ -245,10 +240,8 @@ if( $source_maiusc=="SAIR" ) {
                     */
                     $nerro=0;
                     ///  START a transaction - ex. procedure 
-                    mysqli_query('DELIMITER &&'); 
-                    mysqli_query('begin'); 
                     ///  Execute the queries          
-                    mysqli_query("LOCK TABLES $bd_1.usuario UPDATE, $bd_2.participante UPDATE  ");
+                    true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
                     if( $usu_aprovado<1  ) {
                           $sqlcmd = "UPDATE  $bd_1.usuario SET aprovado='1',"
                                   ." activation_code=$activation_code, "
@@ -287,10 +280,7 @@ if( $source_maiusc=="SAIR" ) {
                         }
                     }
                     ///                   
-                    mysqli_query("UNLOCK  TABLES");
                     //  Complete the transaction 
-                    mysqli_query('end'); 
-                    mysqli_query('DELIMITER'); 
                     ///        
                    /***
                          Mandar mensagem para o novo Orientador - caso nao tenha erro               
@@ -334,7 +324,7 @@ if( $source_maiusc=="SAIR" ) {
                         ///  $headers1 .= "From: \"RGE/SISTAM\" <gemac@genbov.fmrp.usp.br>\r\n";    
                         $headers1 .= "From: RGE/SISTAM < $from_email >";                    
                         ///
-                        ///  $nome=utf8_encode($nome);
+                        ///  $nome=mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1');
                         ///
                         $message = "$corpo\n<br><br>
                         Nome: $nome<br>
@@ -349,19 +339,19 @@ if( $source_maiusc=="SAIR" ) {
                      Esta é uma mensagem automática.<br> 
                      *** não responda a este EMAIL ****
                      ";
-                     ///  mail($orientador_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+                     ///  mail($orientador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
                      ///
-                     //// if( mail($orientador_email, stripslashes(utf8_encode($assunto)), $message,$headers1) ) {
+                     //// if( mail($orientador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1) , 'UTF-8', 'ISO-8859-1') {
                      if( mail($orientador_email, $assunto, $message,$headers1) ) {
                           $msg_ok .= "<span style='color: #000000; text-align: center; padding-left: 5px;font-size: medium; overflow: auto; '>"
                              ."&nbsp;&nbsp;Mensagem enviada para o novo Orientador:"
-                             ."<br>&nbsp;&nbsp;<b>".utf8_encode($nome)."</b> no email informado:&nbsp;".$e_mail."</span>".$msg_final;
+                             ."<br>&nbsp;&nbsp;<b>".mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1')."</b> no email informado:&nbsp;".$e_mail."</span>".$msg_final;
                            echo $msg_ok;                
                      } else {
                            $m_erro ="<span style='color: #000000; text-align: center; font-size: medium; overflow: auto; '>"
                               ."&nbsp;&nbsp;<b>Falha</b> no envio da mensagem para o novo Orientador:"
                               ."<br>&nbsp;Corrigir&nbsp;";
-                           $m_erro .="<b>".utf8_encode($nome)."</b> no email informado:&nbsp;".$e_mail."</span>";
+                           $m_erro .="<b>".mb_convert_encoding($nome, 'UTF-8', 'ISO-8859-1')."</b> no email informado:&nbsp;".$e_mail."</span>";
                           ///
                      }
                      ///

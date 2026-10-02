@@ -46,7 +46,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
        if ( $pos1 === false ) {
            //  $$xyz=trim($_POST[$xyz]);
            //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
        } else {
             $$xyz = explode($div_array_por,$_POST[$xyz]);  
        } 
@@ -54,7 +54,7 @@ for( $i=0; $i<count($post_array); $i++ ) {
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -88,8 +88,8 @@ if( strtoupper($source)=="SAIR" ) {
               e de depois usa o  - html_entity_decode 
          */
     /*         
-      $campo_nome = htmlentities(utf8_decode($campo_nome));
-      $campo_value = htmlentities(utf8_decode($campo_value));
+      $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+      $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
       $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));      
       $array_temp = explode(",",$campo_nome);        
       $count_array_temp = sizeof($array_temp);         
@@ -133,7 +133,7 @@ if( strtoupper($source)=="SAIR" ) {
              //
              // Verificando se houve erro no Select
              if( ! $res_acesso ) {
-                  mysql_free_result($res_acesso);
+                  mysqli_free_result($res_acesso);
                   //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                   die("ERRO: Select users e campos  - ".mysqli_error($_SESSION["conex"]));
              }  
@@ -148,7 +148,7 @@ if( strtoupper($source)=="SAIR" ) {
                       $m_erro = "Conta n?o ativada. Por favor verifique seu e-mail para o c?digo de ativação";
                  }
              } else $m_erro = "Esse Usu&aacute;rio n&atilde;o existe";        
-             mysql_free_result($res_acesso);
+             mysqli_free_result($res_acesso);
              // check against salt
              //  if ( $pwd===PwdHash($pass,substr($pwd,0,9))) { 
             //  $m_pwd = PwdHash($pass,trim($arr_nome_val[senha]));
@@ -170,7 +170,7 @@ if( strtoupper($source)=="SAIR" ) {
                     $result_update= mysqli_query("Update users set `ctime`='$stamp', `ckey` = '$ckey' where id='$id' ");
                     // Verificando se houve erro no Update            
                     if( ! $result_update ) {
-                          mysql_free_result($result_update);
+                          mysqli_free_result($result_update);
                           die("ERRO: Update users e campos  - ".mysqli_error($_SESSION["conex"]));
                     }
                     header("Location: ../myaccount.php");
@@ -256,12 +256,12 @@ if( strtoupper($source)=="SAIR" ) {
                           ."  upper(trim(user_name))='$login'");
                 ///
                 if( ! $rs_duplicate  ) {
-                    mysql_free_result($rs_duplicate);
+                    mysqli_free_result($rs_duplicate);
                     //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                     die("ERRO: Select users e campo user_name  - db/mysql&nbsp;".mysqli_error($_SESSION["conex"]));
                 }  
                 list($total) = mysql_fetch_row($rs_duplicate);
-                mysql_free_result($rs_duplicate);
+                mysqli_free_result($rs_duplicate);
                 if ( $total>0) {
                      $m_erro= "O usu&aacute;rio ".$m_user_name." j? existe.&nbsp;<br>"
                           ."Por favor tente novamente como outro usu&aacute;rio.";
@@ -271,12 +271,12 @@ if( strtoupper($source)=="SAIR" ) {
                            ." upper(trim(user_email))='$email' ");
                     //
                     if( ! $rs_duplicate  ) {
-                          mysql_free_result($rs_duplicate);
+                          mysqli_free_result($rs_duplicate);
                          //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                          die("Falha Select users e campo user_email - ".mysqli_error($_SESSION["conex"]));
                     }
                     list($total) = mysql_fetch_row($rs_duplicate);
-                    mysql_free_result($rs_duplicate);
+                    mysqli_free_result($rs_duplicate);
                     if ( $total>0) {
                         $m_erro= "O email j? existe.&nbsp;<br>"
                             ."Por favor tente novamente com outro email (correio eletronico).";
@@ -286,8 +286,6 @@ if( strtoupper($source)=="SAIR" ) {
                /******************* Filtragem de entrada ****************************/
                foreach($arr_nome_val as $key => $value ) $data[$key] = html_entity_decode(filter($value));   
                //  Start a transaction - ex. procedure    
-               mysqli_query('DELIMITER &&'); 
-               mysqli_query('begin'); 
                //  Execute the queries 
                $sql_insert = mysqli_query("INSERT into `users`
                  (`full_name`,`user_email`,`pwd`,`address`,`tel`,`fax`,`website`,`date`,`users_ip`,`activation_code`,`country`,`user_name`)
@@ -306,8 +304,6 @@ if( strtoupper($source)=="SAIR" ) {
                    $user_id = mysql_insert_id();      
                    mysqli_query('commit');                    
                }
-               mysqli_query('end'); 
-               mysqli_query('DELIMITER'); 
                //        
                if( $sql_insert ) {
                     $md5_id = md5($user_id);
@@ -371,7 +367,7 @@ if( strtoupper($source)=="SAIR" ) {
                        exit();                           
                    }                                  
                }                 
-               mysql_free_result($sql_insert);                 
+               mysqli_free_result($sql_insert);                 
             }   //  FINAL - IF strlen(trim($m_erro))<1
             if( strlen(trim($m_erro))>=1 ) {
                   $msg_erro .= $m_erro.$msg_final; 
@@ -417,7 +413,7 @@ if( strtoupper($source)=="SAIR" ) {
          if( $result_pa ) {
              $descricao_pa = trim(mysql_result($result_pa,0,"descricao"));                                                             
          }                
-         mysql_free_result($result_pa);     
+         mysqli_free_result($result_pa);     
          if( strlen(trim($m_erro))<1 ) {
               // $user_email = $data['user_email'];
               $user_email = strtoupper(trim($arr_nome_val[$cpo_email]));
@@ -430,7 +426,7 @@ if( strtoupper($source)=="SAIR" ) {
                                ." where a.codigousp=b.codigousp and  upper(trim(a.e_mail))='$user_email'  ");
               //
               if( ! $rs_check  ) {
-                  mysql_free_result($rs_check);
+                  mysqli_free_result($rs_check);
                   //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                   die("ERRO: Select Tabela  pessoa  e campo e_mail  - ".mysqli_error($_SESSION["conex"]));
               }  
@@ -446,17 +442,17 @@ if( strtoupper($source)=="SAIR" ) {
                } elseif( $num>=1 ) {
                     //  Incluindo o codigousp na variavel  cod_senha
                   // $codigousp_senha = trim(mysql_result($rs_check,0,"codigousp"));                   
-                   mysql_free_result($rs_check);
+                   mysqli_free_result($rs_check);
                   $resultado=mysqli_query("Select login from  pessoal.usuario where "
                             ." upper(trim(login))='$user_login'  and  pa=$lnpa  ");
                   //          
                    if( ! $resultado ) {
-                        mysql_free_result($resultado);                       
+                        mysqli_free_result($resultado);                       
                        //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                        die("ERRO: Select Tabela pessoal.usuario e campos email, login e pa  - ".mysqli_error($_SESSION["conex"]));                       
                    } 
                    $n_regs=mysqli_num_rows($resultado);
-                   mysql_free_result($resultado);    
+                   mysqli_free_result($resultado);    
                    $n_regs = 1;  // Quebra galho. Para evitar o teste do Pa nesse momento                   
                    if( $n_regs<1 ) {
                        $m_erro=1;   
@@ -470,13 +466,13 @@ if( strtoupper($source)=="SAIR" ) {
                                         ." upper(trim(login))='$user_login' ");
                        //            
                        if( ! $rs_activ ) {
-                           mysql_free_result($rs_activ);
+                           mysqli_free_result($rs_activ);
                            //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                            die("ERRO: Atualizando senha  - ".mysqli_error($_SESSION["conex"]));
                        }
                        $res_pa = mysqli_query("Select descricao from rexp.pa where trim(codigo)=".$lnpa);
                        if( ! $res_pa ) {
-                           mysql_free_result($res_pa);          
+                           mysqli_free_result($res_pa);          
                            die("ERRO: Falha erro no Select rexp.pa ".mysqli_error($_SESSION["conex"]));
                        }
                        if( mysqli_num_rows($res_pa)>0 ) {
@@ -521,9 +517,9 @@ if( strtoupper($source)=="SAIR" ) {
                            *** N?o responda a este EMAIL ****
                            ";
                            //  Enviando mensagem para email atribuido
-                           //  Sempre usar  stripslashes(utf8_encode($assunto))  para acentos  stripslashes e  utf8_encode  
+                           //  Sempre usar  stripslashes(mb_convert_encoding($assunto), 'UTF-8', 'ISO-8859-1')  para acentos  stripslashes e  utf8_encode  
                            // mail("lafbezer@fmrp.usp.br,bezerralaf@gmail.com,maflaure@rge.fmrp.usp.br,spfbezer@rge.fmrp.usp.br", $assunto , $message,$headers1);  
-                           mail($user_email, stripslashes(utf8_encode($assunto)), $message ,$headers1);                         
+                           mail($user_email, stripslashes(mb_convert_encoding($assunto)), $message ,$headers1, 'UTF-8', 'ISO-8859-1');                         
 
                            //                          
                            $msg_ok .= "Sua senha foi redefinida e uma nova senha foi enviada para seu endere?o de e-mail.<br>"
@@ -582,7 +578,7 @@ if( strtoupper($source)=="SAIR" ) {
                //                       
                // Verificando se houve erro no Select Tabdla Usuario
                if( ! $rs_check ) {
-                     mysql_free_result($rs_check);
+                     mysqli_free_result($rs_check);
                      //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                      die("ERRO: Select pessoal.usuario e campos  - ".mysqli_error($_SESSION["conex"]));
                 }  
@@ -607,7 +603,7 @@ if( strtoupper($source)=="SAIR" ) {
                                ." trim(codigousp)=$user  AND  activation_code=$activ ");
                     // Verificando se houve erro no update            
                     if( ! $rs_activ ) {
-                          mysql_free_result($rs_activ);
+                          mysqli_free_result($rs_activ);
                           //  die('ERRO: CREATE TABLE  - falha: '.mysqli_error($_SESSION["conex"]));  
                           die("ERRO: N?o foi poss?vel efetivar o usuario/login. ".mysqli_error($_SESSION["conex"]));
                     }

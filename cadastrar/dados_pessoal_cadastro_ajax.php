@@ -39,7 +39,7 @@ $array_temp = explode(",",$campo_nome);
 */
 $cntarr = sizeof($array_temp);
 //
-/// $campo_value = utf8_decode($campo_value);  
+/// $campo_value = mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8');  
 $campo_value = "{$campo_value}";  
 //
 //  $campo_value =  $campo_value; 
@@ -246,7 +246,7 @@ for( $i=0; $i<$cntarrtmp; $i++ ) {
           //  if( $name_type[$campos]=='string' ) {
           if( in_array(strtoupper($name_type[$campos]),$tx_array) ) {    
               //
-              //  $cpo_val=utf8_decode($cpo_val);
+              //  $cpo_val=mb_convert_encoding($cpo_val, 'ISO-8859-1', 'UTF-8');
               //  clean_spaces - procedure para limpar espacos duplicados
               $campos_val= "clean_spaces(\"$cpo_val\") ";
               /**
@@ -334,6 +334,6 @@ $_SESSION["campos_valor"]=html_entity_decode(trim($_SESSION["campos_valor"]));  
 $cpo_nome=$_SESSION["campos_nome"];
 $cpo_valor= $_SESSION["campos_valor"];
 
-if( isset($rsqltb) ) mysql_free_result($rsqltb);
+if( isset($rsqltb) ) mysqli_free_result($rsqltb);
 ////
 ?>

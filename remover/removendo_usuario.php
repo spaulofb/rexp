@@ -9,11 +9,9 @@ if(!isset($_SESSION)) {
 ///
 $lnerro=0;
 ///  Start a transaction - ex. procedure    
-mysqli_query('DELIMITER &&'); 
-mysqli_query('begin'); 
 //  Execute the queries          
 ////  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-mysqli_query("LOCK TABLES $bd_1.usuario  DELETE, $bd_2.participante DELETE,  $bd_2.anotador DELETE ");
+true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
 /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;         
 ///  Removendo o anotador do Projeto  
 $sqlcmd = "DELETE from $bd_2.anotador  WHERE codigo=$cod_usuario  ";
@@ -64,10 +62,7 @@ if( intval($lnerro)<1 ) {
 }  
 ////
 /*!40000 ALTER TABLE `orientador` ENABLE KEYS */;
-mysqli_query("UNLOCK  TABLES");
 //  Complete the transaction 
-mysqli_query('end'); 
-mysqli_query('DELIMITER');         
 ////
 ///  FINAL IMPORTANTE PASSAR RESULTADO PARA ESSA SESSAO
 ///

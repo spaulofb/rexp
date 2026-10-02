@@ -51,7 +51,7 @@ $msg_final="</span></span>";
 //  Verificando SESSION incluir_arq
 if( ! isset($_SESSION["incluir_arq"]) ) {  
       //
-      /**   $msg_erro .= utf8_decode("Sessão incluir_arq não está ativa.").$msg_final;      */
+      /**   $msg_erro .= mb_convert_encoding("Sessão incluir_arq não está ativa.", 'ISO-8859-1', 'UTF-8').$msg_final;      */
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
@@ -132,7 +132,7 @@ if( preg_match("/^DESCARREGAR$/ui",$opcao_maiusc) ) {
                if( $pos1 === false ) {
                     //  $$xyz=trim($_POST[$xyz]);
                     //   Para acertar a acentuacao - utf8_encode
-                    // $$xyz = utf8_decode(trim($_POST[$xyz])); 
+                    // $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
                     $$xyz = trim($_POST[$xyz]); 
                } else {
                     $$xyz = explode($div_array_por,$_POST[$xyz]);   
@@ -184,8 +184,8 @@ exit();
     *     Acentuacao e espacos no arquivo PDF  --- ALterado em 20180613 
     *            utilizando  utf8_encode       
     */
-    // if( ! file_exists("{$pasta}".utf8_encode($arquivo)) ) {
-    // $dir_arq=utf8_decode("{$pasta}$arquivo");
+    // if( ! file_exists("{$pasta}".mb_convert_encoding($arquivo)) , 'UTF-8', 'ISO-8859-1') {
+    // $dir_arq=mb_convert_encoding("{$pasta}$arquivo", 'ISO-8859-1', 'UTF-8');
     // Converte de UTF-8 para ISO-8859-1 (o que o utf8_decode fazia)
      $arquivo = mb_convert_encoding($arquivo, "ISO-8859-1", "UTF-8");
      //  

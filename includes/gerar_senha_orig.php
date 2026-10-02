@@ -27,7 +27,7 @@ function GenPwd($length = 8) {
   /// Numero de senhas 
   $n_senhas=mysqli_num_rows($verificar_senha);
   if( intval($n_senhas)>=1 ) {
-      if( isset($verificar_senha) )  mysql_free_result($verificar_senha);
+      if( isset($verificar_senha) )  mysqli_free_result($verificar_senha);
       ///
       GenPwd();
   }                     

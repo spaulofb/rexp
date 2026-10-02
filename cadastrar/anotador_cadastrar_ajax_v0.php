@@ -240,14 +240,14 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
 	}
 }
 $e_mailinf = "  ";   /// Verificar ponto mais adequado para usar = pegar como parâmetro
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
 $_SESSION["source"]=trim($source);
@@ -339,7 +339,7 @@ if( $source_upper=="CODIGOUSP" ) {
     } else {
             $anotador_nome=mysql_result($resultado,0,"nome");
             $_SESSION["anotador_nome"]=trim($anotador_nome);
-            echo utf8_decode("$anotador_nome#$anotador_e_mail");
+            echo mb_convert_encoding("$anotador_nome#$anotador_e_mail", 'ISO-8859-1', 'UTF-8');
     }    
     exit();
 }
@@ -388,7 +388,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
      ///
      ///  Usuario Orientador/Chefe
      if( ! isset($_SESSION["usuario_conectado"]) ) {
-           $msg_erro .= utf8_decode("Session usuario_conectado não existe.").$msg_final;
+           $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
            echo $msg_erro;               
            exit();                                          
      }   
@@ -423,7 +423,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ***/   
           ini_set('default_charset','utf8');
          ///
-         $_SESSION["anotador_nome"] = $anotador_nome = $nome = utf8_encode(trim(preg_replace('/ +/',' ',$nome)));
+         $_SESSION["anotador_nome"] = $anotador_nome = $nome = mb_convert_encoding(trim(preg_replace('/ +/',' ',$nome)), 'UTF-8', 'ISO-8859-1');
          $nome_tmp = str_replace(' ','',$nome);
         /// Verificar se é duplicata
         ///  Verificar local onde ativar esses comandos de acentuação:              
@@ -447,7 +447,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
         /// Nr. de pessoas
         $nregs = mysqli_num_rows($resultado);
         if( intval($nregs)>0  ) {
-            if( isset($resultado) ) mysql_free_result($resultado);
+            if( isset($resultado) ) mysqli_free_result($resultado);
             $msg_erro .="NOME/E_mail em Duplicata (j&aacute; existe uma pessoa com esse nome ou e_mail). Corrija.".$msg_final;  
             echo $msg_erro;               
             exit();
@@ -460,8 +460,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
         $n_erro=0;
         ///
         ///  Iniciar uma transaction - ex. procedure    
-        mysqli_query('DELIMITER &&'); 
-        mysqli_query('begin'); 
         ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
          mysqli_query("LOCK TABLES $bd_1.pessoa INSERT");
         /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
@@ -477,9 +475,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
         } else {
               mysqli_query('commit');  
         }
-        mysqli_query("UNLOCK  TABLES");
-        mysqli_query('end'); 
-        mysqli_query('DELIMITER');
         ///  Ocorreu erro
         if( intval($n_erro)>0 ) {
             exit();
@@ -539,8 +534,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
       ///  Iniciar uma transaction - ex. procedure    
-      mysqli_query('DELIMITER &&'); 
-      mysqli_query('begin'); 
       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
       mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
       /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
@@ -560,11 +553,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
           } else {
               mysqli_query('commit');  
           }
-          /// mysqli_query("UNLOCK  TABLES");
       }
-      mysqli_query("UNLOCK  TABLES");
-      mysqli_query('end'); 
-      mysqli_query('DELIMITER');
       ///  Ocorreu erro
       if( intval($n_erro)>0 ) {
            exit();
@@ -617,8 +606,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
           /***
                      Incluindo anotador na tabela usuario
           **/
-          mysqli_query('DELIMITER &&'); 
-          mysqli_query('begin'); 
           ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
           mysqli_query("LOCK TABLES $bd_1.usuario INSERT");
           //
@@ -633,16 +620,12 @@ if( strtoupper($val)=="ANOTADOR" ) {
           } else {
               mysqli_query('commit');  
           }
-          mysqli_query("UNLOCK  TABLES");
-          mysqli_query('end'); 
-          mysqli_query('DELIMITER');
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
                echo $msg_erro;               
                exit();
           }
           ///          
-         ///  mysqli_query("UNLOCK  TABLES");
       }  
       /****  Final - Caso Anotador NAO consta na Tabela usuario     ******/
       ///
@@ -674,8 +657,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ///
           $n_erro=0;
           ///  Iniciar uma transaction - ex. procedure    
-          mysqli_query('DELIMITER &&'); 
-          mysqli_query('begin'); 
           mysqli_query("LOCK TABLES $bd_2.participante INSERT ");
           ////   
           $sqlcmd = "INSERT $bd_2.participante values($usuario_ci,$codigoprov,'$datacad','$datavalido',$pa,$codigo_ativa,$aprovado,$chefe )";
@@ -692,15 +673,11 @@ if( strtoupper($val)=="ANOTADOR" ) {
           }
           ///
           /// Concluir a transaction
-          //***mysqli_query("UNLOCK  TABLES");
-          mysqli_query('end'); 
-          mysqli_query('DELIMITER');            
           ///  Ocorreu erro
           if( intval($n_erro)>0 ) {
               exit();                                                 
           }
           /// 
-         /// mysqli_query("UNLOCK  TABLES");
    }  
    ///
    ///   Incluir registro do anotador na tabela anotador
@@ -715,8 +692,6 @@ if( strtoupper($val)=="ANOTADOR" ) {
    /***          Incluindo Anotador     
            Iniciar uma transaction - ex. procedure    
    ***/
-   mysqli_query('DELIMITER &&'); 
-   mysqli_query('begin'); 
    ///  Execute the queries 
    mysql_select_db($db_array[$elemento]);
    ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
@@ -728,15 +703,11 @@ if( strtoupper($val)=="ANOTADOR" ) {
        $msg_erro .='Incluindo anotador na tabela anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
        $n_erro=1;
        mysqli_query('rollback'); 
-       //***mysqli_query("UNLOCK  TABLES");
        echo $msg_erro;               
    } else {
        mysqli_query('commit'); 
    }
    /// Concluir a transaction
-   //*** mysqli_query("UNLOCK  TABLES");
-   mysqli_query('end'); 
-   mysqli_query('DELIMITER');            
    ///  Ocorreu erro
    if( intval($n_erro)>0 ) {
        exit();                                                 
@@ -852,7 +823,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
    *** Não responda a este EMAIL ****
    ";
    
-   //if ( mail($aprovador_email, stripslashes(utf8_encode($assunto)), $message,$headers1)  ) {
+   //if ( mail($aprovador_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1)  , 'UTF-8', 'ISO-8859-1') {
    // SEMPRE TESTAR O COMANDO MAIL -  SE A MENSAGEM FOI ENVIADA  
    //  $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);  
    $emailsender="$orientador_email";
@@ -863,7 +834,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
         ///  Alterado em 20180711            
     ini_set('default_charset','UTF-8');
    ///
-////   $_SESSION["anotador_nome"]= $anotador_nome = utf8_encode($anotador_nome);
+////   $_SESSION["anotador_nome"]= $anotador_nome = mb_convert_encoding($anotador_nome, 'UTF-8', 'ISO-8859-1');
    ///
    ///  Enviando mensagem na tela 
    if( $envio ) {

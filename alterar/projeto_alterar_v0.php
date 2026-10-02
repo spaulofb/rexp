@@ -60,7 +60,7 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 /// $_SESSION['time_exec']=180000;
 /*  UPLOAD: FILEFRAME section of the script
       verifica se o arquivo foi enviado      */
@@ -194,16 +194,16 @@ if( isset($_POST['fileframe']) ) {
                       if( strlen(trim($_SESSION["relatproj_orig"]))>2 ) {
                            $dir_relatproj_orig = "{$_SESSION["dir"]}{$_SESSION["relatproj_orig"]}";
                            ///                 
-                           if( file_exists(utf8_decode("$dir_relatproj_orig")) ) {
+                           if( file_exists(mb_convert_encoding("$dir_relatproj_orig")) , 'ISO-8859-1', 'UTF-8') {
                                ///  Removendo o arquivo anterior  do Projeto
                                ///  unlink("$dir_relatproj_orig");
-                               unlink(utf8_decode("$dir_relatproj_orig")); 
+                               unlink(mb_convert_encoding("$dir_relatproj_orig"), 'ISO-8859-1', 'UTF-8'); 
                            }
                       }
                    }           
                    ///
                    /// COPIA o arquivo para o diretorio especificado
-                   $filename="P".$_POST["nprojexp"]."_".utf8_decode($_FILES["relatproj"]["name"]);
+                   $filename="P".$_POST["nprojexp"]."_".mb_convert_encoding($_FILES["relatproj"]["name"], 'ISO-8859-1', 'UTF-8');
                    if( @copy($_FILES["relatproj"]['tmp_name'],$_SESSION["dir"].$filename) )  {
                          /*** give praise and thanks to the php gods ***/
                          $erros='';
@@ -256,9 +256,9 @@ if( isset($_POST['fileframe']) ) {
               mysqli_query('SET character_set_results=utf8'); 
               mysql_set_charset('utf8');
                   
-              ///  $local_arq = utf8_decode($local_arq); 
+              ///  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
               ///  $local_arq  = html_entity_decode(trim($filename));
-              $local_arq = utf8_encode($filename); 
+              $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
 
               /****  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao 
               *          - Use mysql_select_db() ou mysqli_query()

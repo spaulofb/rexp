@@ -224,13 +224,13 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	   if ( $pos1 === false ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
-           $$xyz = utf8_decode(trim($_POST[$xyz])); 
+           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
 	   } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
 	}
 }
 //
 //   Para acertar a acentuacao - utf8_encode
-//   $source = utf8_decode($source); $val = utf8_decode($val); 
+//   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
@@ -262,7 +262,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
     $res_pessoa=mysqli_query("SELECT  e_mail FROM $bd_1.pessoa WHERE  codigousp=".$val);
     //                          
     if( ! $res_pessoa ) {
-         mysql_free_result($res_pessoa);
+         mysqli_free_result($res_pessoa);
          die('ERRO: Selecionando Participante - falha: '.mysqli_error($_SESSION["conex"]));  
     }
     $n_regs=mysqli_num_rows($res_pessoa);
@@ -271,7 +271,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
         echo $msg_erro; 
     } else {
        $partes = mysql_result($res_pessoa,0,"e_mail")."#";    
-       mysql_free_result($res_pessoa);
+       mysqli_free_result($res_pessoa);
        $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
              ." FROM $bd_1.usuario where codigousp=$val ";
        $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
@@ -281,7 +281,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           $partes .="block"; 
        } else $partes .="none"; 
        echo $partes;
-       mysql_free_result($resultado_usuario);
+       mysqli_free_result($resultado_usuario);
     } 
 } else if( $source_upper=="GERAR_SENHA" ) {  //  Gerar Senha para o Participante
      $elemento=5;
@@ -414,8 +414,8 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
 	          </span>
 			  <?php
                   ////  Desativando variaveis
-                 if( isset($result_tb_temp1) )  mysql_free_result($result_tb_temp1); 
-                 if( isset($result) )  mysql_free_result($result); 
+                 if( isset($result_tb_temp1) )  mysqli_free_result($result_tb_temp1); 
+                 if( isset($result) )  mysqli_free_result($result); 
     	         // Final do SELECT
 	    	 	 break;
 		  } else {
@@ -499,14 +499,14 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           $m_erro=1;                  
       } else if( intval($n_regs)<1 ) {
           ///  Desativando variavel  
-          if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
+          if( isset($resultado_pessoa) ) mysqli_free_result($resultado_pessoa);
           $sqlcmd = "SELECT nome as nome_pessoa from $bd_1.pessoa where codigousp=$codigousp ";
           $resultado_pessoa = mysqli_query($_SESSION["conex"],$sqlcmd);                       
           ///  Nome do Novo Participante para ser incluido
           $nome = mysql_result($resultado_pessoa,0,"nome_pessoa");
           $participante_cadast=0;
            /// Caso variavel ativa - desativando 
-          if( isset($resultado_pessoa) ) mysql_free_result($resultado_pessoa);
+          if( isset($resultado_pessoa) ) mysqli_free_result($resultado_pessoa);
           $sqlcmd = "SELECT senha as senha_usu, pa as pa_usu, aprovado as aprovado_usu "
                    ." FROM $bd_1.usuario where codigousp=$codigousp ";
           $resultado_usuario=mysqli_query($_SESSION["conex"],$sqlcmd);                       
@@ -528,7 +528,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
           } else {
               $usuario_inserir=1;  
           }         
-          if( isset($resultado_usuario) )  mysql_free_result($resultado_usuario);
+          if( isset($resultado_usuario) )  mysqli_free_result($resultado_usuario);
           ///
     }   
     $success="";    
@@ -542,7 +542,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
         //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
         //   - Use mysql_select_db() ou mysqli_query()
         ///  mysqli_query("LOCK TABLES  $bd_1.usuario  INSERT, $bd_2.participante INSERT ");
-         mysqli_query("LOCK TABLES  $bd_1.usuario  WRITE, $bd_2.participante WRITE ");
+         true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
  
          /// Gera a ativação de codigo com 6 digitos
         if( $usuario_inserir==1 ) {
@@ -646,7 +646,7 @@ if( $source_upper=="PARTICIPANTE" ) {  //  Selecionando Participante do Projeto 
                 *** não responda a este EMAIL ****
                 ";                
             }
-          //  mail($usr_email, stripslashes(utf8_encode($assunto)), $message,$headers1);
+          //  mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
             mail($usr_email, stripslashes($assunto), $message,$headers1);
 
             //                          
