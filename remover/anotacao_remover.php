@@ -645,7 +645,8 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
            ///
            var poststr = "grupoanot="+encodeURIComponent(idselecproj)+"&val="+encodeURIComponent(idopcao)+"&m_array="+encodeURIComponent(string_array)+"&navegador="+browser; 
     } else {
-        ///  DESCARREGAR - UPLOAD abrindo o arquivo pdf
+        //
+        //  DESCARREGAR - UPLOAD abrindo o arquivo pdf
         if( opcao=="DESCARREGAR"  ) {
             var poststr = "grupoanot="+encodeURIComponent(opcao)+"&idopcao="+encodeURIComponent(idopcao)+"&m_array="+encodeURIComponent(string_array); 
         }  else {
