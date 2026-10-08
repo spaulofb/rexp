@@ -650,8 +650,8 @@ exit();
          }               
          ///         
      }
-     ///  FINAL - if( intval($nr_anotacao)<1  )
-     ///
+     //  FINAL - if( intval($nr_anotacao)<1  )
+     //
 } elseif( $opcao_maiusc=="EXCLUINDO"  && strtoupper(trim($op_selcpoval))=="ANOTACAO"  ) {
        /*
              Remover uma ANOTACAO de um Projeto
@@ -672,6 +672,9 @@ exit();
             echo $funcoes->mostra_msg_erro("Faltando a CIA (Código de Identificação da Anotação");
        } else {
           //
+          /**  Tabela principal   */
+          $tabela="anotacao";
+          //
           /**   IMPORTANTE:  Formato Mysqli caracteres   */ 
           ///   mysqli_set_charset($_SESSION["conex"], "utf8mb4");
           //
@@ -681,7 +684,7 @@ exit();
                           ."a.testemunha1, a.testemunha2, "
                           ." a.titulo as tit_anotacao, a.relatext as arquivado_como,  "
                           ." b.autor as autor_projeto, b.titulo as tit_projeto "
-                          ." FROM $bd_2.anotacao a, $bd_2.projeto b "
+                          ." FROM $bd_2.$tabela a, $bd_2.projeto b "
                           ." WHERE ( a.projeto=b.cip ) and a.cia=$cia ";
           //
           $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -719,6 +722,7 @@ exit();
           /// Definindo o caminho do arquivo dessa anotacao que sera removido tambem
           $val=strtolower(trim($op_selcpoval));
           $dir= '../doctos_img/A'.$m_autor_projeto."/$val";
+          //
           //  $arquivado_como = htmlentities(mb_convert_encoding($arquivado_como, 'ISO-8859-1', 'UTF-8'));
           $remover_arq = $dir."/".$arquivado_como;
           $dh  = opendir($dir);
@@ -729,7 +733,46 @@ exit();
      echo "ERRO:  LINHA/715  -->>  Antes  \$tit_projeto = $tit_projeto  <<-->>   tit_anotacao = $tit_anotacao  ";
       exit();
        */
-     
+
+      
+
+// deixa a string "crua": sem acento, minúscula, só o essencial
+function chave($s) {
+    //
+    // normaliza mojibake -> UTF-8 real
+    //  if (strpos($s, 'Ã') !== false) {
+    //    $s = mb_convert_encoding($s, 'ISO-8859-1', 'UTF-8');
+    // }
+    // remove acentos (ç->c, ã->a, etc.)
+    //  $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+    //
+    //  return strtolower(trim($s));
+    //  return trim($s);
+
+    // Detecta se a string não está em UTF-8 e converte para UTF-8 real
+    if (!mb_check_encoding($s, 'UTF-8')) {
+        $s = mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
+    } elseif (preg_match('//u', $s) === 0) {
+        // Se não for UTF-8 válido, tenta converter
+        $s = mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
+    }
+
+    // Remove acentos e caracteres especiais (translitera para ASCII)
+   // $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+
+    // Remove caracteres que podem ter sobrado após transliteração
+    //  $s = preg_replace('/[^A-Za-z0-9 ]/', '', $s);
+
+    // Retorna string normalizada e sem acentos
+    return trim($s);
+
+
+    //
+}
+
+
+
+
           
           //
           //  Removendo o arquivo PDF
@@ -759,35 +802,59 @@ exit();
                  //
                  $aqvtini=strstr($aqvt,'_',true);
                  //   
+                 $filename_maiusc = chave($filename_maiusc);
+                 $aqvt = chave($aqvt);
+                 $remover_arq = chave($remover_arq);
+                 //
 
-
-  //    echo  "ERRO:  LINHA/762  -->>   $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq  ";
-  //    exit();
-
-
- if( substr($filename_maiusc,-3,3)=="PDF" &&  $filename_maiusc==$aqvt ) {  
-
-      echo  "ERRO:  LINHA/762  -->> DENTRO -->>    $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq   ";
+/**  
+      echo  "ERRO:  LINHA/785  -->> NOVAOK   $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq  <<--  ";
       exit();
 
- }
 
+$alvo = chave($aqvt);
+$caminho = null;
+
+foreach( scandir("$dir") as $f ) {
+    if ($f === '.' || $f === '..') continue;
+    if( chave($f) === $alvo) {       // compara sem acento/caixa
+        $caminho = "arqs/" . $f;     // usa o NOME REAL que está no disco
+        break;
+    }
+}
+
+echo $caminho
+    ? "Achei: " . htmlspecialchars($caminho, ENT_QUOTES, 'UTF-8')
+    : "NÃO encontrei.";
+    
+    exit();
+ */
+
+
+
+
+
+
+/**   
+ if( substr($filename_maiusc,-3,3)=="PDF" &&  $filename_maiusc==$aqvt ) {  
+      echo  "ERRO:  LINHA/762  -->> DENTRO -->>    $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq   ";
+      exit();
+ }
+ */
 
 
                  //  if( substr($filename_maiusc,-3,3)=="PDF" &&  $filename_maiusc==$aqvt ) {
                  if( strtolower(substr($filename,-3)) === "pdf" && $fnm === $aqvtini ) {
                        //          
-                       // Removendo o arquivo da ANOTACAO
+                       //   Removendo o arquivo da ANOTACAO
                        //  unlink(trim($remover_arq)); 
                        //
-                       if(  unlink(trim($remover_arq))   ) { 
-                            echo "ERRO:  linha/765  -->>  \$remover_arq = $remover_arq  ";                          
-                       }  else  {
-                                 echo "ERRO:  linha/7688  NAO REMOVEU  -->>  \$remover_arq = $remover_arq  ";                          
+                       if( ! unlink(trim($remover_arq))   ) { 
+                            //
+                            die("ERRO:  Arquivo $remover_arq não removido - Corrigir. ") ;                          
+                            //
                        }
-                          exit();
                        //   
-
                        $conta_arq--;             
                        //
                   }           
@@ -795,23 +862,17 @@ exit();
           }
           /**  Final -  while( false !== ($filename = readdir($dh))) {  */  
           //
-
-
-   echo "ERRO: srv_rmanotacao/733  -->> Removendo o arquivo  $remover_arq  - \$cia = $cia  -->> \$array_nome = ".count($array_nome);
-  exit();
-
-
           //   Conexao/MYSQLI
           $conex=$_SESSION["conex"];
           //
-          //  Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem
-          if( intval($conta_arq)<1 ) {
-              if( is_dir($dir) ) { 
-                  rmdir($dir); 
-              } else {
-                  echo $dir.' n&atilde;o existe';    
-              }
-          }
+          /**   Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem   */
+          // if( intval($conta_arq)<1 ) {
+          //    if( is_dir($dir) ) { 
+          //        rmdir($dir); 
+          //    } else {
+          //        echo $dir.' n&atilde;o existe';    
+          //    }
+          // }
           //  FINAL removendo o arquivo PDF
           //
 
@@ -824,7 +885,7 @@ exit();
 
           //  Start a transaction - ex. procedure 
           $lnerro=0;
-          $tabela="anotacao";
+          //
           $commit="commit";   
           //
           //  Execute the queries          
@@ -869,27 +930,30 @@ exit();
               if( intval($nanotacoes)>0 ) {
                    //
                    $nanotacoes=$nanotacoes-1;
-                   $tabela="projeto";
+                   $tabela2="projeto";
                    $commit="commit";   
                    //
                    //  Execute the queries          
                     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-                //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela  UPDATE ");
+                //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela2  UPDATE ");
                     ///
                     ///  Removendo o registro da anotacao
-                    $sqlcmd = "UPDATE $bd_2.$tabela SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
+                    $sqlcmd = "UPDATE $bd_2.$tabela2  SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
                     $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
-                    if( ! $res_reg ) {
-                        $terr="&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysqli:&nbsp;";
-                        echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+                    if( ! $res_reg ) { 
+                         //
+                         $terr="&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysqli:&nbsp;";
+                         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
                          $commit="rollback";
+                         //
                     }    
-                    ///                  
+                    /**  Final - if( ! $res_reg ) {   */
+                    //                  
                     mysqli_query($_SESSION["conex"],$commit);
                     //
                     //  Complete the transaction 
-                    ///
-                    ///  Mensagem de aviso da remocao da Anotacao
+                    //
+                    //  Mensagem de aviso da remocao da Anotacao
                     $txt =  "Anotação: $tit_anotacao removida era parte do Projeto: ".$tit_projeto;
                     echo $txt;
                     //
@@ -899,7 +963,8 @@ exit();
          }
          ///
       }  
-      /// Final do IF  isset(cia)
+      // Final do IF  isset(cia)  
+      //
 }
 #
 ob_end_flush(); 
