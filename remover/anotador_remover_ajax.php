@@ -1,30 +1,33 @@
 <?php
 // 
-///  Arquivo para REMOVER - PROJETO/ANOTADOR  -  ajax 
+//  Arquivo para REMOVER - PROJETO/ANOTADOR  -  ajax 
 //
 //  Biblioteca para uso do programa
 //
 //
 function isEmail($email) {
     return preg_match('/^\S+@[\w\d.-]{2,}\.[\w]{2,6}$/iU', $email) ? TRUE : FALSE;
-}
-///  Funcao para busca com acentos
-if( ! function_exists("stringParaBusca") ) {
+}  
+//
+//  Funcao para busca com acentos
+if( ! function_exists("stringParaBusca") ) {  
+    //
     function stringParaBusca($str) {
-        //Transformando tudo em minúsculas
+        //
+        // Transformando tudo em minúsculas
         $str = trim(strtolower($str));
 
         //Tirando espaços extras da string... "tarcila  almeida" ou "tarcila   almeida" viram "tarcila almeida"
         while ( strpos($str,"  ") )
             $str = str_replace("  "," ",$str);
         
-        //Agora, vamos trocar os caracteres perigosos "ã,á..." por coisas limpas "a"
+        // Agora, vamos trocar os caracteres perigosos "ã,á..." por coisas limpas "a"
         $caracteresPerigosos = array ("Ã","ã","Õ","õ","á","Á","é","É","í","Í","ó","Ó","ú","Ú","ç","Ç","à","À","è","È","ì","Ì","ò","Ò","ù","Ù","ä","Ä","ë","Ë","ï","Ï","ö","Ö","ü","Ü","Â","Ê","Î","Ô","Û","â","ê","î","ô","û","!","?",",","“","”","-","\"","\\","/");
         $caracteresLimpos    = array ("a","a","o","o","a","a","e","e","i","i","o","o","u","u","c","c","a","a","e","e","i","i","o","o","u","u","a","a","e","e","i","i","o","o","u","u","A","E","I","O","U","a","e","i","o","u",".",".",".",".",".",".","." ,"." ,".");
         $str = str_replace($caracteresPerigosos,$caracteresLimpos,$str);
         
-        //Agora que não temos mais nenhum acento em nossa string, e estamos com ela toda em "lower",
-        //vamos montar a expressão regular para o MySQL
+        // Agora que não temos mais nenhum acento em nossa string, e estamos com ela toda em "lower",
+        // vamos montar a expressão regular para o MySQL
         $caractresSimples = array("a","e","i","o","u","c");
         $caractresEnvelopados = array("[a]","[e]","[i]","[o]","[u]","[c]");
         $str = str_replace($caractresSimples,$caractresEnvelopados,$str);
@@ -42,10 +45,11 @@ if( ! function_exists("stringParaBusca") ) {
         
         //Retornando a String finalizada!
         return $str;
+        //
     }
 }    
-///
-///  Funcao para minuscula para Maiuscula
+//
+//  Funcao para minuscula para Maiuscula
 if( ! function_exists("stringParaBusca2") ) {
     function stringParaBusca2($str) {
      /*
@@ -185,38 +189,39 @@ if( ! function_exists("stringParaBusca2") ) {
         /// 
     }
 }    
-////    
+//    
 ob_start(); /* Evitando warning */
+//
 //  Verificando se SESSION_START - ativado ou desativado
 if( ! isset($_SESSION) ) {
     session_start();
 }
 // set IE read from page only not read from cache
 //  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control","no-store, no-cache, must-revalidate");
-header("Cache-Control","post-check=0, pre-check=0");
-header("Pragma", "no-cache");
-
-//  header("content-type: application/x-javascript; charset=tis-620");
-//  header("content-type: application/x-javascript; charset=iso-8859-1");
-header("Content-Type: text/html; charset=ISO-8859-1",true);
-/// header("Content-Type: text/html; charset=UTF-8",true);
-
+//
+// set IE read from page only not read from cache
+//  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // sempre modificada
+header("Pragma: no-cache"); // HTTP/1.0
+header("Cache: no-cache");
+//  header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+// For?a a recarregamento do site toda vez que o navegador entrar na p?gina
+//  header("http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'");   
+header("Cache-Control: no-store, no-cache, must-revalidate");
+/// IMPORTANTE: para acentuacao php
+header("Content-type: text/html; charset=utf-8");
+//
+//  header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0")
 //   Colocar as datas do Cadastro do Usuario e a validade
 date_default_timezone_set('America/Sao_Paulo');
-
-//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
-
-///  IMPORTANTE:  Declarando em PHP - charset UTF-8
-header('Content-type: text/html; charset=utf-8');
-
-//   Para acertar a acentuacao
+///
+ini_set('default_charset','UTF-8');
+//
 //  $_POST = array_map(utf8_decode, $_POST);
 ///  extract: Importa variáveis para a tabela de símbolos a partir de um array 
 extract($_POST, EXTR_OVERWRITE);  
-///
+//
+//
 /// Mensagens para enviar 
 $msg_erro = "<span class='texto_normal' style='color: #FF0000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #000000; text-align: center; ' >";
@@ -225,8 +230,8 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-/// Final - Mensagens para enviar 
-///
+// Final - Mensagens para enviar 
+//
 $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
@@ -235,13 +240,17 @@ if( isset($_SESSION["incluir_arq"]) ) {
      echo $msg_erro;
      exit();
 }
-///
-//// Verificando -  Conexao 
+//
+// Verificando -  Conexao 
 $elemento=5; $elemento2=6;
-//// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
-include("php_include/ajax/includes/conectar.php");     
-
-///  HOST mais a pasta principal do site - host_pasta
+// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
+//  include("php_include/ajax/includes/conectar.php");     
+require("{$incluir_arq}includes/conectar.php");  
+//
+/**  Conexao/Mysqli   */
+$conex = $_SESSION["conex"];
+//
+//  HOST mais a pasta principal do site - host_pasta
 $host_pasta="";
 if( isset($_SESSION["host_pasta"]) ) {
      $host_pasta=$_SESSION["host_pasta"];  
@@ -250,46 +259,48 @@ if( isset($_SESSION["host_pasta"]) ) {
      echo $msg_erro;
      exit();
 }
-///
-///  DEFININDO A PASTA PRINCIPAL 
-/////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
+//
+//  DEFININDO A PASTA PRINCIPAL 
+//  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
      $msg_erro .= "Sessão pasta_raiz não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
 }
-///
-///  Definindo http ou https
-///  Definindo http ou https - IMPORTANTE
-///  Verificando protocolo do Site  http ou https   
-$_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
-$_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
-$raiz_central=$_SESSION["url_central"];
-///
-///  Conjunto de arrays 
+//
+//  Definindo http ou https - IMPORTANTE
+//  Verificando protocolo do Site  http ou https   
+//  $raiz_central=$_SESSION["url_central"];
+$url_central = $_SESSION["url_central"];
+//
+//  Conjunto de arrays 
 include_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
 if( isset($_SESSION["array_pa"]) ) $array_pa = $_SESSION["array_pa"];    
-
-/// Conjunto de Functions
+//
+//   Conjunto de Functions
 require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
 ///
 $post_array = array("source","val","m_array");
 for( $i=0; $i<count($post_array); $i++ ) {
-    $xyz = $post_array[$i];
-    //  Verificar strings com simbolos: # ou ,   para transformar em array PHP    
-    $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
-    if( isset($_POST[$xyz]) ) {
-	    $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
-	   if( $pos1===false ) {
-	       ///  $$xyz=trim($_POST[$xyz]);
-		   ///   Para acertar a acentuacao - utf8_encode
-           $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
-	   } else {
-            $$xyz = explode($div_array_por,$_POST[$xyz]);  
-       } 
+     //
+     $xyz = $post_array[$i];
+     //  Verificar strings com simbolos: # ou ,   para transformar em array PHP    
+     $xyz=="m_array" ? $div_array_por = "#" : $div_array_por = ",";
+     if( isset($_POST[$xyz]) ) {
+         $pos1 = stripos(trim($_POST[$xyz]),$div_array_por);
+	    if( $pos1===false ) {
+	         ///  $$xyz=trim($_POST[$xyz]);
+		     ///   Para acertar a acentuacao - utf8_encode
+             $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
+        } else {
+             $$xyz = explode($div_array_por,$_POST[$xyz]);  
+        } 
+        //
 	}
+    //
 }
+//
 $e_mailinf = "  ";   /// Verificar ponto mais adequado para usar = pegar como parâmetro
 ///
 ///   Para acertar a acentuacao - utf8_encode
@@ -297,51 +308,63 @@ $e_mailinf = "  ";   /// Verificar ponto mais adequado para usar = pegar como pa
 if( strtoupper($val)=="SAIR" ) $source=$val;
 
 $_SESSION["source"]=trim($source);
-$source_upper=strtoupper($_SESSION["source"]);
-///  INCLUINDO CLASS - 
+$source_upper=strtoupper($_SESSION["source"]);  
+//
+//  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 $funcoes=new funcoes();
-///
-if( $source_upper=="SAIR" ) {
-    /// Eliminar todas as variaveis de sessions
-    $_SESSION=array();
-    session_destroy();
-    if( isset($total) ) unset($total);
-    if( isset($login_senha) ) unset($login_senha); 
-    if( isset($login_down) ) unset($login_down); 
-    if( isset($senha_down) )  unset($senha_down); 
-	//
-	//  echo  "<a href='http://www-gen.fmrp.usp.br'  title='Sair' >Sair</a>";
-    response.setHeader("Pragma", "no-cache"); 
-    response.setHeader("Cache-Control", "no-cache"); 
-    response.setDateHeader("Expires",0); 
-	//  echo  "http://www-gen.fmrp.usp.br/";
-	exit();
+//
+// IMPORTANTE:  Formato Mysqli caracteres
+mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+//
+/**
+ *  echo "ERRO:  LINHA/316  -->>  \$source_upper = $source_upper    ";
+*   exit();
+*/
+//
+if( $source_upper=="SAIR" ) {  
+     //
+     // Eliminar todas as variaveis de sessions
+     $_SESSION=array();
+     session_destroy();
+     if( isset($total) ) unset($total);
+     if( isset($login_senha) ) unset($login_senha); 
+     if( isset($login_down) ) unset($login_down); 
+     if( isset($senha_down) )  unset($senha_down); 
+     //
+     //  echo  "<a href=http://www-gen.fmrp.usp.br  title='Sair' >Sair</a>";
+     response.setHeader("Pragma", "no-cache"); 
+     response.setHeader("Cache-Control", "no-cache"); 
+     response.setDateHeader("Expires",0); 
+     //  echo  http://www-gen.fmrp.usp.br/;  
+     exit();
+     //
 }
 /**********   SAIR DO PROGRAMA  **********/
 ///
 if( $source_upper=="PROJETO" ) {
-    ///
-    ///  Usuario Orientador/Chefe/Vice - conectado
+    //
+    //  Usuario Orientador/Chefe/Vice - conectado
     if( ! isset($_SESSION["usuario_conectado"]) ) {
            $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
            echo $msg_erro;               
            exit();                                          
-    }   
-    ///  Autor do Projeto  - codigo
-    $projeto_autor_cod=$_SESSION["usuario_conectado"];              
-    
-    ///  <!--  Anotador/NOME -->      
-    ///  Elementos para Bancos de Dados
-    ///    $elemento=5; $elemento2=6;
-    ///    include("php_include/ajax/includes/conectar.php");
+    }
+    //   
+    //  Autor do Projeto  - codigo
+    $projeto_autor_cod=$_SESSION["usuario_conectado"];   
+    //           
+    //  <!--  Anotador/NOME -->      
+    //  Elementos para Bancos de Dados
+    //    $elemento=5; $elemento2=6;
+    //    include("php_include/ajax/includes/conectar.php");
     # Aqui está o segredo
-    mysqli_query("SET NAMES 'utf8'");
-    mysqli_query('SET character_set_connection=utf8');
-    mysqli_query('SET character_set_client=utf8');
-    mysqli_query('SET character_set_results=utf8');
-    ///
-    ////   Incluir todos os anotadores e superiores (orientadores, etc)  //** ALTERANDO:LAFB110916.1515 **//
+    mysqli_query($conex,"SET NAMES 'utf8'");
+    mysqli_query($conex,'SET character_set_connection=utf8');
+    mysqli_query($conex,'SET character_set_client=utf8');
+    mysqli_query($conex,'SET character_set_results=utf8');
+    //
+    //   Incluir todos os anotadores e superiores (orientadores, etc)  //** ALTERANDO:LAFB110916.1515 **//
     $sqlcmd = "SELECT 'Outro_PA' as tipo_pa, a.nome, a.codigousp,a.categoria, a.e_mail, b.cip "
                  ." FROM $bd_1.pessoa a, $bd_2.anotador b WHERE b.cip=$val and a.codigousp=b.codigo "
                  ." and b.codigo!=$projeto_autor_cod "
@@ -349,14 +372,18 @@ if( $source_upper=="PROJETO" ) {
     ///                        
     $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
     if( !$result ) {
-         ///  die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.".mysqli_error($_SESSION["conex"]));
-         echo $funcoes->mostra_msg_erro("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+         // 
+         /**   die("ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP.".mysqli_error($_SESSION["conex"]));   */
+         $terr="ERRO: PRG/l&oacute;gica - select pessoa X usuario = Anotador. Informe SISTAM/REXP&nbsp;-&nbsp;db/mysqli:&nbsp;";
+         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
          exit();       
     }
-    /// Numero de Anotadores desse Projeto para sererem  desativado/excluido
+    //
+    // Numero de Anotadores desse Projeto para sererem  desativado/excluido
     $m_linhas = mysqli_num_rows($result);
-    ////   <!--  tag select para selecionar o Anotador para o Projeto selecionado -->
-    ////  IMPORTANTE: para retornar como tag Select sempre incluir a tag <div> - 20180518
+    //
+    //   <!--  tag select para selecionar o Anotador para o Projeto selecionado -->
+    //  IMPORTANTE: para retornar como tag Select sempre incluir a tag <div> - 20180518
     ?>
       <select  name="sel_anotador"  id="sel_anotador"  class="td_select" required="required" 
           style="float: left;clear: both;"
@@ -364,19 +391,29 @@ if( $source_upper=="PROJETO" ) {
        <?php
           ////  if( intval($m_linhas)<1 || intval($nprojetos)<1) {
           if( intval($m_linhas)<1 ) {
-              echo "<option value='' >Anotador N&atilde;o Dispon&iacute;vel.</option>";
+              echo "<option value='' >Anotador n&atilde;o dispon&iacute;vel.</option>";
           } else {
             ?>
               <option value="" >Selecione Anotador para remover do projeto</option>
-            <?php         
-               /// Usando arquivo com while e htmlentities
-               ///  include("../includes/tag_select_tabelas.php");
-               $e_mailname=mysql_field_name($result,3);
-               $codigo_sigla=mysql_field_name($result,2);
-               $cpo_nome_descr=mysql_field_name($result,1);
-               $cpo_tipo_pa = mysql_field_name($result,0);
+            <?php       
+               //  
+               // Usando arquivo com while e htmlentities
+               //  include("../includes/tag_select_tabelas.php");
+               /**
+                *  $e_mailname=mysql_field_name($result,3); 
+                *   $codigo_sigla=mysql_field_name($result,2);
+                *   $cpo_nome_descr=mysql_field_name($result,1);
+                *   $cpo_tipo_pa = mysql_field_name($result,0);
+                */
+               $e_mailname     = mysqli_fetch_field_direct($result, 3)->name;
+               $codigo_sigla   = mysqli_fetch_field_direct($result, 2)->name;
+               $cpo_nome_descr = mysqli_fetch_field_direct($result, 1)->name;
+               $cpo_tipo_pa    = mysqli_fetch_field_direct($result, 0)->name;
+               // 
                if( isset($separador) ) unset($separador);
+               //
                while( $linha=mysqli_fetch_array($result) ) {       
+                      //
                       ///  htmlentities - o melhor para transferir na Tag Select
                       $sigla= htmlentities($linha[$codigo_sigla]);  
                       ///  $nome= htmlentities($linha[$cpo_nome_descr]);
@@ -389,57 +426,75 @@ if( $source_upper=="PROJETO" ) {
                            echo "<option  value='' >================================</option>" ;
                            $separador = $tipo_pa;
                       }
+                      //
                       /*  IMPORTANTE:  na tag SELECT  htmlentities($linha[$cpo_nome_descr],ENT_QUOTES,"UTF-8")  */
                       $ln_codigousp=$linha["codigousp"];
                       $anotador_descr=$linha[$cpo_nome_descr];
                       $codigo_caracter=mb_detect_encoding($anotador_descr);
                       if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-                            //// echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
-                            ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
-                            ///   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-                            ////  echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');
-                            echo "<option value=".$ln_codigousp." title='Clicar' >".htmlentities($linha[$cpo_nome_descr],ENT_QUOTES,"UTF-8");
+                            //
+                            /**  echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";    */
+                            //     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
+                            //   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
+                            /**   echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');   */
+                            //  
+                            echo "<option value=".$ln_codigousp." title='Clicar' >".htmlentities($linha[$cpo_nome_descr],ENT_QUOTES,"UTF-8");  
+                            //
                         } else {
                             echo "<option value=".$ln_codigousp." title='Clicar' >".$anotador_descr;
                         }
                         echo "</option>" ;
-                        ///
+                        //
                }
-               ///   echo "<option  value='-999999999'  title='Clicar'  >* Outro (Digite o Nome/E-mail nos cpos. seguintes:)</option>" ;
+               /**   echo "<option  value='-999999999'  title='Clicar'  >* Outro (Digite o Nome/E-mail nos cpos. seguintes:)</option>" ;   */
+               //
             ?>
             </select>
-            <?php
-                 if( isset($result) ) mysqli_free_result($result); 
+            <?php  
+                //
+                 if( isset($result) ) {
+                      mysqli_free_result($result); 
+                 } 
+                 //
           }
           ///
     ///  <!-- Final - Anotador/Nome -->
-   exit();
+     exit();
+     //
 }
-///
-///    CODIGOUSP para verificar se a pessoa tem e_mail
+//
+//    CODIGOUSP para verificar se a pessoa tem e_mail
 if( $source_upper=="CODIGOUSP" ) {      
+    //
     $anotador_codigousp=$val;
+    //
     // Conectar
     $elemento=5;$elemento2=6;
-    include("php_include/ajax/includes/conectar.php"); 
+    //include("php_include/ajax/includes/conectar.php");   
+    require("{$incluir_arq}includes/conectar.php");  
+    //
     //  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
-          $msg_erro .=' Falha na consulta da pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+        $terr=" Falha na consulta da pessoa -&nbsp;db/mysqli:&nbsp;";
+          $msg_erro .= "$terr".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;               
          exit();                                          
-    }
-    /// Verifica se encontrou o novo Anotador
-    $nregs = mysqli_num_rows($resultado);
+    }  
+    /**   Final - if( ! $resultado ) {   */
+    //
+    // Verifica se encontrou o novo Anotador
+     $nregs = mysqli_num_rows($resultado);
     if( intval($nregs)>0) {
-        $anotador_e_mail=mysql_result($resultado,0,"e_mail");
-        $ver_e_mail="(E_mail:$anotador_e_mail)";
+        $linha = mysqli_fetch_assoc($resultado);   // pega a 1ª linha (linha 0)
+        $anotador_e_mail = $linha["e_mail"];
+        $ver_e_mail = "(E_mail:$anotador_e_mail)";
     } else {
         $anotador_e_mail="E_mail ainda n&atilde;o cadastrado.";
         $ver_e_mail="E_mail ainda n&atilde;o cadastrado.";
     }
-    ///
+    //
     if( ! isEmail($anotador_e_mail) ) {
         $msg_erro .="Anotador ainda N&Atilde;O tem E_MAIL v&aacute;lido cadastrado($ver_e_mail). Providencie Corre&ccedil;&atilde;o.";
         $msg_erro .="%";
@@ -453,98 +508,128 @@ if( $source_upper=="CODIGOUSP" ) {
         $msg_erro .="</td></tr>";
         echo $msg_erro.$msg_final;                     
     } else {
-        $_SESSION["anotador_nome"]=$anotador_nome=trim(mysql_result($resultado,0,"nome"));
-        ////
-        $codigo_caracter=mb_detect_encoding($anotador_nome);
-        if( trim(strtoupper($codigo_caracter))!="UTF8" ) {
-              /// echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";
-              ///     echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
-             ///   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
-             ///  echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');
-             /// $_SESSION["anotador_nome"]=$anotador_nome=htmlentities($anotador_nome,ENT_QUOTES,"UTF-8");
-             $_SESSION["anotador_nome"]=$anotador_nome;
+        //
+        /**  $_SESSION["anotador_nome"]=$anotador_nome=trim(mysql_result($resultado,0,"nome"));    */
+        $line = mysqli_fetch_assoc($resultado);  // pega a 1ª linha (linha 0)  
+        if ($line === null) {
+            $anotador_nome = "";     // valor seguro
+        } else {
+            $anotador_e_mail = $line["e_mail"];
+            $_SESSION["anotador_nome"] = $anotador_nome = trim($line["nome"]);
         }
-        ///
+        $codigo_caracter = mb_detect_encoding($anotador_nome);  // nunca recebe null
+        if( trim(strtoupper($codigo_caracter))!="UTF8" ) {  
+             //
+             /**   echo mb_convert_encoding(htmlentities($titulo_projeto), 'ISO-8859-1', 'UTF-8')."&nbsp;&nbsp;</option>";  */
+             //    echo  htmlentities("$titulo_projeto")."&nbsp;&nbsp;</option>";
+             //   echo  $titulo_projeto."&nbsp;&nbsp;</option>";
+             /**   echo "<option value=".$ln_codigousp." title='Clicar' >1)".mb_convert_encoding($anotador_descr, 'UTF-8', 'ISO-8859-1');   */
+             // $_SESSION["anotador_nome"]=$anotador_nome=htmlentities($anotador_nome,ENT_QUOTES,"UTF-8");
+             $_SESSION["anotador_nome"]=$anotador_nome;
+             //
+        }
+        //
         echo  "$anotador_nome#$anotador_e_mail";
-        ///
+        //
     }    
+    //
     exit();
+    //
 }
-///
-///    Tabela do ANOTADOR  cadastrado pelo Orientador  -  variavel val
+//
+//    Tabela do ANOTADOR  cadastrado pelo Orientador  -  variavel val
 if( strtoupper($val)=="ANOTADOR" ) {      
+     //
      /****  Recebendo dados do FORM e Inserindo
-             nas Tabelas ANOTACAO e  PROJETO          ***/
+     *       nas Tabelas ANOTACAO e  PROJETO          
+     ***/
      unset($array_temp); unset($array_t_value); $m_erro="";
      $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario     
-     ///  $pa_anotador = $_SESSION["array_usuarios"]["anotador"];                 
+     //  $pa_anotador = $_SESSION["array_usuarios"]["anotador"];                 
      $pa_anotador = $array_pa["anotador"];
      include("{$_SESSION["incluir_arq"]}includes/dados_campos_form.php");   
-     ///      
+     //      
      foreach( $arr_nome_val as $key => $value ) {
               $$key=$value;  
-      }
-      ///
-      if( isset($_SESSION["gemac"]) ) {
+     }
+     //
+     if( isset($_SESSION["gemac"]) ) {
           $gemac_email=$_SESSION["gemac"];
-      } else {
+     } else {
           $msg_erro .="E_MAIL gemac n&atilde;o &eacute; v&aacute;lido. Re-digite.".$msg_final;
           echo $msg_erro;                     
           exit();
-      }
-      ///
-       $_SESSION["tabela"]="anotador";
-       ///   CAMPOS do FORM anotador_cadastrar.php
-       $lnprojeto = $arr_nome_val["projeto"]; 
-       $lncodigousp = (int) $arr_nome_val["codigousp"];
-       ///
-       /// Nome do Anotador para remover do Projeto selecionado
-       if( isset($_SESSION["anotador_nome"]) ) {
-           ////  $anotador_nome = mb_convert_encoding($_SESSION["anotador_nome"], 'ISO-8859-1', 'UTF-8');
-           ///  $anotador_nome = trim($_SESSION["anotador_nome"]);
-           $_SESSION["anotador_nome"] = $anotador_nome = htmlentities($_SESSION["anotador_nome"],ENT_QUOTES,"UTF-8");
-       } else {
-           /// $nome = "";
-           /// $anotador_nome = mb_convert_encoding($arr_nome_val["nome"], 'ISO-8859-1', 'UTF-8');
-           $_SESSION["anotador_nome"] = $anotador_nome = trim($arr_nome_val["nome"]);
-       }
-       ////  Variavel do e_mail do Anotador a ser removido
-       $anotador_email = $arr_nome_val["e_mail"];
-       ///
-       ///  Verificando pela funcao isEmail  se  o e_mail e valido 
-       if( ! isEmail($anotador_email) ) {
-           $msg_erro .="E_MAIL informado: $anotador_email n&atilde;o &eacute; v&aacute;lido. Re-digite.".$msg_final;
+     }
+     //
+     $_SESSION["tabela"]="anotador";
+     //
+     //   CAMPOS do FORM anotador_cadastrar.php
+     $lnprojeto = $arr_nome_val["projeto"]; 
+     $lncodigousp = (int) $arr_nome_val["codigousp"];
+     //
+     // Nome do Anotador para remover do Projeto selecionado
+     if( isset($_SESSION["anotador_nome"]) ) { 
+          /**   $anotador_nome = mb_convert_encoding($_SESSION["anotador_nome"], 'ISO-8859-1', 'UTF-8');  */
+          //  $anotador_nome = trim($_SESSION["anotador_nome"]);
+          $anotador_nome = htmlentities($_SESSION["anotador_nome"],ENT_QUOTES,"UTF-8");  
+          $_SESSION["anotador_nome"] = $anotador_nome;
+     } else {
+         // $nome = "";
+         // $anotador_nome = mb_convert_encoding($arr_nome_val["nome"], 'ISO-8859-1', 'UTF-8');
+         $_SESSION["anotador_nome"] = $anotador_nome = trim($arr_nome_val["nome"]);
+     }
+     //
+     //  Variavel do e_mail do Anotador a ser removido
+     $anotador_email = $arr_nome_val["e_mail"];
+     //
+     ///  Verificando pela funcao isEmail  se  o e_mail e valido 
+     if( ! isEmail($anotador_email) ) {
+           $terr="E_MAIL informado: $anotador_email n&atilde;o &eacute; v&aacute;lido. Re-digite.";
+           $msg_erro .="$terr".$msg_final;
            echo $msg_erro;                     
            exit();
-       }    
-       ///
-       /// Verificar se a pessoa indicada já consta como anotador (na tabela anotador)
-       $sqlcmd = "SELECT  anotador_ci as usuario_ci FROM $bd_2.anotador  "
+     }    
+     //
+     // Verificar se a pessoa indicada já consta como anotador (na tabela anotador)
+     $sqlcmd = "SELECT  anotador_ci as usuario_ci FROM $bd_2.anotador  "
                    ." WHERE codigo=$lncodigousp and cip=$lnprojeto ";
-       ///           
-       $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-       if( ! $resultado ) {
-           $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
-           echo $msg_erro;               
-           exit();                                          
-       } 
-      /// Numero de participantes
+     //           
+     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
+     if( ! $resultado ) {
+          //
+          $terr="Falha na consulta do anotador -&nbsp;db/mysqli:&nbsp;";
+          $msg_erro .="$terr".mysqli_error($_SESSION["conex"]).$msg_final;  
+          echo $msg_erro;               
+          exit();                                          
+      } 
+      //
+      //  Nr. de participantes
       $nregs_participante=mysqli_num_rows($resultado);
       if( intval($nregs_participante)==1 ) {
-           $usuario_ci=mysql_result($resultado,0,"usuario_ci");           
+           // 
+           //  $usuario_ci=mysql_result($resultado,0,"usuario_ci");           
+           $lrow = mysqli_fetch_assoc($resultado);
+           if( $lrow === null ) {
+                $usuario_ci = "";   // valor seguro
+           } else {
+                $usuario_ci = trim($lrow["usuario_ci"]);
+           }
+           //
       } 
-      ///
-     ///  Indica que o anotador está aprovado (autorizado) para usar o REXP
+      //
+      //  Indica que o anotador está aprovado (autorizado) para usar o REXP
       $aprovado = 1;   
-      ///  Usuario Orientador/Chefe
+      //  Usuario Orientador/Chefe
       if( ! isset($_SESSION["usuario_conectado"]) ) {
-           $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
+           $txt = "Session usuario_conectado inexistente.";
+           $msg_erro .= mb_convert_encoding("$txt", 'ISO-8859-1', 'UTF-8').$msg_final;
            echo $msg_erro;               
            exit();                                          
       }   
-      ////  Autor do Projeto  ou   Chefe/Responsavel 
+      //
+      //  Autor do Projeto  ou   Chefe/Responsavel 
       $projeto_autor_cod=$codigo_ativa=$_SESSION["usuario_conectado"];              
-     ///
+      //
      /** Exemplo do resultado  do  Permissao de Acesso - criando array
           +-------------+--------+
           | descricao   | codigo |
@@ -558,34 +643,25 @@ if( strtoupper($val)=="ANOTADOR" ) {
           +-------------+--------+
       **/
      if( ! isset($pa_anotador) ) {
-          $msg_erro .= mb_convert_encoding("Variável pa_anotador não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
+          $msg_erro .= mb_convert_encoding("Variável pa_anotador inexistente.", 'ISO-8859-1', 'UTF-8').$msg_final;
           echo $msg_erro;               
           exit();                                          
      }
      $pa = $pa_anotador;
      $codigo = $lncodigousp;
-     ///
-      ///  Verificando  url_central
-      if( ! isset($_SESSION["url_central"]) ) {
-          ///  Definindo http ou https - IMPORTANTE
-          ///  Verificando protocolo do Site  http ou https   
-          $_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
-          $_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
-          $raiz_central=$_SESSION["url_central"];
-          ///
-      }
-      $url_central = $_SESSION["url_central"];
-      ///
-      $session_tabela = $_SESSION["tabela"];
-      $n_erro=0;
+     //
+     $session_tabela = $_SESSION["tabela"];
+     $n_erro=0;
       
       
-  echo  "ERRO:  anotador_remover_ajax/580  --->>> CONTINUAR  <<<--- \$_SESSION[anotador_nome] = {$_SESSION["anotador_nome"]} --- anotador_nome = $anotador_nome ";
+  echo  "ERRO:  anotador_remover_ajax/580  --->>>  \$url_central = $url_central  <br>  \$session_tabela = $session_tabela <<-- "
+       ."  --->>> \$_SESSION[anotador_nome] = {$_SESSION["anotador_nome"]} --- anotador_nome = $anotador_nome ";
   exit();      
+
       
-      /*
-             REMOVER ANOTADOR DE PROJETO
-      */
+      /**   
+       *    REMOVER ANOTADOR DE PROJETO
+       */
       ///  Iniciar uma transaction - ex. procedure    
       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
       ///  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
@@ -608,30 +684,21 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ///  Ocorreu ERRO para remover Anotador/Projeto na tabela anotador
           exit();
       }
-      ///
-      ///   Verifica se é necessário incluir registro do anotador na tabela usuário
-     /***
-   $sqlcmd = "SELECT aprovado from $bd_1.usuario where  codigousp=$lncodigousp ";
-   $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-   if( ! $resultado ) {
-        $msg_erro .=' Falha na consulta do anotador na tabela usuario: db/mysql= '.mysqli_error($_SESSION["conex"]).$msg_final;  
-        echo $msg_erro;               
-        exit();                                          
-   } 
-   $nregs=mysqli_num_rows($resultado);
-   ***/
-   
-      ///  Caso NAO ocorreu erro
-      ///   Verifica se é necessário incluir registro do anotador na tabela participante
+      //
+      //   Verifica se é necessário incluir registro do anotador na tabela usuário
+      //  Caso NAO ocorreu erro
+      //   Verifica se é necessário incluir registro do anotador na tabela participante
       $sqlcmd = "SELECT aprovado from $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
       ///
       $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $resultado ) {
-          $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+          $terr="Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;";
+          $msg_erro .="$terr".mysqli_error($_SESSION["conex"]).$msg_final;  
           echo $msg_erro;               
           exit();                                          
       } 
+      //
       ///   Incluir registro do anotador na tabela anotador
       //***mysqli_query("LOCK TABLES rexp.anotador WRITE");
       ///  Chave auto incremento
@@ -641,89 +708,115 @@ if( strtoupper($val)=="ANOTADOR" ) {
       /// Controlar o envio de senha pelo e_mail do anotador, caso seja nova.
       $senha = "";        
       $n_erro=0;
-     
-      /// Numero de participante desse Anotador 
+      //
+      // Numero de participante desse Anotador 
       $nregs=mysqli_num_rows($resultado);
       if( intval($nregs)>0 ) {
-          ///
-          ///  Iniciar uma transaction - ex. procedure    
-          ///  Execute the queries 
-          mysql_select_db($db_array[$elemento]);
-          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          //
+          //  Iniciar uma transaction - ex. procedure    
+          //  Execute the queries 
+          //  mysql_select_db($db_array[$elemento]);
+          mysqli_select_db($_SESSION["conex"], $db_array[$elemento]);
+          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
           true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
           ////   
           $sqlcmd = "DELETE FROM  $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";
-          ///        
+          //        
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
           /// Verificando se houve erro ou nao
           if( ! $resultado ) {
-                $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+                $msg_erro .='Removendo anotador da tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;
                 $n_erro=1;
-                mysqli_query('rollback'); 
-                echo $msg_erro;               
+                mysqli_rollback($_SESSION["conex"]);
+                echo $msg_erro;
           } else {
                /// Executando
-               mysqli_query('commit'); 
+               mysqli_commit($_SESSION["conex"]);
           }
-          ///
-          /// Concluir a transaction
-          mysqli_query('commit'); 
-          ///  Ocorreu erro
+          //
+          //  Ocorreu erro
           if( intval($n_erro)>0 ) {
                 exit();                                                 
           }
-          ///
+          //
      }  
-     ///
-     ////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-     mysqli_query("SET NAMES 'utf8' ");
-     mysqli_query("SET character_set_connection=utf8");
-     mysqli_query("SET character_set_client=utf8");
-     mysqli_query("SET character_set_results=utf8");
-    
-     ///  Buscar o Titulo do Projeto e dados do Orientador/Chefe
+     //
+     /**    IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities  */
+     /**   
+      *  mysqli_query("SET NAMES 'utf8' ");
+      *  mysqli_query("SET character_set_connection=utf8");
+     *   mysqli_query("SET character_set_client=utf8");
+     *   mysqli_query("SET character_set_results=utf8");
+     */
+     //
+     mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+     //
+     //  Buscar o Titulo do Projeto e dados do Orientador/Chefe
      $sqlcmd = "SELECT a.titulo,a.numprojeto,b.nome as nome_autor,b.e_mail as orientador_email "
               ." FROM $bd_2.projeto as a, $bd_1.pessoa b "
               ." WHERE cip=$lnprojeto and a.autor=b.codigousp ";
-     ///              
+     //              
      $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
      if( ! $resultado ) {
-         $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+         $terr="Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysqli:&nbsp;";
+         $msg_erro .="$terr".mysqli_error($_SESSION["conex"]).$msg_final;  
          echo $msg_erro;               
          exit();                                          
      } 
-    ///  Numero de registros
+     //
+     //  Nr. de registros
      $nregs=mysqli_num_rows($resultado);
      if( intval($nregs)<1 ) {
-          $msg_erro .='Buscando dados do projeto e do orientador não encontrado.'.$msg_final;  
+          $terr="Buscando dados do projeto e do orientador não encontrado.";  
+          $msg_erro .="$terr".$msg_final;  
           echo $msg_erro;               
           exit();                                          
-     } 
-     ///  Dados do Projeto e do Orientador
-     $projeto_titulo = mysql_result($resultado,0,"titulo");
-     $projeto_numero = mysql_result($resultado,0,"numprojeto");
-     $projeto_autor = mysql_result($resultado,0,"nome_autor");
-     $orientador_email = mysql_result($resultado,0,"orientador_email");    
-     ///
-     ///  $m_local = html_entity_decode("http://".$host.$_SESSION["pasta_raiz"]);
-     $url_central=$_SESSION["url_central"];    
+     }
+     // 
+     //  Dados do Projeto e do Orientador
+     /**
+      *  $projeto_titulo = mysql_result($resultado,0,"titulo");
+      *   $projeto_numero = mysql_result($resultado,0,"numprojeto");
+      *  $projeto_autor = mysql_result($resultado,0,"nome_autor");
+       *  $orientador_email = mysql_result($resultado,0,"orientador_email");    
+     */
+    /**   Definindo Array    */
+    $linha1 = mysqli_fetch_assoc($resultado);
+    if( $linha1 !== null ) {
+        $projeto_titulo   = $linha1['titulo'];
+        $projeto_numero   = $linha1['numprojeto'];
+        $projeto_autor    = $linha1['nome_autor'];
+        $orientador_email = $linha1['orientador_email'];
+    } else {
+        //
+        // A consulta funcionou, mas não encontrou registro.
+        $terr="Nenhum Projeto e dados do Orientador/Chefe";  
+        $msg_erro .="$terr".$msg_final;  
+        echo $msg_erro;               
+        exit();                                          
+    }
+    //
+     //  $m_local = html_entity_decode("http://".$host.$_SESSION["pasta_raiz"]);
+     //  $url_central=$_SESSION["url_central"];    
      $m_local = html_entity_decode("$url_central");
-     ///
-     /*************  INICIANDO ENVIO DE  EMAIL    ******************************/
-     ///
-     ///  $m_local = html_entity_decode($_SESSION['url_folder']);
+     //
+     /**********    INICIANDO ENVIO DE  EMAIL    *********************/
+     //
+     /**   $m_local = html_entity_decode($_SESSION['url_folder']); */
+     //  
      $a_link = "***** CONEXÃO DE REMOÇÃO *****\n<br><a href='$m_local'  title='Clicar' >$m_local</a>"; 
-     ///
+     //
      $assunto =html_entity_decode("RGE/SISTAM/REXP - Removendo Anotador");    
+     //
      ///  $corpo ="RGE/SISTAM/REXP - Permissão para Anotador do Projeto $projeto_numero <br>(Orientador: $projeto_autor)";
      $corpo ="RGE/SISTAM/REXP - Registro de Anotações<br/>Remoção de Anotador: "
              ."<br/>Projeto: $projeto_numero - $projeto_titulo<br/>(Orientador: $projeto_autor)"
              ."<br/><br/>Anotador:&nbsp;".$anotador_nome;
-     /// 
+    // 
      $headers1  = "MIME-Version: 1.0\n";
      $headers1 .= "Content-type: text/html; charset=UTF-8\n";                    
-     ///  $headers1 .= "Content-type: text/html; charset=iso-8859-1\n";                  
+     //  $headers1 .= "Content-type: text/html; charset=iso-8859-1\n";                  
      $headers1 .= "X-Priority: 3\n";
      $headers1 .= "X-MSMail-Priority: Normal\n";
      $headers1 .= "X-Mailer: php\n";
@@ -769,8 +862,9 @@ if( strtoupper($val)=="ANOTADOR" ) {
                  ."<br/>&nbsp;Anotador:&nbsp;<b>".$anotador_nome."</b><br/>E_mail:&nbsp;".$anotador_email."<br/><br/></span>".$msg_final;
          echo  $msg_erro;              
      }   
-     ///
-     ///  Final - enviar a mensagem por email
+     //
+     //  Final - enviar a mensagem por email
+     //
 }    
 #
 ob_end_flush(); /* limpar o buffer */

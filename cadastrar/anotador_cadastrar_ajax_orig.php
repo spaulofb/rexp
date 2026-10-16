@@ -1,5 +1,6 @@
 <?php
-//   Arquivo para CADASTRAR 
+//
+//   Arquivo para CADASTRAR anotador - AJAX
 //
 //  Biblioteca para uso do programa
 //
@@ -7,25 +8,28 @@
 function isEmail($email) {
     return preg_match('/^\S+@[\w\d.-]{2,}\.[\w]{2,6}$/iU', $email) ? TRUE : FALSE;
 }
-///  Funcao para busca com acentos
+/**  FInal - function isEmail($email) {  */
+//
+//  Funcao para busca com acentos
 if( ! function_exists("stringParaBusca") ) {  
     //
     function stringParaBusca($str) {
         //
         // Transformando tudo em minúsculas
-        $str = trim(strtolower($str));
-
-        //Tirando espaços extras da string... "tarcila  almeida" ou "tarcila   almeida" viram "tarcila almeida"
+        $str = trim(strtolower($str)); 
+        //
+        /**  Tirando espaços extras da string... "tarcila  almeida" ou "tarcila   almeida" viram "tarcila almeida"  */
+        //
         while ( strpos($str,"  ") )
-            $str = str_replace("  "," ",$str);
+             $str = str_replace("  "," ",$str);
         //
         /**  Agora, vamos trocar os caracteres perigosos "ã,á..." por coisas limpas "a"  */ 
         $caracteresPerigosos = array ("Ã","ã","Õ","õ","á","Á","é","É","í","Í","ó","Ó","ú","Ú","ç","Ç","à","À","è","È","ì","Ì","ò","Ò","ù","Ù","ä","Ä","ë","Ë","ï","Ï","ö","Ö","ü","Ü","Â","Ê","Î","Ô","Û","â","ê","î","ô","û","!","?",",","“","”","-","\"","\\","/");
         $caracteresLimpos    = array ("a","a","o","o","a","a","e","e","i","i","o","o","u","u","c","c","a","a","e","e","i","i","o","o","u","u","a","a","e","e","i","i","o","o","u","u","A","E","I","O","U","a","e","i","o","u",".",".",".",".",".",".","." ,"." ,".");
         $str = str_replace($caracteresPerigosos,$caracteresLimpos,$str);
-        
-        //Agora que não temos mais nenhum acento em nossa string, e estamos com ela toda em "lower",
-        //vamos montar a expressão regular para o MySQL
+        //
+        /**  Agora que não temos mais nenhum acento em nossa string, e estamos com ela toda em "lower",    */
+        // vamos montar a expressão regular para o MySQL
         $caractresSimples = array("a","e","i","o","u","c");
         $caractresEnvelopados = array("[a]","[e]","[i]","[o]","[u]","[c]");
         $str = str_replace($caractresSimples,$caractresEnvelopados,$str);
@@ -47,8 +51,9 @@ if( ! function_exists("stringParaBusca") ) {
     }
     //
 }    
-///
-///  Funcao para minuscula para Maiuscula
+/**  Final - if( ! function_exists("stringParaBusca") ) {  */
+//
+//  Funcao para minuscula para Maiuscula
 if( ! function_exists("stringParaBusca2") ) {
     function stringParaBusca2($str) { 
          //
@@ -195,7 +200,8 @@ require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
 //
 //  Verificando -  Conexao 
 $elemento=5; $elemento2=6;
-// include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
+/**   include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");  */
+// 
 require_once("php_include/ajax/includes/conectar.php");     
 //
 //  HOST mais a pasta principal do site - host_pasta
@@ -207,29 +213,31 @@ if( isset($_SESSION["host_pasta"]) ) {
      echo $msg_erro;
      exit();
 }
-///
-///  DEFININDO A PASTA PRINCIPAL 
-/////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
-///  Verificando SESSION  pasta_raiz
+//
+//  DEFININDO A PASTA PRINCIPAL 
+//  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
+//  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
      $msg_erro .= "Sessão pasta_raiz não está ativa.".$msg_final;  
      echo $msg_erro;
      exit();
 }
-///
-///  Definindo http ou https - IMPORTANTE
-///  Verificando protocolo do Site  http ou https   
-$_SESSION["protocolo"]=$protocolo = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
-$_SESSION["url_central"]=$url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
-$raiz_central=$_SESSION["url_central"];
-///
-///  Conjunto de arrays 
-include_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
+//
+//  Definindo http ou https - IMPORTANTE
+/**   Verificando URL protocolo do Site  http ou https  */
+if( ! isset($_SESSION["url_central"]) ) {
+     $msg_erro .= "SESSION url_central inativa - corrigir.".$msg_final;  
+     echo $msg_erro;
+     exit();
+}
+//
+//  Conjunto de arrays 
+require_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
 if( isset($_SESSION["array_pa"]) ) $array_pa = $_SESSION["array_pa"];    
-
-/// Conjunto de Functions
+//
+// Conjunto de Functions
 require_once("{$_SESSION["incluir_arq"]}includes/functions.php");    
-
+//
 $post_array = array("source","val","m_array");
 for( $i=0; $i<count($post_array); $i++ ) {
     $xyz = $post_array[$i];
@@ -241,24 +249,50 @@ for( $i=0; $i<count($post_array); $i++ ) {
 	       //  $$xyz=trim($_POST[$xyz]);
 		   //   Para acertar a acentuacao - utf8_encode
            $$xyz = mb_convert_encoding(trim($_POST[$xyz]), 'ISO-8859-1', 'UTF-8'); 
-	   } else  $$xyz = explode($div_array_por,$_POST[$xyz]);
+	   } else {
+           $$xyz = explode($div_array_por,$_POST[$xyz]);
+       }  
 	}
+    //
 }
-$e_mailinf = "  ";   /// Verificar ponto mais adequado para usar = pegar como parâmetro
+/**  Final - for( $i=0; $i<count($post_array); $i++ ) { */
+//
+/**   Verificar ponto mais adequado para usar = pegar como parâmetro   */
+$e_mailinf = "  ";
 //
 //   Para acertar a acentuacao - utf8_encode
 //   $source = mb_convert_encoding($source); $val = utf8_decode($val, 'ISO-8859-1', 'UTF-8'); 
 if( strtoupper($val)=="SAIR" ) $source=$val;
-
+//
+/** IMPORTANTE:   Conexao MYSQLI  */  
+$conex = $_SESSION["conex"];
+//
 $_SESSION["source"]=trim($source);
 $source_upper=strtoupper($_SESSION["source"]);
-///  INCLUINDO CLASS - 
+//
+//
+$val_upper="";
+if( isset($val) ) {
+    //
+    /** Caso variavel for String */
+    if( is_string($val) ) {
+        /**
+         * Variavel letras Maiusculas
+         */
+        $val_upper=strtoupper(trim($val));
+    }  
+    //
+} 
+/**   Final - if( isset($val) ) {  */
+//
+//  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 if( class_exists('funcoes') ) {
     $funcoes=new funcoes();
 }
-///
+//
 if( $source_upper=="SAIR" ) {
+    //
     // Eliminar todas as variaveis de sessions
     $_SESSION=array();
     session_destroy();
@@ -267,42 +301,61 @@ if( $source_upper=="SAIR" ) {
     if( isset($login_down) ) unset($login_down); 
     if( isset($senha_down) )  unset($senha_down); 
 	//
-	//  echo  "<a href='http://www-gen.fmrp.usp.br'  title='Sair' >Sair</a>";
     response.setHeader("Pragma", "no-cache"); 
     response.setHeader("Cache-Control", "no-cache"); 
     response.setDateHeader("Expires",0); 
-	//  echo  "http://www-gen.fmrp.usp.br/";
+	//
 	exit();
-}
-//    CODIGOUSP para verificar se a pessoa tem e_mail
+    //
+}  
+/**  Final - if( $source_upper=="SAIR" ) { */
+//
+
+/**  
+echo "ERRO:  LINHA300  -->> CERTO <<-- \$_SESSION[url_central] = {$_SESSION["url_central"]} -->> \$source_upper = $source_upper ";
+exit();
+ */
+
+
+
+
+/**  CODIGOUSP para verificar se a pessoa tem e_mail  */
 if( $source_upper=="CODIGOUSP" ) {      
+    //
     $anotador_codigousp=$val;
-    /// Conectar
-    /*
+    //
+    //  Conectar
+    /**  
     $elemento=5;$elemento2=6;
     include("php_include/ajax/includes/conectar.php"); 
     */
-    
+    //
     ///  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $resultado ) {
-          $msg_erro .=' Falha na consulta da pessoa: db/mysql= '.mysqli_error($_SESSION["conex"]).$msg_final;  
+          $msg_erro .=' Falha na consulta da pessoa: db/mysql= '.mysqli_error($conex).$msg_final;  
          echo $msg_erro;               
          exit();                                          
     }
+    //
     ///  Caso ANOTADOR NAO tenha cadastro na tabela pessoa
     if( $val==-999999999 ) {
         $anotador_nome = $_SESSION["anotador_nome"] = "";
     }    
-    ///
-    /// Verifica se encontrou o novo Anotador
+    //
+    /**  Verifica se encontrou o novo Anotador - Nr. de Registros  */
+    //
     $nregs = mysqli_num_rows($resultado);
     if( intval($nregs)>0) {
-        $anotador_e_mail=mysql_result($resultado,0,"e_mail");
+        //
+        /**  function mysqli_result no arquivo ./includes/functions.php:  */
+        $anotador_e_mail=mysqli_result($resultado,0,"e_mail");
         $ver_e_mail="(E_mail:$anotador_e_mail)";
-        $_SESSION["anotador_nome"] = $anotador_nome = mysql_result($resultado,0,"nome");
+        $_SESSION["anotador_nome"] = $anotador_nome = mysqli_result($resultado,0,"nome");
+        //
     } else {
+        //
          $anotador_e_mail="E_mail ainda n&atilde;o cadastrado.";
          $ver_e_mail="E_mail ainda n&atilde;o cadastrado.";   
          /**
@@ -310,141 +363,201 @@ if( $source_upper=="CODIGOUSP" ) {
          echo $msg_erro.$msg_final;                     
          exit();
          ***/
-         ///
+         //
     }
-    ///
-    /// Verifica se o Anotador esta cadastrado ou faltando E_Mail
+    //
+    /**  Verifica se o Anotador esta cadastrado ou faltando E_Mail  */
     if( ! isEmail($anotador_e_mail) ) {
+        //
         if( strlen(trim($anotador_nome))<1 ) {
-           $msg_erro .="<span class='td_inicio1'>Anotador <b>N&Atilde;O</b> cadastrado. Digitar Nome e E_mail. Providencie Corre&ccedil;&atilde;o.<span>"; 
+           $msg_erro .="<span class='td_inicio1'>Anotador <b>N&Atilde;O</b> cadastrado. Digitar Nome e E_mail.";
+           $msg_erro .=" Providencie Corre&ccedil;&atilde;o.<span>"; 
         } else {
-           $msg_erro .="<span class='td_inicio1'>Anotador ainda <b>N&Atilde;O</b> tem E_MAIL v&aacute;lido cadastrado ($ver_e_mail). Providencie Corre&ccedil;&atilde;o.<span>";
+           $msg_erro .="<span class='td_inicio1'>Anotador ainda <b>N&Atilde;O</b>";
+           $msg_erro .=" tem E_MAIL v&aacute;lido cadastrado ($ver_e_mail).";
+           $msg_erro .=" Providencie Corre&ccedil;&atilde;o.<span>";
         }
         ///          
-
-            $msg_erro .="%";
-            $msg_erro .="<table class='table_inicio' cellpadding='1' border='2' cellspacing='1' style='font-weight:normal; background-color: #FFFFFF; margin: 0px; padding: 0px;vertical-align: middle; '  >";
-            $msg_erro .="<tr>";
-            $msg_erro .="<td  class='td_inicio1' style='vertical-align: middle;' >";
-            $msg_erro .="<label for='nome' style='vertical-align: middle; cursor: pointer;' >Nome:&nbsp;</label>";
-            $msg_erro .="</td>";
-            $msg_erro .="<td class='nome' style='vertical-align: middle;' >";
-            $msg_erro .="<input type=\"text\" name=\"nome\" id=\"nome\" class=\"nome\"  size=\"70\" maxlength=\"64\" " 
-                        ." value=\"$anotador_nome\" title=\"Digitar Nome/Anotador\" "
-                        ." onblur=\"javascript: alinhar_texto(this.id,this.value)\"  "
-                        ." autocomplete=\"off\"  style=\"cursor: pointer;\"  />";
-            ///            
-            $msg_erro .="</td></tr>";
-            echo $msg_erro.$msg_final;                     
+        $msg_erro .="%";
+        $msg_erro .="<table class='table_inicio' cellpadding='1' border='2' cellspacing='1' style='font-weight:normal; background-color: #FFFFFF; margin: 0px; padding: 0px;vertical-align: middle; '  >";
+        $msg_erro .="<tr>";
+        $msg_erro .="<td  class='td_inicio1' style='vertical-align: middle;' >";
+        $msg_erro .="<label for='nome' style='vertical-align: middle; cursor: pointer;' >Nome:&nbsp;</label>";
+        $msg_erro .="</td>";
+        $msg_erro .="<td class='nome' style='vertical-align: middle;' >";
+        $msg_erro .="<input type=\"text\" name=\"nome\" id=\"nome\" class=\"nome\"  size=\"70\" maxlength=\"64\" " 
+                    ." value=\"$anotador_nome\" title=\"Digitar Nome/Anotador\" "
+                    ." onblur=\"javascript: alinhar_texto(this.id,this.value)\"  "
+                    ." autocomplete=\"off\"  style=\"cursor: pointer;\"  />";
+        //            
+        $msg_erro .="</td></tr>";
+        echo $msg_erro.$msg_final;                     
+        //    
     } else {
-            $anotador_nome=mysql_result($resultado,0,"nome");
-            $_SESSION["anotador_nome"]=trim($anotador_nome);
-            echo mb_convert_encoding("$anotador_nome#$anotador_e_mail", 'ISO-8859-1', 'UTF-8');
-    }    
+        //
+        $anotador_nome=mysqli_result($resultado,0,"nome");
+        $_SESSION["anotador_nome"]=trim($anotador_nome);
+        echo mb_convert_encoding("$anotador_nome#$anotador_e_mail", 'ISO-8859-1', 'UTF-8');
+        //
+    } 
+    //   
     exit();
+    //
 }
+/**  Final - if( $source_upper=="CODIGOUSP" ) {   */
 //
-//    Tabela do ANOTADOR  cadastrado pelo Orientador  -  variavel val
-if( strtoupper($val)=="ANOTADOR" ) {      
-     ///  Recebendo dados do FORM e Inserindo
-     ///  nas Tabelas ANOTACAO e PROJETO
-     unset($array_temp); unset($array_t_value); $m_erro="";
-     $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario     
-     //  $pa_anotador = $_SESSION["array_usuarios"]["anotador"];                 
-     $pa_anotador = $array_pa["anotador"];
-     include("{$_SESSION["incluir_arq"]}includes/dados_campos_form.php");   
-     ///
-     foreach( $arr_nome_val as $key => $value ) {
+
+
+/**  
+echo "ERRO:  LINHA411  -->> \$val_upper = $val_upper <--  ";
+exit();
+ */
+
+
+
+/**  Tabela do ANOTADOR  cadastrado pelo Orientador  -  variavel val  */
+if( $val_upper=="ANOTADOR" ) {      
+    //
+    //  Recebendo dados do FORM e Inserindo
+    //  nas Tabelas ANOTACAO e PROJETO
+    unset($array_temp); unset($array_t_value); 
+    $m_erro="";
+    $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario     
+    //
+    //  $pa_anotador = $_SESSION["array_usuarios"]["anotador"];                 
+    $pa_anotador = $array_pa["anotador"];
+    //
+    /**  include("{$_SESSION["incluir_arq"]}includes/dados_campos_form.php");   */
+    require_once("{$_SESSION["incluir_arq"]}includes/dados_campos_form.php");   
+    //
+
+
+/**  
+echo "ERRO:  LINHA434  -->> ANOTADOR  \$val_upper = $val_upper <-- \$arr_nome_val count ".count($arr_nome_val);
+exit();
+ */
+
+
+    foreach( $arr_nome_val as $key => $value ) {
               $$key=$value;  
-     }
-     if( isset($_SESSION["gemac"]) ) {
+    }
+    /**  Final - foreach( $arr_nome_val as $key => $value ) {  */
+    //
+    if( isset($_SESSION["gemac"]) ) {
           $gemac_email=$_SESSION["gemac"];
-     } else {
+    } else {
          $msg_erro .="E_MAIL gemac n&atilde;o &eacute; v&aacute;lido. Re-digite.".$msg_final;
          echo $msg_erro;                     
          exit();
-     }
-     ///
-     $_SESSION["tabela"]="anotador";
-     ///   CAMPOS do FORM anotador_cadastrar.php
-     $lnprojeto = $arr_nome_val["projeto"]; 
-     $lncodigousp = (int) $arr_nome_val["codigousp"];
-     /// if( isset($arr_nome_val["nome"]) ) {
-     if( isset($_SESSION["anotador_nome"]) ) {
-          /// $anotador_nome = html_entity_decode($_SESSION["anotador_nome"]);
-          $_SESSION["anotador_nome"] = $anotador_nome = htmlentities($_SESSION["anotador_nome"],ENT_QUOTES,"UTF-8");
-     } else {
-          /// $nome = "";
-         $_SESSION["anotador_nome"] = $anotador_nome = $arr_nome_val["nome"];
-     }
-     ///
-     $e_mailinf = $arr_nome_val["e_mail"];
-     ///  Verificando pela funcao isEmail  se  o e_mail e valido 
-     if( !isEmail($e_mailinf) ) {
-         $msg_erro .="E_MAIL  informado:$e_mailinf n&atilde;o &eacute; v&aacute;lido. Re-digite.".$msg_final;
-         echo $msg_erro;                     
-         exit();
-     }  
-     ///
-     ///  Usuario Orientador/Chefe
-     if( ! isset($_SESSION["usuario_conectado"]) ) {
-           $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
-           echo $msg_erro;               
-           exit();                                          
-     }   
-     ////  Autor do Projeto  ou   Chefe/Responsavel 
-     $projeto_autor_cod=$codigo_ativa=$_SESSION["usuario_conectado"];              
-     ///          
-     /// Verificar se a pessoa indicada já consta como anotador (na tabela anotador)
-     $sqlcmd = "SELECT * from $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto ";
-     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-     if( ! $resultado ) {
-          $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+    }
+    //
+    $_SESSION["tabela"]="anotador";
+    //
+    //   CAMPOS do FORM anotador_cadastrar.php
+    $lnprojeto = $arr_nome_val["projeto"]; 
+    $lncodigousp = (int) $arr_nome_val["codigousp"];
+    //
+    // if( isset($arr_nome_val["nome"]) ) {
+    if( isset($_SESSION["anotador_nome"]) ) {
+         //
+         /**   $anotador_nome = html_entity_decode($_SESSION["anotador_nome"]);  */
+         $anotador_nome = htmlentities($_SESSION["anotador_nome"],ENT_QUOTES,"UTF-8");
+         $_SESSION["anotador_nome"] = $anotador_nome;
+    } else {
+        //
+        // $nome = "";
+        $_SESSION["anotador_nome"] = $anotador_nome = $arr_nome_val["nome"];
+        //
+    }
+    //
+    $e_mailinf = $arr_nome_val["e_mail"];  
+    //
+    /**   Verificando pela funcao isEmail  se  o e_mail e valido   */
+    if( !isEmail($e_mailinf) ) {
+          $msg_erro .="E_MAIL  informado:$e_mailinf n&atilde;o &eacute; v&aacute;lido. Re-digite.";
+          $msg_erro .=$msg_final;
+          echo $msg_erro;                     
+          exit();
+    }  
+    /**  Final - if( !isEmail($e_mailinf) ) {  */
+    //
+    //  Usuario Orientador/Chefe
+    if( ! isset($_SESSION["usuario_conectado"]) ) {
+        //
+        $msg_erro .= mb_convert_encoding("Session usuario_conectado não existe.", 'ISO-8859-1', 'UTF-8').$msg_final;
+        echo $msg_erro;               
+        exit();                                          
+    }   
+    //  Autor do Projeto ou Chefe/Responsavel 
+    $projeto_autor_cod=$codigo_ativa=$_SESSION["usuario_conectado"];              
+    //          
+    /**   Verificar se a pessoa indicada já consta como anotador (na tabela anotador)   */
+    $sqlcmd = "SELECT * from $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto ";
+    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
+    if( ! $resultado ) {
+          $msg_erro .='Falha na consulta do anotador -&nbsp;db/mysqli:&nbsp;';
+          $msg_erro .=mysqli_error($conex).$msg_final;  
           echo $msg_erro;               
           exit();                                          
-     }
-     ///  Nr. de Projetos de desse Anotador
-     $nregs=mysqli_num_rows($resultado);
-     if( intval($nregs)==1 ) {
+    }
+    //
+    /**   Nr. de Projetos de desse Anotador   */
+    $nregs=mysqli_num_rows($resultado);
+    if( intval($nregs)==1 ) {
          $msg_erro .="Anotador j&aacute; est&aacute; cadastrado nesse Projeto.".$msg_final;
          echo $msg_erro;               
          exit();                                          
-     }  
-     ///
-     ///   Verifica se é necessário incluir registro do anotador na tabela pessoa
-     ///
+    }  
+    /**  Final - if( intval($nregs)==1 ) {  */
+    //
+
+
+
+/**  
+echo "ERRO:  LINHA516  -->> ANOTADOR -->> \$nregs = $nregs <<-->>> \$lncodigousp = $lncodigousp <br>"
+        ."  \$e_mailinf = $e_mailinf  <-- \$arr_nome_val count ".count($arr_nome_val)
+       ." <br>  \$projeto_autor_cod = $projeto_autor_cod  ";
+exit();
+ */
+
+
+
+     /**    Verifica se é necessário incluir registro do anotador na tabela pessoa   */
      if( $lncodigousp==-999999999 ) {
-         ///    Remover os espacos do nome deixando apenas um entre as palavras
-         /***  
+         //
+         //    Remover os espacos do nome deixando apenas um entre as palavras
+         /**  
          *     IMPORTANTE: alterado em 20180727
          *         toda parte de acentuacao PHP?MYSQL
          *      mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - 
-                 Use mysql_select_db() ou mysqli_query()
-          ***/   
-          ini_set('default_charset','utf8');
-         ///
-         $_SESSION["anotador_nome"] = $anotador_nome = $nome = mb_convert_encoding(trim(preg_replace('/ +/',' ',$nome)), 'UTF-8', 'ISO-8859-1');
+         *         Use mysql_select_db() ou mysqli_query()
+         */   
+         ini_set('default_charset','utf8');
+         //
+         $anotador_nome = $nome = mb_convert_encoding(trim(preg_replace('/ +/',' ',$nome)), 'UTF-8', 'ISO-8859-1');
+         $_SESSION["anotador_nome"] = $anotador_nome;
          $nome_tmp = str_replace(' ','',$nome);
-        /// Verificar se é duplicata
-        ///  Verificar local onde ativar esses comandos de acentuação:              
-                  /***
+         //
+         // Verificar se é duplicata
+         //  Verificar local onde ativar esses comandos de acentuação:              
+         /**
             *    O charset UTF-8  uma recomendacao, 
             *    pois cobre quase todos os caracteres e 
             *    símbolos do mundo
-         ***/
-         mysql_set_charset('utf8');
+         */
+         $conex->set_charset('utf8');
          ///
          $sqlcmd = "SELECT codigousp from $bd_1.pessoa WHERE
                replace(nome,' ','')='$nome_tmp' or e_mail='$e_mailinf' ; ";
         ///
         $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $resultado ) {
-            $msg_erro .='Falha na busca do anotador/nome na tabela pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+            $msg_erro .='Falha na busca do anotador/nome na tabela pessoa -&nbsp;db/mysqli:&nbsp;'.mysqli_error($conex).$msg_final;  
             echo $msg_erro;               
             exit();                                          
         }
-        ///
-        /// Nr. de pessoas
+        //
+        // Nr. de pessoas
         $nregs = mysqli_num_rows($resultado);
         if( intval($nregs)>0  ) {
             if( isset($resultado) ) mysqli_free_result($resultado);
@@ -458,192 +571,272 @@ if( strtoupper($val)=="ANOTADOR" ) {
         $codigoprov = -(900000000 + (int) (fmod($timeus*1000,100000000)));
         $cpf = $codigoprov;
         $n_erro=0;
-        ///
-        ///  Iniciar uma transaction - ex. procedure    
-        ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-         mysqli_query("LOCK TABLES $bd_1.pessoa INSERT");
+        //
+        //  Iniciar uma transaction - ex. procedure    
+        /**
+         *   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+         */
+         true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
+         //
         /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
         ///
-        mysql_set_charset('utf8');
+        $conex->set_charset('utf8');
         $sqlcmd = "INSERT $bd_1.pessoa(codigousp,nome,categoria,cpf,e_mail) values($codigoprov,'$anotador_nome','OUT',$cpf,'$e_mailinf' )";
         $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $resultado ) {
-             $msg_erro .='Falha na inclus&atilde;o do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
-             mysqli_query('rollback'); 
+             $msg_erro .='Falha na inclus&atilde;o do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysqli:&nbsp;'.mysqli_error($conex).$msg_final;  
+             mysqli_query($_SESSION["conex"],'rollback'); 
              $n_erro=1;
              echo $msg_erro;                 
         } else {
-              mysqli_query('commit');  
+              mysqli_query($_SESSION["conex"],'commit');  
         }
         ///  Ocorreu erro
         if( intval($n_erro)>0 ) {
             exit();
         }    
-        ///
-        /// Atualizar o codigousp como sendo o codigo unico da tabela pessoal.pessoa 
+        //
+        /**   Atualizar o codigousp como sendo o codigo unico da tabela pessoal.pessoa    */
         $sqlcmd = "Select iupessoa from $bd_1.pessoa where codigousp=$codigoprov ";
         $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $resultado ) {
-            $msg_erro .='Falha na busca do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+            $msg_erro .='Falha na busca do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysqli:&nbsp;';
+            $msg_erro .=mysqli_error($conex).$msg_final;  
             echo $msg_erro;               
             exit();                                          
         } 
         $nregs = mysqli_num_rows($resultado);
         if( intval($nregs)>0  ) {
-            $lncodigousp = - mysql_result($resultado,0,"iupessoa");
+            $lncodigousp = - mysqli_result($resultado,0,"iupessoa");
         } else {
-            $msg_erro .='Falha na busca do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.$msg_final;  
+            $msg_erro .='Falha na busca do cadastro do anotador na tabela pessoal.pessoa -&nbsp;db/mysqli:&nbsp;';
+            $msg_erro .=$msg_final;  
             echo $msg_erro;               
             exit();                                          
         }
         $sqlcmd = "UPDATE $bd_1.pessoa set codigousp=$lncodigousp where codigousp=$codigoprov";
         $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
         if( ! $resultado ) {
-            $msg_erro .='Falha na altera&ccedil;&atilde;o do CODIGOUSP do anotador na tabela pessoal.pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+            $msg_erro .='Falha na altera&ccedil;&atilde;o do CODIGOUSP do anotador na tabela pessoal.pessoa ';
+            $msg_erro .='-&nbsp;db/mysqli:&nbsp;';
+            $msg_erro .= mysqli_error($conex).$msg_final;  
             echo $msg_erro;               
             exit();                                          
         }
         ///
    }   
-   ///   
-   ///   Verificar se a pessoa indicada como anotador tem o respectivo e_mail
-   $sqlcmd = "SELECT e_mail from $bd_1.pessoa WHERE codigousp=$lncodigousp ";
+   /**  Final - if( $lncodigousp==-999999999 ) {  */
+   //   
+   // *** ESSENCIAL: Define o charset da conexão para utf8 ***
+   $_SESSION["conex"]->set_charset("utf8");
+   //
+   /**   Verificar se a pessoa indicada como anotador tem o respectivo e_mail  */
+   $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$lncodigousp ";
    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
    if( ! $resultado ) {
-        $msg_erro .='Falha na consulta do cadastro (pessoa) do anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+        $msg_erro .='Falha na consulta do cadastro (pessoa) do anotador -&nbsp;db/mysqli:&nbsp;';
+        $msg_erro .=mysqli_error($conex).$msg_final;  
         echo $msg_erro;               
         exit();                                          
     } 
-    ///  Verificando se encontrou e_mail
-    $nregs = mysqli_num_rows($resultado);
+    //
+    //  Verificando se encontrou e_mail
+    $nregs = mysqli_num_rows($resultado);  
     if( intval($nregs)>0 ) {
-        $e_mail = mysql_result($resultado,0,"e_mail");    
+        //
+        $e_mail = mysqli_result($resultado,0,"e_mail");    
+        $nmanot = mysqli_result($resultado,0,"nome");    
+        $anotador_nome = "{$nmanot}";
+        //
         /// Verificar se e_mail é válido
         if( ! isEmail($e_mail) ) {
             $e_mail="E_mail inválido. Corrigir.";
-        }  
+        } 
+        // 
      } else {
+         //
          $e_mail="E_mail inválido. Corrigir.";
+         $msg_erro .="$e_mail".$msg_final;  
+         echo $msg_erro;               
+         exit();
      }
-     /// Atualizar todas as tabelas necessárias ao uso do anotador:
-     ///  pessoa(e_mail, se necessário=alterado);
-     ///  usuario(novo, se não existir);
-     ///  participante(novo, se não existir);
-     ///  anotador(novo)
-     ///
+     //
+     //  Atualizar todas as tabelas necessárias ao uso do anotador:
+     //  pessoa(e_mail, se necessário=alterado);
+     //  usuario(novo, se não existir);
+     //  participante(novo, se não existir);
+     //  anotador(novo)
+     //
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
-      ///  Iniciar uma transaction - ex. procedure    
-      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-      mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
+      //
+
+
+/**  
+echo "ERRO:  LINHA649  -->> ANOTADOR -->> \$nmanot = $nmanot <<-->> \ \$session_tabela = $session_tabela <<-->>  \$nregs = $nregs <<--<br>"
+       ."  -->> \$bd_1 =<b> $bd_1 </b><<-->>  \$lncodigousp = $lncodigousp <br>"
+        ."  \$e_mailinf = $e_mailinf  <-- \$arr_nome_val count ".count($arr_nome_val)
+       ." <br>  \$projeto_autor_cod = $projeto_autor_cod ";
+exit();
+ */
+
+
+
+      //  Iniciar uma transaction - ex. procedure    
+      //
+      /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()  */
+      true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
       /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
-      ///
-      ///   VERIFICA se necessario ALTERAR o e_mail do anotador
+      //
+      //   VERIFICA se necessario ALTERAR o e_mail do anotador
       if( $e_mailinf<>$e_mail ) {
+          //
           $e_mail = $e_mailinf;
-          /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
+          /**   mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");  */
+          // 
           $sqlcmd = "UPDATE $bd_1.pessoa SET e_mail = '".$e_mailinf."' WHERE codigousp=$lncodigousp ";
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $resultado ) {
-              /// Ocorreu ERRO - MySQL  UPDATE
-              $msg_erro .='UPDATE pessoa set e_mail -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
-              mysqli_query('rollback'); 
+              //
+              // Ocorreu ERRO - MySQL  UPDATE
+              $msg_erro .='UPDATE pessoa set e_mail -&nbsp;db/mysqli:&nbsp;';
+              $msg_erro .=mysqli_error($conex).$msg_final;  
+              //
+              mysqli_query($_SESSION["conex"],'rollback'); 
+              //
               $n_erro=1;
               echo $msg_erro;               
+              //
           } else {
-              mysqli_query('commit');  
+              mysqli_query($_SESSION["conex"],'commit');  
           }
+          //
       }
-      ///  Ocorreu erro
+      //
+      //  Ocorreu erro
       if( intval($n_erro)>0 ) {
            exit();
       }
-      ///
-      ///   Verifica se é necessário incluir registro do anotador na tabela usuário
+      //
+      /**  Verifica se é necessário incluir registro do anotador na tabela usuário  */
       $sqlcmd = "SELECT aprovado FROM $bd_1.usuario WHERE codigousp=$lncodigousp ";
       $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-      /// Verifica se houve ERRO - MySQL SELECT
+      /**   Verifica se houve ERRO - MySQL SELECT  */
       if( ! $resultado ) {
-           $msg_erro .='Falha na consulta do anotador na tabela usuario -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+           $msg_erro .='Falha na consulta do anotador na tabela usuario -&nbsp;db/mysqli:&nbsp;';
+           $msg_erro .= mysqli_error($conex).$msg_final;  
            echo $msg_erro;               
            exit();                                          
       } 
+      /** Nr. de Registros  */
       $nregs=mysqli_num_rows($resultado);
-      /// Controlar o envio de senha pelo e_mail do anotador, caso seja nova.
+      //
+      /**   Controlar o envio de senha pelo e_mail do anotador, caso seja nova.  */
       $senha = "";      
-      
-      ///  Caso Anotador NAO consta na Tabela usuario  
+      //
+      //  Caso Anotador NAO consta na Tabela usuario  
       if( intval($nregs)<1 ) {
-          /// Anotador ainda NAO foi incluído no usuário
-          /// Entao, iniciar todos os campos necessário a tabela usuário:
-          $nposi = strpos($e_mail, "@");       // Extraindo o login do e_mail
-          /// Note: use ===. because the position of 'a' was the 0th (first) character.
-         if( $nposi === false || $nposi==0) {
+          /**    Anotador ainda NAO foi incluído na Tabela usuário   
+           * Entao, iniciar todos os campos necessário a tabela usuário:  
+           */
+          // Extraindo o login do e_mail
+          $nposi = strpos($e_mail, "@");     
+          //
+          /**   Note: use ===. because the position of 'a' was the 0th (first) character.  */
+          if( $nposi === false || $nposi==0) {
+              //
               $msg_erro .='E_MAIL inv&aacute;lido = '.$e_mailinf.$msg_final;  
               echo $msg_erro;               
               exit();                                          
-          }
-          ///  Gerando dados do ususario/anotador
+          }  
+          /**  Final - if( $nposi === false || $nposi==0) {  */
+          //
+          //  Gerando dados do ususario/anotador
           $login = substr($e_mail,0,$nposi);
           $senha = trim(substr($login,0,4)).trim(rand(0,99999));
+          //
+
+/**  
+echo "ERRO:  LINHA760  -->> ANOTADOR -->> \$session_tabela = $session_tabela <<-->>  \$nregs = $nregs <<--<br>"
+       ."  -->> \$bd_1 =<b> $bd_1 </b><<-->>  \$lncodigousp = $lncodigousp <br>"
+        ."  \$e_mailinf = $e_mailinf  <-- \$arr_nome_val count ".count($arr_nome_val)
+       ." <br>  \$projeto_autor_cod = $projeto_autor_cod -->> \$senha = $senha ";
+exit();
+ */
+
+
           $datacad = date("Y-m-d");
           $odata = new DateTime($datacad);  
-          ///  echo $odata->format('d/m/Y')."<br><br>";  
-          ///  adiciona 1 semana na data  
-          ///  $odata->modify('+1 week');  
-          ///   echo $odata->format('d/m/Y')."<br><br>";  
-          ///   remove 14 dias da data  
-          ///  $odata->modify('-14 days');  
+          //
+          //  echo $odata->format('d/m/Y')."<br><br>";  
+          //  adiciona 1 semana na data  
+          //  $odata->modify('+1 week');  
+          //   echo $odata->format('d/m/Y')."<br><br>";  
+          //   remove 14 dias da data  
+          //  $odata->modify('-14 days');  
           $odata->modify('+730 days');
           $datavalido = $odata->format('Y-m-d');
           $codigoprov = $lncodigousp;
           $pa = $pa_anotador;
-          ///
-          /// Indica que o anotador está aprovado (autorizado) para usar o REXP
+          //
+          // Indica que o anotador está aprovado (autorizado) para usar o REXP
           $aprovado = 1;                 
           $activation_code = 0;
           $n_erro=0;
-          /***
-                     Incluindo anotador na tabela usuario
-          **/
-          ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-          mysqli_query("LOCK TABLES $bd_1.usuario INSERT");
+          /**
+          *   Incluindo anotador na tabela usuario
+          */
           //
-          /// mysqli_query("LOCK TABLES pessoal.usuario WRITE");
-          $sqlcmd = "INSERT $bd_1.usuario values('$login',password('$senha'),'$datacad','$datavalido',$codigoprov,$pa,$aprovado,$activation_code )";
+          /**
+          *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+          */
+          true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
+          //
+          $sqlcmd = "INSERT $bd_1.usuario ";
+          $sqlcmd .="  values('$login',old_password('$senha'),'$datacad','$datavalido',$codigoprov,$pa,$aprovado,$activation_code )";
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $resultado ) {
-              ///  Ocorreu ERRO -  MySQL INSERT 
-              $msg_erro .='Incluindo anotador na tabela usuario -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
-              mysqli_query('rollback'); 
+              //
+              /**    Ocorreu ERRO -  MySQL INSERT  cancelando  */   
+              $msg_erro .='Incluindo anotador na tabela usuario -&nbsp;db/mysqli:&nbsp;';
+              $msg_erro .=mysqli_error($conex).$msg_final;  
+              //
+              mysqli_query($_SESSION["conex"],'rollback'); 
+              //
               $n_erro=1;
           } else {
-              mysqli_query('commit');  
+               /**  Executando  */
+               mysqli_query($_SESSION["conex"],'commit');  
           }
-          ///  Ocorreu erro
+          //
+          //  Ocorreu erro
           if( intval($n_erro)>0 ) {
                echo $msg_erro;               
                exit();
           }
-          ///          
+          //          
       }  
-      /****  Final - Caso Anotador NAO consta na Tabela usuario     ******/
-      ///
-      ///   Verifica se é necessário incluir registro do anotador na tabela participante
-      $sqlcmd = "SELECT aprovado from $bd_2.participante "
-                ."  WHERE codigousp=$lncodigousp and pa=$pa_anotador  and codigo_ativa=$projeto_autor_cod ";
-      ///                
+      /**  Final - Caso Anotador NAO consta na Tabela usuario  */
+      //
+      /**    Verifica se é necessário incluir registro do anotador na tabela participante   */
+      $sqlcmd = "SELECT aprovado from $bd_2.participante ";
+      $sqlcmd .= "  WHERE codigousp=$lncodigousp and pa=$pa_anotador ";
+      $sqlcmd .= "  and codigo_ativa=$projeto_autor_cod ";
+      //                
       $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
       if( ! $resultado ) {
-          $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+          $msg_erro .='Falha na consulta do anotador na tabela participante -&nbsp;db/mysqli:&nbsp;';
+          $msg_erro .=mysqli_error($conex).$msg_final;  
           echo $msg_erro;               
           exit();                                          
-      } 
-      /// Numero de registros do Select da Tabela particiapnte
+      }
+      //
+      /**   Numero de registros do Select da Tabela particiapnte    */ 
       $nregs=mysqli_num_rows($resultado);
       if( intval($nregs)<1 ) {
-          /// Anotador ainda NAO foi incluído na tabela participante
-          /// Entao, iniciar todos os campos necessário a tabela participante:
+          //
+          // Anotador ainda NAO foi incluído na tabela participante
+          // Entao, iniciar todos os campos necessário a tabela participante:
           $usuario_ci = 0;
           $codigoprov = $lncodigousp;
           $datacad = date("Y-m-d");
@@ -657,90 +850,117 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ///
           $n_erro=0;
           ///  Iniciar uma transaction - ex. procedure    
-          mysqli_query("LOCK TABLES $bd_2.participante INSERT ");
+          true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
           ////   
           $sqlcmd = "INSERT $bd_2.participante values($usuario_ci,$codigoprov,'$datacad','$datavalido',$pa,$codigo_ativa,$aprovado,$chefe )";
           $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $resultado ) {
-              $msg_erro .='Incluindo anotador na tabela participante -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+              $msg_erro .='Incluindo anotador na tabela participante -&nbsp;db/mysqli:&nbsp;';
+              $msg_erro .=mysqli_error($conex).$msg_final;  
               echo $msg_erro;               
-              $num_erro=1;
-              /// Ocorreu erro - cancelando
-              mysqli_query('rollback'); 
+              $num_erro=1;  
+              //
+              // Ocorreu erro - cancelando
+              mysqli_query($_SESSION["conex"],'rollback'); 
+              //
           }  else {
-              ///  inserindo participante - ok
-              mysqli_query('commit'); 
+              //
+              //  inserindo participante - ok
+              mysqli_query($_SESSION["conex"],'commit'); 
+              //
           }
           ///
           /// Concluir a transaction
-          ///  Ocorreu erro
+          //
+          //  Ocorreu erro
           if( intval($n_erro)>0 ) {
               exit();                                                 
           }
-          /// 
+          // 
+          //
    }  
-   ///
-   ///   Incluir registro do anotador na tabela anotador
-   ///***mysqli_query("LOCK TABLES rexp.anotador WRITE");
-   $anotador_ci = 0;        // Chave auto incremento
+   /**  Final - if( intval($nregs)<1 ) {  */
+   //
+   //   Incluir registro do anotador na tabela anotador
+   //
+   $anotador_ci = 0;  // Chave auto incremento
    $cip = $lnprojeto;
    $codigo = $lncodigousp;
    $pa = $pa_anotador;
    $data =  date("Y-m-d H:i:s");
    ///
    $n_erro=0;
-   /***          Incluindo Anotador     
-           Iniciar uma transaction - ex. procedure    
-   ***/
-   ///  Execute the queries 
-   mysql_select_db($db_array[$elemento]);
-   ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-   mysqli_query("LOCK TABLES $bd_2.anotador INSERT ");
-   ////   
+   /**          Incluindo Anotador     
+   *        Iniciar uma transaction - ex. procedure    
+   */
+   //
+   //  Execute the queries 
+   mysqli_select_db($_SESSION["conex"],$db_array[$elemento]);
+   /**
+    *    mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+    */
+   true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
+   //   
    $sqlcmd = "INSERT into $bd_2.anotador values($anotador_ci,$cip,$codigo,$pa,'$data')";
    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-   if( ! $resultado ) {
-       $msg_erro .='Incluindo anotador na tabela anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+   if( ! $resultado ) {  
+       //
+       $msg_erro .='Incluindo anotador na tabela anotador -&nbsp;db/mysqli:&nbsp;';
+       $msg_erro .=mysqli_error($conex).$msg_final;  
+       //
        $n_erro=1;
-       mysqli_query('rollback'); 
+       //
+       mysqli_query($_SESSION["conex"],'rollback'); 
+       //
        echo $msg_erro;               
+       //
    } else {
-       mysqli_query('commit'); 
+       mysqli_query($_SESSION["conex"],'commit'); 
    }
-   /// Concluir a transaction
-   ///  Ocorreu erro
+   //
+   //  Concluir a transaction
+   //
+   //  Ocorreu erro
    if( intval($n_erro)>0 ) {
        exit();                                                 
-   }
-   ///
-   ///  Enviar e_mail ao anotador informando aprovação para uso do REXP
-   ///
-   ///  Buscar o e_mail do Orientador que está cadastrando esse anotador
+   }  
+   /**  Final - if( intval($n_erro)>0 ) {  */
+   //
+   /**
+    *     Enviar e_mail ao anotador informando aprovação para uso do REXP
+   */
+   //  Buscar o e_mail do Orientador que está cadastrando esse anotador
    $codigoprov = $_SESSION["usuario_conectado"];
    $sqlcmd = "SELECT  e_mail FROM  $bd_1.pessoa WHERE codigousp=$codigoprov";
    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
    if( ! $resultado ) {
-        $msg_erro .='Buscando o e_mail do orientador do projeto na tabela pessoa -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+        //
+        $msg_erro .='Buscando o e_mail do orientador do projeto na tabela pessoa -&nbsp;db/mysqli:&nbsp;';
+        $msg_erro .=mysqli_error($conex).$msg_final;  
         echo $msg_erro;               
         exit();                                          
    } 
    ///  Numero de registros
    $nregs_e_mail=mysqli_num_rows($resultado);
    if( intval($nregs_e_mail)<1 ) {
-        $msg_erro .='Buscando o e_mail do orientador do projeto na tabela pessoa não encontrado.'.$msg_final;  
+        //
+        $msg_erro .='Buscando o e_mail do orientador do projeto na tabela pessoa não encontrado.';
+        $msg_erro .=$msg_final;  
         echo $msg_erro;               
         exit();                                          
    } 
-   ///
-   ///  Variavel de e_mail Orientador do Projeto selecionado
-   $e_mailorientador = mysql_result($resultado,0,"e_mail");
-   ///
-    ///   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-    mysqli_query("SET NAMES 'utf8' ");
-    mysqli_query("SET character_set_connection=utf8");
-    mysqli_query("SET character_set_client=utf8");
-    mysqli_query("SET character_set_results=utf8");
-    
+   /**  Final - if( intval($nregs_e_mail)<1 ) {  */
+   //
+   //  Variavel de e_mail Orientador do Projeto selecionado
+   $e_mailorientador = mysqli_result($resultado,0,"e_mail");
+   //
+   //   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
+   mysqli_query($_SESSION["conex"],"SET NAMES 'utf8' ");
+   mysqli_query($_SESSION["conex"],"SET character_set_connection=utf8");
+   mysqli_query($_SESSION["conex"],"SET character_set_client=utf8");
+   mysqli_query($_SESSION["conex"],"SET character_set_results=utf8");
+   //
+   /**  Select/MYSQLI - Tabelas projeto e pessoa   */ 
    ///  Buscar o Titulo do Projeto autorizado para uso do Anotador
    $sqlcmd = "SELECT a.titulo,a.numprojeto,b.nome as nome_autor,b.e_mail as orientador_email "
              ." FROM $bd_2.projeto as a, $bd_1.pessoa b "
@@ -748,25 +968,31 @@ if( strtoupper($val)=="ANOTADOR" ) {
    ///
    $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
    if( ! $resultado ) {
-        $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
+        $msg_erro .='Buscando o titulo do projeto na tabela projeto -&nbsp;db/mysqli:&nbsp;'.mysqli_error($conex).$msg_final;  
         echo $msg_erro;               
         exit();                                          
-   } 
-  ///  Numero de registros
+   }
+   // 
+   //  Nr. de registros
    $nregs=mysqli_num_rows($resultado);
    if( intval($nregs)<1 ) {
         $msg_erro .='Buscando dados do projeto e do orientador não encontrado.'.$msg_final;  
         echo $msg_erro;               
         exit();                                          
-   } 
-   ///  Anotador Nome para ser incluido 
-   $anotador_nome=$_SESSION["anotador_nome"];
-       
-   ///  Dados do Projeto e do Orientador
-   $projeto_titulo = mysql_result($resultado,0,"titulo");
-   $projeto_numero = mysql_result($resultado,0,"numprojeto");
-   $projeto_autor = mysql_result($resultado,0,"nome_autor");
-   $orientador_email = mysql_result($resultado,0,"orientador_email");    
+   }
+   // 
+   //  Anotador Nome para ser incluido 
+   /**
+   if( isset($_SESSION["anotador_nome"]) ) {
+          $anotador_nome=$_SESSION["anotador_nome"];
+   }
+   */
+   //    
+   //  Dados do Projeto e do Orientador
+   $projeto_titulo = mysqli_result($resultado,0,"titulo");
+   $projeto_numero = mysqli_result($resultado,0,"numprojeto");
+   $projeto_autor = mysqli_result($resultado,0,"nome_autor");
+   $orientador_email = mysqli_result($resultado,0,"orientador_email");    
     ///
     if( strlen(trim($senha))<1 ){
         $senha="Usar a mesma senha anteriormente criada.";
@@ -827,31 +1053,36 @@ if( strtoupper($val)=="ANOTADOR" ) {
    // SEMPRE TESTAR O COMANDO MAIL -  SE A MENSAGEM FOI ENVIADA  
    //  $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);  
    $emailsender="$orientador_email";
+   //
     ///  Enviando mensagem para o novo anotador
     //// $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);
     ///   $envio = mail($anotador_email, $assunto, $message,$headers1,"-f".$emailsender);
     $envio = mail($anotador_email, $assunto, $message,$headers1,"-r".$emailsender);
-        ///  Alterado em 20180711            
+    //
+    //  Alterado em 20250526            
     ini_set('default_charset','UTF-8');
-   ///
-////   $_SESSION["anotador_nome"]= $anotador_nome = mb_convert_encoding($anotador_nome, 'UTF-8', 'ISO-8859-1');
-   ///
-   ///  Enviando mensagem na tela 
-   if( $envio ) {
-       $msg_ok .= "<span style='color: #000000; text-align: center; padding-left: 5px;font-size: medium; '>"
+    //
+    //  Enviando mensagem na tela 
+    if( $envio ) {
+        //
+        $msg_ok .= "<span style='color: #000000; text-align: center; padding-left: 5px;font-size: medium; '>"
                  ."<br>&nbsp;&nbsp;Mensagem enviada para o novo Anotador cadastrado nesse Projeto:<br/><b>$projeto_titulo</b>:<br/>"
                  ."<br/>&nbsp;Anotador:&nbsp;<b>".$anotador_nome."</b><br/>E_mail:&nbsp;".$e_mail."<br><br></span>".$msg_final;
        echo $msg_ok;                        
-   } else {
+       //
+    } else {
+        //
        $msg_erro .= "<span style='color: #000000; text-align: center; padding-left: 5px;font-size: medium; '>"
                  ."Mensagem <b>N&Atilde;O</b> foi enviada para o novo Anotador cadastrado nesse Projeto:<br/><b>$projeto_titulo</b>:<br/>"
                  ."<br/>&nbsp;Anotador:&nbsp;<b>".$anotador_nome."</b><br/>E_mail:&nbsp;".$e_mail."<br/><br/></span>".$msg_final;
        echo $msg_erro;              
+       //
     }
     ///    Final - enviar a mensagem por email
     /// 
-}    
+}  
+/**  Final - if( $val_upper=="ANOTADOR" ) {  */  
 #
-ob_end_flush(); /* limpar o buffer */
+ob_end_flush(); /** limpar o buffer */
 #
 ?>

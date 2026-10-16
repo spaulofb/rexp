@@ -16,10 +16,16 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-///  IMPORTANTE:  Declarando em PHP - charset UTF-8
+//
+//
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+//  IMPORTANTE:  Declarando em PHP - charset UTF-8
 header('Content-type: text/html; charset=utf-8');
-
-//// Mensagens para enviar
+//
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -27,12 +33,12 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-///   FINAL - Mensagens para enviar
+//   FINAL - Mensagens para enviar
 
 // include('inicia_conexao.php');
 extract($_POST, EXTR_OVERWRITE); 
-
-///  Verificando SESSION incluir_arq - 20180618
+//
+//  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
@@ -63,10 +69,12 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
-/// $_SESSION['time_exec']=180000;
-///
-///  INCLUINDO CLASS - 
+if( ! isset($_SESSION["titulo_cabecalho"]) ) {
+      $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
+} 
+// $_SESSION['time_exec']=180000;
+//
+//  INCLUINDO CLASS - 
 require_once("{$_SESSION["incluir_arq"]}includes/autoload_class.php");  
 $funcoes=new funcoes();
 $funcoes->usuario_pa_nome();
@@ -187,8 +195,9 @@ function acentuarAlerts(mensagem) {
 /*************  Final  -- function acentuarAlerts(mensagem)   ************/
 ///
 ///  Verifica se foi selecionado o Projeto
-function ativar(projeto_selec) {
-    /// Verificando parametro projeto_selec
+function ativar(projeto_selec) {  
+     //
+    // Verificando parametro projeto_selec
     if( typeof(projeto_selec)=='undefined' ) var projeto_selec="";
     projeto_selec = trim(projeto_selec);
     /**
@@ -294,12 +303,18 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
      var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
      var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
     
-/// alert(" arq anotacao_remover.php/296 --->>  idselecproj = "+idselecproj+" -  idopcao = "+idopcao+"  --  opcao = "+opcao+" - string_array = "+string_array);
+     /**  
+ alert(" arq anotacao_remover.php/296 --->>  idselecproj = "+idselecproj+" -  idopcao = "+idopcao
+            +"  --  opcao = "+opcao+" - string_array = "+string_array);
+             */
+
  
-    /// tag Select para desativar o campo Select ordenar
+    //                  
+    // tag Select para desativar o campo Select ordenar
     var quantidade=idselecproj.search(/BUSCA_PROJ|busca_porcpo/i);
     if( quantidade!=-1 ) {
-         ///  Caso idopcao estiver  nula
+         //
+         //  Caso idopcao estiver  nula
          if( idopcao.length<1 ) {
               ///  Retornar na pagina - reset 
               location.href=pagina_local;
@@ -406,17 +421,18 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
     ///  Verifica qual Navegador sendo usado
     var m_isChrome=isChrome().toString();
     var m_isInternetExplorer=isInternetExplorer();
-
-    /// Define o procedimento para processamento dos resultados dp srv_php
+    //
+    // Define o procedimento para processamento dos resultados dp srv_php
     var inclusao = function (oXML) { 
-          ///  Recebendo o resultado do php/ajax
+          //
+          //  Recebendo o resultado do php/ajax
           var srv_ret = trim(oXML.responseText);
           var lnip = srv_ret.search(/Nenhum|ERRO:/i);
-          ///
+          //
 
-          /***
-  alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
-  ***/       
+/**  
+*    alert("anotacao_remover.php/410  --->  1) -- lnip = "+lnip+"  -->>  idselecproj = "+idselecproj+"  <<-- idopcao = "+idopcao+"  -- opcao = "+opcao+" \r\n  -  Recebendo resultado do srv_mostraanot="+srv_ret);   
+ */
 
          ///  Caso ocorreu erro
          if( parseInt(lnip)!=-1 ) {
@@ -432,16 +448,22 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
               }
          }
          ///  Caso NAO encontrou nem:  Nenhum|ERRO:
-         if( lnip==-1 ) {
+         if( lnip==-1 ) {    
+             //
 
-///   alert("anotacao_remover.php/405   --->>   2)  --- opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);          
-              
+
+     /**
+     *      alert("anotacao_remover.php/405   --->>   2)  --- opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);          
+     */
+             
+             // 
              if( opcao=="DESCARREGAR" ) {
+                  //
                   var msgtxt=acentuarAlerts("\r\nCaso o Internet Explorer bloqueie o download, faça o seguinte:\r\n\r\n Opção - Via Ferramentas do Internet Explorer\r\n 1 - Abra o Opções do Internet Explorer e clique na aba Segurança.\r\n 2 - Clique no botão Nível Personalizado e dentro de Configurações de Segurança, localize o recurso Downloads \r\n3 - Em: Aviso automático para downloads de arquivo e selecione Habilitar");    
                   alert(msgtxt);
                   srv_ret = trim(srv_ret);
-                  var array_arq = srv_ret.split("%");
-                ////  self.location.href="../includes/baixar.php?pasta="+encodeURIComponent(array_arq[0])+"&file="+encodeURIComponent(array_arq[1]);
+                  var array_arq = srv_ret.split("%");  
+                  //
                   self.location.href=raiz_central+"includes/baixar.php?pasta="+encodeURIComponent(array_arq[0])+"&file="+encodeURIComponent(array_arq[1]);
                   ///
              }  else if( opcao=="BUSCA_PROJ" ) {
@@ -452,22 +474,22 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                       ///  Ativando ID div_out - enviando dados
                        exoc("div_out",1,srv_ret);           
                       ///          
-             } else if( idopcao=="TODOS" ) {
-                 
- ///   alert("anotacao_remover.php  --  LINHA/339   --->> opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);                           
-                   /***
-                   if( document.getElementById('div_form') ) {
-                        document.getElementById('div_form').style.display="block";
-                        document.getElementById('div_form').innerHTML=srv_ret;                                         
-                   }
-                   ***/
-                   /// Enviando dados para ID id_out - ativar
+             } else if( idopcao=="TODOS" ) {  
+                   //
+
+          /**
+          *     alert("anotacao_remover.php  --  LINHA/339   --->> opcao = "+opcao+"  --- idopcao = "+idopcao+"  -- lnip = "+lnip+" - \r\n  Recebendo resultado do srv_mostraanot="+srv_ret);                           
+          */
+
+                  // 
+                  // Enviando dados para ID id_out - ativar
                   if( document.getElementById('div_out') ) {
                         document.getElementById('div_out').style.display="block";
                         document.getElementById('div_out').innerHTML=srv_ret;                                         
                    }
-                  //// exoc("div_out",1,srv_ret);   
+                   // exoc("div_out",1,srv_ret);   
                    return;
+                   //
              }  else if( opcao=="REMOVER" ) {     
                  ///
                    var  myArguments = string_array; 
@@ -500,6 +522,7 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                         alert("Usar Navegador Google Chrome ou Internet Explorer");
                         return
                    }
+                   //
                    if( pos!=-1 ) {
                         var pos = srv_ret.search(/APROVADO|NAOAPROVADO/);
                         if( pos!=-1 ) {                                            
@@ -513,21 +536,25 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                                      document.getElementById('div_form').innerHTML=showmodal;
                               }                                                                                           
                         }
+                        //
                     } else if( pos==-1 ) {
                         if( showmodal=="excluido" ) {        
                              /***  IMPORTANTE: essa function acentuarAlerts
                                      para acentuacao
                              ***/
                              var mensagem=acentuarAlerts("Anotação excluída. Verificar.");
+                             //
                              alert(mensagem);
+                             //
                              document.location.reload(true);  
                              ///
                         }
                     }
                     /// 
-             }  else if( opcao.toUpperCase()=="ANOTACAO" &&  idopcao.toUpperCase()=="EXCLUINDO"  ) {            ///                
-                    //// Recebendo a mensagem do arquivo srv_rmanotacao.php - sobre excluir ANOTACAO
-                    ///  alert("Anotação removida.");
+             }  else if( opcao.toUpperCase()=="ANOTACAO" &&  idopcao.toUpperCase()=="EXCLUINDO"  ) {
+                    //                
+                    // Recebendo a mensagem do arquivo srv_rmanotacao.php - sobre excluir ANOTACAO
+                    //  alert("Anotação removida.");
                     /***  IMPORTANTE: essa function acentuarAlerts
                             para acentuacao
                     ***/
@@ -538,29 +565,38 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                     location.reload();
                     return;
              }  else {
+                    //
                     if( opcao=="CAMPOS_OBRIGATORIOS"  ) {
                          var pos = m_dados_recebidos.search(/Nenhum|ERRO:/i);
                          if( trim(m_dados_recebidos)!="" && pos==-1 ) {
                                var myArguments = m_dados_recebidos;
                                if( document.getElementById('id_body')  ) {
-                                    document.getElementById('id_body').setAttribute('style','background-color: #007FFF');
+                                    var did_body=document.getElementById('id_body');
+                                    did_body.setAttribute('style','background-color: #007FFF');
                                }    
+                               //
                                var showmodal=window.showModalDialog("myArguments.php",myArguments,"dialogWidth:600px;dialogHeight:500px;resizable:no;status:no;center:yes;help:no;");  
-                               if( showmodal != null) {                                                                           
-                                 //  alert("LINHA 151 - cadastrar_auto.php  =  "+m_dados_recebidos)
+                               if( showmodal != null) {          
+                                   //                                                                 
+                                   //  alert("LINHA 151 - cadastrar_auto.php  =  "+m_dados_recebidos)
                                    var pos = m_dados_recebidos.search(/APROVADO|NAOAPROVADO/);
                                    if( pos!=-1 ) {                                            
                                        var array_modal = showmodal.split("#");
                                        if( document.getElementById('div_form')  ) {
                                            document.getElementById('div_form').style.display="block";
                                            if( document.getElementById('id_body')  ) {
-                                                document.getElementById('id_body').setAttribute('style','background-color: #FFFFFF');
+                                                var xid_body=document.getElementById('id_body');
+                                                xid_body.setAttribute('style','background-color: #FFFFFF');
                                            }    
                                            //  document.getElementById('div_form').innerHTML=array_modal[0];
                                            document.getElementById('div_form').innerHTML=showmodal;
+                                           //
                                        }                                                                                           
-                                   }                                        
-                               }       
+                                   } 
+                                   /**  Fomaç - if( pos!=-1 ) {    */                                       
+                                   //
+                               }   
+                               //    
                          } else if(pos!=-1 ) {
                               document.getElementById('label_msg_erro').style.display="block";
                               document.getElementById('label_msg_erro').innerHTML=srv_ret;                                      
@@ -587,16 +623,20 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                 */
                 /// Mensagem de erro ID label_msg_erro - ativar
                 exoc("label_msg_erro",1,srv_ret);   
+                //
            }; 
            return;
-    };
-    ///   Define o servidor PHP para remover 
-    ///    do banco de dados - anotacao do projeto desejado
+    };  
+    //
+    //   Define o servidor PHP para remover 
+    //    do banco de dados - anotacao do projeto desejado
     var srv_php = "srv_rmanotacao.php";
+    //
     var poststr = new String("");
         /// if( idselecproj.toUpperCase()=="DESCARREGAR" || idselecproj.toUpperCase()=="DETALHES" ) {
     var encontrado=idselecproj.search(/DESCARREGAR|DETALHES|BUSCA_PROJ|ordenar/i);    
-     ///  Caso encontrou um dos tres nomes 
+    //
+    //  Caso encontrou um dos tres nomes 
     if( encontrado!=-1 ) {
            var browser="";
            if( typeof navegador=="function" ) {
@@ -605,7 +645,8 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
            ///
            var poststr = "grupoanot="+encodeURIComponent(idselecproj)+"&val="+encodeURIComponent(idopcao)+"&m_array="+encodeURIComponent(string_array)+"&navegador="+browser; 
     } else {
-        ///  DESCARREGAR - UPLOAD abrindo o arquivo pdf
+        //
+        //  DESCARREGAR - UPLOAD abrindo o arquivo pdf
         if( opcao=="DESCARREGAR"  ) {
             var poststr = "grupoanot="+encodeURIComponent(opcao)+"&idopcao="+encodeURIComponent(idopcao)+"&m_array="+encodeURIComponent(string_array); 
         }  else {
@@ -619,7 +660,7 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
                          ETAPA PARA REMOVER A ANOTACAO DE UM PROJETO NO ARQ. srv_rmanotacao.php 
                          utilizando a function para_confirm do arquivo functions.js
                      */    
-                     var remover = para_confirm("Remover tem certeza?");
+                     var remover = para_confirm("Remover Anotação tem certeza?");
                      if( remover ) {
                            //  Iniciando excclusao da Anotacao escolhida
                            var poststr = "idopcao="+encodeURIComponent(idopcao)+"&op_selcpoval="+encodeURIComponent(opcao)+"&cia="+encodeURIComponent(string_array);                     
@@ -641,7 +682,8 @@ function remove_anotacao(idselecproj, idopcao,string_array) {
          usando metodo post, + as variaveis, valores e a funcao   */
      var conectando_dados = myConn.connect(srv_php, "POST", poststr, inclusao);   
      /*  uma coisa legal nesse script se o usuario não tiver suporte a JavaScript  
-          porisso eu coloquei return false no form o php enviar sozinho            */
+          porisso eu coloquei return false no form o php enviar sozinho            */   
+     //
 }
 /*********   Final -function remove_anotacao(idselecproj, idopcao,string_array)   **********/
 ///
@@ -665,16 +707,17 @@ include("{$_SESSION["incluir_arq"]}includes/menu_horizontal.php");
 <?php 
 ///     Alterado em 20170925  - MENU 
 require("{$_SESSION["incluir_arq"]}includes/domenu.php");
-
-////     CONSULTAR  Anotacao
+//
+//     CONSULTAR  Anotacao
 if( isset($_GET["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_GET["m_titulo"];    
 } elseif( isset($_POST["m_titulo"]) ) {
    $_SESSION["m_titulo"]=$_POST["m_titulo"];      
 }
-///  Definindo TITULO da pagina
+//
+//  Definindo TITULO da pagina
 $_SESSION["m_titulo"]="Anota&ccedil;&atilde;o";
-////        
+//        
 ?>
 <!--  Mensagem de ERRO e Titulo    -->
 <section class="merro_e_titulo" >
@@ -688,6 +731,7 @@ $_SESSION["m_titulo"]="Anota&ccedil;&atilde;o";
 //  INVES de superusuario e?  super
 //  if( ( $permit_pa>$array_pa['superusuario']  and $permit_pa<=$permit_anotador ) ) {    
 if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {    
+//
 ?>
 <div id="div_form" class="div_form" style="overflow:auto;" >
 <div style="padding-top: .5em;text-align: center;background-color: #FFFFFF;" >
@@ -695,37 +739,55 @@ if( ( $permit_pa>$array_pa['super']  and $permit_pa<=$permit_anotador ) ) {
 </p>
 </div>
 <?php 
-/// Selecionando o Projeto do Orientador/Usuario
+//
+// Selecionando o Projeto do Orientador/Usuario
 # Aqui está o segredo
+/*** 
 mysqli_query("SET NAMES 'utf8'");
 mysqli_query('SET character_set_connection=utf8');
 mysqli_query('SET character_set_client=utf8');
 mysqli_query('SET character_set_results=utf8');
-///
-if ($permit_pa<=$permit_orientador) {
+*/
+//
+//
+# IMPORTANTE: Aqui esta o segredo
+mysqli_query($conex,"SET NAMES 'utf8' ");
+mysqli_query($conex,'SET character_set_connection=utf8');
+mysqli_query($conex,'SET character_set_client=utf8');
+mysqli_query($conex,'SET character_set_results=utf8');
+//
+if( $permit_pa<=$permit_orientador ) {
+     //
+     //  Select/Mysqli
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." a.codigousp=".$usuario_conectado." order by b.titulo ";
 } else {
+     //
+     //  Select/Mysqli
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
         ." b.cip in (select distinct cip from $bd_2.anotador "
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
 $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
-///  Verificando se houve erro no Select/MySql                  
+//
+//  Verificando se houve erro no Select/MySql                  
 if( ! $result ) {
-    //  die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));  
+     //
+    /**    die('ERRO: Selecionando os projetos autorizados para esse Usu&aacute;rio: '.mysqli_error($_SESSION["conex"]));    */ 
     /* $msg_erro .= "Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]);
     echo $msg_erro.$msg_final;  */            
     //  Parte do Class                
-    echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
+    $terr="Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} - db/mysqli:&nbsp;";
+    echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
     exit();                  
 }
 ///  Numero de Projetos Selecionados
 $_SESSION["nprojetos"] = $nprojetos = mysqli_num_rows($result);
 ///
 if( intval($_SESSION["nprojetos"])>0 ) {
+     //
     ///  SESSION do Projeto Selecionado para alterar ANotacao
     if( isset($_SESSION["anotacao_cip_altexc"]) ) {
          $cip_anotacao_escolhida = $_SESSION["anotacao_cip_altexc"];
@@ -739,23 +801,25 @@ if( intval($_SESSION["nprojetos"])>0 ) {
                  </script>
               <?php
          }
-         ///       
+         //       
     }
-    ///
+    //
 }
-///
+//
 ?>
 <div class="div_select_busca"  >
 <select name="busca_proj" id="busca_proj" class="Busca_letrai" title="Selecione o Projeto para Busca de Anota&ccedil;&otilde;es"  onchange="javascript: remove_anotacao(this.id,this.value,'<?php echo $usuario_conectado;?>')"  >
     <!-- Identificacao do Projeto [Fonte][ProcessoNo.][ - Titulo] -->
     <?php 
-        /// Verifica se NAO tem projeto  ou 
+        //
+        // Verifica se NAO tem projeto  ou 
         if( intval($nprojetos)<1 ) {
               echo "<option value='' >N&atilde;o existe Projeto vinculado a esse {$_SESSION["usuario_pa_nome"]}.</option>";
         } else {
               echo "<option value='' >Selecione o Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
-              ////
-              while( $linha=mysql_fetch_assoc($result) ) {
+              //
+              while( $linha=mysqli_fetch_assoc($result) ) {
+                    //
                     $_SESSION["cip"]= (int) $linha['cip'];
                     $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
                     $autor_nome = $linha['nome'];
@@ -818,25 +882,29 @@ if( intval($_SESSION["nprojetos"])>0 ) {
                         echo  $titulo_projeto."&nbsp;&nbsp;</option>";                                  
                     }
                     ***/
-                    ////    
+                    //    
               }
+              /**  FINAL - while( $linha=mysql_fetch_assoc($result) ) {   */
+              //
         }
+        //
         ?>
         </select>
 </div>
 <?php
-///   Conectar - CODIGO/USP
-///  $elemento=5; $elemento2=6;
-///  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
+//
+//   Conectar - CODIGO/USP
+//  $elemento=5; $elemento2=6;
+//  include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");     
 //
 //  Selecionar as anota??es de projeto pelo campo desejado
 $opcao_cpos = Array("ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
 //
-///  Salvar letrais iniciais em um conjunto para facilitar a busca
-///  $m_anotacoes=mb_convert_encoding("Anotações", 'ISO-8859-1', 'UTF-8');
+//  Salvar letrais iniciais em um conjunto para facilitar a busca
+//  $m_anotacoes=mb_convert_encoding("Anotações", 'ISO-8859-1', 'UTF-8');
 $m_anotacoes="Anotações";
-///
+//
 ?>
 <div id="id_anotacao" style="display: none;text-align: center;" >
 <p class="titulo_usp" >
@@ -857,6 +925,7 @@ Mostrar&nbsp;Anota&ccedil;&otilde;es&nbsp;</p>
 } else {
    echo  "<p  class='titulo_usp' >Usu&aacute;rio n&atilde;o autorizado</p>";
 }
+//
 ?>
 <div  style="position:relative;  display:flex; ">
 <!-- id div_out  -->

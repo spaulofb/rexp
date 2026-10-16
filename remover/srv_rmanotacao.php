@@ -954,7 +954,8 @@ echo $caminho
                     //  Complete the transaction 
                     //
                     //  Mensagem de aviso da remocao da Anotacao
-                    $txt =  "Anotação: $tit_anotacao removida era parte do Projeto: ".$tit_projeto;
+                    $txt =  "Anotação: $tit_anotacao removida era parte do Projeto: ".$tit_projeto;   
+                    //
                     echo $txt;
                     //
               }

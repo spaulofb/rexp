@@ -358,7 +358,8 @@ if( $source_upper=="PROJETO" ) {
     ////   <!--  tag select para selecionar o Anotador para o Projeto selecionado -->
     ////  IMPORTANTE: para retornar como tag Select sempre incluir a tag <div> - 20180518
     ?>
-      <SELECT  class="td_select" required="required"  id="sel_anotador" name="sel_anotador"
+      <select  name="sel_anotador"  id="sel_anotador"  class="td_select" required="required" 
+          style="float: left;clear: both;"
            title="Selecione Anotador"  onchange="javascript: enviar_dados_anotador('codigousp',this.value)" >            
        <?php
           ////  if( intval($m_linhas)<1 || intval($nprojetos)<1) {
@@ -408,7 +409,7 @@ if( $source_upper=="PROJETO" ) {
             ?>
             </select>
             <?php
-                 if( isset($result) ) mysql_free_result($result); 
+                 if( isset($result) ) mysqli_free_result($result); 
           }
           ///
     ///  <!-- Final - Anotador/Nome -->
@@ -496,10 +497,12 @@ if( strtoupper($val)=="ANOTADOR" ) {
        ///   CAMPOS do FORM anotador_cadastrar.php
        $lnprojeto = $arr_nome_val["projeto"]; 
        $lncodigousp = (int) $arr_nome_val["codigousp"];
-       /// if( isset($arr_nome_val["nome"]) ) {
+       ///
+       /// Nome do Anotador para remover do Projeto selecionado
        if( isset($_SESSION["anotador_nome"]) ) {
            ////  $anotador_nome = mb_convert_encoding($_SESSION["anotador_nome"], 'ISO-8859-1', 'UTF-8');
-             $anotador_nome = trim($_SESSION["anotador_nome"]);
+           ///  $anotador_nome = trim($_SESSION["anotador_nome"]);
+           $_SESSION["anotador_nome"] = $anotador_nome = htmlentities($_SESSION["anotador_nome"],ENT_QUOTES,"UTF-8");
        } else {
            /// $nome = "";
            /// $anotador_nome = mb_convert_encoding($arr_nome_val["nome"], 'ISO-8859-1', 'UTF-8');
@@ -575,10 +578,18 @@ if( strtoupper($val)=="ANOTADOR" ) {
       ///
       $session_tabela = $_SESSION["tabela"];
       $n_erro=0;
+      
+      
+  echo  "ERRO:  anotador_remover_ajax/580  --->>> CONTINUAR  <<<--- \$_SESSION[anotador_nome] = {$_SESSION["anotador_nome"]} --- anotador_nome = $anotador_nome ";
+  exit();      
+      
+      /*
+             REMOVER ANOTADOR DE PROJETO
+      */
       ///  Iniciar uma transaction - ex. procedure    
       ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
       ///  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
-      mysqli_query("LOCK TABLES $bd_1.anotador DELETE");    
+      true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;    
      /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
      ///
      /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
@@ -639,7 +650,7 @@ if( strtoupper($val)=="ANOTADOR" ) {
           ///  Execute the queries 
           mysql_select_db($db_array[$elemento]);
           ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-          mysqli_query("LOCK TABLES $bd_2.participante  DELETE");
+          true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
           ////   
           $sqlcmd = "DELETE FROM  $bd_2.participante WHERE  codigousp=$lncodigousp and "
                   ."  pa=$pa_anotador and usuario_ci=$usuario_ci and codigo_ativa=$projeto_autor_cod ";

@@ -1,4 +1,5 @@
 <?php
+//
 //  AJAX da opcao Remover  - Servidor PHP para remover Anotacao do PROJETO
 //  esse arquivo faz parte do anotacao_remover.php
 //
@@ -10,20 +11,30 @@ ob_start(); /* Evitando warning */
 if(!isset($_SESSION)) {
    session_start();
 }
+//
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
 // set IE read from page only not read from cache
 //  header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control","no-store, no-cache, must-revalidate");
-header("Cache-Control","post-check=0, pre-check=0");
-header("Pragma", "no-cache");
-
-//  header("content-type: application/x-javascript; charset=tis-620");
-//  header("content-type: application/x-javascript; charset=iso-8859-1");
-header("Content-Type: text/html; charset=ISO-8859-1",true);
-//  Melhor setlocale para acentuacao - strtoupper, strtolower, etc...
-setlocale(LC_ALL, "pt_BR", "pt_BR.iso-8859-1", "pt_BR.utf-8");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // sempre modificada
+header("Pragma: no-cache"); // HTTP/1.0
+header("Cache: no-cache");
+//  header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+// For?a a recarregamento do site toda vez que o navegador entrar na p?gina
+//  header("http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'");   
+header("Cache-Control: no-store, no-cache, must-revalidate");
+/// IMPORTANTE: para acentuacao php
+header("Content-type: text/html; charset=utf-8");
+//
+//  header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0")
+//   Colocar as datas do Cadastro do Usuario e a validade
+date_default_timezone_set('America/Sao_Paulo');
 ///
-//// Mensagens para enviar
+ini_set('default_charset','UTF-8');
+//
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -31,7 +42,7 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-///   FINAL - Mensagens para enviar
+//   FINAL - Mensagens para enviar
 
 /*
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
@@ -42,33 +53,30 @@ $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 ///  $_POST = array_map(utf8_decode, $_POST);
 ///  extract: Importa vari?veis para a tabela de s?mbolos a partir de um array 
 extract($_POST, EXTR_OVERWRITE);  
-
-///  Verificando SESSION incluir_arq - 20180612
+//
+//  Verificando SESSION incluir_arq - 20180612
 $incluir_arq="";
 if( isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=$_SESSION["incluir_arq"];  
 } else {
-    echo "Sess?o incluir_arq n�o est? ativa.";
+    echo "SESSION incluir_arq inexistente.";
     exit();
 }
 ///  DEFININDO A PASTA PRINCIPAL 
 /////  $_SESSION["pasta_raiz"]="/rexp_responsivo/";     
 ///  Verificando SESSION  pasta_raiz
 if( ! isset($_SESSION["pasta_raiz"]) ) {
-     $msg_erro .= utf8_decode("Sess?o pasta_raiz n�o est? ativa.").$msg_final;  
+     $msg_erro .= "Sess?o pasta_raiz inexistente.".$msg_final;  
      echo $msg_erro;
      exit();
 }
 $pasta_raiz=$_SESSION["pasta_raiz"];
-///
-///  Definindo http ou https
-///  Definindo http ou https - IMPORTANTE
-///  Verificando protocolo do Site  http ou https   
-$_SESSION["protocolo"] = $protocolo =  (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS']=="on") ? "https" : "http");
-$_SESSION["url_central"] = $url_central = $protocolo."://".$_SERVER['HTTP_HOST'].$_SESSION["pasta_raiz"];
+//
+//  Definindo http ou https - IMPORTANTE
+//  Verificando protocolo do Site  http ou https   
 $raiz_central=$_SESSION["url_central"];
-///
-///  Parametros de controle para esse processo:
+//
+//  Parametros de controle para esse processo:
 if( isset($_POST['cip']) ) $cip= $_POST['cip'];
 if( isset($_SESSION["usuario_conectado"]) ) $anotador = $_SESSION["usuario_conectado"];
 if( isset($_SESSION["usuario_conectado"]) ) $usuario_conectado= $_SESSION["usuario_conectado"];
@@ -76,33 +84,45 @@ if( isset($_POST['grupoanot']) ) $opcao = strtoupper(trim($_POST['grupoanot']));
 if( isset($_POST['op_selcpoid']) ) $op_selcpoid = $_POST['op_selcpoid'];
 if( isset($_POST['op_selcpoval']) ) $op_selcpoval= $_POST['op_selcpoval'];
 if( isset($_POST['nr_anotacao']) ) $nr_anotacao = $_POST['nr_anotacao'];
-///
-/// Conectar 
+//
+// Conectar 
 $elemento=5; $elemento2=6;
-include("php_include/ajax/includes/conectar.php");
-require_once('php_include/ajax/includes/tabela_pa.php');
+//  include("php_include/ajax/includes/conectar.php");
+require("{$incluir_arq}includes/conectar.php");  
+//
+//  require_once('php_include/ajax/includes/tabela_pa.php');
+include_once("{$_SESSION["incluir_arq"]}includes/tabela_pa.php");
+//
+//
+include_once("{$_SESSION["incluir_arq"]}includes/array_menu.php");
 if( isset($_SESSION["array_pa"]) ) $array_pa=$_SESSION["array_pa"];        
 //
-///  INCLUINDO CLASS - 
-////  require_once('../includes/autoload_class.php');  
+// Functions PHP - v20260924
+require_once("{$_SESSION["incluir_arq"]}includes/functions.php");
+//
+//  INCLUINDO CLASS - 
+//  require_once('../includes/autoload_class.php');  
 require_once("{$incluir_arq}includes/autoload_class.php");  
 $funcoes=new funcoes();
+//
 // $funcoes->usuario_pa_nome();
 // $_SESSION["usuario_pa_nome"]=$funcoes->usuario_pa_nome;
 //
-///  UPLOAD -  do Servidor para maquina local
-
+//  UPLOAD -  do Servidor para maquina local
 if( isset($idopcao) ) {
     if( ! isset($opcao) or strlen(trim($opcao))<1 ) $opcao=$idopcao;
 }
-///
 $opcao_maiusc=strtoupper(trim($opcao));
-///
-///  Arquivo da tabela de remover anotacao - importante
+//
+//  Arquivo da tabela de remover anotacao - importante
 $arq_tab_rm_anotacao="{$incluir_arq}includes/tabela_de_remocao_anotacao.php"; 
-///
-///  SAIR do Programa
+//
+// IMPORTANTE:  Formato Mysqli caracteres
+mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+//
+//  SAIR do Programa
 if( $opcao_maiusc=="SAIR" ) {
+    //
     /// Eliminar todas as variaveis de sessions
     $_SESSION=array();
     session_destroy();
@@ -111,17 +131,17 @@ if( $opcao_maiusc=="SAIR" ) {
     if( isset($login_down) ) unset($login_down); 
     if( isset($senha_down) )  unset($senha_down); 
     //
-    ///  echo  "<a href='http://www-gen.fmrp.usp.br'  title='Sair' >Sair</a>";
     response.setHeader("Pragma", "no-cache"); 
     response.setHeader("Cache-Control", "no-cache"); 
     response.setDateHeader("Expires",0); 
-    ///  echo  "http://www-gen.fmrp.usp.br/";
+    //
     exit();
 }
-/// Final - SAIR do programa
-///
-///
+// Final - SAIR do programa
+//
+//
 if( $opcao_maiusc=="DESCARREGAR" )  {
+    //
     // Define o tempo m?ximo de execu??o em 0 para as conex?es lentas
     set_time_limit(0);
     $post_array = array("grupoanot","val","m_array");
@@ -164,55 +184,71 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     exit();     
     ///
 } elseif( $opcao_maiusc=="BUSCA_PROJ" ) {
-     ///  Verifica se existe ANOTACOES para o PROJETO escolhido
-      $sqlcmd = "SELECT anotacao as nanotacoes FROM  $bd_2.projeto  "
-                 ." WHERE cip=$val  ";
-      ///           
-      $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
-      if( ! $result_consult_anotacao ) {
-            echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("anota??o")." na tabela  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
-            exit();        
+      //   
+      //  Verifica se existe ANOTACOES para o PROJETO escolhido
+      $sqlcmd = "SELECT anotacao as nanotacoes FROM  $bd_2.projeto "
+         ." WHERE cip=$val ";
+      //
+      $result_consult_anotacao = mysqli_query($_SESSION["conex"], $sqlcmd);
+      if ( ! $result_consult_anotacao ) {
+            $terr = "Selecionando anotação na tabela  -&nbsp;db/mysqli:&nbsp;";
+            echo $funcoes->mostra_msg_erro("$terr" . mysqli_error($_SESSION["conex"]));
+            exit();
       }
-      ///  Numero de Anotacoes 
-      $nanotacoes= (int) mysql_result($result_consult_anotacao,0,0);  
-      if( intval($nanotacoes)<1 ) {
-            echo $funcoes->mostra_msg_erro("Nenhuma anota&ccedil;&atilde;o desse Projeto.");            
-            exit();        
-      } 
-      ///
+      // Nr. Anotacoes
+      $linha = mysqli_fetch_row($result_consult_anotacao);   // pega a primeira linha
+      $nanotacoes = (int) ($linha[0] ?? 0);                  // primeira coluna
+
+/**  
+echo "ERRO: srv_rmanotacao/214 -->> BUSCA_PROJ - \$nanotacoes = $nanotacoes <<-->>"
+     ." \$opcao_maiusc = $opcao_maiusc  -->> \$raiz_central = $raiz_central   ";
+exit();
+ */
+
+
+      if( $nanotacoes < 1 ) {
+           echo $funcoes->mostra_msg_erro("Nenhuma anota&ccedil;&atilde;o desse Projeto.");
+           exit();
+      }
+      //
 } elseif( preg_match("/^TODOS|ordenar/i",$opcao_maiusc) ) {
-    ///
-    ///  Mostrar todas as anotacoes de um Projeto
-   $table_remover = $_SESSION["table_remover"] = "$bd_2.temp_remover_anotacao";
-   $sql_temp = "DROP TABLE IF EXISTS  $table_remover  ";  
-   $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
-   if( ! $drop_result  ) {
-        /// 
-        /// Parte do Class
-        echo $funcoes->mostra_msg_erro("Removendo a Tabela {$_SESSION["table_remover"]} -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+    //
+    //  Mostrar todas as anotacoes de um Projeto 
+    $table_remover = $_SESSION["table_remover"] = "$bd_2.temp_remover_anotacao";
+    $sql_temp = "DROP TABLE IF EXISTS  $table_remover  ";  
+    $drop_result = mysqli_query($_SESSION["conex"],$sql_temp); 
+    if( ! $drop_result  ) {
+        // 
+        // Parte do Class
+        $terr="Removendo a Tabela {$_SESSION["table_remover"]} -&nbsp;db/mysqli:&nbsp;";
+        echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
         exit();                      
-   }
-   $_SESSION["selecionados"]="";
-   /// Numero do CIP - Codigo de Identificacao do Projeto
-   $alterar=FALSE;
-   if( ! isset($cip) ) {
-       $alterar=TRUE;
-   } elseif( intval($cip)<1 ) {
-       $alterar=TRUE;
-   }
-   if( $alterar ) {
+    }
+    $_SESSION["selecionados"]="";
+    //
+    // Nr. do CIP - Codigo de Identificacao do Projeto
+    $alterar=FALSE;
+    if( ! isset($cip) ) {
+         $alterar=TRUE;
+    } elseif( intval($cip)<1 ) {
+         $alterar=TRUE;
+    }
+    //
+    if( $alterar ) {
        if( isset($val) ) {
            $cip=$val;             
        } else {
-           echo $funcoes->mostra_msg_erro(utf8_decode("Varii�vel val n�o definida - corrigir."));
+           echo $funcoes->mostra_msg_erro("Variiável val indefinida - corrigir.");
            exit();        
        }
-   }
-   /// 
-   ///  Selecionar a anotacao para remover
-    /// Contador de linhas - resultado do Select/Mysql
-    mysqli_query("SET @xnr:=0");
-    ///   Criando a tabela temporaria
+       //
+    }
+    // 
+    //  Selecionar a anotacao para remover
+    // Contador de linhas - resultado do Select/Mysql
+    mysqli_query($_SESSION["conex"],"SET @xnr:=0");
+    //
+    //   Criando a tabela temporaria
     $sqlcmd ="CREATE TABLE  IF NOT EXISTS $table_remover ";
     /*
     $sqlcmd .= "SELECT a.numero as nr, a.alteraant as Altera, alteradapn as Alterada, "
@@ -232,20 +268,20 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
         ."  alteradapn as Alterada   "
         ." FROM $bd_2.anotacao a, $bd_1.pessoa b, $bd_2.projeto c  "
         ."  WHERE  a.autor=b.codigousp and  c.cip=$cip and   ";
-    ///    
-     /***
+    //    
+    /***
         *      Alterado em 20181023
         *      Super, Chefe e Vice     
-     ***/
-     if( $_SESSION["permit_pa"]<$array_pa['aprovador'] )  {
-          $where_cond = "  a.projeto=$cip   ";    
-     } elseif( $_SESSION["permit_pa"]==$array_pa['orientador'] )  {
-          $where_cond = "  a.projeto=$cip   ";    
-     } else {
-          $where_cond = "  a.projeto=".$cip." and a.autor=".$anotador;         
-     }  
-     ////
-    ///  $sqlcmd .= $where_cond." order by a.numero desc";
+    ***/
+    if( $_SESSION["permit_pa"]<$array_pa['aprovador'] )  {
+         $where_cond = "  a.projeto=$cip   ";    
+    } elseif( $_SESSION["permit_pa"]==$array_pa['orientador'] )  {
+         $where_cond = "  a.projeto=$cip   ";    
+    } else {
+         $where_cond = "  a.projeto=".$cip." and a.autor=".$anotador;         
+    }  
+    //
+    //  $sqlcmd .= $where_cond." order by a.numero desc";
     if( ! isset($m_array) ) {
          $sqlcmd .= $where_cond." order by a.numero desc";            
     } else {
@@ -254,29 +290,34 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
               $m_array=str_replace("Titulo","titulo",$m_array);
               $sqlcmd .= $where_cond." order by $m_array";               
          }
+         //
     }
-    ///
-    /// Executando mysql_query
+    //
+    // Executando mysql_query
     $result_rmanotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_rmanotacao ) {
        ///  die('ERRO: Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o='.$opcao.' - '.mysqli_error($_SESSION["conex"]).$orientador);
         echo $funcoes->mostra_msg_erro("Consultando a Tabela anota&ccedil;&atilde;o -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
         exit();        
     }       
-    ///
-    ///  Selecionando todos os registros da Tabela temporaria
+    //
+    //  Selecionando todos os registros da Tabela temporaria
     $query2 = "SELECT * from  ".$_SESSION["table_remover"]."  ";
     $result_outro = mysqli_query($_SESSION["conex"],$query2);                                    
     if( ! $result_outro ) {
-         /// die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysqli_error($_SESSION["conex"]));  
-         echo $funcoes->mostra_msg_erro("Selecionando as anota&ccedil;&otilde;es do Projeto  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));     
+         // die("ERRO: Selecionando as Anota&ccedil;&otilde;es do Projeto  - ".mysqli_error($_SESSION["conex"]));    
+         $terr="Selecionando as anota&ccedil;&otilde;es do Projeto  -&nbsp;db/mysqli:&nbsp;";
+         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));     
          exit();                 
     }        
-    ///  Pegando os nomes dos campos do primeiro Select
-    $num_fields=mysqli_num_fields($result_outro);  ///  Obtem o numero de campos do resultado
+    //
+    //  Pegando os nomes dos campos do primeiro Select
+    $num_fields=mysqli_num_fields($result_outro);  //  Obtem o numero de campos do resultado
     $td_menu = $num_fields+1;   
-    ///  Total de registros
+    //
+    //  Total de registros
     $_SESSION["total_regs"]=$total_regs = mysqli_num_rows($result_outro);
+
 
 /***
   echo  "ERRO: srv_rmanotacao/280   -->>  \$total_regs = $total_regs -- \$opcao_maiusc = $opcao_maiusc --- \$val = $val <br> -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
@@ -295,59 +336,83 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
     $_SESSION['total_regs']==1 ? $lista_usuario=" <b>1</b> Anota&ccedil;&atilde;o " : $lista_usuario="<b>".$_SESSION['total_regs']."</b> Anota&ccedil;&otilde;es ";     
     $_SESSION["titulo"]= "<p class='titulo'  style='text-align: left; margin: 0px 0px 0px 4px; padding: 0px; line-height: normal;' >";
     $_SESSION["titulo"].= "Lista de $lista_usuario ".$_SESSION['selecionados']."</p>"; 
-    ///  Buscando a pagina para listar os registros        
+    //
+    //  Buscando a pagina para listar os registros        
     $_SESSION["num_rows"]=$_SESSION["total_regs"];  $_SESSION["name_c_id0"]="codigousp";    
     if( isset($titulo_pag) ) $_SESSION["ucfirst_data"]=$titulo_pag;
     $_SESSION["pagina"]=0;
     $_SESSION["m_function"]="remove_anotacao" ;  $_SESSION["conjunto"]="Anotacao#@=".$usuario_conectado."#@=".$cip;
     $_SESSION["opcoes_lista"] = "{$arq_tab_rm_anotacao}?pagina=";
+
+
+/**  
+  echo  "ERRO: srv_rmanotacao/341   -->>  \$total_regs = $total_regs -- \$opcao_maiusc = $opcao_maiusc --- \$val = $val <br>"
+       ." -->> \$arq_tab_rm_anotacao = $arq_tab_rm_anotacao  -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
+  exit();
+ */    
+
     require_once("{$arq_tab_rm_anotacao}");                      
     ///
     if( isset($opcao) ) unset($opcao);
     exit();
     ///
 } elseif( $opcao_maiusc=="REMOVER" ) {
-     ///   Fomrulario para recemover Anotacao
+     //
+     //   Fomrulario para recemover Anotacao
      if( ! isset($_POST['nr_anotacao']) ) {
             $nr_anotacao=0;   
      }
-     ///
-     ///  Verificando Anotacoes
+     //
+     // Conexao/MYsqli
+     $conex = $_SESSION["conex"];
+     //
+     //  Verificando Anotacoes
      if( intval($nr_anotacao)<1  ) {
-          echo  utf8_decode("ERRO: Anota��o inv�lida.");
-     } else {
-         ///  Seleciona a Anotacao para Remover
-         $sqlcmd = "SELECT a.cia, a.numero as nr, a.alteraant as altera_nr, a.autor as anotador, "
+          echo  "ERRO: Anotação inválida.";
+     } else {  
+        //
+        // IMPORTANTE:  Formato Mysqli caracteres
+        mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+        //
+        //  Seleciona a Anotacao para Remover
+        $sqlcmd = "SELECT a.cia, a.numero as nr, a.alteraant as altera_nr, a.autor as anotador, "
              ."concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anot, "
                       ."a.testemunha1, a.testemunha2, "
                       ." a.titulo as tit_anotacao, a.relatext as arquivado_como,  "
                       ." b.autor as autor_projeto, b.titulo as tit_projeto "
                       ." FROM rexp.anotacao a, rexp.projeto b "
                       ." WHERE ( a.projeto=b.cip ) and a.projeto=$cip  and  a.numero=$nr_anotacao ";
-         ///
-         $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
-         ///
-         if( ! $result_anotacao_rm ) {
-             if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
-             echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
-         } else {
+        //
+        $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
+        //
+        if( ! $result_anotacao_rm ) {
+             if( isset($result_anotacao_rm) ) {
+                  mysqli_free_result($result_anotacao_rm);  
+             } 
+             //
+             $terr="Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/mysqli:&nbsp;";
+             echo  $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                  
+        } else {
              ///
              ///  Clicar o Formulario da Anotacao para ser excluida     
              $array_nome=mysqli_fetch_array($result_anotacao_rm);
              foreach( $array_nome as $key => $value ) {
                       $$key=$value;
              }
-             ///  Passando as variaveis para SESSION
+             //
+             //  Passando as variaveis para SESSION
              $_SESSION["autor_projeto"]=$autor_projeto; $_SESSION["projeto"]=$cip; 
-             $_SESSION["anotacao"]=$nr_anotacao;  $_SESSION["arquivado_como"]=$arquivado_como;  
-             ///   Formulario da Anotacao para Excluir
+             $_SESSION["anotacao"]=$nr_anotacao;  
+             $_SESSION["arquivado_como"]=$arquivado_como;  
+             //
+             //   Formulario da Anotacao para Excluir
              $texto1="<div class='caixa_box' style='width:auto;padding: .6em 0 .6em 0;' >";
              $texto1.="Excluir essa anota&ccedil;&atilde;o desse Projeto?";
              $texto1.="</div>";
              echo $texto1;
              $_SESSION["cols"]=4; $td1_width="35";  $tr_heigth="26px";
-             ////          
-          ?>
+             //          
+        ?>
           
           
  <!-- div - ate antes do Cancelar e  Remover -->            
@@ -360,32 +425,57 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
              </span>
                 <!-- N. Funcional USP/Matricula - Autor/ANOTADOR -->
             <?php 
-              ///  Selecionando Anotador
-              $res_anotador = mysqli_query("SELECT codigousp,nome,categoria FROM $bd_1.pessoa "
-                                    ." WHERE codigousp=$anotador order by nome "); 
+              //
+              //  Selecionando Anotador
+              $proc="SELECT codigousp,nome,categoria FROM $bd_1.pessoa ";
+              $proc.=" WHERE codigousp=$anotador order by nome  ";
+              $res_anotador = mysqli_query($conex,"$proc"); 
               ///                                    
               if( ! $res_anotador ) {
-                 echo  $funcoes->mostra_msg_erro("Select Tabela  pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
+                  $terr="Select Tabela  pessoa -&nbsp;db/mysqli:&nbsp;";
+                  echo  $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                  
                   exit();                
               }
-              ///  Cod/Num_USP/Autor/Anotador
+              //
+              //  Cod/Num_USP/Autor/Anotador
               $m_linhas = mysqli_num_rows($res_anotador);
-              if( intval($m_linhas)<1 ) {
-                  $autor="== Nenhum encontrado ==";
+              if( intval($m_linhas) < 1 ) {
+                  $autor = "== Nenhum encontrado ==";
               } else {
-                  $_SESSION["anotador_codigousp"]=mysql_result($res_anotador,0,"codigousp");
-                  $anotador_nome=mysql_result($res_anotador,0,"nome");
-                  $anotador_categoria=mysql_result($res_anotador,0,"categoria");                    
-                  if( isset($res_anotador))  mysqli_free_result($res_anotador);
+                  //
+                  // substitui os mysql_result($res_anotador, 0, "coluna")
+                  mysqli_data_seek($res_anotador, 0);          // garante que está na 1ª linha
+                  $reg = mysqli_fetch_assoc($res_anotador);    // lê a linha como array associativo
+                  //
+                  $_SESSION["anotador_codigousp"] = $reg["codigousp"];
+                  $anotador_nome                  = $reg["nome"];
+                  $anotador_categoria             = $reg["categoria"];
+                  //
+                  // Desativar variavel
+                  if( isset($res_anotador) ) {
+                       mysqli_free_result($res_anotador);
+                  } 
+                  //
               }
-              /// Final da Num_USP/Nome Autor/Anotador
-              ///  Nome do Anotador do Projeto
+              //
+              // Final da Num_USP/Nome Autor/Anotador
+              //  Nome do Anotador do Projeto
               echo "<span style='color: #FFFFFF; padding-right:1em;' >"
                     ."$anotador_nome</span>"; 
-              ///
-              ///  SESSION cadigo usp do Anotador
+              //
+              //  SESSION cadigo usp do Anotador
               $anotador_codigousp = $_SESSION["anotador_codigousp"];
-              ///      
+              //      
+
+/**  
+  echo  "ERRO: srv_rmanotacao/454   -->> REMOVER  \$m_linhas = $m_linhas -- \$opcao_maiusc = $opcao_maiusc  <br>"
+       ." -->> \$anotador_codigousp = $anotador_codigousp  -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
+  exit();
+ */
+
+
+
+              //
          ?>  
           <!--  Nr. da Anotacao  -->       
           <span style="background-color: #FFFFFF; color: #000000; border: 1px solid #000000;" >Anota&ccedil;&atilde;o#&nbsp;
@@ -427,7 +517,11 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           <label for="fonteprojid" >Arquivo da Anota&ccedil;&atilde;o:&nbsp;</label>
        </span>
         <span class="arquivado_como" >
-             <?php echo $arquivado_como;?>
+            <!--  IMPORTANTE:  Funcionando com htmlentities  e  mb_convert_encoding  -->
+             <?php 
+             //  echo htmlentities(mb_convert_encoding($arquivado_como, 'ISO-8859-1', 'UTF-8')); 
+             echo $arquivado_como; 
+             ?>
         </span>           
     </div>
     <!-- Final - Arquivo da Anotacao -->    
@@ -440,26 +534,37 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
       <label title="Testemunha (1)" >Testemunha (1):&nbsp;</label>   
         <!-- Codigo da Testemunha (1) da realizacao -->
         <?php 
+            //
             ///  Selecionando a Testemunha (1)
             $test1="SELECT codigousp,nome as testemunha1_nome,categoria 
                      FROM $bd_1.pessoa WHERE codigousp=$testemunha1 order by nome ";
             ///         
-            $result1=mysqli_query($test1);
-            ///  Codigo da Testemunha (1) da realizacao 
+            $result1=mysqli_query($conex,$test1);
+            //
+            //  Codigo da Testemunha (1) da realizacao 
             if( ! $result1 )  {
-                echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
+                $terr="Select Tabela pessoa -&nbsp;db/mysqli:&nbsp;";
+                echo  $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                  
                 exit();                
             }
-            ///  Se Testemunha (1) encontrado
+            //
+            //  Se Testemunha (1) encontrado
             $test1_nome="";
             $n_test1=mysqli_num_rows($result1);
-            if( $n_test1==1 ) $test1_nome = mysql_result($result1,0,'testemunha1_nome');
-            
-            ///  include("testemunhas.php"); 
+            if( $n_test1==1 ) {
+                $test1_nome = mysqli_result($result1,0,'testemunha1_nome');
+            } 
+            /**  Final -  if( $n_test1==1 ) {   */
+            //
+            //  include("testemunhas.php"); 
             echo "<span style='color: #FFFFFF; padding-top:0; vertical-align:text-top; ' >$test1_nome</span>";           
-            ///
-            if( isset($result1) ) mysqli_free_result($result1); 
-            /// FINAL - Codigo da Testemunha (1) da realizacao 
+            //
+            //  Desativar variavel
+            if( isset($result1) ) {
+                  mysqli_free_result($result1); 
+            } 
+            // FINAL - Codigo da Testemunha (1) da realizacao 
+            //
          ?>  
     </div>  
     <div class="div_nova"   >
@@ -470,24 +575,45 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           $test2="SELECT codigousp,nome as testemunha2_nome,categoria 
                      FROM $bd_1.pessoa WHERE codigousp=$testemunha2 order by nome ";
           ///           
-          $result=mysqli_query($test2);
+          $result=mysqli_query($conex,$test2);
           ///  Codigo da Testemunha (2) da realizacao 
           if( ! $result )  {
-               echo  $funcoes->mostra_msg_erro("Select Tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
+               $terr="Select Tabela pessoa -&nbsp;db/mysqli:&nbsp;";
+               echo  $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                  
                exit();                
           }
-          /// $testemunhas_result = $result;
-          ///  Se Testemunha (1) encontrado
+          //
+          // $testemunhas_result = $result;
+          //  Se Testemunha (1) encontrado
           $test2_nome="";
           $n_test2=mysqli_num_rows($result);
-          if( $n_test2==1 ) $test2_nome = mysql_result($result,0,'testemunha2_nome');
-          
-          ///  include("testemunhas.php"); 
+          if( $n_test2==1 ) {
+               //
+              // Function mysqli_result dentro de functions.php 
+               $test2_nome = mysqli_result($result,0,'testemunha2_nome');
+               //
+          } 
+          //
+          //  include("testemunhas.php"); 
           echo "<span style='color: #FFFFFF;' >$test2_nome</span>";
-          ///
-          if( isset($result) )  mysqli_free_result($result); 
-          /// FINAL - Codigo da Testemunha (2) da realizacao 
-      ?>  
+          //
+          if( isset($result) ) {
+               mysqli_free_result($result); 
+          }  
+          // FINAL - Codigo da Testemunha (2) da realizacao 
+          //
+
+
+/**  
+  echo  "ERRO: srv_rmanotacao/594   -->> REMOVER   -->> OK  \$test1_nome = $test1_nome <br> \$opcao_maiusc = $opcao_maiusc  <br>"
+       ." -->> \$anotador_codigousp = $anotador_codigousp  -->> \$bd_1 = $bd_1  --- \$bd_2 = $bd_2  ";
+  exit();
+ */
+
+
+
+
+     ?>  
     </div>    
   <!--  Final - Testemunhas 1 e 2  -->    
 
@@ -524,49 +650,65 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
          }               
          ///         
      }
-     ///  FINAL - if( intval($nr_anotacao)<1  )
-     ///
+     //  FINAL - if( intval($nr_anotacao)<1  )
+     //
 } elseif( $opcao_maiusc=="EXCLUINDO"  && strtoupper(trim($op_selcpoval))=="ANOTACAO"  ) {
-        /*
+       /*
              Remover uma ANOTACAO de um Projeto
-        */  
-       /// Caso Ativa SESSION anotacao_cip_altexc  desativar
+       */  
+       // Caso Ativa SESSION anotacao_cip_altexc  desativar
        if( isset($_SESSION["anotacao_cip_altexc"]) ) {
            unset($_SESSION["anotacao_cip_altexc"]);
        }    
-       ///
-      ///  Codigo de Identificacao da Anotacao - cia
-      if( ! isset($cia) ) {
-          $cia=0;             
-      }
-      ///  Verificando o
-      if( intval($cia)<1 ) {
-           /// Faltando cia
-           echo $funcoes->mostra_msg_erro(utf8_decode("Faltando a CIA (C�digo de Identifica��o da Anota��o)"));
-     } else {
-          ///
-          ///  Seleciona a Anotacao para Remover  -- MySQL/Select
+       //
+       //  Codigo de Identificacao da Anotacao - cia
+       if( ! isset($cia) ) {
+            $cia=0;             
+       }
+       //
+       //  Verificando o
+       if( intval($cia)<1 ) {
+            // Faltando cia
+            echo $funcoes->mostra_msg_erro("Faltando a CIA (Código de Identificação da Anotação");
+       } else {
+          //
+          /**  Tabela principal   */
+          $tabela="anotacao";
+          //
+          /**   IMPORTANTE:  Formato Mysqli caracteres   */ 
+          ///   mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+          //
+          /**   Seleciona a Anotacao para Remover  -- MySQLI/Select   */  
           $sqlcmd = "SELECT a.cia, a.numero as nr, a.alteraant as altera_nr, a.autor as anotador, "
                           ."concat(substr(a.data,9,2),'/',substr(a.data,6,2),'/',substr(a.data,1,4)) as data_anot, "
                           ."a.testemunha1, a.testemunha2, "
                           ." a.titulo as tit_anotacao, a.relatext as arquivado_como,  "
                           ." b.autor as autor_projeto, b.titulo as tit_projeto "
-                          ." FROM $bd_2.anotacao a, $bd_2.projeto b "
+                          ." FROM $bd_2.$tabela a, $bd_2.projeto b "
                           ." WHERE ( a.projeto=b.cip ) and a.cia=$cia ";
-          ///
+          //
           $result_anotacao_rm = mysqli_query($_SESSION["conex"],$sqlcmd);
           if( ! $result_anotacao_rm ) {
-               if( isset($result_anotacao_rm) ) mysqli_free_result($result_anotacao_rm);
-               echo  $funcoes->mostra_msg_erro("Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                  
+               //
+               //  Desativar variavel
+               if( isset($result_anotacao_rm) ) {
+                   mysqli_free_result($result_anotacao_rm);
+               } 
+               //
+               $terr="Falha consultando a tabela anota&ccedil;&atilde;o  -&nbsp;db/Mysqli:&nbsp;";
+               echo  $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                  
+               //
           } else {
-               ///  Clicar o Formulario da Anotacao para ser excluida     
+               //
+               //  Clicar o Formulario da Anotacao para ser excluida     
                $array_nome=mysqli_fetch_array($result_anotacao_rm);
                foreach( $array_nome as $key => $value ) {
                          $$key=$value;
                }
+               //
           }
-          ///
-          ///  Essa PARTE vem do arquivo  -  myArguments_remover.php
+          //
+          //  Essa PARTE vem do arquivo  -  myArguments_remover.php
           $m_projeto=$_SESSION["projeto"]; $m_anotacao = $_SESSION["anotacao"]; 
           $anotador = $_SESSION["anotador_codigousp"];
           ///
@@ -580,94 +722,250 @@ if( $opcao_maiusc=="DESCARREGAR" )  {
           /// Definindo o caminho do arquivo dessa anotacao que sera removido tambem
           $val=strtolower(trim($op_selcpoval));
           $dir= '../doctos_img/A'.$m_autor_projeto."/$val";
+          //
+          //  $arquivado_como = htmlentities(mb_convert_encoding($arquivado_como, 'ISO-8859-1', 'UTF-8'));
           $remover_arq = $dir."/".$arquivado_como;
           $dh  = opendir($dir);
           $exempt = array('.','..'); $conta_arq=0;
-          ///
-          ///  Removendo o arquivo PDF
+          //
+
+/**  
+     echo "ERRO:  LINHA/715  -->>  Antes  \$tit_projeto = $tit_projeto  <<-->>   tit_anotacao = $tit_anotacao  ";
+      exit();
+       */
+
+      
+
+// deixa a string "crua": sem acento, minúscula, só o essencial
+function chave($s) {
+    //
+    // normaliza mojibake -> UTF-8 real
+    //  if (strpos($s, 'Ã') !== false) {
+    //    $s = mb_convert_encoding($s, 'ISO-8859-1', 'UTF-8');
+    // }
+    // remove acentos (ç->c, ã->a, etc.)
+    //  $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+    //
+    //  return strtolower(trim($s));
+    //  return trim($s);
+
+    // Detecta se a string não está em UTF-8 e converte para UTF-8 real
+    if (!mb_check_encoding($s, 'UTF-8')) {
+        $s = mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
+    } elseif (preg_match('//u', $s) === 0) {
+        // Se não for UTF-8 válido, tenta converter
+        $s = mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
+    }
+
+    // Remove acentos e caracteres especiais (translitera para ASCII)
+   // $s = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);
+
+    // Remove caracteres que podem ter sobrado após transliteração
+    //  $s = preg_replace('/[^A-Za-z0-9 ]/', '', $s);
+
+    // Retorna string normalizada e sem acentos
+    return trim($s);
+
+
+    //
+}
+
+
+
+
+          
+          //
+          //  Removendo o arquivo PDF
           while( false !== ($filename = readdir($dh))) {
+                 //
                  if( in_array(strtolower($filename),$exempt) ) continue;
                  $filename_maiusc = strtoupper(trim($filename));
+                 //  $filename_maiusc = html_entity_decode($filename_maiusc, ENT_QUOTES | ENT_HTML5, 'UTF-8');     
+                 //  $filename_maiusc = html_entity_decode($filename_maiusc, ENT_QUOTES , 'UTF-8');     
+                 //  $filename_maiusc = mb_convert_encoding($filename_maiusc, 'ISO-8859-1', 'UTF-8');        
+                          
+                 //
                  $conta_arq++;
-                 if( ( substr($filename_maiusc,-3,3)=="PDF") && ( $filename_maiusc==strtoupper(trim($arquivado_como)) ) ) {
-                        /// Removendo o arquivo da ANOTACAO
-                        unlink(trim($remover_arq)); 
-                        $conta_arq--;             
+                 //
+                 $aqvt=strtoupper(trim($arquivado_como));  
+                 //  $aqvt=mb_strtoupper(trim($arquivado_como),"UTF-8");  
+                 //  $aqvt = htmlentities(mb_convert_encoding($aqvt, 'ISO-8859-1', 'UTF-8'));                 
+                 //  $aqvt = mb_convert_encoding($aqvt, 'ISO-8859-1', 'UTF-8');                 
+                 //       $aqvt = html_entity_decode($aqvt, ENT_QUOTES | ENT_HTML5 , "UTF-8");      
+                 // $aqvt = html_entity_decode($aqvt, ENT_QUOTES , "UTF-8");      
+                 //  $aqvt=mb_strtoupper($aqvt,"UTF-8");  
+                 //
+                 /** IMPORTANTE:  buscando os caracteres inicias definidao - Ex.: P1A1   
+                  *     Antes do simbolo underline  _
+                 */
+                 $fnm=strstr($filename_maiusc,'_',true);
+                 //
+                 $aqvtini=strstr($aqvt,'_',true);
+                 //   
+                 $filename_maiusc = chave($filename_maiusc);
+                 $aqvt = chave($aqvt);
+                 $remover_arq = chave($remover_arq);
+                 //
+
+/**  
+      echo  "ERRO:  LINHA/785  -->> NOVAOK   $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq  <<--  ";
+      exit();
+
+
+$alvo = chave($aqvt);
+$caminho = null;
+
+foreach( scandir("$dir") as $f ) {
+    if ($f === '.' || $f === '..') continue;
+    if( chave($f) === $alvo) {       // compara sem acento/caixa
+        $caminho = "arqs/" . $f;     // usa o NOME REAL que está no disco
+        break;
+    }
+}
+
+echo $caminho
+    ? "Achei: " . htmlspecialchars($caminho, ENT_QUOTES, 'UTF-8')
+    : "NÃO encontrei.";
+    
+    exit();
+ */
+
+
+
+
+
+
+/**   
+ if( substr($filename_maiusc,-3,3)=="PDF" &&  $filename_maiusc==$aqvt ) {  
+      echo  "ERRO:  LINHA/762  -->> DENTRO -->>    $filename_maiusc ==  $aqvt  --->>>>  \$remover_arq = $remover_arq   ";
+      exit();
+ }
+ */
+
+
+                 //  if( substr($filename_maiusc,-3,3)=="PDF" &&  $filename_maiusc==$aqvt ) {
+                 if( strtolower(substr($filename,-3)) === "pdf" && $fnm === $aqvtini ) {
+                       //          
+                       //   Removendo o arquivo da ANOTACAO
+                       //  unlink(trim($remover_arq)); 
+                       //
+                       if( ! unlink(trim($remover_arq))   ) { 
+                            //
+                            die("ERRO:  Arquivo $remover_arq não removido - Corrigir. ") ;                          
+                            //
+                       }
+                       //   
+                       $conta_arq--;             
+                       //
                   }           
+                  //
           }
-          ///  Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem
-          if( intval($conta_arq)<1 ) {
-              if( is_dir($dir) ) { 
-                  rmdir($dir); 
-              } else {
-                  echo $dir.' n&atilde;o existe';    
-              }
-          }
-          ///  FINAL removendo o arquivo PDF
-          ///
-          ///  Start a transaction - ex. procedure 
-         $lnerro=0;
-         $tabela="anotacao";
-         $commit="commit";   
-         //  Execute the queries          
-         //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-         mysqli_query("LOCK TABLES $bd_2.$tabela  DELETE ");
-         ///
-         ///  Removendo o registro da anotacao
-         $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
-         $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
-         if( ! $res_reg  ) $lnerro=1;
-         ///
-         if( intval($lnerro)>=1 ) {
-              echo $funcoes->mostra_msg_erro("&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+          /**  Final -  while( false !== ($filename = readdir($dh))) {  */  
+          //
+          //   Conexao/MYSQLI
+          $conex=$_SESSION["conex"];
+          //
+          /**   Caso NAO TENHA mais ARQUIVOS na PASTA remove-la tambem   */
+          // if( intval($conta_arq)<1 ) {
+          //    if( is_dir($dir) ) { 
+          //        rmdir($dir); 
+          //    } else {
+          //        echo $dir.' n&atilde;o existe';    
+          //    }
+          // }
+          //  FINAL removendo o arquivo PDF
+          //
+
+
+/**   echo "ERRO:  LINHA/750  --  \$tit_projeto = $tit_projeto -   tit_anotacao = $tit_anotacao  ";
+ *               exit();
+     */
+
+
+
+          //  Start a transaction - ex. procedure 
+          $lnerro=0;
+          //
+          $commit="commit";   
+          //
+          //  Execute the queries          
+          //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
+     //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela  DELETE ");
+          //
+          /**     REMOVENDO o registro da anotacao    */
+          $sqlcmd = "DELETE from $bd_2.$tabela  WHERE cia=$cia ";
+          $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
+          if( ! $res_reg  ) $lnerro=1;
+          //
+          if( intval($lnerro)>=1 ) {
+              //
+              $terr="&nbsp;Removendo registro. Cancelado -&nbsp;db/mysql:&nbsp;";
+              echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
               $commit="rollback";
-         }    
-         ///                  
-         mysqli_query($commit);
-         ///  Complete the transaction 
-         ///  Removido
+          }    
+          //                  
+          mysqli_query($_SESSION["conex"],$commit);
+          //
+          //  Complete the transaction 
+          //
+         /**  Verifica caso foi  Removido  */  
          if( intval($lnerro)<1 ) {
-              ////   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
-              ////   Diminuir o numero de Anotacoes no Projeto
-             ///  Verifica se existe ANOTACOES para o PROJETO escolhido
+              // 
+              //   echo $funcoes->mostra_msg_ok("&nbsp;Removido.");
+              //   Diminuir o numero de Anotacoes no Projeto
+              //  Verifica se existe ANOTACOES para o PROJETO escolhido
               $sqlcmd = "SELECT anotacao FROM  $bd_2.projeto  WHERE cip=$m_projeto ";
-              ///           
+              //           
               $result_consult_anotacao = mysqli_query($_SESSION["conex"],$sqlcmd);
               if( ! $result_consult_anotacao ) {
-                    echo $funcoes->mostra_msg_erro("Selecionando ".mb_convert_encoding("anota??o")." na tabela Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]), 'ISO-8859-1', 'UTF-8');            
-                    exit();        
+                   $terr="Selecionando anotação na tabela Projeto -&nbsp;db/mysqli:&nbsp;";
+                   echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));            
+                   exit();        
               }
-              ///  Numero de Anotacoes 
-              $nanotacoes=mysql_result($result_consult_anotacao,0,0);  
+              //
+              //  Nr. de Anotacoes 
+              //   $nanotacoes=mysql_result($result_consult_anotacao,0,0);  
+              $linha = mysqli_fetch_array($result_consult_anotacao);
+              $nanotacoes = (int) $linha[0];
               if( intval($nanotacoes)>0 ) {
-                    $nanotacoes=$nanotacoes-1;
-                    $tabela="projeto";
-                    $commit="commit";   
-                    //  Execute the queries          
+                   //
+                   $nanotacoes=$nanotacoes-1;
+                   $tabela2="projeto";
+                   $commit="commit";   
+                   //
+                   //  Execute the queries          
                     //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-                    mysqli_query("LOCK TABLES $bd_2.$tabela  UPDATE ");
+                //    mysqli_query($conex,"LOCK TABLES $bd_2.$tabela2  UPDATE ");
                     ///
                     ///  Removendo o registro da anotacao
-                    $sqlcmd = "UPDATE $bd_2.$tabela SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
+                    $sqlcmd = "UPDATE $bd_2.$tabela2  SET anotacao=$nanotacoes  WHERE cip=$m_projeto ";
                     $res_reg =  mysqli_query($_SESSION["conex"],$sqlcmd);
-                    if( ! $res_reg ) {
-                        echo $funcoes->mostra_msg_erro("&nbsp;Diminuindo total de anota��es do Projeto. Cancelado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                    if( ! $res_reg ) { 
+                         //
+                         $terr="&nbsp;Diminuindo total de anotações do Projeto. Cancelado -&nbsp;db/mysqli:&nbsp;";
+                         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
                          $commit="rollback";
+                         //
                     }    
-                    ///                  
-                    mysqli_query($commit);
-                    ///  Complete the transaction 
-                    ///
-                    ///  Mensagem de aviso da remocao da Anotacao
-                    $txt =  'Anota��o: '.$tit_anotacao.' removida era parte do Projeto: '.$tit_projeto;
+                    /**  Final - if( ! $res_reg ) {   */
+                    //                  
+                    mysqli_query($_SESSION["conex"],$commit);
+                    //
+                    //  Complete the transaction 
+                    //
+                    //  Mensagem de aviso da remocao da Anotacao
+                    $txt =  "Anotação: $tit_anotacao removida era parte do Projeto: ".$tit_projeto;   
+                    //
                     echo $txt;
-                    ///
+                    //
               }
+              /**  Final - if( intval($nanotacoes)>0 ) {  */
              ///
          }
          ///
       }  
-      /// Final do IF  isset(cia)
+      // Final do IF  isset(cia)  
+      //
 }
 #
 ob_end_flush(); 

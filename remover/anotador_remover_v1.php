@@ -183,7 +183,7 @@ $cols=4;
             $usuario_conectado." order by b.titulo "); 
            //                  
            if( ! $result ) {
-                if( isset($result) ) mysql_free_result($result);
+                if( isset($result) ) mysqli_free_result($result);
                 die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: '.mysqli_error($_SESSION["conex"]));  
            }
            //  $count_arr_cnc = count($arr_cnc["fonterec"])-1;

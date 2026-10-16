@@ -17,10 +17,15 @@ if(!isset($_SESSION)) {
     Define o caminho HTTP  -  20180612
 ***/  
 var raiz_central="<?php echo  $_SESSION["url_central"];?>";    
-///
+//
+/****  
+*     Define o caminho HTTP  - 20180612
+**/  
+var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
+//
 charset="utf-8";
-///
-///  variavel quando ocorrer Erros ou apenas enviar mensagem
+//
+//  variavel quando ocorrer Erros ou apenas enviar mensagem
 var  msg_erro_ini='<span class="texto_normal" style="color: #000; text-align: center;overflow: auto;">';
 msg_erro_ini+='ERRO:&nbsp;<span style="color: #FF0000;">';
 //  variavel quando estiver Ccorreto
@@ -92,8 +97,9 @@ function acentuarAlerts(mensagem) {
 /*****************  Final  -- function acentuarAlerts(mensagem)   ***************************/
 ///
 ///    Function para receber dados - AJAX
-function enviar_dados_anotador(source,val,string_array) {
-    /// Verificando se a function exoc existe 
+function enviar_dados_anotador(source,val,string_array) {   
+    //
+    // Verificando se a function exoc existe 
     if(typeof exoc=="function" ) {
          ///  Ocultando ID  e utilizando na tag input comando onkeypress
          exoc("label_msg_erro",0);  
@@ -101,13 +107,13 @@ function enviar_dados_anotador(source,val,string_array) {
         alert("funcion exoc não existe - ADMINISTRADOR CORRIGIR.");
         return;        
     }
-    
-    ///  Verificando variaveis recebidas
+    //
+    //  Verificando variaveis recebidas
     if( typeof(source)=="undefined" ) var source=""; 
     if( typeof(val)=="undefined" ) var val="";
     if( typeof(string_array)=="undefined" ) var string_array="";
     if( typeof(val)=="string" ) var val_upper=val.toUpperCase();
-    
+    //
     /// Verifica se a variavel e uma string
     var source_maiusc=""; var source_array_pra_string="";  
     if( typeof(source)=='string' ) {
@@ -121,7 +127,8 @@ function enviar_dados_anotador(source,val,string_array) {
              var array_source = source.split(",");
              var teste_cadastro = array_source[1];
              var  pos = teste_cadastro.search("incluid");
-         }
+         }  
+         //
      }  else if( typeof(source)=='number' && isFinite(source) )  {
           source = source.value;                
      } else if(source instanceof Array) {
@@ -130,23 +137,15 @@ function enviar_dados_anotador(source,val,string_array) {
      }
      ///  variavel opcao igual a  source maiuscula
      var opcao = source.toUpperCase();
-     /****  
-           Define o caminho HTTP  - 20180612
-     ***/  
-    var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
-    var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
-   
-///  alert(" anotador_remover_js/132 -->> INICIO <<--  source = "+opcao+" -- val = "+val+"  -  string_array ="+string_array);
+     //
 
-     /// Reiniciar a pagina atual
-     /***
-     if( opcao=="RESET" ) {
-         parent.location.href=val;                
-         return;   
-     }
-     ***/
-     ///
-     /// tag Select para retornar
+
+ alert(" anotador_remover_js/140 -->> INICIO <<--  source = "+opcao+" -- val = "+val+"  -  string_array ="+string_array);  
+
+    // 
+    var poststr="";
+     //
+     // tag Select para retornar
      var quantidade=opcao.search(/PROJETO|RESET/i);
      if( quantidade!=-1 ) {
          var retornar=0;
@@ -165,15 +164,24 @@ function enviar_dados_anotador(source,val,string_array) {
          }
          if( opcao=="RESET" ) var retornar=1;
          /// Retornar 
-         if( retornar==1 ) {
-              ///  Desativando/Ocultando a Tag Select do Nome do novo Anotador
-              exoc("codigousp",0);  
-              location.href=pagina_local;
-              return;
+         if( retornar==1 ) {   
+             // 
+             //  Desativando/Ocultando a Tag Select do Nome do novo Anotador
+             exoc("codigousp",0);  
+             location.href=pagina_local;
+             return;
          }    
          ///
      }        
-     ///
+     //
+
+
+/**  
+ *    alert(" anotador_remover_js/184 -->>   source = "+opcao+" -- val = "+val+"  -  raiz_central ="+raiz_central);  
+ */
+
+
+
      if( opcao=="ANOTADOR" ) { 
         if( val.toUpperCase()=="CODIGOUSP" ) {  
              if( document.getElementById('td_proj_ou_expe') ) {
@@ -347,7 +355,8 @@ function enviar_dados_anotador(source,val,string_array) {
 					  	  m_erro=1; m_id_title="Arquivo precisa ser no formato PDF.";
 					  }
 				  }
-			 }
+			 }  
+             //
              //  Verificando os coautores ou colaboradores
              var pos = m_id_name.search(/ncoautor/i);
 			 if( pos!=-1 ) {
@@ -355,10 +364,12 @@ function enviar_dados_anotador(source,val,string_array) {
 					 n_coresponsaveis[n_i_coautor]=m_id_value;
 					 n_i_coautor++;
              } 			 
- 	 		 if( m_id_name.toUpperCase()=="ENVIAR" ) {
+ 	 		 if( m_id_name.toUpperCase()=="ENVIAR" ) {  
+                 //
 				 if( m_value_coresponsaveis>1 ) {
-                      ///  You can define the comparing function here. 
-					  ///  JS default uses a crappy string compare. 					 
+                      //
+                      //  You can define the comparing function here. 
+					  //  JS default uses a crappy string compare. 					 
 					  var duplicado = 0;
                       var sorted1_arr=n_coresponsaveis.sort(); 
                       var tot_n_c=n_coresponsaveis.length;
@@ -460,7 +471,7 @@ function enviar_dados_anotador(source,val,string_array) {
     if( opcao=="CODIGOUSP" )  {
          var poststr = "source="+encodeURIComponent(source)+"&val="+encodeURIComponent(val);    
                       
- ////     alert(" CODIGOUSP -  anotador_remover_js/414 -  source = "+opcao+" -- opcao = "+opcao+"  --  val = "+val+" \r\n - poststr =  "+poststr);
+ ///    alert(" CODIGOUSP -  anotador_remover_js/414 -  source = "+opcao+" -- opcao = "+opcao+"  --  val = "+val+" \r\n - poststr =  "+poststr);
  
     }
    
@@ -474,28 +485,35 @@ function enviar_dados_anotador(source,val,string_array) {
     }
 	//
 	//  Serve tanto para o arquivo projeto, anotacao e outros - Cadastrar
-   //   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
+    //   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
     //  var receber_dados = "proj_exp_ajax.php";
     var receber_dados = "anotador_remover_ajax.php";
     
-    ///  FUNCTION - PRINCIPAL NO RECEBIMENTO DE DADOS/RETONRO DO AJAX
+/**
+ *    alert(" CODIGOUSP -  anotador_remover_js/497 -  source = "+opcao+" -- opcao = "+opcao+"  --  val = "+val+" \r\n - poststr =  "+poststr);
+ */
+ 
+
+     //  FUNCTION - PRINCIPAL NO RECEBIMENTO DE DADOS/RETONRO DO AJAX
 	 var inclusao = function (oXML) { 
-                      ///  Recebendo os dados do arquivo ajax
-                      ///  Importante ter trim no  oXML.responseText para tirar os espacos
+                      // 
+                      //  Recebendo os dados do arquivo ajax
+                      //  Importante ter trim no  oXML.responseText para tirar os espacos
                       var m_dados_recebidos = trim(oXML.responseText);
-                      ////  Verificando se houve ERRO
-                      var pos = m_dados_recebidos.search(/ERRO:|FALHA:/i);
+                      //  Verificando se houve ERRO
+                      var pos = m_dados_recebidos.search(/ERRO:|FALHA:/ui);
                       if( pos!=-1 ) {
-                           /// Mensagem de erro ativar
+                           //
+                           // Mensagem de erro ativar
                            exoc("label_msg_erro",1,m_dados_recebidos);   
                            /*   document.getElementById('label_msg_erro').style.display="block";
                                  document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
                            */
                            return;
                       }
-                      ///                         
+                      //                         
                         
-///  alert(" anotador_remover_js.php/359 - opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                        
+  alert(" anotador_remover_js.php/503 - opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                        
  	            
                       /// Verificando a opcao                        
                       if( opcao=="CODIGOUSP" ) {     
@@ -664,15 +682,19 @@ function enviar_dados_anotador(source,val,string_array) {
                               }
 						  }
           			  }
- 		  }; 
+ 		  };  
+          //
 	   /* 
 		      aqui ? enviado mesmo para pagina receber.php 
 		       usando metodo post, + as variaveis, valores e a funcao   */
+        //
  	   var conectando_dados = myConn.connect(receber_dados, "POST", poststr, inclusao);   
 	   /*  uma coisa legal nesse script se o usuario não tiver suporte a JavaScript  
-    	  porisso eu coloquei return false no form o php enviar sozinho   */
-       ///
+    	  porisso eu coloquei return false no form o php enviar sozinho   
+        */
+       //
 	   return;
+       //
 }  
 /******   FINAL - Function enviar_dados_cad para AJAX     ******/
 ///

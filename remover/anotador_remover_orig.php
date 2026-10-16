@@ -61,7 +61,7 @@ $_SESSION["m_horiz"] = $array_projeto;
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
 
 ///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=utf8_decode("Registro de Anotação");
+if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
 /// $_SESSION['time_exec']=180000;
 ///
 ////  INCLUINDO CLASS - 
@@ -129,13 +129,14 @@ if( isset($_GET["m_titulo"]) ) {
 }  
 //				  
 ?>
-<!--  Mensagem de ERRO     -->
+<!--  Mensagens e Titulo  -->
 <section class="merro_e_titulo" >
 <div  id="label_msg_erro"  >
 </div>
 <p class='titulo_usp' >Remover&nbsp;<?php echo ucfirst($_SESSION["m_titulo"]);?><br/>
 Para realizar Anota&ccedil;&atilde;o de Projeto</p>
 </section>
+<!-- Final -  Mensagens e Titulo  -->
 <div id="div_form"  class="div_form" >
 <?php
 //   Definição das datas de controle para eventual registro (log)
@@ -157,13 +158,18 @@ $cols=4;
 <div  id="arq_link" style="overflow: auto; height: auto;"  >
 <form name="form1" id="form1"  enctype="multipart/form-data"  method="post"  
  onsubmit="javascript: enviar_dados_anotador('submeter','ANOTADOR',document.form1); return false;"  >
-  <!-- div - ate antes do Cancelar e  Remover -->
- <div style="border: .1em solid #000000;padding:.2em;" >
-   <section>
-       <article class="projetoarticle1"   style="width: auto;" >
+
+<!-- div - ate antes do Cancelar e  Remover -->
+<div class="parte_inicial" >
+
+   <div class="div_nova"   >
+        <!-- Identificação do Projeto [CIP][ - Titulo] -->
+        <span>
            <label for="projeto"  title="Identificacao do Projeto"   >
               Projeto:&nbsp;
-           </label><br/>
+           </label>
+        </span>
+        <span>
         <!-- Identificação do Projeto [CIP][ - Titulo] -->
         <?php 
           /////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
@@ -177,7 +183,7 @@ $cols=4;
             $usuario_conectado." order by b.titulo "); 
            //                  
            if( ! $result ) {
-                if( isset($result) ) mysql_free_result($result);
+                if( isset($result) ) mysqli_free_result($result);
                 die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: '.mysqli_error($_SESSION["conex"]));  
            }
            //  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
@@ -212,51 +218,64 @@ $cols=4;
            }
            ?>  
            <!-- Final da Num_USP/Nome Responsavel  -->
-       </article>
-   </section>    
+       </span>
+   </div>    
 
-   <section>
-      <article class="projetoarticle1" >
+   
+      <table  class="div_nova"  style="border: none; margin:0; padding: 0;;">
+       <tr>
+        <td>
          <!-- Anotador do Projeto escolhido -->
-            <label for="codigousp" style="vertical-align: middle; cursor: pointer;" title="Anotador">Anotador:&nbsp;</label>
-            <div id="codigousp" name="codigousp"  ></div>
+            <label for="codigousp"  style="vertical-align: middle; cursor: pointer; font-weight: bold;"  title="Anotador">Anotador:&nbsp;</label>
          <!-- Final - Anotador do Projeto escolhido -->
-      </article>   
-   </section>
+        </td>
+        <td>
+           <span id="codigousp" name="codigousp"  ></span> 
+         </td>
+       </tr>
+      </table>
+       <!-- Final - Anotador do Projeto escolhido -->
+   
 
-      <section>
-         <article class="projetoarticle1" >
+         <div class="class="div_cadanotador""  >
              <!--  Anotador/NOME -->      
                <div id="div_nome" align="justify" ></div>
              <!-- Final - Anotador/Nome -->
-         </article>
-      </section> 
-      <section>
-         <article class="projetoarticle1"  >
-            <!--  Anotador/E_MAIL -->
-            <div style="width: 8%;margin-top:2px;">
-              <label for="e_mail"  >E_mail:&nbsp;</label>
-              </div>
-             <p>
-              <input type="email" name="e_mail"  id="e_mail"  size="64" maxlength="64" title="Digitar E_MAIL/Anotador"  onKeyUp="this.value=trim(this.value);"  onkeydown="javascript: backspace(event,this)" required="required"  autocomplete="off"  style="font-size: small; cursor: pointer; display: none;" />
-             </p>
-             <!--   <input type="hidden" id="gemac" name="gemac" value="<?php echo $_SESSION["gemac"];?>"  > -->
-            <!-- Final - Anotador/E_MAIL -->
-         </article>
-      </section> 
+        </div>
+      
+      
+      <div class="div_nova"  >
+        <!--  Anotador/E_MAIL -->
+          <span>
+             <label for="e_mail" style="float: left; height: auto; " >E_mail:&nbsp;</label>
+          </span>
+          <!-- STYLE/CSS dentro do arquivo participante_cadastrar_js.php - atualizado em 20181203 -->
+          <span>
+              <input type="email" name="e_mail" id="e_mail" class="email"  maxlength="64" 
+                  title="Digitar E_MAIL/Anotador"  onKeyUp="this.value=trim(this.value);" 
+                  onkeydown="javascript: backspace(event,this)" 
+                   required="required"  autocomplete="off" 
+                    style="display: none;" />
+            
+          </span>            
+          <!-- Final - Anotador/E_MAIL -->     
+       </div>
+
+      
   </div>
-  <!-- Final - div - ate antes do Cancelar e  Remover -->      
-      <section>
-           <!--  TAGS  type reset e  submit  -->                                              
-             <article class="reset_button"  >
+  <!-- Final - div - ate antes do Cancelar e  Remover -->   
+  
+     
+     <div class="reset_button" >
+           <!--  TAGS  type Cancelar e  Remover  -->                                              
+             <span>
                 <!-- Cancelar -->                  
-                  <span>
                   <button type="submit" name="limpar" id="limpar"   class="botao3d"   
                    onclick="javascript: enviar_dados_anotador('reset','<?php echo $pagina_local;?>'); return false;"  title="Cancelar"  acesskey="C"  alt="Cancelar" >    
       Cancelar&nbsp;<img src="../imagens/limpar.gif" alt="Cancelar"  >
                       </button>
                   </span>    
-                 <!-- Final - Limpar  -->
+                 <!-- Final - Cancelar  -->
                  <!-- Remover -->         
                    <span>        
                      <button  type="submit"  name="enviar" id="enviar"  class="botao3d" 
@@ -264,10 +283,9 @@ $cols=4;
       Remover&nbsp;<img src="../imagens/enviar.gif" alt="Remover"  >
                       </button>
                     </span>  
-                 <!-- Final -Enviar -->
-             </article>                  
-           <!--  FINAL - TAGS  type reset e  submit  -->
-      </section>
+               <!-- Final - Remover -->
+           <!--  FINAL - TAGS  type Cancelar e Remover  -->
+      </div>
 </form>
 </div>
 </div>

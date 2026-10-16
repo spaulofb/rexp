@@ -14,10 +14,15 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-///  IMPORTANTE:  Declarando em PHP - charset UTF-8
+//
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+//  IMPORTANTE:  Declarando em PHP - charset UTF-8
 header('Content-type: text/html; charset=utf-8');
-
-//// Mensagens para enviar
+//
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -29,8 +34,8 @@ $msg_final="</span></span>";
 
 // include('inicia_conexao.php');
 extract($_POST, EXTR_OVERWRITE); 
-
-///  Verificando SESSION incluir_arq - 20180618
+//
+//  Verificando SESSION incluir_arq - 20180618
 $n_erro=0; $incluir_arq="";
 if( ! isset($_SESSION["incluir_arq"]) ) {
      $msg_erro .= "Sessão incluir_arq não está ativa.".$msg_final;  
@@ -41,8 +46,8 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-///
-///   CASO OCORREU ERRO GRAVE
+//
+//   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -53,21 +58,23 @@ if( intval($n_erro)>0 ) {
 *      INICIANDO CONEXAO - PRINCIPAL
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-
-///  Variavel recebida do script/arquivo - inicia_conexao.php 
+//
+//  Variavel recebida do script/arquivo - inicia_conexao.php 
 $_SESSION["m_horiz"] = $array_projeto;
-///
-///   Caminho da pagina local
+//
+//   Caminho da pagina local
 $_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
-
-///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
-/// $_SESSION['time_exec']=180000;
-///
-////  INCLUINDO CLASS - 
+//
+//  Titulo do Cabecalho - Topo
+if( ! isset($_SESSION["titulo_cabecalho"]) ) {
+      $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
+} 
+// $_SESSION['time_exec']=180000;
+//
+//  INCLUINDO CLASS - 
 require_once("{$incluir_arq}includes/autoload_class.php");  
 $funcoes=new funcoes();
-///
+//
 /***
 *    Depois do arquivo inicia_conexao.php 
 *      - definido Desktop ou Mobile (aplicativo movel)
@@ -97,12 +104,12 @@ $estilocss = $_SESSION["estilocss"];
 <script  type="text/javascript"  src="<?php echo $host_pasta;?>js/responsiveslides.min.js" ></script>
 <script type="text/javascript" src="<?php echo $host_pasta;?>js/resize.js" ></script>
 <?php
-///    Arquivo javascript em PHP
-////  
+//    Arquivo javascript em PHP
+//  
 include("{$_SESSION["incluir_arq"]}js/anotador_remover_js.php");
-///  
+//  
 require("{$_SESSION["incluir_arq"]}includes/domenu.php");
-///
+//
 ?>
 </head>
 <body  id="id_body"    oncontextmenu="return false" onselectstart="return false"  ondragstart="return false"    onkeydown="javascript: no_backspace(event);"   >
@@ -171,28 +178,45 @@ $cols=4;
         </span>
         <span>
         <!-- Identificação do Projeto [CIP][ - Titulo] -->
-        <?php 
-          /////   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
-            mysqli_query("SET NAMES 'utf8'");
-            mysqli_query('SET character_set_connection=utf8');
-            mysqli_query('SET character_set_client=utf8');
-            mysqli_query('SET character_set_results=utf8');
-           ///                         
+        <?php
+            // 
+            //   IMPORTANTE: excelente para acentuacao da tag SELECT -  e tb  htmlentities        
+            /**
+             *  mysqli_query("SET NAMES 'utf8'");
+            *   mysqli_query('SET character_set_connection=utf8');
+            *   mysqli_query('SET character_set_client=utf8');
+            *   mysqli_query('SET character_set_results=utf8');
+            */
+             //     
+             # IMPORTANTE: Aqui esta o segredo
+             mysqli_query($conex,"SET NAMES 'utf8' ");
+             mysqli_query($conex,'SET character_set_connection=utf8');
+             mysqli_query($conex,'SET character_set_client=utf8');
+             mysqli_query($conex,'SET character_set_results=utf8');
+             //                    
             ///  Selecionando o Projeto desse Anotador
-           $result = mysqli_query("SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
+           $result = mysqli_query($conex,"SELECT b.cip,b.titulo FROM $bd_2.projeto b WHERE b.autor=".
             $usuario_conectado." order by b.titulo "); 
            //                  
            if( ! $result ) {
-                if( isset($result) ) mysql_free_result($result);
-                die('ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: '.mysqli_error($_SESSION["conex"]));  
+                //
+                if( isset($result) )  {
+                     //   mysqli_free_result($result);
+                     unset($result);
+                }  
+                //
+                $terr='ERRO: Selecionando os poss&iacute;veis projetos para esse Anotador: ';
+                die("$terr".mysqli_error($_SESSION["conex"]));  
+                //
            }
            //  $count_arr_cnc = count($arr_cnc["fonterec"])-1;
             //  Identificação da Fonte de Recurso
            $nprojetos = mysqli_num_rows($result);
+           //
            ?>
            <!-- tag select para selecionar o Projeto -->
-           <SELECT name="projeto"  id="projeto" class="td_select" title="Identificação do Projeto" 
-               onchange="javascript: enviar_dados_anotador(this.id,this.value)"  required="required" >
+           <select name="projeto"  id="projeto" class="td_select" title="Identificação do Projeto" 
+               onchange="enviar_dados_anotador(this.id,this.value)"  required="required" >
            <?php
            if( intval($nprojetos)<1 ) {
                 $opcao_msg="N&atilde;o existe Projeto do atual Orientador/Superior.";
@@ -203,15 +227,16 @@ $cols=4;
                ?>
                 <option value='' >Selecione o Projeto a ser acessado por esse Anotador a ser removido&nbsp;</option>
                 <?php
-                while( $linha=mysql_fetch_assoc($result) ) {
-                      ///  
-                      ////  echo "<option  value=".$linha['cip']."  >".$titulo."&nbsp;</option>";   
-                      ///  $titulo=$linha['titulo'];
-                       /// $titulo=html_entity_decode($linha['titulo'], ENT_QUOTES, "UTF-8");
-                      $_SESSION["cip"]=$linha['cip'];
-                      echo "<option  value=".$linha['cip']."  >".htmlentities($linha['titulo'],ENT_QUOTES,"UTF-8")."&nbsp;</option>";   
-                     ////      
+                while( $linha=mysqli_fetch_assoc($result) ) {
+                       //  
+                       //  echo "<option  value=".$linha['cip']."  >".$titulo."&nbsp;</option>";   
+                       //  $titulo=$linha['titulo'];
+                       // $titulo=html_entity_decode($linha['titulo'], ENT_QUOTES, "UTF-8");
+                       $_SESSION["cip"]=$linha['cip'];
+                       echo "<option  value=".$linha['cip']."  >".htmlentities($linha['titulo'],ENT_QUOTES,"UTF-8")."&nbsp;</option>";   
+                       //      
                }
+               //
               ?>
             </select>
              <?php 
@@ -255,7 +280,7 @@ $cols=4;
                   title="Digitar E_MAIL/Anotador"  onKeyUp="this.value=trim(this.value);" 
                   onkeydown="javascript: backspace(event,this)" 
                    required="required"  autocomplete="off" 
-                    style="display: none;" />
+                    style="display: none;background-color:#FFFFFF;"  />
             
           </span>            
           <!-- Final - Anotador/E_MAIL -->     
