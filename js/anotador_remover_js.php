@@ -310,8 +310,10 @@ function enviar_dados_anotador(source,val,string_array) {
 			      m_id_value = trim(document.getElementById(m_id_name).value);
 			 } else if( m_id_type=="textarea" ) {  
 			      m_id_value = trim(document.getElementById(m_id_name).value);
-				  if( m_id_value=="" ) var m_erro = 1;	 
+				  if( m_id_value=="" ) var m_erro = 1;  
+                  //	 
 			 }  else if( m_id_type=="select-one" ) {  
+                  //
 			      if( m_id_name=="anotacao_select_projeto" || m_id_name.toUpperCase()=="ALTERA_COMPLEMENTA" ) continue;
 			      m_id_value = trim(document.getElementById(m_id_name).value);
 				  if( m_id_value=="" ) var m_erro = 1;	
@@ -365,7 +367,45 @@ function enviar_dados_anotador(source,val,string_array) {
 					 n_i_coautor++;
              } 			 
  	 		 if( m_id_name.toUpperCase()=="ENVIAR" ) {  
-                 //
+                 //   
+
+
+
+                // Desativa o botão "Remover"
+                var enviar = document.getElementById('enviar');
+                if( enviar ) {
+                    enviar.disabled = true;
+                }
+
+                // Transforma o botão "Cancelar" em "Retornar"
+                var limpar = document.getElementById('limpar');
+                if (limpar) {
+                    limpar.title = 'Retornar';
+                    limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
+                    limpar.setAttribute('alt', 'Retornar');
+                    // troca só o texto, preservando o <img> que está dentro do button
+                    limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
+                }   
+                // 
+
+
+
+if( typeof  +m_value_coresponsaveis === 'undefined') {
+      //
+      // está undefined  
+      var   +m_value_coresponsaveis=0; 
+      //  
+}
+
+
+
+
+
+
+alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);    
+
+
+
 				 if( m_value_coresponsaveis>1 ) {
                       //
                       //  You can define the comparing function here. 
@@ -388,8 +428,9 @@ function enviar_dados_anotador(source,val,string_array) {
 					       } 
 						   */
                       } 
-				 }
- 				 ///  Verificando as testemunhas
+				 } 
+                 //
+ 				 //  Verificando as testemunhas
 			     if( ( n_testemunhas==2 ) && ( m_erro<1 ) ) {
                         ///  You can define the comparing function here. 
   					    ///  JS default uses a crappy string compare. 					 
@@ -402,7 +443,7 @@ function enviar_dados_anotador(source,val,string_array) {
 						 	 var m_erro=1;
 		    			} 
 				 }
-                 ///				 			 
+                 //				 			 
 			 }
              
   ///  alert("  anotador_remover_js/399  --  SUBMETER  <<<---   cpo#"+i+"  nome="+m_id_name+"  tipo="+m_id_type+"  valor="+m_id_value);             
@@ -575,9 +616,34 @@ function enviar_dados_anotador(source,val,string_array) {
                       } else if( opcao=="ANOTADOR" ) {     
                           ///
                           
- ///  alert(" anotador_remover_js.php/549 --->>>  ANOTADOR  <<<--- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                  
+
+
+
+  // Desativa o botão "Remover"
+    var enviar = document.getElementById('enviar');
+    if (enviar) {
+        enviar.disabled = true;
+    }
+
+    // Transforma o botão "Cancelar" em "Retornar"
+    var limpar = document.getElementById('limpar');
+    if (limpar) {
+        limpar.title = 'Retornar';
+        limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
+        limpar.setAttribute('alt', 'Retornar');
+        // troca só o texto, preservando o <img> que está dentro do button
+        limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
+    }
+
+
+
+
+
+
+  alert(" anotador_remover_js.php/549 --->>>  ANOTADOR  <<<--- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                  
                           
                           if( val.toUpperCase()=="CODIGOUSP" ) {  
+                                //
                                 document.getElementById('label_msg_erro').style.display="none";
                                 var new_elements = m_dados_recebidos.split("|");
                                 var temp = trim(new_elements[0]);
@@ -613,28 +679,85 @@ function enviar_dados_anotador(source,val,string_array) {
                                       }                                                     
                                       i++;
                                 }
-                          }                                
+                          }        
+                          //                        
                       } else if( opcao=="PROJETO" ) {     
-                           /// Ativando o ID codigousp com Anotadores do Projeto 
+                           //
+                           // Ativando o ID codigousp com Anotadores do Projeto 
                            exoc("codigousp",1,m_dados_recebidos);                                  
                            return;
-                           //// 
-					  } else {
-						  var pos = m_dados_recebidos.search(/ERRO:/i);
+                           // 
+        	      } else {  
+                           //
+         		  var pos = m_dados_recebidos.search(/ERRO:/i);
                           if( document.getElementById('corpo') ) {
                               document.getElementById('corpo').style.display="block";   
-                          }
-                          /// Verifica caso encontrou erro  pos!=-1                          
-         		          if( pos!=-1 ) {
-						      /// document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
+                          }  
+                          //
+                          // Verifica caso encontrou erro  pos!=-1                          
+         		  if( pos!=-1 ) {
+                              //  
+
+
+
+
+
+
+                              
+    alert(" anotador_remover_js.php/633 --->>>  ANOTADOR  <<<--- ANTES SUBMETER  <<-- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                                              
+
+						      // document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
                               /// Ativando o ID label_msg_erro com mensagem
                               exoc("label_msg_erro",1,m_dados_recebidos);                                  
-						  } else {
+                              //
+			  } else {
                               ///
- 					          if( opcao=="SUBMETER" ) {
-								  ///  Recebendo o numprojeto e o num do autor
+
+
+
+
+  // Desativa o botão "Remover"
+    var enviar = document.getElementById('enviar');
+    if (enviar) {
+        enviar.disabled = true;
+    }
+
+    // Transforma o botão "Cancelar" em "Retornar"
+    var limpar = document.getElementById('limpar');
+    if (limpar) {
+        limpar.title = 'Retornar';
+        limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
+        limpar.setAttribute('alt', 'Retornar');
+        // troca só o texto, preservando o <img> que está dentro do button
+        limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
+    }
+
+
+  alert(" ANTES DA OPCAO  SUBMETER   ");  
+
+
+
+
+ 			      if( opcao=="SUBMETER" ) {
+                                   //
+
+                                   
+
+
+
+                          
+  alert(" anotador_remover_js.php/645 --->>>  ANOTADOR  <<<---  SUBMETER  <<-- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                  
+                          
+
+
+  
+
+
+
+								  //  Recebendo o numprojeto e o num do autor
 								  var test_array = m_dados_recebidos.split("falta_arquivo_pdf");
 								  if( test_array.length>1 ) {
+                                       //
     								   m_dados_recebidos=test_array[0];
 									   var n_co_autor = test_array[1].split("&");
 									   ///  Passando valores para tag type hidden
@@ -643,7 +766,8 @@ function enviar_dados_anotador(source,val,string_array) {
                                        if(  n_co_autor.length==3 ) {
                                            ///  ID da pagina anotacao_cadastrar.php
                                            document.getElementById('anotacao_numero').value=n_co_autor[2];
-                                       }
+                                       }  
+                                       //
 								  }
    								  /// document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
                                   /// Ativando o ID label_msg_erro com mensagem
@@ -661,13 +785,15 @@ function enviar_dados_anotador(source,val,string_array) {
                                   var array_e_mail = new Array('e_mail','email','e-mail','user_email');
                                   var arr_e_mail_length = array_e_mail.length;
                                   ///  Verificar que id pertence ao email
-                                  for( var i=0; i<arr_e_mail_length; i++ ) {
-                                      ///  Verificando se existe id do e_mail
-                                      if( document.getElementById(array_e_mail[i]) ) {
-                                            var e_mail=array_e_mail[i];   
-                                            ///  Caso exista ocultar
-                                            exoc(e_mail,0);  
-                                      }
+                                  for( var i=0; i<arr_e_mail_length; i++ ) {  
+                                        //
+                                        //  Verificando se existe id do e_mail
+                                        if( document.getElementById(array_e_mail[i]) ) {
+                                              var e_mail=array_e_mail[i];   
+                                               ///  Caso exista ocultar
+                                              exoc(e_mail,0);  
+                                        }
+                                        //
                                   }
                                   ///  Reiniciando a tag Select do Projeto
                                   if( document.getElementById("projeto") ) {
@@ -680,6 +806,7 @@ function enviar_dados_anotador(source,val,string_array) {
                                        document.getElementById('corpo').innerHTML=oXML.responseText;     
                                   } 
                               }
+                              //
 						  }
           			  }
  		  };  

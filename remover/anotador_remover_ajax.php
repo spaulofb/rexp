@@ -5,14 +5,14 @@
 //  Biblioteca para uso do programa
 //
 //
-function isEmail($email) {
+function isEmail(string $email) {
     return preg_match('/^\S+@[\w\d.-]{2,}\.[\w]{2,6}$/iU', $email) ? TRUE : FALSE;
 }  
 //
 //  Funcao para busca com acentos
 if( ! function_exists("stringParaBusca") ) {  
     //
-    function stringParaBusca($str) {
+    function stringParaBusca(string $str) {
         //
         // Transformando tudo em minúsculas
         $str = trim(strtolower($str));
@@ -51,7 +51,7 @@ if( ! function_exists("stringParaBusca") ) {
 //
 //  Funcao para minuscula para Maiuscula
 if( ! function_exists("stringParaBusca2") ) {
-    function stringParaBusca2($str) {
+    function stringParaBusca2(string $str) {
      /*
          $a1 ="àáâãäåæçèéêëìíîïñòóôõöøùúûüý";
          $a1_len = strlen($a1);
@@ -173,7 +173,6 @@ if( ! function_exists("stringParaBusca2") ) {
                             'ç' => 'Ç',
                             'ñ' => 'Ñ',
                             'ò' => 'Ò',
-                            'ò' => 'Ò',                        
                             'ö' => 'Ö',                        
                             'ø' => 'Ø',                                                
                             'ù' => 'Ù',                                                                        
@@ -333,9 +332,6 @@ if( $source_upper=="SAIR" ) {
      if( isset($senha_down) )  unset($senha_down); 
      //
      //  echo  "<a href=http://www-gen.fmrp.usp.br  title='Sair' >Sair</a>";
-     response.setHeader("Pragma", "no-cache"); 
-     response.setHeader("Cache-Control", "no-cache"); 
-     response.setDateHeader("Expires",0); 
      //  echo  http://www-gen.fmrp.usp.br/;  
      exit();
      //
@@ -473,6 +469,9 @@ if( $source_upper=="CODIGOUSP" ) {
     //include("php_include/ajax/includes/conectar.php");   
     require("{$incluir_arq}includes/conectar.php");  
     //
+    # IMPORTANTE: define o charset da conexão (servidor + cliente mysqli)
+    mysqli_set_charset($conex, "utf8mb4");
+    //
     //  Verificando se o Anotador tem email - (Valido)
     $sqlcmd = "SELECT e_mail,nome from $bd_1.pessoa WHERE codigousp=$anotador_codigousp ";
     $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
@@ -510,13 +509,8 @@ if( $source_upper=="CODIGOUSP" ) {
     } else {
         //
         /**  $_SESSION["anotador_nome"]=$anotador_nome=trim(mysql_result($resultado,0,"nome"));    */
-        $line = mysqli_fetch_assoc($resultado);  // pega a 1ª linha (linha 0)  
-        if ($line === null) {
-            $anotador_nome = "";     // valor seguro
-        } else {
-            $anotador_e_mail = $line["e_mail"];
-            $_SESSION["anotador_nome"] = $anotador_nome = trim($line["nome"]);
-        }
+         $_SESSION["anotador_nome"] = $anotador_nome = trim($linha["nome"]);
+        //
         $codigo_caracter = mb_detect_encoding($anotador_nome);  // nunca recebe null
         if( trim(strtoupper($codigo_caracter))!="UTF8" ) {  
              //
@@ -651,39 +645,45 @@ if( strtoupper($val)=="ANOTADOR" ) {
      $codigo = $lncodigousp;
      //
      $session_tabela = $_SESSION["tabela"];
-     $n_erro=0;
-      
-      
-  echo  "ERRO:  anotador_remover_ajax/580  --->>>  \$url_central = $url_central  <br>  \$session_tabela = $session_tabela <<-- "
-       ."  --->>> \$_SESSION[anotador_nome] = {$_SESSION["anotador_nome"]} --- anotador_nome = $anotador_nome ";
-  exit();      
-
-      
       /**   
        *    REMOVER ANOTADOR DE PROJETO
-       */
-      ///  Iniciar uma transaction - ex. procedure    
-      ///  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-      ///  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
+      */
+      //  Iniciar uma transaction - ex. procedure    
+      /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()   */ 
+      //  mysqli_query("LOCK TABLES $bd_1.pessoa UPDATE");
       true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;    
      /*!40000 ALTER TABLE `orientador` DISABLE KEYS */;
      ///
-     /// mysqli_query("LOCK TABLES pessoal.pessoa UPDATE");
-      $sqlcmd = "DELETE FROM $bd_2.anotador WHERE codigo=$lncodigousp and cip=$lnprojeto  ";
-      $resultado = mysqli_query($_SESSION["conex"],$sqlcmd);
-      if( ! $resultado ) {
-          $msg_erro .='Delete tabela anotador -&nbsp;db/mysql:&nbsp;'.mysqli_error($_SESSION["conex"]).$msg_final;  
-          mysqli_query('rollback'); 
-          $n_erro=1;
-          echo $msg_erro;               
-      } else {
-          mysqli_query('commit');  
-      }
-      ///  Ocorreu erro
-      if( intval($n_erro)>0 ) {
-          ///  Ocorreu ERRO para remover Anotador/Projeto na tabela anotador
-          exit();
-      }
+      $n_erro = 0;
+      $lncodigousp = intval($lncodigousp);
+      $lnprojeto   = intval($lnprojeto);   
+
+
+/**   
+ *    echo  "ERRO:  anotador_remover_ajax/580  --->>>  \$url_central = $url_central  <br>  \$session_tabela = $session_tabela <<-- "
+*       ."  <br> --->>> \$_SESSION[anotador_nome] = {$_SESSION["anotador_nome"]} --- anotador_nome = $anotador_nome  <br> "
+*       ."  -->>  \$lncodigousp = $lncodigousp  <<-->>  \$lnprojeto = $lnprojeto  ";    
+*    exit();      
+ */      
+  
+
+
+
+      //
+      /**  Removendo o Anotador de um Projeto   */
+      $sqlcmd = "DELETE FROM $bd_2.anotador WHERE codigo=$lncodigousp AND cip=$lnprojeto";
+      $resultado = mysqli_query($_SESSION["conex"], $sqlcmd);
+      if( !$resultado ) {
+           $msg_erro .= 'Delete tabela anotador -&nbsp;db/mysql:&nbsp;'
+                    . mysqli_error($_SESSION["conex"]) . $msg_final;
+            $n_erro = 1;
+            echo $msg_erro;
+      }  
+      /**  Final - if (!$resultado) {  */  
+      //
+      if ($n_erro > 0) {
+            exit();   // ERRO ao remover Anotador/Projeto
+      }  
       //
       //   Verifica se é necessário incluir registro do anotador na tabela usuário
       //  Caso NAO ocorreu erro

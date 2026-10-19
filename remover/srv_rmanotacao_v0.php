@@ -131,10 +131,6 @@ if( $opcao_maiusc=="SAIR" ) {
     if( isset($login_down) ) unset($login_down); 
     if( isset($senha_down) )  unset($senha_down); 
     //
-    response.setHeader("Pragma", "no-cache"); 
-    response.setHeader("Cache-Control", "no-cache"); 
-    response.setDateHeader("Expires",0); 
-    //
     exit();
 }
 // Final - SAIR do programa
