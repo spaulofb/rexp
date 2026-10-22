@@ -120,7 +120,7 @@ function enviar_dados_cad(source,val,m_array) {
          ///  Ocultando ID  e utilizando na tag input comando onkeypress
          exoc("label_msg_erro",0);  
     } else {
-        alert("funcion exoc nao existe - ADMINISTRADOR CORRIGIR.");
+        alert("funcion exoc inexistente - ADMINISTRADOR CORRIGIR.");
         return;        
     }
     ///
@@ -234,10 +234,10 @@ function enviar_dados_cad(source,val,m_array) {
     var opcao = source.toUpperCase();
     //
      
-
+/**  
  alert(" projeto_cadastrar_js/243  -->>  INICIO    --->> opcao = "+opcao
          +"  -->> (1) - source = "+source+"  -- (2)  val = "+val+"  -- (3)  m_array = "+m_array);                  
-
+ */
    
      
      /*****    
@@ -349,6 +349,7 @@ function enviar_dados_cad(source,val,m_array) {
                   //
                   var mensag_erro="ERRO: Existem DATAS além das datas: Inicial e a Final do Projeto.  Corrigir.";    
                   alert(mensag_erro);
+                  //
                   //  Enviando a mensagem de erro 
                   exoc("label_msg_erro",1,mensag_erro);  
                   //
@@ -617,7 +618,8 @@ function enviar_dados_cad(source,val,m_array) {
                       ///  frm.m_id_name.focus();
                       document.getElementById(m_id_name).focus();
                       //
-                      //  alert("Corrigir: "+m_id_title);
+                      //  alert("Corrigir: "+m_id_title);  
+                      //
                       return;
                       //
                  }
@@ -698,11 +700,11 @@ function enviar_dados_cad(source,val,m_array) {
                       ////  Verificando se houve ERRO
                       var pos = m_dados_recebidos.search(/ERRO:|FALHA:|Uncau|Fatal erro/ui);
 
-
-    alert(" projeto_cadastrar_js/521  -->>> INCLUSAO ->> pos = "+pos+" <--> receber_dados = "+receber_dados
+/**  
+    alert(" projeto_cadastrar_js/521  -->>> INCLUSAO ->> pos = <b>"+pos+"</b> <--- \r\n  ---> receber_dados = "+receber_dados
         +" -  pasta_raiz = "+pasta_raiz+"  \r\n  opcao = "+opcao+" (1) - source = "+source+"  -- (2)  val = "
-         +val+"  -- (3)  m_array = "+m_array);             
-
+         +val+"  -- (3)  m_array = "+m_array+" \r\n m_dados_recebidos =  "+m_dados_recebidos);             
+ */
          
                       
                       //
@@ -725,13 +727,26 @@ function enviar_dados_cad(source,val,m_array) {
                            //
                       }
                       /**  Final - if( pos!=-1 ) {  */
-                      ///                         
+                      //
+
+
+/** 
+    alert(" projeto_cadastrar_js/733  -->>> INCLUSAO  2) Parte  --->> pos = "+pos+" <--> receber_dados = "+receber_dados
+        +" -  pasta_raiz = "+pasta_raiz+"  \r\n  opcao = "+opcao+" <br>    --->>  1) source = "+source+"  -- (2)  val = "
+         +val+"  -- (3)  m_array = "+m_array);             
+ */
+         
+
+
+                      //                         
                       if( ( opcao=="CORESPONSAVEIS" ) ||  ( opcao=="COLABS" ) ) {                            
                             //
                             //  document.getElementById('corpo').style.display="block";    
                             //  document.getElementById(id_inc_pe).innerHTML= oXML.responseText;
-                            //   ativar ID id_inc_pe
-                            exoc(id_inc_pe,1,m_dados_recebidos);                             
+                            //   ativar ID id_inc_pe  
+                            //
+                            exoc(id_inc_pe,1,m_dados_recebidos);     
+                            //                        
                             return;
                             //
                       } else if( opcao=="ANOTACAO" ) {
@@ -808,7 +823,7 @@ function enviar_dados_cad(source,val,m_array) {
                                 ///
                             } else if( ( val.toUpperCase()=="ALTERA_COMPLEMENTA" ) &&  msa.length>=1 ) {
                                 //
-                                var pos = m_dados_recebidos.search(/ERRO:/i);
+                                var pos = m_dados_recebidos.search(/ERRO:/i);  
                                 //
                                 if( document.getElementById('corpo') ) {
                                     /**
@@ -844,7 +859,7 @@ function enviar_dados_cad(source,val,m_array) {
                             //
                       } else {
                           //
-                          ///  Desativando ID label_msg_erro 
+                          //  Desativando ID label_msg_erro 
                           exoc("label_msg_erro",0,""); 
                           ///
                           if( opcao=="SUBMETER" ) {
@@ -959,8 +974,10 @@ function n_coresponsaveis(field,event) {
        //
 	}
     //
-    if( tecla==13  || tecla==9 ) {
+    if( tecla==13  || tecla==9 ) {  
+         //
          alert(" ENTER OU TAB - field  = "+field +" - value = "+value+" - tecla = "+tecla)
+         //
          return;
 	}
     //

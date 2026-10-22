@@ -902,9 +902,9 @@ if( $val_upper=="PROJETO" ) {
      $incluir_arq=$_SESSION["incluir_arq"];
      include("{$incluir_arq}includes/dados_campos_form_alterar_auto.php");            
      ////
-     ///  $campo_nome = htmlentities(mb_convert_encoding($campos_nome), 'ISO-8859-1', 'UTF-8');
+     ///  $campo_nome = htmlentities(mb_convert_encoding($campos_nome, 'ISO-8859-1', 'UTF-8'));
      $campo_nome = $_SESSION["campos_nome"];
-     /// $campo_value = htmlentities(mb_convert_encoding($campo_value), 'ISO-8859-1', 'UTF-8');
+     /// $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
      $campo_value = $_SESSION["campos_valor"];
      ///
      ///  Verificando campos 
@@ -1108,7 +1108,7 @@ if( $val_upper=="PROJETO" ) {
            mysql_select_db($db_array[$elemento]);
            //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
            //   - Use mysql_select_db() ou mysqli_query()
-           mysqli_query("LOCK TABLES $bd_2.projeto UPDATE, $bd_2.corespproj DELETE, $bd_2.corespproj UPDATE ");
+           true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
            ///  $sqlcmd="UPDATE $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
            $sqlcmd="UPDATE $bd_2.projeto SET  "
                       ." titulo='$titulo',objetivo=$objetivo,coresponsaveis=$coresponsaveis,"
@@ -1215,8 +1215,8 @@ if( $val_upper=="PROJETO" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome), 'ISO-8859-1', 'UTF-8');
-	 $campo_value = htmlentities(mb_convert_encoding($campo_value), 'ISO-8859-1', 'UTF-8');
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);

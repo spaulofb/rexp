@@ -537,7 +537,7 @@ if(  $source_upper=="BUSCA_PROJ" ) {
         exit();        
     }
     $_SESSION["autor_codigousp"]=$autor_codigousp;    
-    if( isset($result_alterar_projeto) ) mysql_free_result($result_alterar_projeto); 
+    if( isset($result_alterar_projeto) ) mysqli_free_result($result_alterar_projeto); 
     ///
     ///  Arquivo do Projeto em PDF
     if( ! isset($Arquivo) ) $Arquivo="";
@@ -902,9 +902,9 @@ if( $val_upper=="PROJETO" ) {
      $incluir_arq=$_SESSION["incluir_arq"];
      include("{$incluir_arq}includes/dados_campos_form_alterar_auto.php");            
      ////
-     ///  $campo_nome = htmlentities(mb_convert_encoding($campos_nome), 'ISO-8859-1', 'UTF-8');
+     ///  $campo_nome = htmlentities(mb_convert_encoding($campos_nome, 'ISO-8859-1', 'UTF-8'));
      $campo_nome = $_SESSION["campos_nome"];
-     /// $campo_value = htmlentities(mb_convert_encoding($campo_value), 'ISO-8859-1', 'UTF-8');
+     /// $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
      $campo_value = $_SESSION["campos_valor"];
      ///
      ///  Verificando campos 
@@ -1072,7 +1072,7 @@ if( $val_upper=="PROJETO" ) {
       if( intval($m_regs)>=1 ) {
            $outro_titulo=mysql_result($result,0,"titulo_outro");
            $projeto_outro=mysql_result($result,0,"projeto_outro");
-           if( isset($result) ) mysql_free_result($result);
+           if( isset($result) ) mysqli_free_result($result);
            ///
            $result=mysqli_query("SELECT  descricao FROM $bd_2.objetivo "
                      ." WHERE  codigo={$objetivo}  ");
@@ -1095,7 +1095,7 @@ if( $val_upper=="PROJETO" ) {
       } else {
      	  ///  Continuacao Tabela Projeto para Alterar 
           /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
-	       if( isset($result) ) mysql_free_result($result);
+	       if( isset($result) ) mysqli_free_result($result);
            ///  Caso tenha coautores/coresponsaveis no Projeto
            ///  include("n_cos.php");
            ///
@@ -1108,7 +1108,7 @@ if( $val_upper=="PROJETO" ) {
            mysql_select_db($db_array[$elemento]);
            //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
            //   - Use mysql_select_db() ou mysqli_query()
-           mysqli_query("LOCK TABLES $bd_2.projeto UPDATE, $bd_2.corespproj DELETE, $bd_2.corespproj UPDATE ");
+           true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
            ///  $sqlcmd="UPDATE $bd_2.projeto  (".$_SESSION["campos_nome"].") values(".$_SESSION["campos_valor"].") ";       
            $sqlcmd="UPDATE $bd_2.projeto SET  "
                       ." titulo='$titulo',objetivo=$objetivo,coresponsaveis=$coresponsaveis,"
@@ -1171,7 +1171,7 @@ if( $val_upper=="PROJETO" ) {
                 ///  Incluindo arquivo para a Anotacao do Projeto 
                 ///  projeto, autor/orientador e numero da anotacao
                 /// $projeto_cip=mysql_result($result_proj,0,"cip");       
-                ///  mysql_free_result($result_proj);                       
+                ///  mysqli_free_result($result_proj);                       
                 $data_atual=date("Y-m-d H:i:s"); //  Data de hoje e horario  
                 $sqlcmd="UPDATE $bd_2.anotador SET pa=$lnpa,data='$data_atual'  WHERE cip=$cip ";
                 $res_anotador=mysqli_query($_SESSION["conex"],$sqlcmd); 
@@ -1215,8 +1215,8 @@ if( $val_upper=="PROJETO" ) {
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
     */	
- 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome), 'ISO-8859-1', 'UTF-8');
-	 $campo_value = htmlentities(mb_convert_encoding($campo_value), 'ISO-8859-1', 'UTF-8');
+ 	 $campo_nome = htmlentities(mb_convert_encoding($campo_nome, 'ISO-8859-1', 'UTF-8'));
+	 $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
 	 $campo_nome = substr($campo_nome,0,strpos($campo_nome,",enviar"));
 	 $array_temp = explode(",",$campo_nome);
  	 $array_t_value = explode(",",$campo_value);
@@ -1253,7 +1253,7 @@ if( $val_upper=="PROJETO" ) {
             $codigo_prx = 0;
         }
         $codigo_prx += -1;
-        mysql_free_result($result);
+        mysqli_free_result($result);
         $arr_nome_val['codigousp'] = $codigo_prx;
         if( $i_codigousp<0 ) {
             //  die("ERRO: Falha inesperada criando um NOVO codigo USP.");
@@ -1270,7 +1270,7 @@ if( $val_upper=="PROJETO" ) {
         exit();          
 	}
     $m_regs=mysqli_num_rows($result_usu);
-    mysql_free_result($result_usu);
+    mysqli_free_result($result_usu);
     if(  $m_regs>=1 ) {
             /* $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val['codigousp']." j&aacute; est&aacute; cadastrado.".$msg_final;
            echo $msg_erro; */
@@ -1343,7 +1343,7 @@ if( $val_upper=="PROJETO" ) {
          exit();
     }
     $m_regs = mysqli_num_rows($result_usu);
-	mysql_free_result($result_usu);
+	mysqli_free_result($result_usu);
 	if(  $m_regs>=1 ) {
          /* $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val['login']." j&aacute; cadastrado.".$msg_final;
          echo $msg_erro;  */

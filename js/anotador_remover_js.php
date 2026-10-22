@@ -139,8 +139,9 @@ function enviar_dados_anotador(source,val,string_array) {
      var opcao = source.toUpperCase();
      //
 
-
- alert(" anotador_remover_js/140 -->> INICIO <<--  source = "+opcao+" -- val = "+val+"  -  string_array ="+string_array);  
+/**  
+ alert(" anotador_remover_js/140 -->> INICIO <<--  source = "+opcao+" -- val = "+val+"  -  string_array ="+string_array);    
+  */
 
     // 
     var poststr="";
@@ -365,56 +366,51 @@ function enviar_dados_anotador(source,val,string_array) {
  			         m_id_value = trim(document.getElementById(m_id_name).value);
 					 n_coresponsaveis[n_i_coautor]=m_id_value;
 					 n_i_coautor++;
-             } 			 
+             } 	
+             //		 
  	 		 if( m_id_name.toUpperCase()=="ENVIAR" ) {  
-                 //   
-
-
-
-                // Desativa o botão "Remover"
-                var enviar = document.getElementById('enviar');
-                if( enviar ) {
-                    enviar.disabled = true;
-                }
-
-                // Transforma o botão "Cancelar" em "Retornar"
-                var limpar = document.getElementById('limpar');
-                if (limpar) {
-                    limpar.title = 'Retornar';
-                    limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
-                    limpar.setAttribute('alt', 'Retornar');
-                    // troca só o texto, preservando o <img> que está dentro do button
-                    limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
-                }   
-                // 
-
-
-
-if( typeof  +m_value_coresponsaveis === 'undefined') {
-      //
-      // está undefined  
-      var   +m_value_coresponsaveis=0; 
-      //  
-}
-
-
-
-
-
-
-alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);    
-
-
-
-				 if( m_value_coresponsaveis>1 ) {
+                  //   
+                  // Desativa o botão "Remover"
+                  //  Ocultando botao Remover
+                 if(  document.getElementById('enviar') ) {  
+		              //   
+                      //  Alterado em 20220623
+                      var r_mt = document.getElementById('enviar') ;
+                      var tdisp =  r_mt.style.display;
+                      if( tdisp!="none" ) {
+                           r_mt.style.display="none";
+                      }
+                      //
+                 }
+                 //
+                 // Transforma o botão "Cancelar" em "Retornar"
+                 if(  document.getElementById('limpar') )  {  
+                      //   
+                      limpar.title = 'Retornar';
+                      limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
+                      limpar.setAttribute('alt', 'Retornar');
+                      // troca só o texto, preservando o <img> que está dentro do button
+                      limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;  
+                      // 
+                 }      
+                 /**   Final -  if(  document.getElementById('limpar') )  {   */
+                 // 
+                 if( typeof  +m_value_coresponsaveis === 'undefined') {
+                      //
+                      // está undefined  
+                      var  m_value_coresponsaveis=0; 
+                      //  
+                 }   
+                 //
+	             if( m_value_coresponsaveis>1 ) {
                       //
                       //  You can define the comparing function here. 
-					  //  JS default uses a crappy string compare. 					 
-					  var duplicado = 0;
+    	              //  JS default uses a crappy string compare. 					 
+	                  var duplicado = 0;
                       var sorted1_arr=n_coresponsaveis.sort(); 
                       var tot_n_c=n_coresponsaveis.length;
                       for( var i=0; i<=tot_n_c; i++ ) { 
-					 	   for( var y=0; y<=tot_n_c; y++ ) { 
+				     	   for( var y=0; y<=tot_n_c; y++ ) { 
 						         if( ( sorted1_arr[i]==sorted1_arr[y] ) && ( i!=y ) ) {
 									   duplicado=1; 
      	    					       m_id_title="Duplicado"; m_erro=1;									
@@ -427,11 +423,12 @@ alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);
 							  break;
 					       } 
 						   */
-                      } 
-				 } 
-                 //
- 				 //  Verificando as testemunhas
-			     if( ( n_testemunhas==2 ) && ( m_erro<1 ) ) {
+                     }
+                     // 
+				} 
+                //
+ 				//  Verificando as testemunhas
+			    if( ( n_testemunhas==2 ) && ( m_erro<1 ) ) {
                         ///  You can define the comparing function here. 
   					    ///  JS default uses a crappy string compare. 					 
 					    var duplicado = 0;
@@ -442,26 +439,24 @@ alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);
 	    				     var m_id_title="Duplicado"; 
 						 	 var m_erro=1;
 		    			} 
-				 }
-                 //				 			 
-			 }
-             
-  ///  alert("  anotador_remover_js/399  --  SUBMETER  <<<---   cpo#"+i+"  nome="+m_id_name+"  tipo="+m_id_type+"  valor="+m_id_value);             
-             
-			 ///
-  			 ///  Verificando diferentes dados nos campos de Senha ( Senha e a Confirmacao )
-			 if( ( n_senhas>1 ) && ( m_erro<1 ) ) {
+				}
+                //				 			 
+			}
+            //
+  			//  Verificando diferentes dados nos campos de Senha ( Senha e a Confirmacao )
+		 	if( ( n_senhas>1 ) && ( m_erro<1 ) ) {
 				  senha1 = document.getElementById("senha").value;
 	              senha2 =  document.getElementById("redigitar_senha").value;
 	              if( senha1!=senha2 ) {
 				 	   m_id_title="SENHAS DIFERENTES";
 					   m_erro=1;
 				  }
+                  //
 			 }
 			 //  IF quando encontrado Erro
              //  Quando for campo sem title passar sem erro
              if( m_id_title.length<1 ) m_erro=0;
-             
+             // 
              //  Verificando a data  FINAL
              var m_datas = /(datafinal|datafin|data_fin)/i;
              if( m_datas.test(m_id_name) )  {
@@ -554,8 +549,10 @@ alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);
                       }
                       //                         
                         
+/**  
   alert(" anotador_remover_js.php/503 - opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                        
- 	            
+ 	  */           
+
                       /// Verificando a opcao                        
                       if( opcao=="CODIGOUSP" ) {     
                           var array_e_mail = new Array('e_mail','email','e-mail','user_email');
@@ -613,35 +610,9 @@ alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);
                               } 
                               ///
                           }
+                          //
                       } else if( opcao=="ANOTADOR" ) {     
                           ///
-                          
-
-
-
-  // Desativa o botão "Remover"
-    var enviar = document.getElementById('enviar');
-    if (enviar) {
-        enviar.disabled = true;
-    }
-
-    // Transforma o botão "Cancelar" em "Retornar"
-    var limpar = document.getElementById('limpar');
-    if (limpar) {
-        limpar.title = 'Retornar';
-        limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
-        limpar.setAttribute('alt', 'Retornar');
-        // troca só o texto, preservando o <img> que está dentro do button
-        limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
-    }
-
-
-
-
-
-
-  alert(" anotador_remover_js.php/549 --->>>  ANOTADOR  <<<--- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                  
-                          
                           if( val.toUpperCase()=="CODIGOUSP" ) {  
                                 //
                                 document.getElementById('label_msg_erro').style.display="none";
@@ -688,140 +659,95 @@ alert("  SENTRO DO ENVIAR -  m_value_coresponsaveis = "+m_value_coresponsaveis);
                            return;
                            // 
         	      } else {  
-                           //
-         		  var pos = m_dados_recebidos.search(/ERRO:/i);
-                          if( document.getElementById('corpo') ) {
+                      //
+               		  var pos = m_dados_recebidos.search(/ERRO:/i);
+                      if( document.getElementById('corpo') ) {
                               document.getElementById('corpo').style.display="block";   
-                          }  
+                      }  
+                      //
+                      // Verifica caso encontrou erro  pos!=-1                          
+                      //
+             		  if( pos!=-1 ) {
+                          //  
+                         // document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
+                         /// Ativando o ID label_msg_erro com mensagem
+                         exoc("label_msg_erro",1,m_dados_recebidos);                                  
+                         //
+         			  } else {
                           //
-                          // Verifica caso encontrou erro  pos!=-1                          
-         		  if( pos!=-1 ) {
-                              //  
-
-
-
-
-
-
-                              
-    alert(" anotador_remover_js.php/633 --->>>  ANOTADOR  <<<--- ANTES SUBMETER  <<-- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                                              
-
-						      // document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
-                              /// Ativando o ID label_msg_erro com mensagem
-                              exoc("label_msg_erro",1,m_dados_recebidos);                                  
+        			     if( opcao=="SUBMETER" ) {
                               //
-			  } else {
-                              ///
-
-
-
-
-  // Desativa o botão "Remover"
-    var enviar = document.getElementById('enviar');
-    if (enviar) {
-        enviar.disabled = true;
-    }
-
-    // Transforma o botão "Cancelar" em "Retornar"
-    var limpar = document.getElementById('limpar');
-    if (limpar) {
-        limpar.title = 'Retornar';
-        limpar.setAttribute('acesskey', 'R');   // atributo exatamente como no seu HTML
-        limpar.setAttribute('alt', 'Retornar');
-        // troca só o texto, preservando o <img> que está dentro do button
-        limpar.firstChild.nodeValue = 'Retornar\u00A0'; // \u00A0 = &nbsp;
-    }
-
-
-  alert(" ANTES DA OPCAO  SUBMETER   ");  
-
-
-
-
- 			      if( opcao=="SUBMETER" ) {
+     					      //  Recebendo o numprojeto e o num do autor
+							 var test_array = m_dados_recebidos.split("falta_arquivo_pdf");
+							 if( test_array.length>1 ) {
                                    //
-
-                                   
-
-
-
-                          
-  alert(" anotador_remover_js.php/645 --->>>  ANOTADOR  <<<---  SUBMETER  <<-- opcao = "+opcao+" - val = "+val+" -  \r\n m_dados_recebidos =  "+m_dados_recebidos) ;                                                  
-                          
-
-
-  
-
-
-
-								  //  Recebendo o numprojeto e o num do autor
-								  var test_array = m_dados_recebidos.split("falta_arquivo_pdf");
-								  if( test_array.length>1 ) {
-                                       //
-    								   m_dados_recebidos=test_array[0];
-									   var n_co_autor = test_array[1].split("&");
-									   ///  Passando valores para tag type hidden
-							  		   document.getElementById('nprojexp').value=n_co_autor[0];
-     								   document.getElementById('autor_cod').value=n_co_autor[1];
-                                       if(  n_co_autor.length==3 ) {
-                                           ///  ID da pagina anotacao_cadastrar.php
-                                           document.getElementById('anotacao_numero').value=n_co_autor[2];
-                                       }  
-                                       //
-								  }
-   								  /// document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
-                                  /// Ativando o ID label_msg_erro com mensagem
-                                  exoc("label_msg_erro",1,m_dados_recebidos);                                  
-                                      
-                                  /// Verificar pra nao acusar erro
-                                  if( document.getElementById('arq_link') ) {
-                                      document.getElementById('arq_link').style.display="block";        
-                                  }
-                                  ///
-                                  ///  Desativando/Ocultando a Tag Select do Nome do novo Anotador
-                                  exoc("codigousp",0);  
-                                 
-                                  ///  Campo email - desativando/ocultando
-                                  var array_e_mail = new Array('e_mail','email','e-mail','user_email');
-                                  var arr_e_mail_length = array_e_mail.length;
-                                  ///  Verificar que id pertence ao email
-                                  for( var i=0; i<arr_e_mail_length; i++ ) {  
-                                        //
-                                        //  Verificando se existe id do e_mail
-                                        if( document.getElementById(array_e_mail[i]) ) {
-                                              var e_mail=array_e_mail[i];   
-                                               ///  Caso exista ocultar
-                                              exoc(e_mail,0);  
-                                        }
-                                        //
-                                  }
-                                  ///  Reiniciando a tag Select do Projeto
-                                  if( document.getElementById("projeto") ) {
-                                        document.getElementById("projeto").selectedIndex="0";
-                                  } 
-                                  ///  document.getElementById('div_form').innerHTML=m_dados_recebidos;
-                                  return;
-							  } else  {
-                                  if( document.getElementById('corpo') ) {
-                                       document.getElementById('corpo').innerHTML=oXML.responseText;     
-                                  } 
-                              }
-                              //
-						  }
-          			  }
- 		  };  
-          //
-	   /* 
-		      aqui ? enviado mesmo para pagina receber.php 
-		       usando metodo post, + as variaveis, valores e a funcao   */
-        //
- 	   var conectando_dados = myConn.connect(receber_dados, "POST", poststr, inclusao);   
-	   /*  uma coisa legal nesse script se o usuario não tiver suporte a JavaScript  
-    	  porisso eu coloquei return false no form o php enviar sozinho   
-        */
-       //
-	   return;
-       //
+    						       m_dados_recebidos=test_array[0];
+								   var n_co_autor = test_array[1].split("&");
+								   //  Passando valores para tag type hidden
+							  		document.getElementById('nprojexp').value=n_co_autor[0];
+     								document.getElementById('autor_cod').value=n_co_autor[1];
+                                    if(  n_co_autor.length==3 ) {
+                                          ///  ID da pagina anotacao_cadastrar.php
+                                          document.getElementById('anotacao_numero').value=n_co_autor[2];
+                                    }  
+                                    //
+						    }
+   							// document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;
+                            // Ativando o ID label_msg_erro com mensagem
+                            exoc("label_msg_erro",1,m_dados_recebidos);                                  
+                            //
+                            // Verificar pra nao acusar erro
+                            if( document.getElementById('arq_link') ) {
+                                  document.getElementById('arq_link').style.display="block";        
+                            }
+                            //
+                            //  Desativando/Ocultando a Tag Select do Nome do novo Anotador
+                            exoc("codigousp",0);  
+                            //
+                            //  Campo email - desativando/ocultando
+                            var array_e_mail = new Array('e_mail','email','e-mail','user_email');
+                            var arr_e_mail_length = array_e_mail.length;
+                            ///  Verificar que id pertence ao email
+                            for( var i=0; i<arr_e_mail_length; i++ ) {  
+                                  //
+                                  //  Verificando se existe id do e_mail
+                                  if( document.getElementById(array_e_mail[i]) ) {
+                                       var e_mail=array_e_mail[i];   
+                                       //  Caso exista ocultar
+                                        exoc(e_mail,0);  
+                                   }
+                                   //
+                            }
+                            //
+                            //  Reiniciando a tag Select do Projeto
+                            if( document.getElementById("projeto") ) {
+                                  document.getElementById("projeto").selectedIndex="0";
+                            } 
+                            ///  document.getElementById('div_form').innerHTML=m_dados_recebidos;
+                            return;
+                            //
+						} else {
+                            //
+                            if( document.getElementById('corpo') ) {
+                                   document.getElementById('corpo').innerHTML=oXML.responseText;     
+                            } 
+                        }
+                        //
+				}
+                //
+          	}
+            //
+ 	 };  
+     //
+	 /** 
+		*      aqui ? enviado mesmo para pagina receber.php 
+		*       usando metodo post, + as variaveis, valores e a funcao  
+     */
+      //
+ 	  var conectando_dados = myConn.connect(receber_dados, "POST", poststr, inclusao);   
+      //
+	  return;
+      //
 }  
 /******   FINAL - Function enviar_dados_cad para AJAX     ******/
 ///

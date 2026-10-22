@@ -13,10 +13,15 @@
 if( ! isset($_SESSION)) {
    session_start();
 }
-///  IMPORTANTE:  Declarando em PHP - charset UTF-8
+//
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+//
+//  IMPORTANTE:  Declarando em PHP - charset UTF-8
 header('Content-type: text/html; charset=utf-8');
-
-//// Mensagens para enviar
+//
+// Mensagens para enviar
 $msg_erro = "<span class='texto_normal' style='color: #000; text-align: center; ' >";
 $msg_erro .= "ERRO:&nbsp;<span style='color: #FF0000; text-align: center; ' >";
 
@@ -24,8 +29,8 @@ $msg_ok = "<span class='texto_normal' style='color: #000; text-align: center;' >
 $msg_ok .= "<span style='color: #FF0000; padding: 4px;' >";
 
 $msg_final="</span></span>";
-///   FINAL - Mensagens para enviar
-
+//   FINAL - Mensagens para enviar
+//
 // include('inicia_conexao.php');
 extract($_POST, EXTR_OVERWRITE); 
 
@@ -40,8 +45,8 @@ if( ! isset($_SESSION["incluir_arq"]) ) {
     $incluir_arq=trim($_SESSION["incluir_arq"]);    
 }
 if( strlen($incluir_arq)<1 ) $n_erro=1;
-///
-///   CASO OCORREU ERRO GRAVE
+//
+//   CASO OCORREU ERRO GRAVE
 if( intval($n_erro)>0 ) {
      $msg_erro .= "Erro ocorrido na parte: $n_erro.".$msg_final;  
      echo $msg_erro;
@@ -52,16 +57,20 @@ if( intval($n_erro)>0 ) {
 *      INICIANDO CONEXAO - PRINCIPAL
 ***/
 require_once("{$_SESSION["incluir_arq"]}inicia_conexao.php");
-
-///  Variavel recebida do script/arquivo - inicia_conexao.php 
+//
+//  Variavel recebida do script/arquivo - inicia_conexao.php 
 $_SESSION["m_horiz"] = $array_projeto;
-///
-///   Caminho da pagina local
-$_SESSION["pagina_local"] = $pagina_local=$_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
-
-///  Titulo do Cabecalho - Topo
-if( ! isset($_SESSION["titulo_cabecalho"]) ) $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
-/// $_SESSION['time_exec']=180000;
+//
+//   Caminho da pagina local
+$pagina_local = $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";
+$_SESSION["pagina_local"] = $pagina_local; 
+//
+//  Titulo do Cabecalho - Topo
+if( ! isset($_SESSION["titulo_cabecalho"]) ) {
+     $_SESSION["titulo_cabecalho"]=mb_convert_encoding("Registro de Anotação", 'ISO-8859-1', 'UTF-8');
+}  
+//
+// $_SESSION['time_exec']=180000;
 /*  UPLOAD: FILEFRAME section of the script
       verifica se o arquivo foi enviado      */
 //  $_SESSION["display_arq"]='none';
@@ -69,8 +78,8 @@ $_SESSION["display_arq"]='none';
 $_SESSION["div_form"]="block";
 $_SESSION["result"]=''; 
 $_SESSION["msg_upload"]="";
-///
-/// Mensagens
+//
+// Mensagens
 include_once("{$_SESSION["incluir_arq"]}mensagens.php");
 ///
 //  INCLUINDO CLASS - 
@@ -89,40 +98,45 @@ $usuario_pa_nome=$funcoes->usuario_pa_nome;
 *      - definido Desktop ou Mobile (aplicativo movel)
 */
 $estilocss = $_SESSION["estilocss"];
-///
-///
-if( ! isset($_SESSION["relatproj_orig"]) ) $_SESSION["relatproj_orig"]="";
+//
+if( ! isset($_SESSION["relatproj_orig"]) ) $_SESSION["relatproj_orig"]="";  
+//
 //  fileframe - tag iframe  type hidden
 if( isset($_POST['fileframe']) ) {
-   /* 
-   $_SESSION["div_form"]="none";
-   $_SESSION["msg_upload"] .= $msg_erro."PASSOU POR AQUI - 1 - {$_SESSION["relatproj_orig"]} - 2 - {$_FILES['relatproj']['tmp_name']} ";
-   $_SESSION["msg_upload"] .=$msg_erro_final;                  
-   break;
+   /**   
+   * $_SESSION["div_form"]="none";
+   * $_SESSION["msg_upload"] .= $msg_erro."PASSOU POR AQUI - 1 - {$_SESSION["relatproj_orig"]} - 2 - {$_FILES['relatproj']['tmp_name']} ";
+   *  $_SESSION["msg_upload"] .=$msg_erro_final;                  
+   *  break;
    */
    include("{$_SESSION["incluir_arq"]}includes/functions.php");
-   ///  NOME TEMPORARIO NO SERVIDOR
+   //
+   //  NOME TEMPORARIO NO SERVIDOR
    if( isset($_FILES['relatproj']['tmp_name']) ) {
+          //
           $_SESSION["result"]='OK'; 
           $erros="";
           $_SESSION["display_arq"]='block';
           /**   Conjunto de arquivos - ver tamanho total dos arquivos   ***/
           $tam_total_arqs=0; $files_array= array(); 
           $conta_arquivos = count($_FILES['relatproj']['tmp_name']);    
-          ///  Verificando se existe diretorio
+          //
+          //  Verificando se existe diretorio
           $msg_erro =  "<p "
                    ." style='text-align: center; font-size: small; font-family: Verdana, Arial, Helvetica, sans-serif, Times, Georgia; font-weight:bolder;' >";
           $msg_erro_final = "</p>";
-          ///  Verifica se houve Falha/Erro
+          //
+          //  Verifica se houve Falha/Erro
           if( intval($conta_arquivos)<1 ) {
                $_SESSION["msg_upload"] = $msg_erro."ERRO: Falta INDICAR o arquivo.".$msg_erro_final;
                $_SESSION["result"]='FALSE'; 
                $erros="ERRO";
           }
-          ///    Esse For abaixo para acrescentar diretorios caso nao tenha  --- 20180921
-          ///  if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION["dir"]) ) {  ///  Tem que ser maior que 8 bytes
+          //
+          //    Esse For abaixo para acrescentar diretorios caso nao tenha  --- 20180921
+          //  if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION["dir"]) ) {  ///  Tem que ser maior que 8 bytes
           for( $n=1; $n<3 ; $n++ ) {
-               ///  if( $n==1 )    $_SESSION["dir"] = "/var/www/html/rexp3/doctos_img/A".$_POST["autor_cod"];
+               //
                if( intval($n)==1 ) $_SESSION["dir"] ="{$_SESSION["incluir_arq"]}doctos_img/A".$_POST["autor_cod"];
                if( intval($n)==2 ) $_SESSION["dir"] .= "/projeto/";       
                if(  !file_exists($_SESSION["dir"]) ) {  ///  Verificando dir e sub-dir
@@ -137,7 +151,7 @@ if( isset($_POST['fileframe']) ) {
                     }
                }
           }   
-          ///
+          //
           /// tamanho em bytes do diretorio
           $tamanho_dir = shell_exec("/usr/bin/du  ".$_SESSION["dir"]);  
           $tamanho_dir = explode("/",$tamanho_dir);
@@ -194,11 +208,10 @@ if( isset($_POST['fileframe']) ) {
                       if( strlen(trim($_SESSION["relatproj_orig"]))>2 ) {
                            $dir_relatproj_orig = "{$_SESSION["dir"]}{$_SESSION["relatproj_orig"]}";
                            ///                 
-                           if( file_exists(mb_convert_encoding("$dir_relatproj_orig")) , 'ISO-8859-1', 'UTF-8') {
-                               ///  Removendo o arquivo anterior  do Projeto
-                               ///  unlink("$dir_relatproj_orig");
-                               unlink(mb_convert_encoding("$dir_relatproj_orig"), 'ISO-8859-1', 'UTF-8'); 
-                           }
+                           if( file_exists(mb_convert_encoding("$dir_relatproj_orig", 'ISO-8859-1', 'UTF-8')) ) {
+                                 //  Removendo o arquivo anterior do Projeto
+                                 unlink( mb_convert_encoding("$dir_relatproj_orig", 'ISO-8859-1', 'UTF-8') );
+                            }
                       }
                    }           
                    ///
@@ -229,13 +242,21 @@ if( isset($_POST['fileframe']) ) {
           $_SESSION["erros"] = trim($erros);
           ///   Alterando o nome do arquivo na tabela  projeto
           if( trim($erros)=='' ) {
-              /// extract: Importa variaveis para a tabela de simbolos a partir de um array 
+              // 
+              /**   extract: Importa variaveis para a tabela de simbolos a partir de um array   */
               extract($_POST, EXTR_OVERWRITE);  
               ///   
               $elemento=5; $elemento2=6;  
-              include("php_include/ajax/includes/conectar.php");
-              $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
-              ///  $local_arq0 = $_SESSION["dir"].$filename;
+              //  include("php_include/ajax/includes/conectar.php");
+              require("{$incluir_arq}includes/conectar.php");  
+              //
+              //  $db_select = mysql_select_db($db_array[$elemento],$lnkcon);
+              $db_select = mysqli_select_db($lnkcon, $db_array[$elemento]);
+              if (!$db_select) {
+                   die("Erro ao selecionar o banco de dados: " . mysqli_error($lnkcon));
+              }
+              //
+              //  $local_arq0 = $_SESSION["dir"].$filename;
               $nprojexp = $_POST["nprojexp"]; 
               $autor_cod = $_POST["autor_cod"];
               /***  
@@ -249,110 +270,116 @@ if( isset($_POST['fileframe']) ) {
                     *    O charset UTF-8  uma recomendacao, 
                     *    pois cobre quase todos os caracteres e 
                     *    símbolos do mundo
-              ***/
-              mysqli_query("SET NAMES 'utf8'"); 
-              mysqli_query('SET character_set_connection=utf8'); 
-              mysqli_query('SET character_set_client=utf8'); 
-              mysqli_query('SET character_set_results=utf8'); 
-              mysql_set_charset('utf8');
-                  
-              ///  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
-              ///  $local_arq  = html_entity_decode(trim($filename));
-              $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1'); 
-
+              *    mysqli_query("SET NAMES 'utf8'"); 
+              *    mysqli_query('SET character_set_connection=utf8'); 
+              *    mysqli_query('SET character_set_client=utf8'); 
+              *    mysqli_query('SET character_set_results=utf8'); 
+              *    mysql_set_charset('utf8');
+              **/
+              //
+              # IMPORTANTE: define o charset da conexão (servidor + cliente mysqli)
+              mysqli_set_charset($conex, "utf8mb4");
+              //
+              //  $local_arq = mb_convert_encoding($local_arq, 'ISO-8859-1', 'UTF-8'); 
+              //  $local_arq  = html_entity_decode(trim($filename));
+              $local_arq = mb_convert_encoding($filename, 'UTF-8', 'ISO-8859-1');   
+              //
               /****  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao 
               *          - Use mysql_select_db() ou mysqli_query()
               ***/
               ///  Recebendo as sessoes enviadas do arquivo projeto_alterar_ajax.php
               $cip=""; $autor_cod="";$nprojexp="";
               if( isset($_SESSION["cip"]) ) {
-                  $cip=$_SESSION["cip"];
+                    $cip=$_SESSION["cip"];
               }
               ///
               ///  Selecionar os Projetos de acordo com o op??o
               $sqlcmd = "SELECT numprojeto as nprojexp,autor as autor_cod "
                       ."  FROM $bd_2.projeto  WHERE cip=$cip ";
-              ///
-              $result_consult_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);
-              /***
+              //
+              $result_consult_projeto = mysqli_query($_SESSION["conex"], $sqlcmd);
               if( ! $result_consult_projeto ) {
-                   $msg_erro .= "Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o=".$opcao.' - '.mysqli_error($_SESSION["conex"]).$msg_final;  
-                   echo $msg_erro;                
-                   exit();
-              }
-              ***/
-              ///
-              if( ! $result_consult_projeto ) {
-                    $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA: ';
-                    $_SESSION["msg_upload"].=mysqli_error($_SESSION["conex"]).$msg_erro_final;
+                   $_SESSION["msg_upload"]  = $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA: ';
+                   $_SESSION["msg_upload"] .= mysqli_error($_SESSION["conex"]).$msg_erro_final;
               } else {
                   ///
-                  $n_regs=mysqli_num_rows($result_consult_projeto);
-                  /// Caso encontador o Projeto
-                  if( $n_regs==1 ) {
+                  $n_regs = mysqli_num_rows($result_consult_projeto);
+                  //
+                  // Caso encontrado o Projeto
+                  if( $n_regs == 1 ) {
+                      //
                       ///  Definindo os nomes dos campos recebidos do MYSQL SELECT
                       if( isset($array_nome) ) unset($array_nome);
-                      $array_nome=mysqli_fetch_array($result_consult_projeto);
+                      $array_nome = mysqli_fetch_array($result_consult_projeto);
                       foreach( $array_nome as $chave_cpo => $valor_cpo ) {
-                                $$chave_cpo=$valor_cpo;
+                              $$chave_cpo = $valor_cpo;
                       }
                   }
-                  //// 
-                  ///  Verificando a variavel cip - Codigo da Informacao do Projeto
-                  if( strlen(trim($cip))>0 ) {
-                        ///  START a transaction - ex. procedure  
-                        $n_erro=0;  
-                        mysqli_query('DELIMITER &&'); 
-                        mysqli_query('begin'); 
-                        true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
-                        //// $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq'  WHERE numprojeto=$nprojexp and autor=$autor_cod  ");
-                        $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq' 
-                                          WHERE cip=$cip ");
-                        ///
-                        if( ! $success ) {
-                              ///  Ocorreu ERRO
-                             $n_erro=1;  
-                             $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA'.mysqli_error($_SESSION["conex"]);
-                             $_SESSION["msg_upload"].=$msg_erro_final;
-                             mysqli_query('rollback'); 
-                        } else {
-                             mysqli_query('commit'); 
-                        }
-                        mysqli_query("UNLOCK  TABLES");
-                        mysqli_query('end'); 
-                        mysqli_query('DELIMITER');
-                        ///
-                        /// Caso NAO Ocorreu erro
-                        if( intval($n_erro)<1 ) {
-                             /// Select/Mysql -  nome do usuario/autor
-                             ///   Utilizado pelo Mysql/PHP        
-                             mysqli_query("SET NAMES 'utf8'");
-                             mysqli_query('SET character_set_connection=utf8');
-                             mysqli_query('SET character_set_client=utf8');
-                             mysqli_query('SET character_set_results=utf8');
-                             ///                         
-                             $success=mysqli_query("SELECT nome from $bd_1.pessoa WHERE codigousp=$autor_cod  ");
-                             /// Verificando se houve erro no Select Tabela pessoa
-                             if( ! $success ) {
-                                  /*  $msg_erro .= "Select tabela objetivo - falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
-                                      echo $msg_erro;  */
-                                  echo $funcoes->mostra_msg_erro("Select tabela pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
-                             } else {
-                                 ///  Variavel autor_nome com o nome do usuario/autor
-                                 $autor_nome= trim(mysql_result($success,0,0)); 
-                                 $_SESSION["msg_upload"] .= $msg_erro."Projeto $nprojexp do autor $autor_nome foi alterado.";
-                                 $_SESSION["msg_upload"] .= $msg_erro_final;                           
-                             } 
-                        }
-                        ////
-                  } else {
-                       $_SESSION["msg_upload"]= $msg_erro.'Armazenamento '.$_FILES["relatproj"]["name"].' FALHA. Contado Administrador';
-                       $_SESSION["msg_upload"].=$msg_erro_final;                  
-                  }
-                  ///
-              }      
-              ///              
+                  //
+                  //  Verificando a variavel cip - Codigo da Informacao do Projeto
+                  if( strlen(trim($cip)) > 0 ) {
+                       //
+                       //  START a transaction (requer InnoDB; em MyISAM a transacao e ignorada)
+                       $n_erro = 0;
+                       mysqli_begin_transaction($_SESSION["conex"]);
+                       //   
+                       /**  
+                        *   $success = mysqli_query($_SESSION["conex"],
+                         *  "UPDATE $bd_2.projeto SET relatproj='$local_arq' WHERE numprojeto=$nprojexp and autor=$autor_cod "); 
+                       */
+                       // 
+                       $proc= "UPDATE $bd_2.projeto SET relatproj=\"$local_arq\"  WHERE cip=$cip ";
+                       $success = mysqli_query($_SESSION["conex"], "$proc");
+                       //
+                       if( ! $success ) {
+                                ///  Ocorreu ERRO
+                            $n_erro = 1;
+                            $xtxt='Armazenamento '.$_FILES["relatproj"]["name"].' FALHA';
+                            $_SESSION["msg_upload"]  = $msg_erro."$xtxt".mysqli_error($_SESSION["conex"]);
+                            $_SESSION["msg_upload"] .= $msg_erro_final;
+                            mysqli_rollback($_SESSION["conex"]);
+                            //
+                       } else {
+                            mysqli_commit($_SESSION["conex"]);
+                       }
+                       //
+                       // Caso NAO Ocorreu erro
+                       if( intval($n_erro) < 1 ) {
+                            //
+                            // Charset da conexao (substitui os 4 SET NAMES/character_set_*)
+                            mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+                            //
+                            $proc="SELECT nome from $bd_1.pessoa WHERE codigousp=$autor_cod ";
+                            $success = mysqli_query($_SESSION["conex"], "$proc");
+                            //
+                            // Verificando se houve erro no Select Tabela pessoa
+                            if( ! $success ) {
+                                //
+                                $txtz="Select tabela pessoa -&nbsp;db/mysqli:&nbsp;";
+                                echo $funcoes->mostra_msg_erro("$txtz".mysqli_error($_SESSION["conex"]));  
+                                //
+                            } else {
+                                ///  Variavel autor_nome com o nome do usuario/autor
+                                $linha_autor = mysqli_fetch_array($success);
+                                $autor_nome  = trim($linha_autor[0]);
+                                $_SESSION["msg_upload"] .= $msg_erro."Projeto $nprojexp do autor $autor_nome foi alterado.";
+                                $_SESSION["msg_upload"] .= $msg_erro_final;
+                                //
+                            }
+                            //
+                       }
+                       ///
+                } else {  
+                    //
+                    $proc='Armazenamento '.$_FILES["relatproj"]["name"].' FALHA. Contate o Administrador';
+                    $_SESSION["msg_upload"]  = $msg_erro."$proc";
+                    $_SESSION["msg_upload"] .= $msg_erro_final;
+                }
+                ///
+            }
+            ///
           }  
+          //
    } else {
         /// Ocorreu erro 
         $_SESSION["msg_upload"] .= $msg_erro."Nenhum arquivo Selecionado";
@@ -512,7 +539,7 @@ function altera_projeto(source,val,string_array) {
     var raiz_central="<?php echo  $_SESSION["url_central"];?>";       
     var pagina_local="<?php echo  $_SESSION["protocolo"]."://{$_SERVER["HTTP_HOST"]}{$_SERVER['PHP_SELF']}";?>";       
 
-//// alert(" projeto_alterar.php/256 - INICIO - source= "+source+" val= "+val+" string_array="+string_array);
+ alert(" projeto_alterar.php/256 - INICIO - source= "+source+" val= "+val+" string_array="+string_array);
 
     /// BOTAO - TODOS
     var quantidade= lcopcao.search(/TODOS|TODAS/i);
@@ -951,15 +978,15 @@ function altera_projeto(source,val,string_array) {
     //  Serve tanto para o arquivo projeto, anotacao e outros - Cadastrar
    //   ARQUIVO abaixo onde recebe os DADOS da PAGINA e EXECUTA os procedimentos e Retorna resultado
     var receber_dados = raiz_central+"alterar/projeto_alterar_ajax.php";
-    ///
-
+    //
+    //
     var inclusao = function (oXML) { 
                        //  Recebendo os dados do arquivo ajax
                        //  Importante ter trim no  oXML.responseText para tirar os espacos
                        var m_dados_recebidos = trim(oXML.responseText);
                        var lnip = m_dados_recebidos.search(/Nenhum|ERRO:/i);
    
- ///   alert("---> projeto_alterar.php/914 -->> opcao = "+opcao+"  <<-- source = "+source+" - val = "+val+" - m_dados_recebidos "+m_dados_recebidos);                                
+   alert("---> projeto_alterar.php/914 -->> opcao = "+opcao+"  <<-- source = "+source+" - val = "+val+" - m_dados_recebidos "+m_dados_recebidos);                                
    
                        ///  Caso encontrado:  Nenhum|ERRO:
                        if( lnip!=-1 ) {
@@ -1012,20 +1039,22 @@ function altera_projeto(source,val,string_array) {
                                   return;
                                    ///
                               }    
+                              //
                        } else if( opcao=="BUSCA_PROJ"  ) {
-                                 ///  VERIFICA se retornou ERRO  
-                                 var pos = m_dados_recebidos.search(/ERRO|Nenhum/i);
-                                  if( pos!=-1 ) {
-                                       /***
+                              //
+                              //  VERIFICA se retornou ERRO  
+                              var pos = m_dados_recebidos.search(/ERRO|Nenhum/i);
+                              if( pos!=-1 ) {
+                                  /***
                                        if( document.getElementById('label_msg_erro') ) {
                                            document.getElementById('label_msg_erro').style.display="block";    
                                            document.getElementById('label_msg_erro').innerHTML=m_dados_recebidos;                                          
                                        }
-                                       ***/
-                                      /// Mensagem de erro ID id_inc_pe - ativar
-                                      exoc("label_msg_erro",1,m_dados_recebidos);   
-                                      ///
-                                  } else {
+                                    ***/
+                                    /// Mensagem de erro ID id_inc_pe - ativar
+                                    exoc("label_msg_erro",1,m_dados_recebidos);   
+                                    ///
+                              } else {
                                      // Caso tenha cancelado a Alteracao - LIMPAR
                                      if( val.toUpperCase()=="LIMPAR" ) {
                                         //  Voltar para o inicio da Tag Select  id  - selectedindex
@@ -1041,7 +1070,8 @@ function altera_projeto(source,val,string_array) {
                                             document.getElementById('div_out').innerHTML=m_dados_recebidos;
                                         }
                                      }
-                                  } 
+                              } 
+                              //
                         } else if( opcao=="TODOS"  ) {
                                 if( document.getElementById('busca_proj') ) {
                                      document.getElementById('busca_proj').options[0].selected=true;
@@ -1494,13 +1524,18 @@ include("php_include/ajax/includes/conectar.php");
 ///  Selecionar os projetos pelo campo desejado
 $opcao_cpos = Array("fonterec","objetivo","ano_inicio","ano_final","anotacao") ;
 $opcao_ncpos = count($opcao_cpos);                
-///  TAG Select
+//
+//  TAG Select
 # Aqui está o segredo
-mysqli_query("SET NAMES 'utf8'");
-mysqli_query('SET character_set_connection=utf8');
-mysqli_query('SET character_set_client=utf8');
-mysqli_query('SET character_set_results=utf8');
-///
+//  mysqli_query("SET NAMES 'utf8'");
+//  mysqli_query('SET character_set_connection=utf8');
+//  mysqli_query('SET character_set_client=utf8');
+//   mysqli_query('SET character_set_results=utf8');
+//
+//  TAG Select
+# Aqui está o segredo
+mysqli_set_charset($_SESSION["conex"], "utf8mb4");
+//
 if ( $permit_pa<=$permit_orientador ) {
     $sqlcmd = "SELECT a.codigousp,a.nome,b.cip,b.fonterec,b.fonteprojid,b.numprojeto,b.titulo,"
         ."b.anotacao FROM $bd_1.pessoa a, $bd_2.projeto b where a.codigousp=b.autor and "
@@ -1512,16 +1547,19 @@ if ( $permit_pa<=$permit_orientador ) {
         ." where codigo=".$usuario_conectado.")  order by b.titulo ";
 }
 $result = mysqli_query($_SESSION["conex"],$sqlcmd); 
-///                  
 if( ! $result ) {
-   /*  $msg_erro .= "Selecionando os projetos autorizados para esse Usu&aacute;rio. db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
-    echo $msg_erro; */    
-   echo $funcoes->mostra_msg_erro("Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
-    exit();    
+    /**   
+     *    $msg_erro .= "Selecionando os projetos autorizados para esse Usu&aacute;rio. db/mysql: ".mysqli_error($_SESSION["conex"]).$msg_final;
+     *   echo $msg_erro; 
+     */
+     $terr="Selecionando os Projetos autorizados para esse {$_SESSION["usuario_pa_nome"]} -&nbsp;db/mysqli:&nbsp;";
+     echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+     exit();    
+     //
 }
-///  N?mero de Projetos Selecionados
+//  Nr. de Projetos Selecionados
 $nprojetos = mysqli_num_rows($result);
-///
+//
 ?>
 <!--  Todos Projetos -->   
 <div style="display: flex;"  >
@@ -1562,7 +1600,11 @@ if( intval($nprojetos)<1 ) {
 } else {
     echo "<option value='' >Selecione o Projeto a ser acessado por esse {$_SESSION["usuario_pa_nome"]} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
     ///
-    while($linha=mysql_fetch_assoc($result)) {
+
+
+
+    while( $linha = mysqli_fetch_assoc($result) ) {
+            //
              $_SESSION["cip"]=$linha['cip'];
              $_SESSION["anotacao_numero"]=$linha['anotacao']+1;
              $autor_nome = $linha['nome'];  
@@ -1602,9 +1644,15 @@ if( intval($nprojetos)<1 ) {
                   echo "<option  value=".$linha['cip']."  title='Orientador do Projeto: $autor_nome' >"
                           .$titulo_projeto."&nbsp;&nbsp;</option>";                                   
               }
+              //
            
       }       
-}            
+      /**  Final - while($linha=mysqli_fetch_assoc($result)) {     */
+      //
+
+
+}
+//            
 ?>                
 </select>      
 </div>

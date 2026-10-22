@@ -107,22 +107,31 @@ if( isset($_POST['fileframe']) ) {
              $_SESSION["msg_upload"] = $msg_erro."ERRO: Falta INDICAR o arquivo.".$msg_erro_final;
 	         $_SESSION["result"]='FALSE'; $erros="ERRO";
         }
+        //
     	//    Esse For abaixo para acrescentar diretorios caso nao tenha
-        //  if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION[dir]) ) {  //  Tem que ser maior que 8 bytes
-     	for( $n=1; $n<3 ; $n++ ) {
-            ///  if( $n==1 )	$_SESSION[dir] = "/var/www/html/rexp3/doctos_img/A".$_POST[autor_cod];
-            if( $n==1 )  $_SESSION[dir] = "/var/www/html".$_SESSION[pasta_raiz]."doctos_img/A".$_POST[autor_cod];
-            if( $n==2 )	$_SESSION[dir] .= "/projeto/";	   
-            if(  !file_exists($_SESSION[dir]) ) {  //  Verificando dir e sub-dir
-                    $r = mkdir($_SESSION[dir],0755);
-                    if ( $r===false ) {
-                        //  echo  $msg_erro;
-                        $_SESSION["msg_upload"] = $msg_erro."Erro ao tentar criar diret&oacute;rio".$msg_erro_final;
-                        //  die("Erro ao tentar criar diret&oacute;rio");
-                        $_SESSION["result"]='FALSE';  $erros='ERRO';
-                    } else  chmod($_SESSION[dir],0755);							        			
+        //  
+         /**   if ( $tamanho_dir[0]<1  or  !file_exists($_SESSION[dir]) ) {  //  Tem que ser maior que 8 bytes     */
+        // valida autor_cod como inteiro -> evita path traversal (../) vindo do POST
+        $autor_cod = (int) $_POST['autor_cod'];
+        //  
+        $_SESSION['dir'] = "/var/www/html".$_SESSION['pasta_raiz']."doctos_img/A".$autor_cod."/projeto/";
+        //
+        if( ! is_dir($_SESSION['dir']) ) {
+            //
+            // o && is_dir trata corrida (outro processo criou no meio) sem falso erro
+            if( ! mkdir($_SESSION['dir'], 0755, true) && ! is_dir($_SESSION['dir']) ) {
+                //
+                $proc="Erro ao tentar criar diret&oacute;rio";
+                $_SESSION["msg_upload"] = $msg_erro."$proc".$msg_erro_final;
+                $_SESSION["result"] = 'FALSE';
+                $erros = 'ERRO';
+                //
+            } else {
+                chmod($_SESSION['dir'], 0755);
             }
-     	}   
+            //
+        }
+        /**  Final -  if( ! is_dir($_SESSION['dir']) ) {   */
         //
         $tamanho_dir = shell_exec("/usr/bin/du  ".$_SESSION[dir]);  // tamanho em bytes do diretorio
         $tamanho_dir = explode("/",$tamanho_dir);
@@ -407,7 +416,7 @@ function acentuarAlerts(mensagem) {
     return mensagem;
     ///
 }
-/*****************  Final  -- function acentuarAlerts(mensagem)   ***************************/
+/*******     Final  -- function acentuarAlerts(mensagem)     **********/
 ///
 ///   Function principal para arquivo AJAX
 function remove_projeto(idselecproj, idopcao,string_array) {
@@ -433,9 +442,9 @@ function remove_projeto(idselecproj, idopcao,string_array) {
     exoc("projeto_escolhido",0,"");                   
     //
 
-  /**  
+  
   alert("projeto_remover/296  -- idselecproj = "+idselecproj+"   - idopcao = "+idopcao+"  --- string_array = "+string_array);    
- */  
+ 
 
     //
     //  Verificando variaveis
@@ -450,22 +459,25 @@ function remove_projeto(idselecproj, idopcao,string_array) {
     if( idopcao.toUpperCase()!="LIMPAR" )  var val=idopcao;
     //
     if( typeof(string_array)=="undefined" ) var string_array=""; 
-    //// Verifica se a variavel e uma string
+    // Verifica se a variavel e uma string
     var nr_projeto=0;
     if( typeof(string_array)=='string' ) {
-           //  src = trim(string_array);
-           //  string.replace - Melhor forma para eliminiar espa?os no comeco e final da String/Variavel
-           var string_array = string_array.replace(/^\s+|\s+$/g,"");        
-           var string_array_maiusc = string_array.toUpperCase();     
-           var pos = string_array.indexOf("#@=");   
-           if( pos!=-1 ) {  
-               //  Criando um Array 
-               var array_string_array = string_array.split("#@=");
-               if(array_string_array.length==4) nr_projeto=array_string_array[3];
-               /*  var teste_cadastro = array_string_array[1];
+        //
+         //  src = trim(string_array);
+        //  string.replace - Melhor forma para eliminiar espa?os no comeco e final da String/Variavel
+        var string_array = string_array.replace(/^\s+|\s+$/g,"");        
+        var string_array_maiusc = string_array.toUpperCase();     
+        var pos = string_array.indexOf("#@=");   
+        if( pos!=-1 ) {  
+            //
+            //  Criando um Array 
+            var array_string_array = string_array.split("#@=");
+            if(array_string_array.length==4) nr_projeto=array_string_array[3];
+            /*  var teste_cadastro = array_string_array[1];
                var  pos = teste_cadastro.search("incluid");
-                */
-           }
+            */
+        }
+        //
     }  else if( typeof(string_array)=='number' && isFinite(string_array) )  {
            var string_array = string_array.value;                
     }

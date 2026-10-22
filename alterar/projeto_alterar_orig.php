@@ -304,7 +304,7 @@ if( isset($_POST['fileframe']) ) {
                         $n_erro=0;  
                         mysqli_query('DELIMITER &&'); 
                         mysqli_query('begin'); 
-                        mysqli_query("LOCK TABLES $bd_2.projeto UPDATE ");
+                        true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
                         //// $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq'  WHERE numprojeto=$nprojexp and autor=$autor_cod  ");
                         $success = mysqli_query("UPDATE $bd_2.projeto SET relatproj='$local_arq' 
                                           WHERE cip=$cip ");
