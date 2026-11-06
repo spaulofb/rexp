@@ -57,8 +57,8 @@ if( isset($_SESSION["num_rows"]) ) {
         // Conta os resultados no total da minha query
         //  $strCount = "SELECT COUNT(*) AS 'num_registros' $final_query";
         //  $query    = mysqli_query($strCount);
-        $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
-        $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
+        //  $_SESSION["row"]  = mysqli_fetch_array($resultado_outro);
+        //  $_SESSION["total_regs"] = mysqli_num_rows($resultado_outro);
         $_SESSION["passou"]=1; $total_regs = $_SESSION["total_regs"];
         for( $z=1; $z<99999 ; $z++ ) {
                $valor_final[$z] = $z*$maximo;
@@ -74,7 +74,7 @@ if( isset($_SESSION["num_rows"]) ) {
 }    
 //
 /**  Total de Registros  */
-$row=$_SESSION["row"]; $total_regs = $_SESSION["total_regs"];
+$total_regs = $_SESSION["total_regs"];
 
 
 
@@ -95,8 +95,10 @@ if( intval($total_regs)<=0 ) {
     /***
            Verificando SESSION  table_temp_editar  -  20171121
     ***/   
-    if( ! isset($_SESSION["table_alterar_projeto"]) ) {
-        echo $funcoes->mostra_msg_erro(mb_convert_encoding("Falha SESSION table_alterar_projeto não definida."), 'ISO-8859-1', 'UTF-8');    
+    if( ! isset($_SESSION["table_alterar_projeto"]) ) {  
+        //
+        $terr="Falha SESSION table_alterar_projeto não definida.";
+        echo $funcoes->mostra_msg_erro(mb_convert_encoding("$terr", 'ISO-8859-1', 'UTF-8'));    
         exit();
     }
     ///  Tabela Temporaria
