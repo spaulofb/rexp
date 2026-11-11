@@ -1,9 +1,11 @@
 <?php
-//   AJAX - ALTERAR PROJETO - 20120803
-//   Faz parte do arquivo projeto_alterar.php
-//
-///  Funcao para busca com acentos
+/**
+ *      AJAX - ALTERAR PROJETO - 20120803
+ *   Faz parte do arquivo projeto_alterar.php
+ */
+//  Funcao para busca com acentos
 function stringParaBusca($str) {
+    //
     /// Transformando tudo em min?sculas
     $str = trim(strtolower($str));
 
@@ -660,16 +662,16 @@ if(  $source_upper=="BUSCA_PROJ" ) {
    </div>
 
    <!--  Titulo do Projeto  -->
-   <div  class="td_inicio1"  style="text-align: left;vertical-align: top;   background-color: #32CD99; " >
-      <label for="titulo"  style="vertical-align: top; color:#000000; background-color: #32CD99; cursor:pointer;" ><span class="asteristico" >*</span>&nbsp;T&iacute;tulo:&nbsp;
-        <textarea rows="3" cols="90" name="titulo" id="titulo" required="required"  onKeyPress="javascript:limita_textarea('titulo');" 
-           title='Digitar T&iacute;tulo do Projeto' style="cursor: pointer; overflow:auto;" 
-            onblur="javascript: alinhar_texto(this.id,this.value);"  >
-            <?php echo  $titulo;?>
-        </textarea>
-      </label>      
+   <div  class="td_inicio1"  style="text-align: left; background-color: #32CD99;" >
+      <label for="titulo" style="display:flex; align-items:flex-start; gap:5px; color:#000000; background-color: #32CD99; cursor:pointer;" >
+        <span style="white-space:nowrap;"><span class="asteristico">*</span>&nbsp;T&iacute;tulo:</span>
+        <textarea rows="3" cols="90" name="titulo" id="titulo" required="required" onKeyPress="javascript:limita_textarea('titulo');"
+           title='Digitar T&iacute;tulo do Projeto' style="cursor: pointer; overflow:auto;"
+            onblur="javascript: alinhar_texto(this.id,this.value);"  ><?php echo $titulo;?></textarea>
+      </label>
    </div>
-   <!-- Final -  Titulo do Projeto  -->                 
+    <!-- Final -  Titulo do Projeto  -->
+
 
    <!--  Objetivo  -->
    <div  class="td_inicio1" style="vertical-align: middle; text-align: left;" >
@@ -807,32 +809,41 @@ if(  $source_upper=="BUSCA_PROJ" ) {
                <?php
                $n_y=$texto; $n_td=4;
                $n_tot=$n_td/2;
-               for( $y=1; $y<=$n_tot ; ++$y ) {
-                   $texto=$n_y+$y; $colspan=2;
-                   ///  Caso variavel val ser imprar entao colspan=1                   
-                   if( $y>=$val and $impar_ou_par==1 ) $colspan=1;
-                   if( ( $acrescentou==1 ) and  ( $texto>$val ) ) {                         
+               for( $y=1; $y<=$n_tot ; ++$y ) {  
+                    //
+                    $texto=$n_y+$y; $colspan=2;
+                    //  Caso variavel val ser imprar entao colspan=1                   
+                    if( $y>=$val and $impar_ou_par==1 ) $colspan=1;
+                    if( ( $acrescentou==1 ) and  ( $texto>$val ) ) {                         
                          continue;
-                   } else  {
-                       ?>
-                        <td class="detalhes1"  style="text-align: left; color: #000000;" >
-                           &nbsp;
-                      <?php
-                          echo "$m_co $texto:&nbsp;";
-                   }
-                   $n_tot2=1; 
-                   for( $z=1; $z<=$n_tot2 ; $z++ ) {         
-                         $coresp_nome = trim(mysql_result($result_corespproj,$n_cores,"nome_coresponsavel"));
-                         $codigousp_coresp = mysql_result($result_corespproj,$n_cores,"codigousp_coresp");
-                         echo "<input type=\"hidden\"  id=\"ncoautor[$n_cores]\" name=\"ncoautor[$n_cores]\" value=\"$codigousp_coresp\"  >";
-                         echo "<span style='color:#FFFFFF;'>".$coresp_nome."</span>";
-                       ?>
-                     </td>
-                   <?php                      
-                     $n_cores++;
-                   } 
-                  /// Final do If TD  - numero USP/Coautor
-               }
+                    } else  {
+                        ?>
+                         <td class="detalhes1"  style="text-align: left; color: #000000;" >
+                            &nbsp;
+                       <?php
+                           echo "$m_co $texto:&nbsp;";
+                    }
+                    //
+                    $n_tot2=1; 
+                    for( $z=1; $z<=$n_tot2 ; $z++ ) {       
+                          // 
+                          mysqli_data_seek($result_corespproj, $n_cores);
+                          $lin_coresp = mysqli_fetch_assoc($result_corespproj);
+                          $coresp_nome = trim($lin_coresp["nome_coresponsavel"]);
+                          $codigousp_coresp = $lin_coresp["codigousp_coresp"];
+                          echo "<input type=\"hidden\"  id=\"ncoautor[$n_cores]\" name=\"ncoautor[$n_cores]\" value=\"$codigousp_coresp\"  >";
+                          echo "<span style='color:#FFFFFF;'>".$coresp_nome."</span>";
+                          //
+                        ?>
+                      </td>
+                    <?php                      
+                      $n_cores++;
+                      //
+                    } 
+                    // Final do If TD  - numero USP/Coautor
+                    //
+               }  
+               //
                ?>
                </tr>
                <?php
@@ -1235,15 +1246,16 @@ if( $val_upper=="PROJETO" ) {
            echo $funcoes->mostra_msg_erro($texto_erro);                      
      	   exit();
       } else {
-     	  ///  Continuacao Tabela Projeto para Alterar 
+           //
+     	   //  Continuacao Tabela Projeto para Alterar 
           /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
 	       if( isset($result) ) mysqli_free_result($result);
            ///  Caso tenha coautores/coresponsaveis no Projeto
            ///  include("n_cos.php");
            ///
            $n_erro=0;
-                  
-           /// CIP do Projeto
+           //       
+           // CIP do Projeto
            if( isset($_SESSION["cip"]) ) $cip=$_SESSION["cip"];
            ///  START a transaction - ex. procedure    
            //  Execute the queries 
