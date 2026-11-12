@@ -1036,16 +1036,9 @@ if( $val_upper=="PROJETO" ) {
      $cpo_final="alterar";
      ///
      $incluir_arq=$_SESSION["incluir_arq"];
-     include("{$incluir_arq}includes/dados_campos_form_alterar_auto.php");            
+     //  include("{$incluir_arq}includes/dados_campos_form_alterar_auto.php");      
+     require_once("{$incluir_arq}includes/dados_campos_form_alterar_proj.php");      
      //
-
-
-
-  echo "ERRO: projeto_alterar_ajax - LINHA/1017  -->>  \$source_upper = $source_upper  -- "
-           ."  -->>   \$cpo_final  = $cpo_final ";
-     exit();
-
-
      //  $campo_nome = htmlentities(mb_convert_encoding($campos_nome, 'ISO-8859-1', 'UTF-8'));
      $campo_nome = $_SESSION["campos_nome"];
      // $campo_value = htmlentities(mb_convert_encoding($campo_value, 'ISO-8859-1', 'UTF-8'));
@@ -1057,7 +1050,8 @@ if( $val_upper=="PROJETO" ) {
      ///  Vericando se o Codigo/USP se ja esta cadastrado na Tabela pessoa
      if( isset($_SESSION["autor_codigousp"]) ) $arr_nome_val['codigousp']=$_SESSION["autor_codigousp"];
      if( ! isset($arr_nome_val['codigousp']) ) $arr_nome_val['codigousp']="";
-     $arr_nome_val['codigousp'] = (int) trim($arr_nome_val['codigousp']);
+     $arr_nome_val['codigousp'] = (int) trim($arr_nome_val['codigousp']);   
+     //
      ///  Definindo os nomes dos campos recebidos do FORM
      foreach(  $arr_nome_val as $key => $value ) {
              $$key =  $value;
@@ -1068,7 +1062,8 @@ if( $val_upper=="PROJETO" ) {
      $m_titulo=strtoupper(trim($titulo));
 	 $m_fonterec=strtoupper(trim($fonterec));	
      $m_fonteprojid=strtoupper(trim($fonteprojid));    
-	 $_SESSION["numprojeto"]=strtoupper(trim($numprojeto));
+	 $_SESSION["numprojeto"]=strtoupper(trim($numprojeto));  
+     //
 	 //   MELHOR JEITO PRA ACERTAR O CAMPO NOME
      //   function para caracteres com acentos passando para Maiusculas
      //  '/&aacute;/i' => '?',  
@@ -1082,7 +1077,8 @@ if( $val_upper=="PROJETO" ) {
       *   Verificando as datas recebidas datainicio e datafinal
       */
      $time_inicial="";
-     if( isset($datainicio) ) {
+     if( isset($datainicio) ) {   
+          //
           if( strlen(trim($datainicio))>5 ) {
              $m_datainicio=$datainicio;              
           }
@@ -1101,7 +1097,8 @@ if( $val_upper=="PROJETO" ) {
      }  
      //
      $m_final="";
-     if( isset($datainicio) ) {     
+     if( isset($datainicio) ) {   
+         //  
          /**  Converter Data PHP para Mysql   */
          ///  if( $dt_inicio>$dt_atual ) {
           if( strlen(trim($datafinal))>5 ) {
@@ -1126,7 +1123,8 @@ if( $val_upper=="PROJETO" ) {
         /**   if( strlen(trim($m_datainicio))<10 ) $m_datainicio="--";  */
          if( strlen(trim($m_datainicio))<10 ) $m_datainicio="0000-00-00";  
          //
-     }
+     }   
+     //
      if( ! isset($datafinal) ) {
           ///  $datafinal="--";
           $datafinal="0000-00-00";
@@ -1136,7 +1134,6 @@ if( $val_upper=="PROJETO" ) {
      ///  $time_final = geraTimestamp($data_final);
      ///  Variavel para incluir na Tabela anotador no campo PA
      $lnpa = $_SESSION["permit_pa"];
-     
      /***
           Verifica a SESSION  relatproj_arq
            referente ao arquivo do Projeto formato PDF
@@ -1197,15 +1194,17 @@ if( $val_upper=="PROJETO" ) {
                      ." trim(fonterec)=trim('".$fonterec."')  and  "
                      ." trim(fonteprojid)=trim('".$fonteprojid."') and "
                      ." autor=".$autor." and datainicio='$m_datainicio' and numprojeto!=$numprojeto ";
-      } else {
+      } else {   
+           //
            $parte=" objetivo={$objetivo}  and  "
                      ." trim(fonterec)=trim('".$fonterec."')  and  "
                      ." trim(fonteprojid)=trim('".$fonteprojid."') and "
                      ." autor=".$autor." and datainicio='$m_datainicio' and cip!=$cip ";
     }
-    ///
+    //
+    //   Select/MYSQLI
     $sql_cmd="SELECT  cip,autor,titulo as titulo_outro, numprojeto as projeto_outro  "
-                     ." FROM $bd_2.projeto WHERE $parte ";
+                     ." FROM $bd_2.projeto WHERE $parte ";   
     //	
     $result=mysqli_query($conex,$sql_cmd);			 
     // Verificando se houve erro no Select Tabdla Usuario
@@ -1220,6 +1219,21 @@ if( $val_upper=="PROJETO" ) {
     // 
     // Total de Registros 
     $m_regs=mysqli_num_rows($result);
+
+
+     
+  echo "ERRO: projeto_alterar_ajax - LINHA/1333  CONTINUA  ===->>  \$source_upper = $source_upper  -- "
+           ." <br>  -->>   \$cpo_final  = $cpo_final  -->>  \$m_titulo = $m_titulo  "
+           ." <br>  -->>  \$m_fonterec = $m_fonterec  -->> \$m_fonteprojid = $m_fonteprojid  "
+           ."  -->>  \$_SESSION[numprojeto] = {$_SESSION["numprojeto"]} --==>>>\$datainicio = $datainicio "
+           ."  <br>  -->>  \$time_atual  = $time_atual  -->>  \$lnpa = $lnpa    "
+           ."   <br>  -->>  \$sql_cmd = $sql_cmd  <br>  \$m_regs = <b>  $m_regs </b> ";
+     exit();
+
+
+
+
+
     if( intval($m_regs)>=1 ) {  
            //
            $outro_titulo=mysql_result($result,0,"titulo_outro");
@@ -1244,22 +1258,27 @@ if( $val_upper=="PROJETO" ) {
                        ."j&aacute; est&aacute; cadastrado com esses dados&nbsp;(Autor, Objetivo, Fonte, Nr. Processo, Data In&iacute;cio).";                       
            ///  echo $msg_erro;
            echo $funcoes->mostra_msg_erro($texto_erro);                      
-     	   exit();
+            exit();
       } else {
            //
-     	   //  Continuacao Tabela Projeto para Alterar 
-          /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */	
-	       if( isset($result) ) mysqli_free_result($result);
+            //  Continuacao Tabela Projeto para Alterar 
+          /*   MELHOR jeito de acertar a acentuacao - html_entity_decode    */    
+           if( isset($result) ) mysqli_free_result($result);
            ///  Caso tenha coautores/coresponsaveis no Projeto
            ///  include("n_cos.php");
            ///
            $n_erro=0;
            //       
            // CIP do Projeto
-           if( isset($_SESSION["cip"]) ) $cip=$_SESSION["cip"];
-           ///  START a transaction - ex. procedure    
+           if( isset($_SESSION["cip"]) ) $cip=$_SESSION["cip"];     
+           //
+           //  START a transaction - ex. procedure    
            //  Execute the queries 
-           mysql_select_db($db_array[$elemento]);
+           //   mysql_select_db($db_array[$elemento]);
+           if( !mysqli_select_db($_SESSION["conex"], $db_array[$elemento])) {
+                die("Erro ao selecionar o banco: " . mysqli_error($_SESSION["conex"]));
+           }
+           //
            //  mysql_db_query - Esta funcao esta obsoleta, nao use esta funcao 
            //   - Use mysql_select_db() ou mysqli_query()
            true /* LOCK TABLES removido: trava MyISAM invalida/sem UNLOCK */;
@@ -1345,6 +1364,7 @@ if( $val_upper=="PROJETO" ) {
            } else {
            */
            if( intval($n_erro)<1 ) {
+               //
                 ///  Incluindo arquivo para a Anotacao do Projeto 
                 ///  projeto, autor/orientador e numero da anotacao
                 /// $projeto_cip=mysql_result($result_proj,0,"cip");       
@@ -1389,12 +1409,18 @@ if( $val_upper=="PROJETO" ) {
                 }     
                 //              
            }
+           /**   Final - if( intval($n_erro)<1 ) {  */
+           //
     }  
-    ////  Final  - IF da variavel  m_regs
+    /** Final - if( intval($m_regs)>=1 ) {    */
+    //
     exit();                          
+    //
 	/***  FINAL IF TABELA projeto  -  BD  REXP   ***/
-} elseif( $val_upper=="PESSOAL" ) {
-     ///  Tabela pessoa - BD PESSOAL
+    //
+} elseif( $val_upper=="PESSOAL" ) {   
+    //
+    //  Tabela pessoa - BD PESSOAL
     /*	 
          Melhor jeito de acertar a acentuacao - htmlentities(utf8_decode
 		 OU para MYSQL  tem que ser html_entity_decode
