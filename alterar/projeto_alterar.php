@@ -1081,6 +1081,7 @@ function altera_projeto(source,val,string_array) {
                                 document.getElementById('div_out').innerHTML=m_dados_recebidos;                
                                 //                           
                         } else {
+                              //
                               var pos = m_dados_recebidos.search(/ERRO:|CORRIGIR_ERRO:|FALHA:/i);
                               if( document.getElementById('corpo') ) document.getElementById('corpo').style.display="block";
                               document.getElementById('label_msg_erro').style.display="block";
@@ -1093,9 +1094,10 @@ function altera_projeto(source,val,string_array) {
                                     return;
                               } else {
 
- ///  alert(" FINAL --->> opcao = "+opcao+"  --- source = "+source+" - val = "+val+" \r\n -->> m_dados_recebidos = "+m_dados_recebidos);
+   alert(" FINAL --->> LINHA/1097  -->>  opcao = "+opcao+"  --- source = "+source+" - val = "+val+" \r\n -->> m_dados_recebidos = "+m_dados_recebidos);
 
                                   if( opcao=="SUBMETER" ) {
+                                        //
                                        document.getElementById('label_msg_erro').style.display="block";    
                                        //  OCULTANDO as divs:  div_form e div_out
                                        if( document.getElementById('div_form') ) {
@@ -1141,7 +1143,9 @@ function altera_projeto(source,val,string_array) {
                                   } else {
                                       if( document.getElementById('corpo') ) document.getElementById('corpo').innerHTML=oXML.responseText;   
                                   }
-                              }
+                                  //
+                              } 
+                              //
                          }
                         
            }; 

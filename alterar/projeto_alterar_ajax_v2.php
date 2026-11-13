@@ -540,18 +540,7 @@ if(  $source_upper=="BUSCA_PROJ" ) {
     $opcao=$source_upper;  $where_cond="";
     $_SESSION["selecionados"]="";
     //
-
-
-
-  echo "ERRO: projeto_alterar_ajax - LINHA/550  -->>  \$source_upper = $source_upper  -- "
-           ."  -->>   \$cip  = $cip ";
-     exit();
-
-
-
-
-
-    ///  Selecionar os Projetos de acordo com o op??o
+    //  Selecionar os Projetos de acordo com o op??o
     $sqlcmd = "SELECT a.numprojeto, a.titulo, a.objetivo, a.fonterec, a.fonteprojid, a.anotacao, ";
     $sqlcmd .= "a.autor as autor_codigousp, b.nome as autor_nome, a.cip as Detalhes,  a.coresponsaveis, ";
     $sqlcmd .= "concat(substr(a.datainicio,9,2),'/',substr(a.datainicio,6,2),'/',substr(a.datainicio,1,4)) as datainicio, ";    
@@ -574,9 +563,25 @@ if(  $source_upper=="BUSCA_PROJ" ) {
           $where_cond .= "";
     }
     $sqlcmd .= $where_cond." order by a.cip desc";
-    ///
-    /// Executando Select/MySQL
-    /////   Utilizado pelo Mysql/PHP - IMPORTANTE       
+    //
+
+
+
+    /**
+     *       echo "ERRO: projeto_alterar_ajax - LINHA/550  -->>  \$source_upper = $source_upper  -- "
+     *           ." <br>  -->>   \$cip  = $cip  -->>  \$opcao = $opcao   -->>  \$sqlcmd = $sqlcmd ";
+      * exit();
+
+     */
+
+
+
+
+
+
+
+    // Executando Select/MySQL
+    //   Utilizado pelo Mysql/PHP - IMPORTANTE       
     /***
     mysqli_query("SET NAMES 'utf8'");
     mysqli_query('SET character_set_connection=utf8');
@@ -588,29 +593,36 @@ if(  $source_upper=="BUSCA_PROJ" ) {
     *    pois cobre quase todos os caracteres e 
     *    símbolos do mundo
     ***/
-     mysql_set_charset('utf8');
+     mysqli_set_charset($_SESSION["conex"], "utf8mb4");
     ///                         
     $result_alterar_projeto = mysqli_query($_SESSION["conex"],$sqlcmd);
     if( ! $result_alterar_projeto ) {
          /*   $msg_erro .= "Falha consultando a tabela anota&ccedil;&atilde;o  - op&ccedil;&atilde;o=".$opcao.' - '.mysqli_error($_SESSION["conex"]).$msg_final;  
-            echo $msg_erro;   */            
-          echo $funcoes->mostra_msg_erro("&nbsp;Consultando as Tabelas projeto e pessoa -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+            echo $msg_erro;   */         
+        $terr="&nbsp;Consultando as Tabelas projeto e pessoa -&nbsp;db/mysql:&nbsp;";
+          echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
           exit();
+          //
     }       
+    //
+    //  Nr. registros
     $n_regs=mysqli_num_rows($result_alterar_projeto);   
     //
     // Caso encontador o Projeto
     if( intval($n_regs)==1 ) {
-           //  Definindo os nomes dos campos recebidos do MYSQL SELECT
-           if( isset($array_nome) ) unset($array_nome);
-           $array_nome=mysqli_fetch_array($result_alterar_projeto);
-           ///   Campos e Valores do resultado do Select/MySQL
-           foreach( $array_nome as $chave_cpo => $valor_cpo ) {
-                  $$chave_cpo=$valor_cpo;   
-           }
-           $_SESSION["coresponsaveis"]=$coresponsaveis;
-           $_SESSION["cip"]=$Detalhes;  ///   variavel Detalhes como cip
-           $Arquivo=mysql_result($result_alterar_projeto,0,"Arquivo");
+         //
+         //  Definindo os nomes dos campos recebidos do MYSQL SELECT
+        if( isset($array_nome) ) unset($array_nome);
+        $array_nome = mysqli_fetch_array($result_alterar_projeto);
+        //
+        //   Campos e Valores do resultado do Select/MySQL
+        foreach( $array_nome as $chave_cpo => $valor_cpo ) {
+            $$chave_cpo = $valor_cpo;
+        }
+        $_SESSION["coresponsaveis"] = $coresponsaveis;
+        $_SESSION["cip"] = $Detalhes;  ///   variavel Detalhes como cip
+        $Arquivo = $array_nome["Arquivo"];   // antes: mysql_result($result_alterar_projeto,0,"Arquivo")
+         //
     } else {
         /* $msg_erro .= "Projeto n&atilde;o encontrado.".$msg_final;  
         echo $msg_erro; */     
@@ -618,15 +630,19 @@ if(  $source_upper=="BUSCA_PROJ" ) {
         exit();        
     }
     $_SESSION["autor_codigousp"]=$autor_codigousp;    
-    if( isset($result_alterar_projeto) ) mysqli_free_result($result_alterar_projeto); 
-    ///
-    ///  Arquivo do Projeto em PDF
+    if( isset($result_alterar_projeto) ) {
+            //   mysqli_free_result($result_alterar_projeto); 
+          unset($result_alterar_projeto); 
+    }  
+    //
+    //  Arquivo do Projeto em PDF
     if( ! isset($Arquivo) ) $Arquivo="";
     $_SESSION["relatproj_arq"]=$Arquivo;
     ///
     $total_cols=4;    
-    ////
-    //// FORM --->>>  accept-charset='utf-8' <<<---  Utilizado pelo Mysql/PHP - IMPORTANTE -20180615      
+    // 
+    /**    FORM --->>>  accept-charset='utf-8' <<<---  Utilizado pelo Mysql/PHP - IMPORTANTE -20180615    */ 
+    //
 ?>
 <form  accept-charset="utf-8"  name="form_alterar_projeto" id="form_alterar_projeto" enctype="multipart/form-data"   method="post" 
    style="overflow: hidden;border: 2px solid #000000; height: 100%;" >
@@ -791,32 +807,41 @@ if(  $source_upper=="BUSCA_PROJ" ) {
                <?php
                $n_y=$texto; $n_td=4;
                $n_tot=$n_td/2;
-               for( $y=1; $y<=$n_tot ; ++$y ) {
-                   $texto=$n_y+$y; $colspan=2;
-                   ///  Caso variavel val ser imprar entao colspan=1                   
-                   if( $y>=$val and $impar_ou_par==1 ) $colspan=1;
-                   if( ( $acrescentou==1 ) and  ( $texto>$val ) ) {                         
+               for( $y=1; $y<=$n_tot ; ++$y ) {  
+                    //
+                    $texto=$n_y+$y; $colspan=2;
+                    //  Caso variavel val ser imprar entao colspan=1                   
+                    if( $y>=$val and $impar_ou_par==1 ) $colspan=1;
+                    if( ( $acrescentou==1 ) and  ( $texto>$val ) ) {                         
                          continue;
-                   } else  {
-                       ?>
-                        <td class="detalhes1"  style="text-align: left; color: #000000;" >
-                           &nbsp;
-                      <?php
-                          echo "$m_co $texto:&nbsp;";
-                   }
-                   $n_tot2=1; 
-                   for( $z=1; $z<=$n_tot2 ; $z++ ) {         
-                         $coresp_nome = trim(mysql_result($result_corespproj,$n_cores,"nome_coresponsavel"));
-                         $codigousp_coresp = mysql_result($result_corespproj,$n_cores,"codigousp_coresp");
-                         echo "<input type=\"hidden\"  id=\"ncoautor[$n_cores]\" name=\"ncoautor[$n_cores]\" value=\"$codigousp_coresp\"  >";
-                         echo "<span style='color:#FFFFFF;'>".$coresp_nome."</span>";
-                       ?>
-                     </td>
-                   <?php                      
-                     $n_cores++;
-                   } 
-                  /// Final do If TD  - numero USP/Coautor
-               }
+                    } else  {
+                        ?>
+                         <td class="detalhes1"  style="text-align: left; color: #000000;" >
+                            &nbsp;
+                       <?php
+                           echo "$m_co $texto:&nbsp;";
+                    }
+                    //
+                    $n_tot2=1; 
+                    for( $z=1; $z<=$n_tot2 ; $z++ ) {       
+                          // 
+                          mysqli_data_seek($result_corespproj, $n_cores);
+                          $lin_coresp = mysqli_fetch_assoc($result_corespproj);
+                          $coresp_nome = trim($lin_coresp["nome_coresponsavel"]);
+                          $codigousp_coresp = $lin_coresp["codigousp_coresp"];
+                          echo "<input type=\"hidden\"  id=\"ncoautor[$n_cores]\" name=\"ncoautor[$n_cores]\" value=\"$codigousp_coresp\"  >";
+                          echo "<span style='color:#FFFFFF;'>".$coresp_nome."</span>";
+                          //
+                        ?>
+                      </td>
+                    <?php                      
+                      $n_cores++;
+                      //
+                    } 
+                    // Final do If TD  - numero USP/Coautor
+                    //
+               }  
+               //
                ?>
                </tr>
                <?php
@@ -1179,24 +1204,29 @@ if( $val_upper=="PROJETO" ) {
     ///
     $sql_cmd="SELECT  cip,autor,titulo as titulo_outro, numprojeto as projeto_outro  "
                      ." FROM $bd_2.projeto WHERE $parte ";
-    ///	
+    //	
     $result=mysqli_query($conex,$sql_cmd);			 
-      /// Verificando se houve erro no Select Tabdla Usuario
-      if( ! $result ) {
-          /* $msg_erro .= "Select tabela projeto - falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
+    // Verificando se houve erro no Select Tabdla Usuario
+    if( ! $result ) {
+          /**  $msg_erro .= "Select tabela projeto - falha: ".mysqli_error($_SESSION["conex"]).$msg_final;
           echo $msg_erro;  */        
-          echo $funcoes->mostra_msg_erro("Select Tabela projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));                      
+          $terr="Select Tabela projeto -&nbsp;db/mysqli:&nbsp;";
+          echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));                      
           exit();            
-      } 
-      /// Total de Registros 
-      $m_regs=mysqli_num_rows($result);
-      if( intval($m_regs)>=1 ) {
+          //
+    }
+    // 
+    // Total de Registros 
+    $m_regs=mysqli_num_rows($result);
+    if( intval($m_regs)>=1 ) {  
+           //
            $outro_titulo=mysql_result($result,0,"titulo_outro");
            $projeto_outro=mysql_result($result,0,"projeto_outro");
            if( isset($result) ) mysqli_free_result($result);
-           ///
-           $result=mysqli_query("SELECT  descricao FROM $bd_2.objetivo "
-                     ." WHERE  codigo={$objetivo}  ");
+           //
+           $proc="SELECT  descricao FROM $bd_2.objetivo ";
+           $proc.=" WHERE  codigo={$objetivo}  ";
+           $result=mysqli_query($conex,"$proc");
            ///                 
            /// Verificando se houve erro no Select Tabela Usuario
            if( ! $result ) {
@@ -1240,45 +1270,68 @@ if( $val_upper=="PROJETO" ) {
            $success=mysqli_query($_SESSION["conex"],$sqlcmd); 
            ///  Complete the transaction 
            if( $success ) { 
-                 ///  Cadastrando na tabela corespproj os coresponsaveis
-                 if( ! isset($count_coresp) ) $count_coresp=-1;
-                 ///  if( intval($x)<1 ) {
-                 ///  Removendo os co-responsaveis
-                 $delete_coresproj = mysqli_query("DELETE from $bd_2.corespproj 
-                                                    WHERE projetoautor=$autor and projnum=$numprojeto ");
+                //
+                //  Cadastrando na tabela corespproj os coresponsaveis
+                if( ! isset($count_coresp) ) $count_coresp=-1;
+                //  if( intval($x)<1 ) {
+                //  Removendo os co-responsaveis
+                $proc="DELETE from $bd_2.corespproj  ";
+                $proc.= " WHERE projetoautor=$autor and projnum=$numprojeto ";
+                 $delete_coresproj = mysqli_query($conex,"$proc");
                  ///
                  if( ! $delete_coresproj ) {
                       $n_erro=1; 
-                      $result=false;
-                      ///  $msg_erro .="Falha DELETE FROM coresproj -  ERRO#2 = ".mysqli_error($_SESSION["conex"]).$msg_final;
-                      echo $funcoes->mostra_msg_erro("&nbsp;DELETE FROM corespproj -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
-                      mysqli_query('rollback'); 
+                      $result=false;   
+                      /**   $msg_erro .="Falha DELETE FROM coresproj -  ERRO#2 = ".mysqli_error($_SESSION["conex"]).$msg_final;   */
+                      // 
+                      $terr="&nbsp;DELETE FROM corespproj -&nbsp;db/mysqli:&nbsp;";
+                      echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+                      //  mysqli_query('rollback'); 
+                      mysqli_rollback($_SESSION["conex"]);   // em vez de mysqli_query('rollback');
+
+                      //
                  }                           
                  ///  }
                  ///    
-                 for( $x=0; $x<$count_coresp; $x++ ) {
-                       ///  Caso NAO houve erro
+                 for( $x=0; $x<$count_coresp; $x++ ) {  
+                       //
+                       //  Caso NAO houve erro
                        if( intval($n_erro)<1 ) {
-                            /// Inserindo os co-responsaveis
-                            $result=mysqli_query("INSERT INTO $bd_2.corespproj  "
-                                    ." values(".$autor.", ".$numprojeto.", ".$n_coresponsaveis[$x].")");
+                            //
+                            // Inserindo os co-responsaveis  
+                            $proc="INSERT INTO $bd_2.corespproj  ";
+                            $proc.=" values(".$autor.", ".$numprojeto.", ".$n_coresponsaveis[$x].") ";
+                            $result=mysqli_query($_SESSION["conex"],"$proc");
                             ///         
                             if( ! $result ) {
                                  $n_erro=1;
                                  $texto_erro ="&nbsp;CORESP. n&atilde;o foi cadastrado (autor/projeto/coresp). ERRO#3 = ".$autor.", ".$numprojeto.", ".$n_coresponsaveis[$x];
                                  echo $funcoes->mostra_msg_erro($texto_erro."&nbsp;-&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
-                                 mysqli_query('rollback'); 
+                                 //  mysqli_query('rollback'); 
+                                 mysqli_rollback($_SESSION["conex"]);   // em vez de mysqli_query('rollback');
                                  break;
+                                 //
                             }                            
-                       }
+                       }  
+                       //
+                 } 
+                 //
+                 //  Caso tenha sucess/result
+                 //  if( $result )  mysqli_query('commit');                      
+                 if( $result )  {
+                     mysqli_commit($_SESSION["conex"]);     // em vez de mysqli_query('commit');
                  }
-                 ///  Caso tenha sucess/result
-                 if( $result )  mysqli_query('commit');                                  
-           } else {
+                 //            
+           } else {  
+                 //
                  $n_erro=1;
-                 ///  $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi alterado. ERRO#1 = ".mysqli_error($_SESSION["conex"]).$msg_final;                 
-                 echo $funcoes->mostra_msg_erro("&nbsp;Projeto <b>N&Atilde;O</b> foi alterado - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
-                 mysqli_query('rollback'); 
+                 /**  $msg_erro .="&nbsp;Projeto <b>N&Atilde;O</b> foi alterado. ERRO#1 = ".mysqli_error($_SESSION["conex"]).$msg_final;   */
+                 //                 
+                 $terr="&nbsp;Projeto <b>N&Atilde;O</b> foi alterado - db/mysqli:&nbsp; ";
+                 echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+                // mysqli_query('rollback'); 
+                mysqli_rollback($_SESSION["conex"]);   // em vez de mysqli_query('rollback');  
+                 //
            }  
            ///
            /// Final do IF success              
@@ -1299,11 +1352,14 @@ if( $val_upper=="PROJETO" ) {
                 if( $res_anotador )  {
                      ///  Nome do autor do Projeto alterado
                      $sql_cmd="SELECT  nome from $bd_1.pessoa  WHERE codigousp=$autor ";
-                     $res_autor_nome=mysqli_query($sql_cmd); 
+                     $res_autor_nome=mysqli_query($_SESSION["conex"],$sql_cmd); 
                      if( ! $res_autor_nome ) {
-                        /* $msg_erro .="&nbsp;Nome do autor do Projeto. ERRO#1 = ".mysqli_error($_SESSION["conex"]).$msg_final;                 
-                        echo $msg_erro;   */ 
-                         echo $funcoes->mostra_msg_erro("&nbsp;Nome do autor do Projeto -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));
+                         /**   $msg_erro .="&nbsp;Nome do autor do Projeto. ERRO#1 = ".mysqli_error($_SESSION["conex"]).$msg_final;                 
+                          *   echo $msg_erro;  
+                          */
+                          $terr="&nbsp;Nome do autor do Projeto -&nbsp;db/mysqli:&nbsp;";                          
+                         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
+                         //
                     } else {
                          $nome_autor_projeto = htmlentities(trim(mysql_result($res_autor_nome,0,"nome")));
                          /// Antes
@@ -1319,12 +1375,16 @@ if( $val_upper=="PROJETO" ) {
                          echo $funcoes->mostra_msg_ok($texto_ok);
                            ///  echo  $msg_ok."falta_arquivo_pdf".$numprojeto."&".$autor."&".$relatproj;
                           /// Efetiva a transa??o nos duas tabelas (anotacao e projeto)                                             
-                    }
+                    }   
+                    //
                 } else {
                     /* $msg_erro .="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado.".mysqli_error($_SESSION["conex"]).$msg_final;
                         echo $msg_erro;    */                               
-                     echo $funcoes->mostra_msg_erro("&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado -&nbsp;db/mysql:&nbsp;".mysqli_error($_SESSION["conex"]));            
-                }                   
+                     $terr="&nbsp;Anotador <b>N&Atilde;O</b> foi cadastrado -&nbsp;db/mysqli:&nbsp;";   
+                     echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));             
+                     //
+                }     
+                //              
            }
     }  
     ////  Final  - IF da variavel  m_regs
@@ -1352,29 +1412,44 @@ if( $val_upper=="PROJETO" ) {
     $elemento=5;  $m_regs=0;
     include("/var/www/cgi-bin/php_include/ajax/includes/conectar.php");
     //  Vericando se o Codigo/USP se ja esta cadastrado na Tabela pessoa
-	mysql_select_db($db_array[$elemento]);
-    //  mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()
-    /*
-        $arr_nome_val['codigousp'] = strlen(trim($arr_nome_val['codigousp']))>0 ? $arr_nome_val['codigousp'] : 0;    
-    */  
+    //	mysql_select_db($db_array[$elemento]);
+    mysqli_select_db($_SESSION["conex"], $db_array[$elemento]);
+    //
+    /**   mysql_db_query - Esta funcao e obsoleta, nao use esta funcao - Use mysql_select_db() ou mysqli_query()  
+     *     $arr_nome_val['codigousp'] = strlen(trim($arr_nome_val['codigousp']))>0 ? $arr_nome_val['codigousp'] : 0;     
+     */
+    //  
     if( ! isset($arr_nome_val['codigousp']) ) $arr_nome_val['codigousp']=0;
     //
-    if ( $arr_nome_val['codigousp']==0) {
-        $result=mysqli_query("SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ") ;
-        if( ! $result ) {
+    if( $arr_nome_val['codigousp']==0 ) {   
+        //
+        //  Select/Myçsqli  
+      	$proc="SELECT min(codigousp) as codigo_ult  FROM  $bd_1.pessoa where codigousp<0 ";
+        $result=mysqli_query($_SESSION["conex"],"$proc") ;
+        if( ! $result ) {  
+            //
             // die("Falha erro no Select/Atribuir codigoUSP".mysqli_error($_SESSION["conex"]));
-            echo $funcoes->mostra_msg_erro("Select/Atribuir codigoUSP - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
+            $terr="Select/Atribuir codigoUSP - db/mysqli:&nbsp; ";
+            echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));
             exit();
+            //
         }
         $m_regs=mysqli_num_rows($result);
         if ($m_regs>0) {
-            $codigo_prx = mysql_result($result,0,'codigo_ult');
+            mysqli_data_seek($result, 0);
+            $linha = mysqli_fetch_assoc($result);
+            $codigo_prx = $linha['codigo_ult'];
         } 
         if (!isset($codigo_prx)) {
             $codigo_prx = 0;
         }
         $codigo_prx += -1;
-        mysqli_free_result($result);
+        if( isset($result) ) {
+            //  mysqli_free_result($result);
+            unset($result);
+            //
+        }
+        //
         $arr_nome_val['codigousp'] = $codigo_prx;
         if( $i_codigousp<0 ) {
             //  die("ERRO: Falha inesperada criando um NOVO codigo USP.");
@@ -1382,23 +1457,38 @@ if( $val_upper=="PROJETO" ) {
             exit();            
         }
         $array_t_value[$i_codigousp] = $codigo_prx;
-    }
-    
-	$result_usu=mysqli_query("SELECT codigousp,nome FROM $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']) ;
-	if( ! $result_usu ) {
-		//  die("Falha erro no Select".mysqli_error($_SESSION["conex"]));
-        echo $funcoes->mostra_msg_erro("Select da Tabela pessoa - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));
+        //
+    }   
+    //
+    /**  Select/Mysqli  */
+    $proc="SELECT codigousp,nome FROM $bd_1.pessoa  WHERE codigousp=".$arr_nome_val['codigousp'];
+	$result_usu=mysqli_query($_SESSION["conex"],"$proc") ;
+	if( ! $result_usu ) {  
+        //
+		//  die("Falha erro no Select".mysqli_error($_SESSION["conex"]));  
+        $proc="Select da Tabela pessoa - db/mysqli:&nbsp; ";
+        echo $funcoes->mostra_msg_erro("$proc".mysqli_error($_SESSION["conex"]));
         exit();          
-	}
+        //
+	}  
+    //
+    //  Nr. Registros
     $m_regs=mysqli_num_rows($result_usu);
-    mysqli_free_result($result_usu);
-    if(  $m_regs>=1 ) {
+    //
+    if( isset($result_usu) ) {
+         //  mysqli_free_result($result_usu);
+         unset($result_usu);
+    } 
+    //
+    if(  intval($m_regs)>=1 ) {
             /* $msg_erro .= "&nbsp;Esse C&oacute;digo:&nbsp;".$arr_nome_val['codigousp']." j&aacute; est&aacute; cadastrado.".$msg_final;
            echo $msg_erro; */
-
-           echo $funcoes->mostra_msg_erro("&nbsp;Esse C&oacute;digo:&nbsp;{$arr_nome_val['codigousp']} j&aacute; est&aacute; cadastrado.");
+           $terr="&nbsp;Esse C&oacute;digo:&nbsp;{$arr_nome_val['codigousp']} j&aacute; est&aacute; cadastrado.";
+           echo $funcoes->mostra_msg_erro("$terr");
            exit();                      
+           //
     } else {
+           //
            //   Vericando se o NOme se ja esta cadastrado  na Tabela pessoa
            //   Importante no PHP strtoupper, str trim  e no MYSQL  replace,upper,trim
            //    Remover os espacos do nome deixando apenas um entre as palavras
@@ -1408,7 +1498,8 @@ if( $val_upper=="PROJETO" ) {
            //  
            //  Acertando ACENTOS DO HTML PARA PHP/MYSQL - html_entity_decode
            $pessoa_nome=html_entity_decode(trim($pessoa_nome)); 
-           mysql_select_db($db_array[$elemento]);
+           mysqli_select_db($_SESSION["conex"],$db_array[$elemento]);
+           //
            //  SESSION abaixo para ser usada no include
            $_SESSION["tabela"]="pessoa";          
            include("dados_recebidos_arq_ajax.php");  
@@ -1416,62 +1507,89 @@ if( $val_upper=="PROJETO" ) {
            //  INSERINDO 
            //  Start a transaction - ex. procedure			   
            //
-           $success=mysqli_query("insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") "); 
+           $proc="insert into $bd_1.pessoa  (".$cpo_nome.") values(".$cpo_valor.") ";
+           $success=mysqli_query($_SESSION["conex"],"$proc"); 
+           //
            //  Complete the transaction 
            if ( $success ) { 
-               mysqli_query('commit'); 
+               // 
+               mysqli_commit($_SESSION["conex"]);     // em vez de mysqli_query($conex,'commit')
+               //
                /* $msg_ok .="<p class='titulo_usp'>&nbsp;".$arr_nome_val['nome']." foi cadastrado.</p>".$msg_final;
                echo $msg_ok; */
-               
-              echo $funcoes->mostra_msg_ok("<p class='titulo_usp'>&nbsp;{$arr_nome_val['nome']} foi cadastrado.</p>");
-
+               $terr="<p class='titulo_usp'>&nbsp;{$arr_nome_val['nome']} foi cadastrado.</p>";               
+               echo $funcoes->mostra_msg_ok("$terr");   
+               //
            } else { 
-               mysqli_query('rollback'); 
+               //
+               mysqli_rollback($_SESSION["conex"]); 
                /*
                $msg_erro .="&nbsp;".$arr_nome_val['nome']." n&atilde;o foi cadastrado.".$msg_final;
                echo $msg_erro;	     */
-               
-               echo $funcoes->mostra_msg_erro("&nbsp;{$arr_nome_val['nome']}&nbsp;n&atilde;o foi cadastrado.");               
+               $terr="&nbsp;{$arr_nome_val['nome']}&nbsp;n&atilde;o foi cadastrado.";
+               echo $funcoes->mostra_msg_erro("$terr");               
+               //
            } 
+           //
 	}
 	//  Final - Tabela pessoa 
+    //
     exit();
+    //
 }  elseif( $val_upper=="USUARIO" ) {
      //  Tabela usuario - BD PESSOAL  Tabela usuario
      //
      unset($array_temp); unset($array_t_value); $m_erro=0;
+     //
      //    Dados vindo de um FORM   
      include("../includes/dados_campos_form.php");
      $conta =  sizeof($array_temp);
+     //
      //  Verificando campos 
     //  Verificando Login e Senha 
-    if( strtoupper(trim($arr_nome_val['login']))==strtoupper(trim($arr_nome_val['senha']))  ) {
+    $a1=strtoupper(trim($arr_nome_val['login']));
+    $b1=strtoupper(trim($arr_nome_val['senha'])) ;
+    if( $a1==$b1 ) {
         /* $msg_erro .= "ERRO:  Usuário/Login e Senha iguais - corrigir ".$msg_final;
          echo  $msg_erro;  */
-         
-         echo $funcoes->mostra_msg_erro("&nbsp;Usu&aacute;rio/Login e Senha iguais - corrigir");               
+         $terr="&nbsp;Usu&aacute;rio/Login e Senha iguais - corrigir";
+         echo $funcoes->mostra_msg_erro("$terr");               
+         //
          exit(); 
+         //
     }
+    /**  Final - if( $a1==$b1 ) {  */
+    //
 	 //  Verificando campos 
-	//  Verificando se nao existe Usuario com esse login  na Tabela usuario
-    $result_usu = mysqli_query("SELECT login FROM $bd_1.usuario WHERE "
-                        ."  trim(login)=trim('".$arr_nome_val['login']."')");
+     /**   Verificando se nao existe Usuario com esse login  na Tabela usuario   */
+     $proc="SELECT login FROM $bd_1.usuario WHERE ";
+     $proc.="  trim(login)=trim('".$arr_nome_val['login']."') ";
+     $result_usu = mysqli_query($_SESSION["conex"],"$proc");
     if ( ! $result_usu ) {
          /*  $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val[login]." - falha no mysql/query:".mysqli_error($_SESSION["conex"]).$msg_final;
          echo $msg_erro;  */
-         
-         echo $funcoes->mostra_msg_erro("Select da Tabela usuario. &nbsp;Usu&aacute;rio:&nbsp;{$arr_nome_val[login]} - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));         
+         $terr="Select da Tabela usuario. &nbsp;Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} - db/mysqli:&nbsp; ";
+         echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));         
          exit();
-    }
+         //
+    }  
+    /**  Final -  if ( ! $result_usu ) {  */
+    //
+    //  Nr. Registros
     $m_regs = mysqli_num_rows($result_usu);
-	mysqli_free_result($result_usu);
-	if(  $m_regs>=1 ) {
+    if( isset($result_usu) ) {
+        //  mysqli_free_result($result_usu);
+        unset($result_usu);
+    }
+    //
+	if(  intval($m_regs)>=1 ) {
          /* $msg_erro .= "&nbsp;Usu&aacute;rio:&nbsp;".$arr_nome_val['login']." j&aacute; cadastrado.".$msg_final;
          echo $msg_erro;  */
-         
-         echo $funcoes->mostra_msg_erro("&nbsp;Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} j&aacute; cadastrado.");         
+         $terr="&nbsp;Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} j&aacute; cadastrado.";   
+         echo $funcoes->mostra_msg_erro("$terr");         
          exit();         
 	} 
+    //
     //  SESSION Tabela para ser usada no include: dados_recebidos_arq_ajax.php
     //  DEsativando
     if( isset($_SESSION["campos_nome"]) )  unset($_SESSION["campos_nome"]);
@@ -1480,15 +1598,19 @@ if( $val_upper=="PROJETO" ) {
     $_SESSION["tabela"]="usuario";
     include("dados_recebidos_arq_ajax.php");
     //	
-    mysql_select_db($db_array[$elemento]);
-    $n_pa = trim($arr_nome_val['pa']);
+    //  mysql_select_db($db_array[$elemento]);
+    mysqli_select_db($_SESSION["conex"], $db_array[$elemento]);
+    $n_pa = trim($arr_nome_val['pa']);  
+    //
     //  foreach( $array_usuarios as $key =>$valor ) {
     foreach( $array_pa as $key =>$valor ) {        
           if( $n_pa==$valor  ) {
                $nome_key = $key;
                break;
-          }
+          }  
+          //
     }
+    //
     //  START  a transaction - ex. procedure    
     //  Execute the queries 
     //  $success = mysqli_query("insert into pessoa (".$campos.") values(".$campos_val.") "); 
@@ -1499,54 +1621,68 @@ if( $val_upper=="PROJETO" ) {
 
     // echo "cpo_nome=".$cpo_nome."<br>  cpo_valor=".$cpo_valor."<br><br>";
     // exit();
-    $success=mysqli_query("insert into  usuario "
-                ."  (".$cpo_nome.",activation_code) values(".$cpo_valor.",'$activ_code') "); 
+    $proc="insert into  usuario ";
+    $proc.="  (".$cpo_nome.",activation_code) values(".$cpo_valor.",'$activ_code') ";
+    $success=mysqli_query($_SESSION["conex"],"$proc"); 
     //  Complete the transaction 
     if ( $success ) { 
         /*  $msg_ok .="<p class='titulo_usp'>Usu&aacute;rio:&nbsp;"
         .$arr_nome_val['login']." foi cadastrado.</p>".$msg_final;  */
-        
-        echo $funcoes->mostra_msg_ok("<p class='titulo_usp'>Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} foi cadastrado.</p>");
+        $terr="<p class='titulo_usp'>Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} foi cadastrado.</p>";
+        echo $funcoes->mostra_msg_ok("$terr");
         $m_erro=0;      
-        mysqli_query('commit'); 
+        //  mysqli_query('commit'); 
+        mysqli_commit($_SESSION["conex"]); 
+        //
     } else { 
         /* $msg_erro .="Usu&aacute;rio:&nbsp;"
         .$arr_nome_val['login']." n&atilde;o foi cadastrado.".$msg_final;
         echo $msg_erro;   */
-        
-        echo $funcoes->mostra_msg_erro("Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} n&atilde;o foi cadastrado - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"])); 
+        $terr="Usu&aacute;rio:&nbsp;{$arr_nome_val['login']} n&atilde;o foi cadastrado - db/mysqli:&nbsp; ";
+        echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"])); 
         $m_erro=1;      
-        mysqli_query('rollback'); 
+        mysqli_rollback($_SESSION["conex"]);  
+        //
     }
     // 
-    if( $m_erro<1 ) {
-        $res_email = mysqli_query("Select e_mail from $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']." ");
+    //
+    if( intval($m_erro) <1 ) {
+        //
+        $proc="Select e_mail from $bd_1.pessoa where codigousp=".$arr_nome_val['codigousp']." ";
+        $res_email = mysqli_query($_SESSION["conex"],"$proc");
         if( ! $res_email ) {
-            //  die("ERRO: Select pessoa campo e_mail falha: ".mysqli_error($_SESSION["conex"]));
-            
-            echo $funcoes->mostra_msg_erro("Select Tabela pessoa - db/mysql:&nbsp; ".mysqli_error($_SESSION["conex"]));           
+            /**    die("ERRO: Select pessoa campo e_mail falha: ".mysqli_error($_SESSION["conex"]));  */
+            // 
+            $terr="Select Tabela pessoa - db/mysqli:&nbsp; ";
+            echo $funcoes->mostra_msg_erro("$terr".mysqli_error($_SESSION["conex"]));           
+            //
         }  else {
-            $usr_email=html_entity_decode(trim(mysql_result($res_email,0,'e_mail')));
+            //
+            mysqli_data_seek($res_email, 0);
+            $row_email = mysqli_fetch_assoc($res_email);
+            $usr_email = html_entity_decode(trim($row_email['e_mail']));
             $data['senha'] = $arr_nome_val['senha'];
-            mysql_freeresult($res_email);
+            //
+            //  Desativar variavel
+            if( isset($res_email) ) {
+                //  mysqli_free_result($res_email);
+                unset($res_email);
+            }  
+            /**  Final -  if( isset($res_email) ) {  */
             //
             $host  = $_SERVER['HTTP_HOST'];
             $retornar = html_entity_decode("http://".$host.$_SESSION["pasta_raiz"]);
             $user=$arr_nome_val['codigousp'];
             $m_local="ativar.php?user=".$user."&activ_code=".$activ_code;
-            /*
-            $a_link = "***** CONEXÃO DE ATIVAÇÃO *****\n<br>"
-            ."<a href='http://$host$new_path/ativar.php?user=$user&activ_code=$activ_code'  title='Clicar' >"
-            ."http://$host$new_path/ativar.php?user=$user&activ_code=$activ_code</a>"; 
-            */
+            //
             $a_link = "***** CONEXÃO DE ATIVAÇÃO *****\n<br>"
                      ."<a href='$retornar$m_local'  title='Clicar' >$retornar$m_local</a>"; 
             //
             //  $host_upper = strtoupper($host);           
             $host_lower = strtolower($host);                     
             //  $assunto =html_entity_decode("Redefini??o de senha");    
-            $assunto =html_entity_decode("RGE/SISTAM - Detalhes da Autentifica??o");    
-            $corpo ="RGE/SISTAM - Anota??o<br>";
+            $assunto =html_entity_decode("RGE/SISTAM - Detalhes da Autentificação");    
+            $corpo ="RGE/SISTAM - Anotação<br>";
             $corpo .="$host_lower<br><br>";    
             $corpo .=html_entity_decode("Seu cadastro como ".ucfirst($nome_key)." foi realizado.<br>Detalhes do seu registro\r\n");                    
             $user_name = html_entity_decode($arr_nome_val['login']); 
@@ -1578,19 +1714,23 @@ if( $val_upper=="PROJETO" ) {
             Esta é uma mensagem automática.<br> 
             *** não responda a este EMAIL ****
             ";
-            mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');
-
+            //  mail($usr_email, stripslashes(mb_convert_encoding($assunto)), $message,$headers1, 'UTF-8', 'ISO-8859-1');   
+            mail($usr_email, stripslashes(mb_convert_encoding($assunto, 'UTF-8', 'ISO-8859-1')), $message, $headers1);
             //                          
             /*    $msg_ok .= "<p>Sua senha foi redefinida e uma nova senha foi enviada para seu endere?o de e-mail.<br>"
             ."<a href='$retornar' title='Clicar' >Retornar</a></p>";                         
             */
              /*  $msg_ok .= "<p>Mensagem de Acesso enviada para o email:  $usr_email<br></p>";                         
             echo  $msg_ok; */
-            
-            echo $funcoes->mostra_msg_ok("<p>Mensagem de Acesso enviada para o email:  $usr_email<br></p>");
+            $proc="<p>Mensagem de Acesso enviada para o email:  $usr_email<br></p>";
+            echo $funcoes->mostra_msg_ok("$proc");
+            //
         }
+        //
     }
+    //
     exit();                  
+    //
 }	 
 #
 ob_end_flush(); /* limpar o buffer */
